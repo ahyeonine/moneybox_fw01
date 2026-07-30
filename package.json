@@ -1,0 +1,21 @@
+{
+  "name": "moneybox-fx-reservation-prototype",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "해외환전예약 서비스 (지점수령) 클릭 가능한 프로토타입 - Foreign Exchange Reservation (branch pickup) clickable prototype",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.8"
+  }
+}
