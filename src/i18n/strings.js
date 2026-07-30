@@ -203,4 +203,77 @@ export const STRINGS = {
     en: 'eSIM is provided by an external partner. (Dummy external link in this prototype.)',
   },
   'esim.link': { ko: '외부 eSIM 페이지 열기', en: 'Open external eSIM page' },
+
+  // ── 최상위 3개 탭 ──
+  'top.site': { ko: '외국인 웹사이트', en: 'Customer Website' },
+  'top.cems': { ko: 'CEMS (어드민)', en: 'CEMS (Admin)' },
+  'top.pos': { ko: 'POS', en: 'POS' },
+  'top.hint': {
+    ko: '데모 편의를 위한 화면 전환 탭입니다. 실제로는 서로 다른 사용자가 사용하는 별도 시스템입니다.',
+    en: 'Demo switcher between screens. In production these are separate systems for different users.',
+  },
+
+  // ── 외국인 웹사이트 헤더/네비 ──
+  'site.nav.branch': { ko: '지점 수령', en: 'Branch Pickup' },
+  'site.nav.airport': { ko: '공항 수령', en: 'Airport Pickup' },
+  'site.nav.esim': { ko: 'eSIM', en: 'eSIM' },
+  'site.nav.about': { ko: '회사 소개·문의', en: 'About & Contact' },
+  'site.lang': { ko: '언어', en: 'Language' },
+  'airport.title': { ko: '공항 수령', en: 'Airport Pickup' },
+  'airport.body': {
+    ko: '현재 운영하지 않는 서비스입니다. 지점 수령을 이용해 주세요.',
+    en: 'This service is not currently operating. Please use Branch Pickup.',
+  },
+  'airport.goBranch': { ko: '지점 수령으로 이동', en: 'Go to Branch Pickup' },
+
+  // ── 진행 단계(재구성) ──
+  'wz.branch': { ko: '지점 선택', en: 'Branch' },
+  'wz.apply': { ko: '환전 신청', en: 'Apply' },
+  'wz.info': { ko: '예약자 정보', en: 'Details' },
+  'wz.review': { ko: '최종 확인', en: 'Review' },
+  'wz.consent': { ko: '정책 동의', en: 'Consent' },
+  'wz.done': { ko: '예약 완료', en: 'Done' },
+
+  // ── STEP A: 지점 선택 ──
+  'stepA.title': { ko: '수령하실 지점을 선택하세요', en: 'Choose a pickup branch' },
+  'stepA.listTitle': { ko: '지점 목록', en: 'Branches' },
+  'stepA.mapTitle': { ko: '지도', en: 'Map' },
+  'stepA.mapDummy': { ko: '데모용 지도 (실제 지도 API 미연동)', en: 'Demo map (no real map API)' },
+  'stepA.open': { ko: '영업중', en: 'Open' },
+  'stepA.select': { ko: '이 지점 선택', en: 'Select' },
+
+  // ── STEP B: 지점 상세 + 신청 ──
+  'stepB.reviews': { ko: '개의 후기', en: 'reviews' },
+  'stepB.openUntil': { ko: '영업중 · {time}에 영업 종료', en: 'Open · closes at {time}' },
+  'stepB.copy': { ko: '복사하기', en: 'Copy' },
+  'stepB.copied': { ko: '복사됨', en: 'Copied' },
+  'stepB.liveRate': { ko: '실시간 환율', en: 'Live rates' },
+  'stepB.buyTab': { ko: '외화 살 때', en: 'You buy' },
+  'stepB.sellTab': { ko: '외화 팔 때', en: 'You sell' },
+  'stepB.allRates': { ko: '전체 환율 보기', en: 'View all rates' },
+  'stepB.allRatesTitle': { ko: '전체 환율', en: 'All rates' },
+  'stepB.bankCompare': { ko: '은행 환율 비교', en: 'Bank rate comparison' },
+  'stepB.bankBuy': { ko: '살 때', en: 'Buy' },
+  'stepB.vsBank': { ko: '은행보다 유리', en: 'better than bank' },
+  'stepB.applyCardTitle': { ko: '환전 신청', en: 'Apply' },
+  'stepB.buyFx': { ko: '외화 구매', en: 'Buy FX' },
+  'stepB.sellFx': { ko: '외화 판매', en: 'Sell FX' },
+  'stepB.buyFxHint': { ko: '고객이 외화를 구매합니다 (지점 매출)', en: 'You buy foreign currency' },
+  'stepB.sellFxHint': { ko: '고객이 외화를 판매합니다 (지점 매입)', en: 'You sell foreign currency' },
+  'stepB.dateTime': { ko: '수령 날짜 및 시간', en: 'Pickup date & time' },
+  'stepB.time': { ko: '시간', en: 'Time' },
+  'stepB.amountTitle': { ko: '환전 금액', en: 'Amount' },
+  'stepB.maxHint': { ko: '신청 가능 금액', en: 'Available amount' },
+  'stepB.unitHint': { ko: '입력 단위', en: 'Input unit' },
+  'stepB.estKrw': { ko: '예상 원화 금액', en: 'Estimated KRW' },
+  'stepB.apply': { ko: '신청하기', en: 'Apply' },
+  'stepB.rateNote': {
+    ko: '표시 금액은 참고용이며, 최종 확인 단계에서 확정 환율로 재계산됩니다.',
+    en: 'Amounts are indicative; the final rate is confirmed at the review step.',
+  },
+  'review.ratefixed.note': {
+    ko: '이 환율로 확정되었습니다 (최종확인 시점 픽스).',
+    en: 'Rate confirmed at this review step.',
+  },
+  'common.pickupTime': { ko: '수령 시간', en: 'Pickup time' },
 }

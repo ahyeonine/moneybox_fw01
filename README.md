@@ -15,15 +15,21 @@ npm run dev       # 개발 서버 (http://localhost:5173)
 npm run build && npm run preview
 ```
 
-## 주요 화면
+## 화면 구조 — 최상위 3개 탭
 
-| 경로 | 대상 | 설명 |
+상단 탭바로 3개 시스템을 전환합니다 (실제로는 서로 다른 사용자용 별도 시스템, 프로토타입 데모 편의상 탭 전환).
+
+| 탭 / 경로 | 대상 | 설명 |
 |---|---|---|
-| `/` | 고객 | 홈 (랜딩) |
-| `/book` | 고객 | **지점수령예약 8단계** (지점→통화/구분→금액→수령일→정보→확인→동의→완료) |
-| `/lookup` | 고객 | 예약조회 (번호+이메일) → 취소 / 변경 |
-| `/operator` | 지점 운영자 | 신규예약 리스트(시재준비) · 거래처리 · 시뮬레이션 도구 |
-| `/about`, `/esim` | - | Out of Scope (더미 / 외부링크) |
+| **외국인 웹사이트** `/site` | 고객 | 지점수령예약 (STEP A 지점선택 → STEP B 지점상세+신청 → 정보 → 확인 → 동의 → 완료) |
+| ↳ `/site/airport` | - | 공항 수령 (Out of Scope, 미운영 안내) |
+| ↳ `/site/esim`, `/site/about` | - | eSIM 더미링크 / 회사 소개·문의 더미 |
+| ↳ `/site/lookup` | 고객 | 예약조회 (번호+이메일) → 취소 / 변경 |
+| **CEMS (어드민)** `/cems` | 지점 운영자 | 신규예약 리스트 (시재 준비용 조회) |
+| **POS** `/pos` | 지점 직원 | 예약번호 조회 → 신분증 대조 → 거래처리 + 시뮬레이션 도구 |
+
+> 예약 플로우는 기존 8단계 중 1~4단계(지점/통화/금액/수령일)를 STEP A·B로 통합했으며,
+> 검증·상태·환율픽스(최종확인 시점)·자동취소 등 로직은 그대로 유지됩니다.
 
 ## 데모용 시드 데이터
 
@@ -43,16 +49,20 @@ npm run build && npm run preview
 
 ```
 src/
-├─ main.jsx / App.jsx          진입점 · 라우팅
+├─ main.jsx / App.jsx          진입점 · 라우팅 (3탭)
 ├─ i18n/                       다국어 (ko/en) 사전 + Provider
 ├─ store/ReservationContext    전역 예약 상태 + 시뮬레이션 기준일
 ├─ data/                       목데이터 (지점 · 환율 · 시드 예약)
-├─ lib/                        검증 · 날짜 · 포맷 · 예약번호 유틸
-├─ components/                 Layout · Stepper · Badges · Modal · SimBar 등
+├─ lib/                        검증 · 날짜(시간슬롯) · 포맷 · 예약번호 유틸
+├─ components/
+│   ├─ RootLayout · TopTabs    최상위 3탭 셸
+│   ├─ CustomerSite            외국인 웹사이트 헤더/네비
+│   ├─ LanguageDropdown · LanguageToggle · Stepper · Badges · Modal · SimBar
+│   └─ BranchMap               STEP A 더미 지도
 └─ pages/
-   ├─ Home / LookupPage / AboutPage / EsimPage
-   ├─ booking/BookingFlow      8단계 위저드
-   └─ operator/                OperatorConsole · PrepList · TransactionProcess
+   ├─ LookupPage · AirportPage · AboutPage · EsimPage
+   ├─ booking/BookingFlow      STEP A/B + 정보·확인·동의·완료
+   └─ operator/                CemsShell(→PrepList) · PosShell(→TransactionProcess)
 ```
 
 ## 개발 문서

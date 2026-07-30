@@ -19,6 +19,7 @@ function make(o) {
     customerName: o.customerName,
     email: o.email,
     pickupDate: o.pickupDate, // YYYY-MM-DD
+    pickupTime: o.pickupTime ?? '10:00', // HH:mm (지점 상세 화면에서 선택)
     createdAt: o.createdAt,
     processedAt: o.processedAt ?? null,
     idVerified: o.idVerified ?? false,

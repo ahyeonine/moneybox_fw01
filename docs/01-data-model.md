@@ -23,6 +23,7 @@
 | `customerName` | string | ✔ | 예약자명(여권 영문명, 대문자 정규화) | `JOHN SMITH` |
 | `email` | string | ✔ | 예약자 이메일 (형식검증만, 인증 없음) | `john@example.com` |
 | `pickupDate` | date (YYYY-MM-DD) | ✔ | 수령 예정일 | `2026-07-31` |
+| `pickupTime` | string (HH:mm) | ✔ | 수령 예정 시간 (지점 상세 화면에서 슬롯 선택) | `10:00` |
 | `createdAt` | datetime | ✔ | 신청 일시 | `2026-07-28T09:12:00+09:00` |
 | `processedAt` | datetime \| null | | 완료 처리 일시 (완료 시 세팅) | `null` |
 | `idVerified` | boolean | ✔ | 지점 현장 신분증 대조 완료 여부 (시뮬레이션) | `false` |

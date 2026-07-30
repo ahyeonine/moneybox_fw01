@@ -13,6 +13,12 @@ export function formatForeign(n, currency) {
   return `${formatNumber(n)} ${currency}`
 }
 
+/** 날짜 + 시간 표기 */
+export function formatDateTime(iso, time, lang = 'ko') {
+  const d = formatDate(iso, lang)
+  return time ? `${d} ${time}` : d
+}
+
 /** YYYY-MM-DD → 로케일 표기 */
 export function formatDate(iso, lang = 'ko') {
   if (!iso) return '-'

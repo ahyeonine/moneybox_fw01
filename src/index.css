@@ -743,3 +743,306 @@ th.num {
   color: var(--text-3);
   font-weight: 600;
 }
+
+/* ================= 최상위 3개 탭 ================= */
+.toptabs {
+  background: #10151d;
+  border-bottom: 1px solid #000;
+}
+.toptabs-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+}
+.toptabs a {
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #9aa6b5;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+.toptabs a:hover {
+  color: #d7dee8;
+}
+.toptabs a.active {
+  color: #fff;
+  border-bottom-color: var(--brand);
+}
+.toptabs-hint {
+  margin-left: auto;
+  color: #5f6b7a;
+  font-size: 11px;
+  white-space: nowrap;
+  padding-left: 16px;
+}
+@media (max-width: 720px) {
+  .toptabs-hint {
+    display: none;
+  }
+}
+
+/* ================= 외국인 웹사이트 헤더 ================= */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.site-header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.logo {
+  font-weight: 900;
+  font-size: 19px;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  flex: 0 0 auto;
+}
+.logo span {
+  color: var(--brand);
+}
+.site-nav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+.site-nav a {
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.site-nav a:hover {
+  background: var(--surface-2);
+}
+.site-nav a.active {
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+.lang-dd {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px 4px 12px;
+  background: var(--surface);
+  flex: 0 0 auto;
+}
+.lang-dd .globe {
+  font-size: 14px;
+}
+.lang-dd select {
+  border: 0;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  padding: 2px 4px;
+  width: auto;
+}
+.lang-dd select:focus {
+  outline: none;
+  box-shadow: none;
+}
+.site .content,
+.admin .content {
+  max-width: 1100px;
+}
+
+/* ================= 어드민(CEMS/POS) 헤더 ================= */
+.admin-header {
+  background: #1b2430;
+  border-bottom: 1px solid #0c1119;
+}
+.admin-header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+}
+.admin-brand {
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+.admin-header .lang-toggle {
+  background: transparent;
+}
+
+/* ================= STEP A: 지점 선택 ================= */
+.branch-split {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 780px) {
+  .branch-split {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.split-h {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.dot-open {
+  color: var(--success);
+}
+.map-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.map-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #e9eef6, #dbe6f5);
+  background-image: linear-gradient(rgba(120, 140, 170, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 140, 170, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  border: 0;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.map-pin .pin-dot {
+  font-size: 22px;
+  filter: grayscale(0.2);
+}
+.map-pin .pin-label {
+  font-size: 11px;
+  font-weight: 700;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+.map-pin.selected .pin-dot {
+  transform: scale(1.35);
+  filter: none;
+}
+.map-pin.selected .pin-label {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+.map-caption {
+  padding: 8px 12px;
+  text-align: center;
+  background: var(--surface);
+}
+
+/* ================= STEP B: 지점 상세 + 신청 ================= */
+.detail-split {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+@media (min-width: 860px) {
+  .detail-split {
+    grid-template-columns: 1.5fr 1fr;
+  }
+}
+.detail-left .card + .card {
+  margin-top: 14px;
+}
+.detail-right {
+  position: static;
+}
+@media (min-width: 860px) {
+  .detail-right {
+    position: sticky;
+    top: 76px;
+  }
+}
+.rate-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (min-width: 480px) {
+  .rate-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.rate-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  background: var(--surface);
+}
+.rate-card.bank {
+  background: var(--surface-2);
+}
+.rate-card .rc-cur {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.rate-card .rc-rate {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+.apply-card {
+  border-color: #d6e0f2;
+}
+.amount-row {
+  display: flex;
+  gap: 8px;
+}
+.cur-select {
+  width: 120px;
+  flex: 0 0 auto;
+}
+.convert-box {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+  background: var(--surface-2);
+}
+.convert-box .cv-top {
+  font-size: 14px;
+  color: var(--text-2);
+  font-weight: 700;
+}
+.convert-box .cv-arrow {
+  color: var(--brand);
+  font-size: 16px;
+  margin: 2px 0;
+}
+.convert-box .cv-krw {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--brand-dark);
+  letter-spacing: -0.02em;
+}

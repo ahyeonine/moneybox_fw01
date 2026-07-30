@@ -32,6 +32,7 @@ export function ReservationProvider({ children }) {
         customerName: draft.customerName,
         email: draft.email,
         pickupDate: draft.pickupDate,
+        pickupTime: draft.pickupTime ?? '10:00',
         createdAt: `${today}T00:00:00+09:00`, // 프로토타입: 시각은 기준일 자정으로 기록
         processedAt: null,
         idVerified: false,
