@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useI18n } from '../../i18n/I18nContext.jsx'
 import { useReservations } from '../../store/ReservationContext.jsx'
 import { getBranch } from '../../data/branches.js'
@@ -9,12 +10,28 @@ import { StatusBadge, TxBadge } from '../../components/Badges.jsx'
 export default function TransactionProcess() {
   const { t, lang } = useI18n()
   const { getByNo, completeReservation } = useReservations()
+  const [params] = useSearchParams()
 
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState(params.get('no') || '')
   const [no, setNo] = useState(null) // 조회된 예약번호
   const [notFound, setNotFound] = useState(false)
   const [idChecked, setIdChecked] = useState(false)
   const [flash, setFlash] = useState(null)
+
+  // 예약조회 결과 리스트에서 행 클릭 → ?no=RSV-... 로 진입 시 자동 조회
+  useEffect(() => {
+    const qno = params.get('no')
+    if (!qno) return
+    const r = getByNo(qno)
+    if (r) {
+      setNo(r.reservationNo)
+      setIdChecked(r.idVerified)
+      setNotFound(false)
+    } else {
+      setNotFound(true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // 항상 store 최신 상태를 참조
   const rec = no ? getByNo(no) : null

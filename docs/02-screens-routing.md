@@ -35,7 +35,9 @@
 | `/cems/settings/rates` | `RateManagement` | 운영자 | 환전율관리 |
 | `/cems/settings/limits` | `LimitManagement` | 운영자 | 외국인서비스 한도관리 (신규) |
 | `/pos` (index) | `PosHome` | 직원 | POS 홈 (타일 화면) = POS 기본 진입 |
-| `/pos/transaction` | `PosTransaction` | 직원 | 거래처리 + 시뮬레이션 바 (홈 타일에서 진입) |
+| `/pos/reservation` | `PosReservationSearch` | 직원 | 환전예약 검색 폼 (화면 A) |
+| `/pos/reservation/results` | `PosReservationResults` | 직원 | 환전예약 결과 리스트 (화면 B) |
+| `/pos/transaction` | `PosTransaction` | 직원 | 거래처리 + 시뮬레이션 바 (`?no=` 로 예약 사전선택) |
 | `*` | → `/site` | - | 폴백 |
 
 ---
@@ -119,12 +121,30 @@
 옅은 회색 배경 전체 화면, 카드형 타일. 상단 중앙 `MONEY BOX` 로고(공통 `Logo` 재사용).
 - **1행(큰 타일 2개)**: 주황 `SELL / 외화 파실 때`, 파랑 `BUY / 외화 사실 때`
 - **2행(작은 타일 3개)**: `MORE / 더보기`, **`RESERVATION / 환전예약`(클릭 동작)**, `ONLINE EXCHANGE / 온라인환전`
-- `환전예약` 타일만 `/pos/transaction` 으로 이동. 나머지(SELL/BUY/MORE/ONLINE)는 시각적 존재만(서비스 범위 밖).
+- `환전예약` 타일만 `/pos/reservation`(검색 폼) 으로 이동. 나머지(SELL/BUY/MORE/ONLINE)는 시각적 존재만(서비스 범위 밖).
 - **푸터**: 좌 `머니박스 지점`(일반화 더미, 실제 지점명 미노출) / 중앙 `© MONEYBOX Corp.` / 우 `v1.0.0-demo`
 
-### 4.1 거래처리 (`PosTransaction`, `/pos/transaction`)
+### 4.1 환전예약 검색 폼 — 화면 A (`PosReservationSearch`, `/pos/reservation`)
+POS 홈 `환전예약` 타일 클릭 시 최초 진입. 전화/휴대전화 필드 없이 **이메일 단일 채널**.
+- 좌상단: 아이콘 + `환전예약` 타이틀 / 우상단: **`홈`** 버튼만(검색 전이라 `이전` 없음) → POS 홈
+- 폼(세로): `이름` · `수령일`(기본값=시뮬레이션 오늘) · `이메일` · **`검색`**(검정 전체폭)
+- 검색 시 조건을 쿼리스트링으로 넘겨 결과 리스트(화면 B)로 이동
+
+### 4.2 환전예약 결과 리스트 — 화면 B (`PosReservationResults`, `/pos/reservation/results`)
+- 좌상단: 아이콘 + `환전예약` / 우상단: **`홈`** + **`이전`**(→ 화면 A)
+- 상단 필터 행: `이름 · 수령일 · 이메일 · [검색]` — 화면 A 값 유지한 채 재검색(쿼리스트링 갱신)
+- **`방문확인만 보기` / `전체보기` 토글** — 리마인더 응답별 노출 기준(05_어드민기능정의서) 재사용:
+  - 취소/자동취소 → 미노출
+  - 수령예정일 **당일** 도달 건 → 토글과 무관하게 항상 노출
+  - `방문확인만 보기`(기본) → `CONFIRMED`(방문예정 확인)만 노출
+  - `전체보기` → 무응답/발송전 건도 함께 노출
+- 검색 조건: 이름(부분일치) + 수령일(일치 또는 이후, `pickupDate >= date`) + 이메일(부분일치), 미입력 필드는 제외
+- 결과 테이블: `#(예약번호) | 이름 | 이메일 | 수령일`, 각 행 살구색 하이라이트·클릭 가능
+- **행 클릭 → `/pos/transaction?no=RSV-...`** (거래처리 화면에서 해당 예약 자동 조회)
+
+### 4.3 거래처리 (`PosTransaction`, `/pos/transaction`)
 기존 "거래처리" 화면. 예약번호 조회 → 신분증 대조 → 거래완료. 시뮬레이션 바 유지.
-상단에 **`홈으로`** 버튼 추가 → POS 홈으로 복귀.
+상단에 **`홈으로`** 버튼(→ POS 홈). 결과 리스트에서 `?no=` 로 진입 시 예약을 **자동 조회**.
 
 > 지점명 표기 정책: POS 화면에는 실제 지점명을 노출하지 않고 `머니박스 지점` 등 일반화 텍스트만 사용.
 > (CEMS의 `강남신논현환전`은 기존 더미 지점명으로 유지)
@@ -150,6 +170,8 @@ main.jsx
          │  └─ LimitManagement          (/cems/settings/limits)
          └─ PosShell (/pos)             ← Outlet
             ├─ PosHome (index)          ← 타일 홈
+            ├─ PosReservationSearch (/pos/reservation)         ← 화면 A 검색 폼
+            ├─ PosReservationResults (/pos/reservation/results) ← 화면 B 결과 리스트
             └─ PosTransaction (/pos/transaction)  ← SimBar + TransactionProcess + 홈으로
 ```
 
@@ -182,5 +204,7 @@ main.jsx
 
 ### 7.2 POS 홈 추가 (추가)
 - `/pos` 단일 화면 → **홈(타일) + 거래처리** 중첩 라우트로 분리. 기본 진입 = 홈(`PosHome`).
-- 홈의 `환전예약` 타일만 `/pos/transaction`(기존 거래처리)로 이동, 거래처리에 `홈으로` 버튼 추가.
+- 홈의 `환전예약` 타일 → 검색 폼(화면 A) → 결과 리스트(화면 B) → 행 클릭 → 거래처리 흐름 신설.
+  거래처리에 `홈으로` 버튼, `?no=` 사전선택(자동 조회) 지원.
+- 결과 리스트에 `방문확인만 보기/전체보기` 토글(리마인더 노출 기준 재사용). 전화/휴대전화 필드는 이메일로 통일.
 - POS 화면 지점명은 일반화 더미(`머니박스 지점`)만 사용 — 실제 지점명 미노출.

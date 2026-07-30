@@ -10,6 +10,8 @@ import CemsShell from './pages/operator/CemsShell.jsx'
 import PosShell from './pages/operator/PosShell.jsx'
 import PosHome from './pages/operator/PosHome.jsx'
 import PosTransaction from './pages/operator/PosTransaction.jsx'
+import PosReservationSearch from './pages/operator/PosReservationSearch.jsx'
+import PosReservationResults from './pages/operator/PosReservationResults.jsx'
 import ForeignReservationAdmin from './pages/cems/ForeignReservationAdmin.jsx'
 import RateManagement from './pages/cems/RateManagement.jsx'
 import LimitManagement from './pages/cems/LimitManagement.jsx'
@@ -41,6 +43,8 @@ export default function App() {
         {/* 탭 3 · POS */}
         <Route path="pos" element={<PosShell />}>
           <Route index element={<PosHome />} />
+          <Route path="reservation" element={<PosReservationSearch />} />
+          <Route path="reservation/results" element={<PosReservationResults />} />
           <Route path="transaction" element={<PosTransaction />} />
         </Route>
 

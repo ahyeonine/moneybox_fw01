@@ -31,7 +31,7 @@ export default function PosHome() {
           <div className="pt-en">MORE</div>
           <div className="pt-ko">더보기</div>
         </div>
-        <button className="pos-tile small active t-resv" onClick={() => nav('/pos/transaction')}>
+        <button className="pos-tile small active t-resv" onClick={() => nav('/pos/reservation')}>
           <div className="pt-icon gray">📋</div>
           <div className="pt-en">RESERVATION</div>
           <div className="pt-ko">환전예약</div>
