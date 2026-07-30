@@ -8,6 +8,8 @@ import AboutPage from './pages/AboutPage.jsx'
 import EsimPage from './pages/EsimPage.jsx'
 import CemsShell from './pages/operator/CemsShell.jsx'
 import PosShell from './pages/operator/PosShell.jsx'
+import PosHome from './pages/operator/PosHome.jsx'
+import PosTransaction from './pages/operator/PosTransaction.jsx'
 import ForeignReservationAdmin from './pages/cems/ForeignReservationAdmin.jsx'
 import RateManagement from './pages/cems/RateManagement.jsx'
 import LimitManagement from './pages/cems/LimitManagement.jsx'
@@ -37,7 +39,10 @@ export default function App() {
         </Route>
 
         {/* 탭 3 · POS */}
-        <Route path="pos" element={<PosShell />} />
+        <Route path="pos" element={<PosShell />}>
+          <Route index element={<PosHome />} />
+          <Route path="transaction" element={<PosTransaction />} />
+        </Route>
 
         <Route path="*" element={<Navigate to="/site" replace />} />
       </Route>

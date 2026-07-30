@@ -34,7 +34,8 @@
 | `/cems/settings` | → `/cems/settings/rates` | 운영자 | 리다이렉트 |
 | `/cems/settings/rates` | `RateManagement` | 운영자 | 환전율관리 |
 | `/cems/settings/limits` | `LimitManagement` | 운영자 | 외국인서비스 한도관리 (신규) |
-| `/pos` | `PosShell` | 직원 | 거래처리 + 시뮬레이션 바 |
+| `/pos` (index) | `PosHome` | 직원 | POS 홈 (타일 화면) = POS 기본 진입 |
+| `/pos/transaction` | `PosTransaction` | 직원 | 거래처리 + 시뮬레이션 바 (홈 타일에서 진입) |
 | `*` | → `/site` | - | 폴백 |
 
 ---
@@ -112,8 +113,21 @@
   `전체 통화에 일괄 적용`(목환율로 통화별 상당액 자동계산) → 표(통화 | 자동계산된 최대금액 | 개별수정 입력).
   지점 변경 시 저장값 로드(없으면 빈 값). 상태는 `SettingsContext`가 보관(새로고침 시 초기화).
 
-## 4. 탭 3 · POS — `PosShell` → `SimBar` + `TransactionProcess`
-기존 "거래처리" 화면을 이 탭으로 이동. 예약번호 조회 → 신분증 대조 → 거래완료. 시뮬레이션 바 유지.
+## 4. 탭 3 · POS — 홈(타일) + 거래처리 (`PosShell` = Outlet)
+
+### 4.0 POS 홈 (`PosHome`, `/pos`)
+옅은 회색 배경 전체 화면, 카드형 타일. 상단 중앙 `MONEY BOX` 로고(공통 `Logo` 재사용).
+- **1행(큰 타일 2개)**: 주황 `SELL / 외화 파실 때`, 파랑 `BUY / 외화 사실 때`
+- **2행(작은 타일 3개)**: `MORE / 더보기`, **`RESERVATION / 환전예약`(클릭 동작)**, `ONLINE EXCHANGE / 온라인환전`
+- `환전예약` 타일만 `/pos/transaction` 으로 이동. 나머지(SELL/BUY/MORE/ONLINE)는 시각적 존재만(서비스 범위 밖).
+- **푸터**: 좌 `머니박스 지점`(일반화 더미, 실제 지점명 미노출) / 중앙 `© MONEYBOX Corp.` / 우 `v1.0.0-demo`
+
+### 4.1 거래처리 (`PosTransaction`, `/pos/transaction`)
+기존 "거래처리" 화면. 예약번호 조회 → 신분증 대조 → 거래완료. 시뮬레이션 바 유지.
+상단에 **`홈으로`** 버튼 추가 → POS 홈으로 복귀.
+
+> 지점명 표기 정책: POS 화면에는 실제 지점명을 노출하지 않고 `머니박스 지점` 등 일반화 텍스트만 사용.
+> (CEMS의 `강남신논현환전`은 기존 더미 지점명으로 유지)
 
 ---
 
@@ -134,7 +148,9 @@ main.jsx
          │  ├─ ForeignReservationAdmin  (/cems/reservations)
          │  ├─ RateManagement           (/cems/settings/rates)
          │  └─ LimitManagement          (/cems/settings/limits)
-         └─ PosShell (/pos)             ← SimBar + TransactionProcess
+         └─ PosShell (/pos)             ← Outlet
+            ├─ PosHome (index)          ← 타일 홈
+            └─ PosTransaction (/pos/transaction)  ← SimBar + TransactionProcess + 홈으로
 ```
 
 > 참고: 기존 `PrepList`(리마인더 노출규칙 포함)는 이번 CEMS 재구성에서 `ForeignReservationAdmin`
@@ -163,3 +179,8 @@ main.jsx
   `POLICY_MIN_AMOUNTS` 추가.
 - 어드민 한도 상태용 `SettingsContext`(통화별 최소 / 지점별 최대) 신설. 프론트 상태만, 새로고침 시 초기화.
 - `Logo` 컴포넌트 추출(외국인 웹사이트·CEMS 헤더 공통).
+
+### 7.2 POS 홈 추가 (추가)
+- `/pos` 단일 화면 → **홈(타일) + 거래처리** 중첩 라우트로 분리. 기본 진입 = 홈(`PosHome`).
+- 홈의 `환전예약` 타일만 `/pos/transaction`(기존 거래처리)로 이동, 거래처리에 `홈으로` 버튼 추가.
+- POS 화면 지점명은 일반화 더미(`머니박스 지점`)만 사용 — 실제 지점명 미노출.

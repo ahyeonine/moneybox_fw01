@@ -1464,3 +1464,144 @@ th.num {
   font-weight: 700;
   color: var(--text-2);
 }
+
+/* ================================================================
+   POS 홈 (타일 화면)
+   ================================================================ */
+.pos-home {
+  min-height: calc(100vh - 45px);
+  background: #eceef1;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 20px 0;
+}
+.pos-top {
+  text-align: center;
+  padding: 8px 0 26px;
+}
+.pos-logo {
+  font-size: 26px;
+}
+.pos-grid {
+  flex: 1;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: minmax(150px, auto);
+  gap: 16px;
+  align-content: start;
+}
+.pos-tile {
+  border: 0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(20, 30, 45, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 20px;
+  color: var(--text);
+  cursor: default;
+}
+.pos-tile .pt-icon {
+  font-size: 34px;
+  line-height: 1;
+}
+.pos-tile .pt-icon.gray {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+.pos-tile .pt-en {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.pos-tile .pt-ko {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+/* 1행: 큰 타일 2개 (각 절반) / 2행: 작은 타일 3개 (각 1/3).
+   6칸 그리드에서 big=span3, small=span2 로 소스 순서대로 배치 (요소 타입 무관). */
+.pos-grid {
+  grid-template-columns: repeat(6, 1fr);
+}
+.pos-tile.big {
+  grid-column: span 3;
+  min-height: 200px;
+  color: #fff;
+}
+.pos-tile.small {
+  grid-column: span 2;
+}
+.pos-tile.big .pt-ko {
+  opacity: 0.95;
+}
+.pos-tile.sell {
+  background: linear-gradient(140deg, #f7a03b, #ef7d1a);
+}
+.pos-tile.buy {
+  background: linear-gradient(140deg, #4a86f7, #2f63e0);
+}
+.pos-tile.small .pt-en {
+  font-size: 15px;
+  color: var(--text-2);
+}
+.pos-tile.small .pt-ko {
+  font-size: 13px;
+  color: var(--text-3);
+}
+.pos-tile.small.active {
+  cursor: pointer;
+  transition: box-shadow 0.12s ease, transform 0.06s ease;
+}
+.pos-tile.small.active .pt-en {
+  color: var(--brand-dark);
+}
+.pos-tile.small.active .pt-icon {
+  filter: none;
+  opacity: 1;
+}
+.pos-tile.small.active:hover {
+  box-shadow: 0 4px 16px rgba(47, 109, 246, 0.25);
+}
+.pos-tile.small.active:active {
+  transform: translateY(1px);
+}
+/* 모바일: 2칸. 큰 타일 각 1칸(한 줄), 작은 타일 more/resv 한 줄, online 전폭 */
+@media (max-width: 639px) {
+  .pos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pos-tile.big {
+    grid-column: span 1;
+    min-height: 150px;
+  }
+  .pos-tile.t-more,
+  .pos-tile.t-resv {
+    grid-column: span 1;
+  }
+  .pos-tile.t-online {
+    grid-column: span 2;
+  }
+}
+.pos-footer {
+  max-width: 900px;
+  width: 100%;
+  margin: 22px auto 0;
+  padding: 16px 4px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-3);
+  border-top: 1px solid #dcdfe4;
+}
+.pos-footer .pf-center {
+  font-weight: 700;
+}
