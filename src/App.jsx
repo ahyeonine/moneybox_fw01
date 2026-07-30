@@ -8,6 +8,9 @@ import AboutPage from './pages/AboutPage.jsx'
 import EsimPage from './pages/EsimPage.jsx'
 import CemsShell from './pages/operator/CemsShell.jsx'
 import PosShell from './pages/operator/PosShell.jsx'
+import ForeignReservationAdmin from './pages/cems/ForeignReservationAdmin.jsx'
+import RateManagement from './pages/cems/RateManagement.jsx'
+import LimitManagement from './pages/cems/LimitManagement.jsx'
 
 export default function App() {
   return (
@@ -25,7 +28,13 @@ export default function App() {
         </Route>
 
         {/* 탭 2 · CEMS (어드민) */}
-        <Route path="cems" element={<CemsShell />} />
+        <Route path="cems" element={<CemsShell />}>
+          <Route index element={<Navigate to="/cems/reservations" replace />} />
+          <Route path="reservations" element={<ForeignReservationAdmin />} />
+          <Route path="settings" element={<Navigate to="/cems/settings/rates" replace />} />
+          <Route path="settings/rates" element={<RateManagement />} />
+          <Route path="settings/limits" element={<LimitManagement />} />
+        </Route>
 
         {/* 탭 3 · POS */}
         <Route path="pos" element={<PosShell />} />

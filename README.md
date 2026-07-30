@@ -25,7 +25,10 @@ npm run build && npm run preview
 | ↳ `/site/airport` | - | 공항 수령 (Out of Scope, 미운영 안내) |
 | ↳ `/site/esim`, `/site/about` | - | eSIM 더미링크 / 회사 소개·문의 더미 |
 | ↳ `/site/lookup` | 고객 | 예약조회 (번호+이메일) → 취소 / 변경 |
-| **CEMS (어드민)** `/cems` | 지점 운영자 | 신규예약 리스트 (시재 준비용 조회) |
+| **CEMS (어드민)** `/cems` | 지점 운영자 | 실제 CEMS 골격 재현 (파란 헤더 + 5탭 + 사이드바) |
+| ↳ `/cems/reservations` | 운영자 | 외국인 환전예약관리 (필터 + 테이블 + 페이지네이션) |
+| ↳ `/cems/settings/rates` | 운영자 | 환전율관리 (통화/채널별 환율, 읽기전용 데모) |
+| ↳ `/cems/settings/limits` | 운영자 | 외국인서비스 한도관리 (통화별 최소 / 지점별 최대) |
 | **POS** `/pos` | 지점 직원 | 예약번호 조회 → 신분증 대조 → 거래처리 + 시뮬레이션 도구 |
 
 > 예약 플로우는 기존 8단계 중 1~4단계(지점/통화/금액/수령일)를 STEP A·B로 통합했으며,

@@ -12,6 +12,17 @@ export const MOCK_RATES = {
   GBP: 1760.0,
   THB: 38.4,
   VND: 0.054,
+  AUD: 905.0,
+  CAD: 1010.0,
+  HKD: 177.0,
+  CHF: 1560.0,
+  SGD: 1025.0,
+  TWD: 43.5,
+  NZD: 830.0,
+  PHP: 24.2,
+  IDR: 0.085,
+  MYR: 312.0,
+  INR: 16.6,
 }
 
 export const CURRENCY_META = {
@@ -22,6 +33,31 @@ export const CURRENCY_META = {
   GBP: { flag: '🇬🇧', label: { ko: '영국 파운드', en: 'British Pound' } },
   THB: { flag: '🇹🇭', label: { ko: '태국 바트', en: 'Thai Baht' } },
   VND: { flag: '🇻🇳', label: { ko: '베트남 동', en: 'Vietnamese Dong' } },
+  AUD: { flag: '🇦🇺', label: { ko: '호주 달러', en: 'Australian Dollar' } },
+  CAD: { flag: '🇨🇦', label: { ko: '캐나다 달러', en: 'Canadian Dollar' } },
+  HKD: { flag: '🇭🇰', label: { ko: '홍콩 달러', en: 'Hong Kong Dollar' } },
+  CHF: { flag: '🇨🇭', label: { ko: '스위스 프랑', en: 'Swiss Franc' } },
+  SGD: { flag: '🇸🇬', label: { ko: '싱가포르 달러', en: 'Singapore Dollar' } },
+  TWD: { flag: '🇹🇼', label: { ko: '대만 달러', en: 'Taiwan Dollar' } },
+  NZD: { flag: '🇳🇿', label: { ko: '뉴질랜드 달러', en: 'NZ Dollar' } },
+  PHP: { flag: '🇵🇭', label: { ko: '필리핀 페소', en: 'Philippine Peso' } },
+  IDR: { flag: '🇮🇩', label: { ko: '인도네시아 루피아', en: 'Indonesian Rupiah' } },
+  MYR: { flag: '🇲🇾', label: { ko: '말레이시아 링깃', en: 'Malaysian Ringgit' } },
+  INR: { flag: '🇮🇳', label: { ko: '인도 루피', en: 'Indian Rupee' } },
+}
+
+// 전체 통화 표시 순서 (18종). 어드민 한도관리·환율관리 화면에서 사용.
+export const CURRENCY_ORDER = [
+  'USD', 'JPY', 'EUR', 'CNY', 'GBP', 'HKD', 'THB', 'TWD', 'SGD',
+  'AUD', 'CAD', 'CHF', 'NZD', 'PHP', 'MYR', 'IDR', 'VND', 'INR',
+]
+
+// 통화별 최소 환전금액 정책 기본값 (전체 지점 공통, 어드민 화면 시드)
+// TODO: 실제 정책 수치로 교체
+export const POLICY_MIN_AMOUNTS = {
+  USD: 100, JPY: 10000, EUR: 100, CNY: 500, GBP: 100, HKD: 500, THB: 1000,
+  TWD: 1000, SGD: 100, AUD: 100, CAD: 100, CHF: 100, NZD: 100, PHP: 2000,
+  MYR: 200, IDR: 500000, VND: 500000, INR: 3000,
 }
 
 /** 예약 시점 환율 조회 (비회원 기준) */

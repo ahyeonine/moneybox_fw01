@@ -11,7 +11,7 @@
 | 탭 | 경로 | 대상 사용자 | 진입 컴포넌트 |
 |---|---|---|---|
 | **외국인 웹사이트** | `/site/*` | 고객(외국인) | `CustomerSite` (자체 헤더/네비) |
-| **CEMS (어드민)** | `/cems` | 지점 운영자 | `CemsShell` → `PrepList` |
+| **CEMS (어드민)** | `/cems/*` | 지점 운영자 | `CemsShell` (파란 헤더 + 5탭 + 사이드바) |
 | **POS** | `/pos` | 지점 직원 | `PosShell` → `SimBar` + `TransactionProcess` |
 
 - 최상위 셸: `RootLayout` = `TopTabs`(3탭 전환) + `<Outlet/>`
@@ -29,7 +29,11 @@
 | `/site/esim` | `EsimPage` | - | eSIM 더미 외부링크 |
 | `/site/about` | `AboutPage` | - | 회사 소개·문의 더미 텍스트 |
 | `/site/lookup` | `LookupPage` | 고객 | 예약조회 → 취소/변경. 헤더 네비에는 없고 **푸터/예약완료 화면에서 링크** |
-| `/cems` | `CemsShell` | 운영자 | 신규예약 리스트(시재준비) |
+| `/cems` (index) | → `/cems/reservations` | 운영자 | 리다이렉트 |
+| `/cems/reservations` | `ForeignReservationAdmin` | 운영자 | 외국인 환전예약관리 (필터+테이블+페이지네이션) |
+| `/cems/settings` | → `/cems/settings/rates` | 운영자 | 리다이렉트 |
+| `/cems/settings/rates` | `RateManagement` | 운영자 | 환전율관리 |
+| `/cems/settings/limits` | `LimitManagement` | 운영자 | 외국인서비스 한도관리 (신규) |
 | `/pos` | `PosShell` | 직원 | 거래처리 + 시뮬레이션 바 |
 | `*` | → `/site` | - | 폴백 |
 
@@ -75,9 +79,38 @@
 
 ---
 
-## 3. 탭 2 · CEMS (어드민) — `CemsShell` → `PrepList`
-기존 "신규예약 리스트(시재 준비용)" 화면을 이 탭으로 이동. 로직/컬럼/필터/리마인더 노출규칙 그대로.
-자체 상단 헤더(`CEMS ·` 타이틀 + 언어토글).
+## 3. 탭 2 · CEMS (어드민) — 실제 운영 CEMS 골격 재현 (`CemsShell`)
+
+실제 운영 중인 CEMS 화면 골격(레이아웃/색상/배치)을 참고해 재현. 어드민 화면은 한국어 라벨 고정.
+
+### 3.0 공통 셸 (`CemsShell`)
+- **헤더(파란 배경)**: 좌측 `MONEY BOX` 로고(외국인 웹사이트와 공통 `Logo` 컴포넌트 재사용) +
+  시스템 타이틀 `환전 관리시스템 (강남신논현환전)`, 우측 접속시간/IP 더미 + `로그아웃`(비동작).
+- **상단 5탭**: `머니 익스체인지 · 머니 24h · 환전예약 · 온라인환전 · 설정`.
+  **`환전예약`·`설정`만 동작**, 나머지 3개는 표시만(포인터 기본). 기본 진입 = `환전예약`.
+- **좌측 사이드바** (선택 탭에 따라 전환):
+  - 환전예약: `외국인 환전예약관리`(동작) + 가상계좌입금조회/가상계좌설정/휴일관리/환전율관리/기간별매출조회(비동작)
+  - 설정: `환전율관리`(동작) + `외국인서비스 한도관리`(동작, 신규)
+
+### 3.1 외국인 환전예약관리 (`ForeignReservationAdmin`, `/cems/reservations`)
+- 기존 "신규예약 리스트"를 CEMS 레이아웃/컬럼으로 재구성.
+- **필터 행**: 구분 · 신청기간 · 수령기간 · 상태 · 환전구분 · 통화 · 예약자명 · [검색][초기화][엑셀 다운로드(비동작)]
+- **테이블 컬럼**: `No | 상태 | 수령일자 | 예약자명 | 이메일 | 환전구분 | 통화 | 환율 | 거래금액 | 원화금액 | 신청일시`
+  (레퍼런스의 생년월일·휴대전화·입금상태·예약금 컬럼은 우리 서비스에 없어 제외)
+- 상태 뱃지 색상: 예약=파랑 / 완료=초록 / 취소=회색. 수령일자 오름차순. 페이지네이션(10건/페이지).
+
+### 3.2 환전율관리 (`RateManagement`, `/cems/settings/rates`) — 대부분 읽기전용 데모
+- 상단 통화 드롭다운(18종) + `사실 때 / 기준환율 / 파실 때` 3요약.
+- 보유량 요약 테이블(지점별 보유량/평균환율/원화금액, 더미).
+- 채널별 환율 테이블: `숨김·적용여부·매각제외·당일수령불가·적용처·사실때(매도)·사실때·파실때·파실때(매입)`.
+  행: `강남 신논현 환전 / 외국인 웹사이트 / 환전예약 / 온라인환전` — **"신논현 무인환전기" → "외국인 웹사이트"로 이름 변경**.
+  `외국인 웹사이트` 행만 수동/자동(%) 라디오 + 입력칸이 화면 상태로 동작.
+
+### 3.3 외국인서비스 한도관리 (`LimitManagement`, `/cems/settings/limits`) — 신규
+- **섹션1. 통화별 최소 환전금액(전체 지점 공통)**: 통화 18종 표(통화 | 최소금액 입력) + `전체 저장`. 최대금액 컬럼 없음.
+- **섹션2. 지점별 건당 최대 환전금액(리스크 상한)**: 지점 드롭다운 + `USD 기준 금액 일괄입력` →
+  `전체 통화에 일괄 적용`(목환율로 통화별 상당액 자동계산) → 표(통화 | 자동계산된 최대금액 | 개별수정 입력).
+  지점 변경 시 저장값 로드(없으면 빈 값). 상태는 `SettingsContext`가 보관(새로고침 시 초기화).
 
 ## 4. 탭 3 · POS — `PosShell` → `SimBar` + `TransactionProcess`
 기존 "거래처리" 화면을 이 탭으로 이동. 예약번호 조회 → 신분증 대조 → 거래완료. 시뮬레이션 바 유지.
@@ -97,9 +130,15 @@ main.jsx
          │  │   └─ BranchDetailLeft / ApplyCard (STEP B)
          │  ├─ AirportPage / EsimPage / AboutPage
          │  └─ LookupPage
-         ├─ CemsShell (/cems)           ← PrepList
+         ├─ CemsShell (/cems)           ← 파란헤더 + 5탭 + 사이드바 + Outlet
+         │  ├─ ForeignReservationAdmin  (/cems/reservations)
+         │  ├─ RateManagement           (/cems/settings/rates)
+         │  └─ LimitManagement          (/cems/settings/limits)
          └─ PosShell (/pos)             ← SimBar + TransactionProcess
 ```
+
+> 참고: 기존 `PrepList`(리마인더 노출규칙 포함)는 이번 CEMS 재구성에서 `ForeignReservationAdmin`
+> 로 대체되었습니다. `SimBar`/`TransactionProcess`(POS)와 예약 도메인 로직은 변경 없습니다.
 
 ---
 
@@ -116,3 +155,11 @@ main.jsx
 - 예약 8단계 중 1~4단계를 **STEP A(지점선택)** + **STEP B(지점상세+신청)** 로 통합. 5~8단계 및
   모든 검증·상태·환율픽스·자동취소 로직은 **변경 없음**.
 - 신규 필드 `pickupTime`(수령 시간) 추가 (STEP B 시간 선택). 그 외 데이터 모델 변경 없음.
+
+### 7.1 CEMS(어드민) 재구성 (추가)
+- `/cems` 단일 화면 → **파란 헤더 + 상단 5탭 + 좌측 사이드바** 골격의 중첩 라우트로 재편.
+- 화면 3종: `외국인 환전예약관리` / `환전율관리` / `외국인서비스 한도관리`(신규).
+- 통화 목데이터 18종으로 확장(`CURRENCY_ORDER`, `MOCK_RATES`, `CURRENCY_META`), 최소금액 정책 시드
+  `POLICY_MIN_AMOUNTS` 추가.
+- 어드민 한도 상태용 `SettingsContext`(통화별 최소 / 지점별 최대) 신설. 프론트 상태만, 새로고침 시 초기화.
+- `Logo` 컴포넌트 추출(외국인 웹사이트·CEMS 헤더 공통).

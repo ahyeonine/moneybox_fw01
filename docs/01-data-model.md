@@ -99,6 +99,42 @@ ReminderStatus     = NONE   | CONFIRMED | NO_RESPONSE
 
 ---
 
+## 4.5 어드민 한도 정책 (CEMS 외국인서비스 한도관리)
+
+CEMS "외국인서비스 한도관리" 화면이 다루는 데이터. 프로토타입에서는 `SettingsContext`(프론트 상태)로만
+관리하며 새로고침 시 초기화됩니다. 실제 백엔드에서는 아래 두 구조로 저장 권장.
+
+### CurrencyMinAmount (통화별 최소 환전금액 · 전체 지점 공통)
+
+| 필드 | 타입 | 설명 |
+|---|---|---|
+| `currency` | string(3) | PK. 통화코드 (18종) |
+| `minAmount` | decimal | 최소 환전금액 (외화 기준) |
+
+- 프로토타입 시드: `POLICY_MIN_AMOUNTS` (`src/data/rates.js`). // TODO: 실제 정책 수치
+- **최대금액 컬럼 없음** — 최대는 지점별 리스크 상한(아래)에서 관리.
+
+### BranchMaxAmount (지점별 건당 최대 환전금액 · 환율 리스크 상한)
+
+| 필드 | 타입 | 설명 |
+|---|---|---|
+| `branchId` | FK→Branch | |
+| `currency` | string(3) | |
+| `maxAmount` | decimal | 건당 최대 환전금액 (외화 기준) |
+| PK | `(branchId, currency)` | |
+
+- 입력 방식: `USD 기준 금액`을 일괄 입력하면 목환율로 통화별 상당액(`maxAmount`)을 자동 계산 후
+  통화별 개별 수정. 지점 단위로 저장.
+- 프로토타입 초기 시드: 기존 `Branch.currencyLimits[*].max` 값에서 로드(`SettingsContext.seedBranchMax`).
+- 예약 금액 검증(booking)은 기존 `Branch.currencyLimits` 를 그대로 사용하며, 본 어드민 화면은
+  데모 목적의 별도 상태입니다. (실제로는 이 테이블이 검증의 소스가 되도록 연결 예정)
+
+### 통화 마스터 (18종)
+`CURRENCY_ORDER` (`src/data/rates.js`): USD, JPY, EUR, CNY, GBP, HKD, THB, TWD, SGD, AUD, CAD, CHF,
+NZD, PHP, MYR, IDR, VND, INR. 각 통화는 `CURRENCY_META`(국기·명칭)와 `MOCK_RATES`(목환율)를 가짐.
+
+---
+
 ## 5. 프로토타입에서 생략한 것 (Out of Scope)
 
 | 항목 | 사유 |

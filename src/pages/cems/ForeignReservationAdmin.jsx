@@ -1,0 +1,219 @@
+import { useState, useMemo } from 'react'
+import { useReservations } from '../../store/ReservationContext.jsx'
+import { CURRENCY_META } from '../../data/rates.js'
+import { formatDate, formatKrw, formatNumber } from '../../lib/format.js'
+import { StatusBadge, TxBadge } from '../../components/Badges.jsx'
+
+// 화면 1 · 외국인 환전예약관리 — 기존 신규예약 리스트를 CEMS 레이아웃/컬럼으로 재구성.
+// 컬럼: No | 상태 | 수령일자 | 예약자명 | 이메일 | 환전구분 | 통화 | 환율 | 거래금액 | 원화금액 | 신청일시
+// (레퍼런스의 생년월일·휴대전화·입금상태·예약금 컬럼은 우리 서비스에 없어 제외)
+
+const PAGE_SIZE = 10
+
+const emptyFilter = {
+  gubun: 'ALL', // 구분 (수령방식 — 지점수령 단일, 데모용 표시)
+  appFrom: '',
+  appTo: '',
+  pickFrom: '',
+  pickTo: '',
+  status: 'ALL',
+  txType: 'ALL',
+  currency: 'ALL',
+  name: '',
+}
+
+export default function ForeignReservationAdmin() {
+  const { reservations } = useReservations()
+
+  const [form, setForm] = useState(emptyFilter)
+  const [applied, setApplied] = useState(emptyFilter)
+  const [page, setPage] = useState(1)
+
+  const setF = (patch) => setForm((f) => ({ ...f, ...patch }))
+
+  const currencies = useMemo(
+    () => Array.from(new Set(reservations.map((r) => r.currency))),
+    [reservations]
+  )
+
+  const rows = useMemo(() => {
+    const f = applied
+    return reservations
+      .filter((r) => (f.status === 'ALL' ? true : r.status === f.status))
+      .filter((r) => (f.txType === 'ALL' ? true : r.transactionType === f.txType))
+      .filter((r) => (f.currency === 'ALL' ? true : r.currency === f.currency))
+      .filter((r) => (f.name ? r.customerName.toLowerCase().includes(f.name.toLowerCase()) : true))
+      .filter((r) => (f.appFrom ? r.createdAt.slice(0, 10) >= f.appFrom : true))
+      .filter((r) => (f.appTo ? r.createdAt.slice(0, 10) <= f.appTo : true))
+      .filter((r) => (f.pickFrom ? r.pickupDate >= f.pickFrom : true))
+      .filter((r) => (f.pickTo ? r.pickupDate <= f.pickTo : true))
+      .sort((a, b) => (a.pickupDate < b.pickupDate ? -1 : a.pickupDate > b.pickupDate ? 1 : 0))
+  }, [reservations, applied])
+
+  const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE))
+  const curPage = Math.min(page, totalPages)
+  const pageRows = rows.slice((curPage - 1) * PAGE_SIZE, curPage * PAGE_SIZE)
+
+  function search() {
+    setApplied(form)
+    setPage(1)
+  }
+  function reset() {
+    setForm(emptyFilter)
+    setApplied(emptyFilter)
+    setPage(1)
+  }
+
+  return (
+    <div>
+      <h1 className="cems-h1">외국인 환전예약관리</h1>
+
+      {/* 필터 행 */}
+      <div className="cems-filter">
+        <label>
+          <span>구분</span>
+          <select value={form.gubun} onChange={(e) => setF({ gubun: e.target.value })}>
+            <option value="ALL">전체</option>
+            <option value="BRANCH">지점수령</option>
+          </select>
+        </label>
+        <label>
+          <span>신청기간</span>
+          <div className="range">
+            <input type="date" value={form.appFrom} onChange={(e) => setF({ appFrom: e.target.value })} />
+            <em>~</em>
+            <input type="date" value={form.appTo} onChange={(e) => setF({ appTo: e.target.value })} />
+          </div>
+        </label>
+        <label>
+          <span>수령기간</span>
+          <div className="range">
+            <input type="date" value={form.pickFrom} onChange={(e) => setF({ pickFrom: e.target.value })} />
+            <em>~</em>
+            <input type="date" value={form.pickTo} onChange={(e) => setF({ pickTo: e.target.value })} />
+          </div>
+        </label>
+        <label>
+          <span>상태</span>
+          <select value={form.status} onChange={(e) => setF({ status: e.target.value })}>
+            <option value="ALL">전체</option>
+            <option value="BOOKED">예약</option>
+            <option value="COMPLETED">완료</option>
+            <option value="CANCELLED">취소</option>
+          </select>
+        </label>
+        <label>
+          <span>환전구분</span>
+          <select value={form.txType} onChange={(e) => setF({ txType: e.target.value })}>
+            <option value="ALL">전체</option>
+            <option value="SELL">매출</option>
+            <option value="BUY">매입</option>
+          </select>
+        </label>
+        <label>
+          <span>통화</span>
+          <select value={form.currency} onChange={(e) => setF({ currency: e.target.value })}>
+            <option value="ALL">전체</option>
+            {currencies.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span>예약자명</span>
+          <input
+            type="text"
+            value={form.name}
+            onChange={(e) => setF({ name: e.target.value })}
+            onKeyDown={(e) => e.key === 'Enter' && search()}
+            placeholder="이름"
+          />
+        </label>
+        <div className="cems-filter-btns">
+          <button className="cems-btn primary" onClick={search}>
+            검색
+          </button>
+          <button className="cems-btn" onClick={reset}>
+            초기화
+          </button>
+          <button className="cems-btn" onClick={() => {}} title="데모: 동작 안 함">
+            엑셀 다운로드
+          </button>
+        </div>
+      </div>
+
+      <div className="cems-count">
+        총 <strong>{rows.length}</strong>건
+      </div>
+
+      {/* 테이블 */}
+      <div className="table-wrap">
+        <table className="cems-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>상태</th>
+              <th>수령일자</th>
+              <th>예약자명</th>
+              <th>이메일</th>
+              <th>환전구분</th>
+              <th>통화</th>
+              <th className="num">환율</th>
+              <th className="num">거래금액</th>
+              <th className="num">원화금액</th>
+              <th>신청일시</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pageRows.length === 0 ? (
+              <tr>
+                <td colSpan={11} style={{ textAlign: 'center', padding: 24, color: 'var(--text-3)' }}>
+                  조회된 예약이 없습니다.
+                </td>
+              </tr>
+            ) : (
+              pageRows.map((r, i) => (
+                <tr key={r.reservationNo}>
+                  <td>{(curPage - 1) * PAGE_SIZE + i + 1}</td>
+                  <td>
+                    <StatusBadge status={r.status} />
+                  </td>
+                  <td>{formatDate(r.pickupDate, 'ko')}</td>
+                  <td>{r.customerName}</td>
+                  <td>{r.email}</td>
+                  <td>
+                    <TxBadge type={r.transactionType} />
+                  </td>
+                  <td>
+                    {CURRENCY_META[r.currency]?.flag} {r.currency}
+                  </td>
+                  <td className="num">{formatNumber(r.rate)}</td>
+                  <td className="num">{formatNumber(r.foreignAmount)}</td>
+                  <td className="num">{formatKrw(r.krwAmount)}</td>
+                  <td>{r.createdAt.slice(0, 10)}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* 페이지네이션 */}
+      <div className="cems-pagination">
+        <button disabled={curPage <= 1} onClick={() => setPage(curPage - 1)}>
+          ‹
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+          <button key={p} className={p === curPage ? 'active' : ''} onClick={() => setPage(p)}>
+            {p}
+          </button>
+        ))}
+        <button disabled={curPage >= totalPages} onClick={() => setPage(curPage + 1)}>
+          ›
+        </button>
+      </div>
+    </div>
+  )
+}

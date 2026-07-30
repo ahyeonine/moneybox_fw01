@@ -1046,3 +1046,421 @@ th.num {
   color: var(--brand-dark);
   letter-spacing: -0.02em;
 }
+
+/* ================================================================
+   CEMS (어드민) — 실제 운영 CEMS 골격 재현
+   ================================================================ */
+.cems {
+  background: #eef1f5;
+  min-height: calc(100vh - 45px);
+}
+
+/* 헤더 (파란 배경) */
+.cems-header {
+  background: linear-gradient(180deg, #1d4ed8, #1b3fb0);
+  color: #fff;
+}
+.cems-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 18px;
+}
+.cems-logo {
+  color: #fff !important;
+  font-size: 18px;
+}
+.cems-logo span {
+  color: #bcd0ff !important;
+}
+.cems-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding-left: 6px;
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+}
+.cems-meta {
+  font-size: 12px;
+  color: #cdd9f5;
+}
+.cems-logout {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+@media (max-width: 640px) {
+  .cems-meta {
+    display: none;
+  }
+  .cems-title {
+    font-size: 13px;
+  }
+}
+
+/* 상단 5탭 */
+.cems-toptabs {
+  background: #12328f;
+  border-bottom: 2px solid #0e2570;
+}
+.cems-toptabs-inner {
+  display: flex;
+  gap: 0;
+  padding: 0 12px;
+  overflow-x: auto;
+}
+.cems-toptabs a,
+.cems-toptabs span {
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #c6d3f7;
+  white-space: nowrap;
+}
+.cems-toptabs a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+.cems-toptabs a.active {
+  background: #eef1f5;
+  color: #12328f;
+}
+.cems-toptabs span.disabled {
+  color: #7f93c9;
+  cursor: default;
+}
+
+/* 사이드바 + 본문 */
+.cems-body {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .cems-body {
+    grid-template-columns: 1fr;
+  }
+}
+.cems-sidebar {
+  background: #fff;
+  border-right: 1px solid var(--border);
+  min-height: calc(100vh - 140px);
+  padding: 10px 0;
+}
+.cems-sidebar-h {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 16px;
+}
+.cems-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cems-sidebar li a,
+.cems-sidebar li span {
+  display: block;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  border-left: 3px solid transparent;
+}
+.cems-sidebar li a:hover {
+  background: var(--surface-2);
+}
+.cems-sidebar li a.active {
+  color: var(--brand-dark);
+  background: var(--brand-soft);
+  border-left-color: var(--brand);
+  font-weight: 800;
+}
+.cems-sidebar li span.disabled {
+  color: var(--text-3);
+  cursor: default;
+}
+.cems-main {
+  padding: 18px 20px 60px;
+  min-width: 0;
+}
+.cems-h1 {
+  font-size: 19px;
+  margin: 0 0 14px;
+}
+.cems-h2 {
+  font-size: 15px;
+  margin: 0 0 10px;
+}
+
+/* 필터 행 */
+.cems-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.cems-filter > label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cems-filter > label > span {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.cems-filter input,
+.cems-filter select {
+  padding: 7px 9px;
+  font-size: 13px;
+  width: auto;
+}
+.cems-filter .range {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cems-filter .range em {
+  color: var(--text-3);
+  font-style: normal;
+}
+.cems-filter-btns {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+.cems-btn {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.cems-btn.primary {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+.cems-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.cems-count {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-bottom: 8px;
+}
+.cems-count strong {
+  color: var(--brand-dark);
+}
+
+/* 테이블 */
+.cems-table {
+  font-size: 13px;
+  min-width: 900px;
+}
+.cems-table th {
+  background: #f2f5fa;
+  border-bottom: 1px solid #d9dfe8;
+  font-size: 12px;
+}
+.cems-table td {
+  border-bottom: 1px solid #eef1f5;
+}
+.limit-table,
+.channel-table {
+  min-width: 520px;
+}
+
+/* 페이지네이션 */
+.cems-pagination {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-top: 16px;
+}
+.cems-pagination button {
+  min-width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.cems-pagination button.active {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+.cems-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 패널 */
+.cems-panel {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.panel-head .cems-h2 {
+  margin: 0;
+}
+.saved-flash {
+  color: var(--success);
+  font-weight: 700;
+  font-size: 13px;
+  margin-right: 10px;
+}
+
+/* 환율관리 상단 요약 */
+.rate-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+}
+.rate-cur {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rate-cur > span {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.rate-summary {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+.rate-summary .rs {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 18px;
+  text-align: center;
+  min-width: 100px;
+}
+.rate-summary .rs-l {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.rate-summary .rs-v {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.rate-summary .rs.buy {
+  background: #fdeef3;
+}
+.rate-summary .rs.buy .rs-v {
+  color: #c0356b;
+}
+.rate-summary .rs.sell {
+  background: var(--brand-soft);
+}
+.rate-summary .rs.sell .rs-v {
+  color: var(--brand-dark);
+}
+
+/* 채널 테이블 편집 행 */
+.channel-table td {
+  text-align: center;
+}
+.channel-table td.num {
+  text-align: right;
+}
+.channel-table .ch-name {
+  text-align: left;
+  font-weight: 700;
+}
+.channel-table .row-editable {
+  background: #fbfcff;
+}
+.ratemode {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.ratemode label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ratemode-input {
+  width: 90px !important;
+  padding: 6px 8px !important;
+}
+
+/* 한도관리 입력 */
+.cell-input {
+  width: 140px !important;
+  padding: 6px 8px !important;
+  text-align: right;
+}
+.auto-cell {
+  color: var(--text-2);
+}
+.limit-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: var(--surface-2);
+  border-radius: 8px;
+}
+.limit-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.limit-controls label > span {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.limit-controls .range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.limit-controls .range input {
+  width: 140px;
+}
+.limit-controls .unit {
+  font-weight: 700;
+  color: var(--text-2);
+}
