@@ -577,7 +577,7 @@ function StepReview({ draft, branch, rate, krw }) {
         </div>
         <div className="row">
           <span className="k">{t('common.txType')}</span>
-          <span className="v">{t(`tx.${draft.transactionType}`)}</span>
+          <span className="v">{t(`txc.${draft.transactionType}`)}</span>
         </div>
         <div className="row">
           <span className="k">{t('common.currency')}</span>
@@ -669,6 +669,10 @@ function StepDone({ rec, onNew }) {
       </p>
       <div className="result-code">{rec.reservationNo}</div>
       <div className="summary" style={{ marginTop: 12 }}>
+        <div className="row">
+          <span className="k">{t('common.txType')}</span>
+          <span className="v">{t(`txc.${rec.transactionType}`)}</span>
+        </div>
         <div className="row">
           <span className="k">{t('stepB.dateTime')}</span>
           <span className="v">{formatDateTime(rec.pickupDate, rec.pickupTime, lang)}</span>

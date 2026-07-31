@@ -42,10 +42,15 @@ export const STRINGS = {
   'status.BOOKED': { ko: '예약', en: 'Booked' },
   'status.COMPLETED': { ko: '완료', en: 'Completed' },
   'status.CANCELLED': { ko: '취소', en: 'Cancelled' },
+  // 내부 데이터값 표기 (직원용 · CEMS/POS). 절대 고객 라벨로 바꾸지 말 것.
   'tx.SELL': { ko: '매출 (외화 수령)', en: 'Sell (customer buys FX)' },
   'tx.BUY': { ko: '매입 (외화 판매)', en: 'Buy (customer sells FX)' },
   'tx.SELL.short': { ko: '매출', en: 'Sell' },
   'tx.BUY.short': { ko: '매입', en: 'Buy' },
+  // 고객용 라벨 (외국인 웹사이트). "내가 뭘 사는가" 관점으로 통일.
+  //  txc.SELL = 매출(내부값) = 외화 구매 / txc.BUY = 매입(내부값) = 원화 구매
+  'txc.SELL': { ko: '외화 구매', en: 'Buy FX' },
+  'txc.BUY': { ko: '원화 구매', en: 'Buy KRW' },
 
   // 홈
   'home.hero.title': { ko: '환율 걱정 없이,\n미리 예약하고 지점에서 받으세요', en: 'Lock your rate now,\npick up cash at a branch' },
@@ -257,9 +262,9 @@ export const STRINGS = {
   'stepB.vsBank': { ko: '은행보다 유리', en: 'better than bank' },
   'stepB.applyCardTitle': { ko: '환전 신청', en: 'Apply' },
   'stepB.buyFx': { ko: '외화 구매', en: 'Buy FX' },
-  'stepB.sellFx': { ko: '외화 판매', en: 'Sell FX' },
-  'stepB.buyFxHint': { ko: '고객이 외화를 구매합니다 (지점 매출)', en: 'You buy foreign currency' },
-  'stepB.sellFxHint': { ko: '고객이 외화를 판매합니다 (지점 매입)', en: 'You sell foreign currency' },
+  'stepB.sellFx': { ko: '원화 구매', en: 'Buy KRW' },
+  'stepB.buyFxHint': { ko: '외화를 사고 원화로 결제합니다', en: 'Buy foreign currency, pay in KRW' },
+  'stepB.sellFxHint': { ko: '원화를 사고 외화로 결제합니다', en: 'Buy KRW, pay in foreign currency' },
   'stepB.dateTime': { ko: '수령 날짜 및 시간', en: 'Pickup date & time' },
   'stepB.time': { ko: '시간', en: 'Time' },
   'stepB.amountTitle': { ko: '환전 금액', en: 'Amount' },
