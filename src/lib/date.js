@@ -28,9 +28,9 @@ export function diffDays(aIso, bIso) {
  * 수령 가능 날짜 범위 계산.
  * @param todayIso 오늘(시뮬레이션 기준일)
  * @param leadTimeDays 지점 리드타임
- * @param maxWindowDays 최대 예약 가능일수 (기본 30일)
+ * @param maxWindowDays 최대 예약 가능일수 (기본 14일 = 2주)
  */
-export function pickupRange(todayIso, leadTimeDays, maxWindowDays = 30) {
+export function pickupRange(todayIso, leadTimeDays, maxWindowDays = 14) {
   return {
     minDate: addDays(todayIso, leadTimeDays),
     maxDate: addDays(todayIso, maxWindowDays),

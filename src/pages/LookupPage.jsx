@@ -214,7 +214,7 @@ function ChangeForm({ rec, today, onSave, onCancel }) {
   const limit = currencyLimit(branchId, effectiveCurrency)
   const amountCheck = validateAmount(amount, limit)
   const branch = getBranch(branchId)
-  const range = pickupRange(today, branch.leadTimeDays, 30)
+  const range = pickupRange(today, branch.leadTimeDays, 14)
   const rate = getRate(effectiveCurrency)
   const krw = amountCheck.ok ? toKrw(Number(amount), rate) : 0
 

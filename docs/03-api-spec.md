@@ -106,6 +106,7 @@
 409 Conflict  { "code": "SOLD_OUT" }
 ```
 - `code`: `BELOW_MIN` | `ABOVE_MAX` | `INVALID_FORMAT` | `LEAD_TIME` | `OUT_OF_WINDOW` | `SOLD_OUT`
+- 수령일 제약: 리드타임 이후 ~ **최대 2주(14일)** 이내. 범위 밖이면 `LEAD_TIME`(리드타임 미만) 또는 `OUT_OF_WINDOW`(14일 초과).
 
 ### `GET /reservations/lookup?reservationNo=RSV-...&email=...`
 예약조회 (번호+이메일 대조, 무로그인).

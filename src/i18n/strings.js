@@ -87,8 +87,8 @@ export const STRINGS = {
   'book.step3.est': { ko: '예상 원화', en: 'Estimated KRW' },
   'book.step4.title': { ko: '수령 예정일을 선택하세요', en: 'Choose a pickup date' },
   'book.step4.help': {
-    ko: '리드타임 이후 ~ 30일 이내 날짜만 선택 가능합니다.',
-    en: 'Only dates after the lead time and within 30 days can be selected.',
+    ko: '리드타임 이후 ~ 최대 2주(14일) 이내 날짜만 선택 가능합니다.',
+    en: 'Only dates after the lead time and within 2 weeks (14 days) can be selected.',
   },
   'book.step5.title': { ko: '예약자 정보를 입력하세요', en: 'Enter your details' },
   'book.step5.namehint': { ko: '여권 영문 표기와 동일하게 입력', en: 'Match your passport exactly' },

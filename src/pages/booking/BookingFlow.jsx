@@ -23,7 +23,8 @@ const STAGES = ['branch', 'apply', 'info', 'review', 'consent', 'done']
 
 const emptyDraft = {
   branchId: '',
-  transactionType: 'SELL', // SELL(외화 구매=지점 매출) | BUY(외화 판매=지점 매입)
+  // 외국인 웹사이트는 원화구매(=매입, BUY)로 고정. (데이터 모델은 매입/매출 둘 다 유지)
+  transactionType: 'BUY',
   currency: '',
   amount: '',
   pickupDate: '',
@@ -52,7 +53,7 @@ export default function BookingFlow() {
   const rate = draft.currency ? getRate(draft.currency) : null
   const krw = amountCheck.ok ? toKrw(Number(draft.amount), rate) : 0
   const range = useMemo(
-    () => (branch ? pickupRange(today, branch.leadTimeDays, 30) : null),
+    () => (branch ? pickupRange(today, branch.leadTimeDays, 14) : null),
     [branch, today]
   )
 
@@ -73,7 +74,7 @@ export default function BookingFlow() {
       ...d,
       branchId,
       currency: first,
-      transactionType: 'SELL',
+      transactionType: 'BUY', // 원화구매 고정
       amount: '',
       pickupDate: '',
       pickupTime: '',
@@ -444,21 +445,12 @@ function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canAp
       <div className="card apply-card">
         <h2 style={{ fontSize: 16 }}>{t('stepB.applyCardTitle')}</h2>
 
-        {/* 외화 구매 / 외화 판매 (= transactionType) */}
+        {/* 환전구분: 원화구매(=매입) 고정. 선택 UI 없이 표시용 배지만 노출 */}
         <div className="pill-group" style={{ marginBottom: 16 }}>
-          {[
-            { tx: 'SELL', title: t('stepB.buyFx'), hint: t('stepB.buyFxHint') },
-            { tx: 'BUY', title: t('stepB.sellFx'), hint: t('stepB.sellFxHint') },
-          ].map((o) => (
-            <button
-              key={o.tx}
-              className={`pill ${draft.transactionType === o.tx ? 'selected' : ''}`}
-              onClick={() => set({ transactionType: o.tx })}
-            >
-              <div className="pill-t">{o.title}</div>
-              <div className="pill-d">{o.hint}</div>
-            </button>
-          ))}
+          <div className="pill selected" aria-disabled="true" style={{ cursor: 'default' }}>
+            <div className="pill-t">{t('stepB.sellFx')}</div>
+            <div className="pill-d">{t('stepB.sellFxHint')}</div>
+          </div>
         </div>
 
         {/* 수령 날짜 및 시간 */}
