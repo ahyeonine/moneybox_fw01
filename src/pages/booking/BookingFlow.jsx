@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../../i18n/I18nContext.jsx'
 import { useReservations } from '../../store/ReservationContext.jsx'
@@ -7,7 +7,7 @@ import Modal from '../../components/Modal.jsx'
 import BranchMap from '../../components/BranchMap.jsx'
 import { BRANCHES, getBranch, branchCurrencies, currencyLimit } from '../../data/branches.js'
 import { CURRENCY_META, getRate, toKrw, getDisplayRates, getBankCompare } from '../../data/rates.js'
-import { validateAmount, isValidEmail, isValidName } from '../../lib/validation.js'
+import { validateAmount, isValidEmail, isValidName, correctAmount } from '../../lib/validation.js'
 import { pickupRange, timeSlots } from '../../lib/date.js'
 import { formatKrw, formatForeign, formatNumber, formatDate, formatDateTime } from '../../lib/format.js'
 
@@ -81,8 +81,11 @@ export default function BookingFlow() {
     setStage('apply')
   }
 
-  // STEP B: 신청하기 → 재고 확인 후 예약자정보로
+  // STEP B: 신청하기 → 금액 자동보정 → 재고 확인 후 예약자정보로
   function submitApply() {
+    // 다음 단계로 넘어가는 시점에 금액 자동 보정(단위→최대→최소)
+    const corrected = correctAmount(draft.amount, limit)
+    if (corrected.changed) set({ amount: corrected.value })
     if (isSoldOut(draft.branchId, draft.currency)) {
       setSoldOut(true)
       return
@@ -126,9 +129,10 @@ export default function BookingFlow() {
     setStage('branch')
   }
 
+  // 금액은 양수이기만 하면 진행 가능(범위/단위는 신청 시 자동보정으로 맞춤)
   const applyValid =
     !!draft.currency &&
-    amountCheck.ok &&
+    Number(draft.amount) > 0 &&
     !!draft.pickupDate &&
     !!draft.pickupTime &&
     draft.pickupDate >= (range?.minDate || '') &&
@@ -417,10 +421,23 @@ function BranchDetailLeft({ branch }) {
   )
 }
 
-function ApplyCard({ branch, draft, set, limit, amountCheck, rate, krw, range, onApply, canApply }) {
+function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canApply }) {
   const { t, lang } = useI18n()
   const currencies = branchCurrencies(branch.id)
   const slots = timeSlots(branch.hours)
+
+  // 금액 자동보정: 포커스 아웃 시 단위→최대→최소 순으로 맞추고 안내 문구를 잠깐 표시
+  const [adjust, setAdjust] = useState(null)
+  const adjustTimer = useRef(null)
+  function handleAmountBlur() {
+    const res = correctAmount(draft.amount, limit)
+    if (res.changed) {
+      set({ amount: res.value })
+      setAdjust(res.reason)
+      if (adjustTimer.current) clearTimeout(adjustTimer.current)
+      adjustTimer.current = setTimeout(() => setAdjust(null), 2500)
+    }
+  }
 
   return (
     <div className="detail-right">
@@ -471,7 +488,7 @@ function ApplyCard({ branch, draft, set, limit, amountCheck, rate, krw, range, o
           )}
         </div>
 
-        {/* 환전 금액 */}
+        {/* 환전 금액 (통화는 드롭다운 한 곳에서만 표시) */}
         <div className="field">
           <span className="lbl">{t('stepB.amountTitle')}</span>
           <div className="amount-row">
@@ -491,25 +508,29 @@ function ApplyCard({ branch, draft, set, limit, amountCheck, rate, krw, range, o
               inputMode="numeric"
               value={draft.amount}
               onChange={(e) => set({ amount: e.target.value })}
+              onBlur={handleAmountBlur}
               placeholder="0"
             />
           </div>
           {limit && (
             <div className="tiny" style={{ marginTop: 6 }}>
-              {t('stepB.maxHint')}: {formatNumber(limit.max)} {draft.currency}
-              {limit.unitStep ? ` · ${t('stepB.unitHint')}: ${formatNumber(limit.unitStep)} ${draft.currency}` : ''}
+              {t('stepB.min')} {formatNumber(limit.min)} {draft.currency} · {t('stepB.max')}{' '}
+              {formatNumber(limit.max)} {draft.currency}
+              {limit.unitStep
+                ? ` · ${formatNumber(limit.unitStep)} ${draft.currency} ${t('stepB.unitSuffix')}`
+                : ''}
             </div>
           )}
-          {!amountCheck.ok && draft.amount !== '' && (
-            <div className="err-text">{t(`err.amount.${amountCheck.code}`)}</div>
+          {adjust && (
+            <div className="notice info" style={{ marginTop: 6, padding: '6px 10px' }}>
+              {t(`stepB.adj.${adjust}`)}
+            </div>
           )}
         </div>
 
-        {/* 환산 원화 (참고용) */}
+        {/* 환산 원화 (참고용) — 통화 코드는 위 드롭다운에만 표시하고 여기선 숫자만 */}
         <div className="convert-box">
-          <div className="cv-top">
-            {draft.amount ? formatForeign(Number(draft.amount), draft.currency) : `0 ${draft.currency}`}
-          </div>
+          <div className="cv-top">{draft.amount ? formatNumber(Number(draft.amount)) : '0'}</div>
           <div className="cv-arrow">↓</div>
           <div className="cv-krw">{formatKrw(krw)}</div>
         </div>
@@ -614,6 +635,30 @@ function StepReview({ draft, branch, rate, krw }) {
 }
 
 /* ================= STEP 7: 정책 동의 ================= */
+// 각 동의 항목: 체크박스 + 한 줄 요약 + "자세히보기" 토글 → 약관 전문(스크롤) 아코디언.
+// 전문을 다 보지 않아도 체크 가능.
+function ConsentItem({ checked, onChange, titleKey, summaryKey, fullKey }) {
+  const { t } = useI18n()
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="check-row consent-item">
+      <input type="checkbox" checked={checked} onChange={onChange} />
+      <div style={{ flex: 1 }}>
+        <div className="consent-head">
+          <button type="button" className="consent-title" onClick={() => setOpen((o) => !o)}>
+            {t(titleKey)}
+          </button>
+          <button type="button" className="consent-more" onClick={() => setOpen((o) => !o)}>
+            {open ? t('book.step7.less') : t('book.step7.more')} {open ? '▴' : '▾'}
+          </button>
+        </div>
+        <div className="cd">{t(summaryKey)}</div>
+        {open && <div className="terms-full">{t(fullKey)}</div>}
+      </div>
+    </div>
+  )
+}
+
 function StepConsent({ consent, setConsent }) {
   const { t } = useI18n()
   const allChecked = consent.noshow && consent.privacy
@@ -630,28 +675,20 @@ function StepConsent({ consent, setConsent }) {
           <div className="ct">{t('book.step7.agreeAll')}</div>
         </div>
       </div>
-      <div className="check-row">
-        <input
-          type="checkbox"
-          checked={consent.noshow}
-          onChange={(e) => setConsent((c) => ({ ...c, noshow: e.target.checked }))}
-        />
-        <div>
-          <div className="ct">{t('book.step7.noshow.t')}</div>
-          <div className="cd">{t('book.step7.noshow.d')}</div>
-        </div>
-      </div>
-      <div className="check-row">
-        <input
-          type="checkbox"
-          checked={consent.privacy}
-          onChange={(e) => setConsent((c) => ({ ...c, privacy: e.target.checked }))}
-        />
-        <div>
-          <div className="ct">{t('book.step7.privacy.t')}</div>
-          <div className="cd">{t('book.step7.privacy.d')}</div>
-        </div>
-      </div>
+      <ConsentItem
+        checked={consent.noshow}
+        onChange={(e) => setConsent((c) => ({ ...c, noshow: e.target.checked }))}
+        titleKey="book.step7.noshow.t"
+        summaryKey="book.step7.noshow.d"
+        fullKey="book.step7.noshow.full"
+      />
+      <ConsentItem
+        checked={consent.privacy}
+        onChange={(e) => setConsent((c) => ({ ...c, privacy: e.target.checked }))}
+        titleKey="book.step7.privacy.t"
+        summaryKey="book.step7.privacy.d"
+        fullKey="book.step7.privacy.full"
+      />
     </div>
   )
 }

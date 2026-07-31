@@ -1783,3 +1783,56 @@ th.num {
     display: none;
   }
 }
+
+/* ================================================================
+   정책동의 아코디언 (약관 전문)
+   ================================================================ */
+.consent-item .consent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.consent-title {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--border);
+}
+.consent-title:hover {
+  color: var(--brand-dark);
+}
+.consent-more {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+.consent-more:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.terms-full {
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-line;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}

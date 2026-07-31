@@ -49,8 +49,8 @@ export const STRINGS = {
   'tx.BUY.short': { ko: '매입', en: 'Buy' },
   // 고객용 라벨 (외국인 웹사이트). "내가 뭘 사는가" 관점으로 통일.
   //  txc.SELL = 매출(내부값) = 외화 구매 / txc.BUY = 매입(내부값) = 원화 구매
-  'txc.SELL': { ko: '외화 구매', en: 'Buy FX' },
-  'txc.BUY': { ko: '원화 구매', en: 'Buy KRW' },
+  'txc.SELL': { ko: '외화구매', en: 'Buy FX' },
+  'txc.BUY': { ko: '원화구매', en: 'Buy KRW' },
 
   // 홈
   'home.hero.title': { ko: '환율 걱정 없이,\n미리 예약하고 지점에서 받으세요', en: 'Lock your rate now,\npick up cash at a branch' },
@@ -106,6 +106,17 @@ export const STRINGS = {
     en: 'We collect your name and email to process this reservation, stored and deleted per applicable law.',
   },
   'book.step7.agreeAll': { ko: '위 내용에 모두 동의합니다', en: 'I agree to all of the above' },
+  'book.step7.more': { ko: '자세히보기', en: 'View details' },
+  'book.step7.less': { ko: '접기', en: 'Collapse' },
+  // 약관 전문 (프로토타입 더미 텍스트)
+  'book.step7.noshow.full': {
+    ko: '[노쇼정책 안내]\n1. 예약하신 외화(원화)는 수령 예정일까지 지점에서 준비됩니다.\n2. 수령 예정일 경과 시 예약이 자동으로 취소될 수 있습니다.\n3. 본 서비스는 별도의 위약금이나 이용 제한 없이 자유롭게 예약/취소가 가능합니다.\n4. 예약 시 확정된 환율은 취소 시 소멸되며, 재예약 시 재예약 시점의 환율이 적용됩니다.',
+    en: '[No-show policy]\n1. Your reserved currency is prepared at the branch until the pickup date.\n2. Reservations may be auto-cancelled after the pickup date passes.\n3. There is no penalty or usage restriction — reserve/cancel freely.\n4. The rate fixed at booking is void on cancellation; a re-reservation uses the rate at that time.',
+  },
+  'book.step7.privacy.full': {
+    ko: '[개인정보 수집·이용 동의]\n1. 수집 항목: 예약자명, 이메일\n2. 수집 목적: 예약 확인 및 안내 알림 발송\n3. 보유 기간: 거래 완료 후 1년',
+    en: '[Personal data collection & use]\n1. Items: name, email\n2. Purpose: reservation confirmation and notifications\n3. Retention: 1 year after transaction completion',
+  },
   'book.step8.title': { ko: '예약이 완료되었습니다', en: 'Reservation complete' },
   'book.step8.sub': {
     ko: '아래 예약번호로 조회·변경·취소할 수 있습니다. 확인 이메일이 발송되었습니다(시뮬레이션).',
@@ -261,10 +272,17 @@ export const STRINGS = {
   'stepB.bankBuy': { ko: '살 때', en: 'Buy' },
   'stepB.vsBank': { ko: '은행보다 유리', en: 'better than bank' },
   'stepB.applyCardTitle': { ko: '환전 신청', en: 'Apply' },
-  'stepB.buyFx': { ko: '외화 구매', en: 'Buy FX' },
-  'stepB.sellFx': { ko: '원화 구매', en: 'Buy KRW' },
+  'stepB.buyFx': { ko: '외화구매', en: 'Buy FX' },
+  'stepB.sellFx': { ko: '원화구매', en: 'Buy KRW' },
   'stepB.buyFxHint': { ko: '외화를 사고 원화로 결제합니다', en: 'Buy foreign currency, pay in KRW' },
   'stepB.sellFxHint': { ko: '원화를 사고 외화로 결제합니다', en: 'Buy KRW, pay in foreign currency' },
+  // 금액 최소/최대/단위 안내 + 자동보정 안내
+  'stepB.min': { ko: '최소', en: 'Min' },
+  'stepB.max': { ko: '최대', en: 'Max' },
+  'stepB.unitSuffix': { ko: '단위', en: 'unit' },
+  'stepB.adj.MAX': { ko: '최대 금액으로 조정되었습니다', en: 'Adjusted to the maximum amount' },
+  'stepB.adj.MIN': { ko: '최소 금액으로 조정되었습니다', en: 'Adjusted to the minimum amount' },
+  'stepB.adj.UNIT': { ko: '입력 단위에 맞게 조정되었습니다', en: 'Adjusted to the input unit' },
   'stepB.dateTime': { ko: '수령 날짜 및 시간', en: 'Pickup date & time' },
   'stepB.time': { ko: '시간', en: 'Time' },
   'stepB.amountTitle': { ko: '환전 금액', en: 'Amount' },
