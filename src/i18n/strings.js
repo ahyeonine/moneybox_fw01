@@ -97,8 +97,8 @@ export const STRINGS = {
   'book.step7.title': { ko: '안내 및 동의', en: 'Notices & consent' },
   'book.step7.noshow.t': { ko: '노쇼 안내', en: 'No-show notice' },
   'book.step7.noshow.d': {
-    ko: '방문이 어려우실 경우 예약 조회에서 언제든 취소하실 수 있습니다. 수령 예정일이 지나면 예약은 자동으로 취소되며, 별도의 제재나 불이익은 없습니다.',
-    en: 'If you cannot visit, you may cancel anytime in My Reservation. Reservations auto-cancel after the pickup date, with no penalty.',
+    ko: '방문이 어려우실 경우 예약 조회에서 미리 취소해 주세요. 수령 예정일이 지나도록 방문하지 않으실 경우 예약이 자동으로 취소되며, 반복될 경우 서비스 이용에 제한이 있을 수 있습니다.',
+    en: 'If you cannot visit, please cancel in advance in My Reservation. If you do not visit by the pickup date, your reservation is auto-cancelled, and repeated no-shows may restrict your use of the service.',
   },
   'book.step7.privacy.t': { ko: '개인정보 수집·이용 동의', en: 'Personal data consent' },
   'book.step7.privacy.d': {
@@ -110,8 +110,8 @@ export const STRINGS = {
   'book.step7.less': { ko: '접기', en: 'Collapse' },
   // 약관 전문 (프로토타입 더미 텍스트)
   'book.step7.noshow.full': {
-    ko: '[노쇼정책 안내]\n1. 예약하신 외화(원화)는 수령 예정일까지 지점에서 준비됩니다.\n2. 수령 예정일 경과 시 예약이 자동으로 취소될 수 있습니다.\n3. 본 서비스는 별도의 위약금이나 이용 제한 없이 자유롭게 예약/취소가 가능합니다.\n4. 예약 시 확정된 환율은 취소 시 소멸되며, 재예약 시 재예약 시점의 환율이 적용됩니다.',
-    en: '[No-show policy]\n1. Your reserved currency is prepared at the branch until the pickup date.\n2. Reservations may be auto-cancelled after the pickup date passes.\n3. There is no penalty or usage restriction — reserve/cancel freely.\n4. The rate fixed at booking is void on cancellation; a re-reservation uses the rate at that time.',
+    ko: '[노쇼정책 안내]\n1. 예약하신 외화(원화)는 수령 예정일까지 지점에서 준비됩니다.\n2. 방문이 어려우실 경우 수령 예정일 전에 미리 취소해 주세요.\n3. 수령 예정일이 지나도록 방문하지 않으실 경우 예약은 자동으로 취소되며, 반복적인 노쇼(미방문)가 확인될 경우 서비스 이용이 제한될 수 있습니다.\n4. 예약 시 확정된 환율은 취소 시 소멸되며, 재예약 시 재예약 시점의 환율이 적용됩니다.',
+    en: '[No-show policy]\n1. Your reserved currency is prepared at the branch until the pickup date.\n2. If you cannot visit, please cancel before the pickup date.\n3. If you do not visit by the pickup date, your reservation is auto-cancelled, and repeated no-shows may restrict your use of the service.\n4. The rate fixed at booking is void on cancellation; a re-reservation uses the rate at that time.',
   },
   'book.step7.privacy.full': {
     ko: '[개인정보 수집·이용 동의]\n1. 수집 항목: 예약자명, 이메일\n2. 수집 목적: 예약 확인 및 안내 알림 발송\n3. 보유 기간: 거래 완료 후 1년',
@@ -146,6 +146,8 @@ export const STRINGS = {
     en: 'No matching reservation. Check your number and email.',
   },
   'lookup.detail': { ko: '예약 상세', en: 'Reservation details' },
+  'lookup.listTitle': { ko: '조회 결과', en: 'Results' },
+  'lookup.backToList': { ko: '목록으로', en: 'Back to list' },
   'lookup.cancelBtn': { ko: '예약 취소', en: 'Cancel reservation' },
   'lookup.changeBtn': { ko: '예약 변경', en: 'Change reservation' },
   'lookup.cancelConfirm.t': { ko: '예약을 취소할까요?', en: 'Cancel this reservation?' },

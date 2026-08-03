@@ -12,47 +12,60 @@ import Modal from '../components/Modal.jsx'
 import DevNote from '../components/DevNote.jsx'
 
 export default function LookupPage() {
-  const { t, lang } = useI18n()
-  const { findReservation, cancelReservation, updateReservation, today } = useReservations()
+  const { t } = useI18n()
+  const { findReservationsForLookup, getByNo, cancelReservation, updateReservation, today } =
+    useReservations()
   const [params] = useSearchParams()
 
   const [form, setForm] = useState({ no: params.get('no') || '', email: params.get('email') || '' })
   const [searched, setSearched] = useState(false)
-  const [record, setRecord] = useState(null)
+  const [results, setResults] = useState([]) // 조회 결과 리스트 (같은 이메일 다건)
+  const [detailNo, setDetailNo] = useState(null) // 상세 보기 대상 예약번호
   const [showCancel, setShowCancel] = useState(false)
   const [editing, setEditing] = useState(false)
   const [flash, setFlash] = useState(null)
 
+  function runSearch(no, email, autoSelectNo) {
+    const list = findReservationsForLookup(no, email)
+    setResults(list)
+    setSearched(true)
+    setEditing(false)
+    setFlash(null)
+    const hit =
+      autoSelectNo && list.find((r) => r.reservationNo.toUpperCase() === autoSelectNo.toUpperCase())
+    setDetailNo(hit ? hit.reservationNo : null)
+  }
+
   function doSearch(e) {
     e?.preventDefault()
-    const r = findReservation(form.no, form.email)
-    setRecord(r)
-    setSearched(true)
+    runSearch(form.no, form.email, null)
+  }
+
+  // 딥링크(예약완료 → 조회): 자동 조회 후 해당 예약 상세로 바로 진입
+  useEffect(() => {
+    const no = params.get('no')
+    const email = params.get('email')
+    if (no && email) runSearch(no, email, no)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // 상세 대상 (항상 store 최신 반영)
+  const detailRec = detailNo ? getByNo(detailNo) : null
+
+  function backToList() {
+    setDetailNo(null)
     setEditing(false)
     setFlash(null)
   }
 
-  // 딥링크(예약완료 → 조회) 자동 조회
-  useEffect(() => {
-    if (params.get('no') && params.get('email')) {
-      const r = findReservation(params.get('no'), params.get('email'))
-      setRecord(r)
-      setSearched(true)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // record 를 항상 최신 상태로 (store 갱신 반영)
-  const live = record ? findReservation(record.reservationNo, record.email) : null
-
   function onCancel() {
-    cancelReservation(record.reservationNo)
+    cancelReservation(detailNo)
     setShowCancel(false)
     setFlash({ type: 'success', msg: t('lookup.cancelled.msg') })
   }
 
   function onSaved(patch) {
-    updateReservation(record.reservationNo, patch)
+    updateReservation(detailNo, patch)
     setEditing(false)
     setFlash({ type: 'success', msg: t('lookup.change.saved') })
   }
@@ -91,11 +104,11 @@ export default function LookupPage() {
           {t('common.search')}
         </button>
         <div className="tiny" style={{ marginTop: 10 }}>
-          demo: RSV-20260728-0001 / john@example.com · RSV-20260725-0005 / david@example.com
+          demo: RSV-20260728-0001 / john@example.com (같은 이메일 3건) · RSV-20260724-0006 / akira@example.com
         </div>
       </form>
 
-      {searched && !live && (
+      {searched && results.length === 0 && (
         <div className="notice danger" style={{ marginTop: 14 }}>
           {t('lookup.notfound')}
         </div>
@@ -107,9 +120,22 @@ export default function LookupPage() {
         </div>
       )}
 
-      {live && !editing && (
+      {/* 리스트 (상세 미선택 시) */}
+      {results.length > 0 && !detailNo && (
+        <ResultList
+          results={results}
+          onSelect={(no) => {
+            setDetailNo(no)
+            setFlash(null)
+          }}
+        />
+      )}
+
+      {/* 상세 */}
+      {detailRec && !editing && (
         <Detail
-          rec={live}
+          rec={detailRec}
+          onBack={backToList}
           onCancel={() => setShowCancel(true)}
           onEdit={() => {
             setEditing(true)
@@ -118,8 +144,8 @@ export default function LookupPage() {
         />
       )}
 
-      {live && editing && (
-        <ChangeForm rec={live} today={today} onSave={onSaved} onCancel={() => setEditing(false)} />
+      {detailRec && editing && (
+        <ChangeForm rec={detailRec} today={today} onSave={onSaved} onCancel={() => setEditing(false)} />
       )}
 
       {showCancel && (
@@ -140,12 +166,42 @@ export default function LookupPage() {
   )
 }
 
-function Detail({ rec, onCancel, onEdit }) {
+// 조회 결과 리스트 (예약번호 / 수령일 / 통화 / 상태) — 항목 클릭 시 상세로
+function ResultList({ results, onSelect }) {
+  const { t, lang } = useI18n()
+  return (
+    <div className="card" style={{ marginTop: 14 }}>
+      <h2>
+        {t('lookup.listTitle')} <span className="tiny">({results.length})</span>
+      </h2>
+      <div className="lookup-list">
+        {results.map((r) => (
+          <button key={r.reservationNo} className="lookup-row" onClick={() => onSelect(r.reservationNo)}>
+            <span className="lr-no">{r.reservationNo}</span>
+            <span className="lr-date">{formatDate(r.pickupDate, lang)}</span>
+            <span className="lr-cur">
+              {CURRENCY_META[r.currency]?.flag} {r.currency}
+            </span>
+            <span className="lr-status">
+              <StatusBadge status={r.status} />
+            </span>
+            <span className="lr-arrow">›</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Detail({ rec, onBack, onCancel, onEdit }) {
   const { t, lang } = useI18n()
   const branch = getBranch(rec.branchId)
   const editable = rec.status === 'BOOKED'
   return (
     <div className="card" style={{ marginTop: 14 }}>
+      <button className="btn ghost" style={{ marginBottom: 12 }} onClick={onBack}>
+        ‹ {t('lookup.backToList')}
+      </button>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
         <h2 style={{ margin: 0 }}>{t('lookup.detail')}</h2>
         <StatusBadge status={rec.status} />

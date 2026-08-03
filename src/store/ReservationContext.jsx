@@ -65,6 +65,23 @@ export function ReservationProvider({ children }) {
     [reservations]
   )
 
+  // 예약조회: (예약번호+이메일) 유효성 확인 후, 같은 이메일의 모든 예약 리스트 반환.
+  // 같은 이메일로 여러 건 예약한 경우 리스트가 여러 줄 나온다. 유효한 쌍이 없으면 빈 배열.
+  const findReservationsForLookup = useCallback(
+    (reservationNo, email) => {
+      const no = (reservationNo || '').trim().toUpperCase()
+      const em = (email || '').trim().toLowerCase()
+      if (!no || !em) return []
+      const sameEmail = reservations.filter((r) => r.email.toLowerCase() === em)
+      const valid = sameEmail.some((r) => r.reservationNo.toUpperCase() === no)
+      if (!valid) return []
+      return [...sameEmail].sort((a, b) =>
+        a.pickupDate < b.pickupDate ? -1 : a.pickupDate > b.pickupDate ? 1 : 0
+      )
+    },
+    [reservations]
+  )
+
   const updateReservation = useCallback((reservationNo, patch) => {
     setReservations((prev) =>
       prev.map((r) => (r.reservationNo === reservationNo ? { ...r, ...patch } : r))
@@ -132,6 +149,7 @@ export function ReservationProvider({ children }) {
     today,
     createReservation,
     findReservation,
+    findReservationsForLookup,
     getByNo,
     updateReservation,
     cancelReservation,

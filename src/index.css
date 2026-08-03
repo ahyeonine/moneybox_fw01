@@ -2025,3 +2025,53 @@ th.num {
   letter-spacing: -0.02em;
   color: var(--text);
 }
+
+/* 예약조회 결과 리스트 (리스트 → 상세) */
+.lookup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lookup-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.9fr 0.8fr 18px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 13px 14px;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.lookup-row:hover {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+.lookup-row .lr-no {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--brand-dark);
+}
+.lookup-row .lr-date,
+.lookup-row .lr-cur {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.lookup-row .lr-arrow {
+  text-align: right;
+  color: var(--text-3);
+  font-size: 18px;
+  font-weight: 700;
+}
+@media (max-width: 520px) {
+  .lookup-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .lookup-row .lr-arrow {
+    display: none;
+  }
+}
