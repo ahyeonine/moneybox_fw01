@@ -1,25 +1,41 @@
+/* 숫자 가독성 좋은 Pretendard (실패 시 Inter/시스템 폰트로 폴백) */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+
 :root {
-  --bg: #f5f6f8;
+  /* 배경/표면 — 배경(옅은 회색)과 카드(순백)를 명확히 분리 */
+  --bg: #f4f5f7;
   --surface: #ffffff;
-  --surface-2: #f0f2f5;
-  --border: #e3e6ea;
-  --text: #1a1d21;
-  --text-2: #5b6470;
-  --text-3: #8b95a1;
-  --brand: #2f6df6;
-  --brand-dark: #1f54cc;
-  --brand-soft: #e8f0ff;
-  --success: #17a673;
-  --success-soft: #e2f6ee;
-  --warn: #d98a00;
-  --warn-soft: #fdf3df;
-  --danger: #e0473f;
-  --danger-soft: #fdeceb;
+  --surface-2: #eceef2;
+  --border: #dce0e6;
+  --border-strong: #c4cbd4;
+  /* 텍스트 — 제목은 near-black, 본문은 진한 회색, 흐린 회색은 placeholder/비활성만 */
+  --text: #16181d;
+  --text-2: #3f3f46;
+  --text-3: #5f6672;
+  --text-faint: #9aa1ac;
+  /* 브랜드 — 메인 블루 */
+  --brand: #2563eb;
+  --brand-dark: #1d4ed8;
+  --brand-soft: #e5efff;
+  /* 포인트 — 오렌지(SELL) */
+  --accent: #f97316;
+  --accent-dark: #ea6a0a;
+  --accent-soft: #fdeddd;
+  --success: #128a5e;
+  --success-soft: #d9f2e7;
+  --warn: #b26a00;
+  --warn-soft: #fbeecf;
+  --danger: #d23b32;
+  --danger-soft: #fce3e1;
   --radius: 14px;
   --radius-sm: 9px;
-  --shadow: 0 1px 2px rgba(20, 30, 45, 0.06), 0 6px 20px rgba(20, 30, 45, 0.06);
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 10px 26px rgba(16, 24, 40, 0.09);
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.1);
   --maxw: 760px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  font-family: 'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  font-feature-settings: 'tnum' 1; /* 표(表)형 숫자 정렬 */
+  -webkit-text-size-adjust: 100%;
 }
 
 * {
@@ -37,8 +53,15 @@ body,
 body {
   background: var(--bg);
   color: var(--text);
+  font-weight: 500; /* 본문 최소 500 (얇은 300~400 금지) */
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   line-height: 1.5;
+}
+
+::placeholder {
+  color: var(--text-faint);
+  font-weight: 500;
 }
 
 a {
@@ -173,20 +196,30 @@ button {
 
 h1 {
   font-size: 22px;
+  font-weight: 800;
   letter-spacing: -0.02em;
+  color: var(--text);
   margin: 0 0 4px;
 }
 h2 {
   font-size: 18px;
+  font-weight: 700;
   letter-spacing: -0.01em;
+  color: var(--text);
   margin: 0 0 10px;
+}
+h3 {
+  font-weight: 700;
+  color: var(--text);
 }
 .muted {
   color: var(--text-2);
   font-size: 14px;
+  font-weight: 500;
 }
 .tiny {
   font-size: 12px;
+  font-weight: 500;
   color: var(--text-3);
 }
 
@@ -216,9 +249,12 @@ h2 {
   background: var(--brand-dark);
 }
 .btn.ghost {
-  background: transparent;
-  border-color: var(--border);
+  background: var(--surface);
+  border-color: var(--border-strong);
   color: var(--text);
+}
+.btn.ghost:hover {
+  border-color: var(--text-3);
 }
 .btn.danger {
   background: var(--danger);
@@ -264,9 +300,10 @@ input[type='date'],
 select {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   font-size: 15px;
+  font-weight: 500;
   background: var(--surface);
   color: var(--text);
 }
@@ -577,7 +614,7 @@ th.num {
 
 /* Home hero */
 .hero {
-  background: linear-gradient(135deg, #21375f, #2f6df6);
+  background: linear-gradient(135deg, #16325c, var(--brand));
   color: #fff;
   border-radius: var(--radius);
   padding: 30px 24px;
@@ -762,7 +799,7 @@ th.num {
   padding: 12px 18px;
   font-size: 14px;
   font-weight: 700;
-  color: #9aa6b5;
+  color: #c3ccd8;
   border-bottom: 3px solid transparent;
   white-space: nowrap;
 }
@@ -1543,10 +1580,10 @@ th.num {
   opacity: 0.95;
 }
 .pos-tile.sell {
-  background: linear-gradient(140deg, #f7a03b, #ef7d1a);
+  background: linear-gradient(140deg, #fb923c, var(--accent-dark));
 }
 .pos-tile.buy {
-  background: linear-gradient(140deg, #4a86f7, #2f63e0);
+  background: linear-gradient(140deg, #4f8bf5, var(--brand-dark));
 }
 .pos-tile.small .pt-en {
   font-size: 15px;
