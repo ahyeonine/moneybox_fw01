@@ -1,8 +1,11 @@
 import { useState, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useReservations } from '../../store/ReservationContext.jsx'
+import { CURRENCY_META } from '../../data/rates.js'
 import { diffDays } from '../../lib/date.js'
-import { formatDate } from '../../lib/format.js'
+import { formatDate, formatKrw, formatNumber } from '../../lib/format.js'
+import { StatusBadge, TxBadge } from '../../components/Badges.jsx'
+import Modal from '../../components/Modal.jsx'
 import DevNote from '../../components/DevNote.jsx'
 import { POS_RESV_NOTES } from './PosReservationSearch.jsx'
 
@@ -33,6 +36,13 @@ export default function PosReservationResults() {
   const [form, setForm] = useState(applied)
   const set = (patch) => setForm((f) => ({ ...f, ...patch }))
   const [showAll, setShowAll] = useState(false) // false = 방문확인만 보기(기본)
+  const [selected, setSelected] = useState(null) // 거래내용 확인 모달 대상
+
+  // 모달 "확인" → 모달 닫고 기존 환전예약플로우(플레이스홀더)로 이동
+  function confirmSelected() {
+    setSelected(null)
+    nav('/pos/reservation/flow')
+  }
 
   function search(e) {
     e?.preventDefault()
@@ -123,7 +133,8 @@ export default function PosReservationResults() {
             <button
               key={r.reservationNo}
               className="pos-result-row"
-              onClick={() => nav(`/pos/transaction?no=${r.reservationNo}`)}
+              onClick={() => setSelected(r)}
+              title="거래내용 확인"
             >
               <span className="pr-no">{r.reservationNo}</span>
               <span className="pr-name">{r.customerName}</span>
@@ -133,6 +144,77 @@ export default function PosReservationResults() {
             </button>
           ))}
         </div>
+      )}
+
+      {/* 거래내용 확인 모달 */}
+      {selected && (
+        <Modal onClose={() => setSelected(null)}>
+          <h2>거래내용 확인</h2>
+          <div className="summary" style={{ marginTop: 8 }}>
+            <div className="row">
+              <span className="k">예약번호</span>
+              <span className="v">{selected.reservationNo}</span>
+            </div>
+            <div className="row">
+              <span className="k">상태</span>
+              <span className="v">
+                <StatusBadge status={selected.status} />
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">예약자명</span>
+              <span className="v">{selected.customerName}</span>
+            </div>
+            <div className="row">
+              <span className="k">이메일</span>
+              <span className="v">{selected.email}</span>
+            </div>
+            <div className="row">
+              <span className="k">환전구분</span>
+              <span className="v">
+                <TxBadge type={selected.transactionType} />
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">통화</span>
+              <span className="v">
+                {CURRENCY_META[selected.currency]?.flag} {selected.currency}
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">예약환율</span>
+              <span className="v">
+                1 {selected.currency} = {formatNumber(selected.rate)} KRW
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">거래금액</span>
+              <span className="v">
+                {formatNumber(selected.foreignAmount)} {selected.currency}
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">원화금액</span>
+              <span className="v">{formatKrw(selected.krwAmount)}</span>
+            </div>
+            <div className="row">
+              <span className="k">수령일자</span>
+              <span className="v">{formatDate(selected.pickupDate, 'ko')}</span>
+            </div>
+            <div className="row">
+              <span className="k">신청일시</span>
+              <span className="v">{selected.createdAt.slice(0, 10)}</span>
+            </div>
+          </div>
+          <div className="btn-row">
+            <button className="btn ghost" onClick={() => setSelected(null)}>
+              닫기
+            </button>
+            <button className="btn primary" onClick={confirmSelected}>
+              확인
+            </button>
+          </div>
+        </Modal>
       )}
     </div>
   )
