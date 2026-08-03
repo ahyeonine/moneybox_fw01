@@ -4,12 +4,11 @@ import LanguageDropdown from './LanguageDropdown.jsx'
 import Logo from './Logo.jsx'
 
 // 외국인 웹사이트 (고객용) 헤더 + 네비게이션.
-// 좌측 로고 / 중앙 네비(지점수령·공항수령·eSIM·회사소개) / 우측 언어 드롭다운. 로그인 없음.
+// 좌측 로고 / 중앙 네비(지점수령·eSIM·회사소개) / 우측 언어 드롭다운. 공항수령 없음, 로그인 없음.
 export default function CustomerSite() {
   const { t } = useI18n()
   const nav = [
-    { to: '/site', label: t('site.nav.branch'), end: true },
-    { to: '/site/airport', label: t('site.nav.airport') },
+    { to: '/site/book', label: t('site.nav.branch') },
     { to: '/site/esim', label: t('site.nav.esim') },
     { to: '/site/about', label: t('site.nav.about') },
   ]
@@ -20,12 +19,7 @@ export default function CustomerSite() {
           <Logo to="/site" />
           <nav className="site-nav">
             {nav.map((n) => (
-              <NavLink
-                key={n.to}
-                to={n.to}
-                end={n.end}
-                className={({ isActive }) => (isActive ? 'active' : '')}
-              >
+              <NavLink key={n.to} to={n.to} className={({ isActive }) => (isActive ? 'active' : '')}>
                 {n.label}
               </NavLink>
             ))}
@@ -34,11 +28,40 @@ export default function CustomerSite() {
           <LanguageDropdown />
         </div>
       </header>
-      <main className="content">
+      <main className="content site-content">
         <Outlet />
       </main>
-      <footer className="footer">
-        <NavLink to="/site/lookup">{t('nav.lookup')}</NavLink> · MoneyBox FX Reservation · Prototype
+      <footer className="site-footer">
+        <div className="site-footer-inner">
+          <div className="sf-brand">
+            <div className="sf-logo">
+              MONEY<span>BOX</span>
+            </div>
+            <div className="sf-company">{t('footer.company')}</div>
+            <div className="sf-addr">{t('footer.addr')}</div>
+            <div className="sf-addr">{t('footer.tel')}</div>
+            <div className="sf-addr">{t('footer.email')}</div>
+          </div>
+          <div className="sf-cols">
+            <div className="sf-col">
+              <div className="sf-col-h">{t('footer.col.service')}</div>
+              <NavLink to="/site/book">{t('site.nav.branch')}</NavLink>
+              <NavLink to="/site/esim">{t('site.nav.esim')}</NavLink>
+              <NavLink to="/site/lookup">{t('nav.lookup')}</NavLink>
+            </div>
+            <div className="sf-col">
+              <div className="sf-col-h">{t('footer.col.company')}</div>
+              <NavLink to="/site/about">{t('site.nav.about')}</NavLink>
+              <a href="#" onClick={(e) => e.preventDefault()}>
+                {t('footer.terms')}
+              </a>
+              <a href="#" onClick={(e) => e.preventDefault()}>
+                {t('footer.privacy')}
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="site-footer-copy">© 2026 MONEYBOX Corp. · Prototype (dummy data)</div>
       </footer>
     </div>
   )

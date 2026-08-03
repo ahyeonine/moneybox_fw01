@@ -301,4 +301,77 @@ export const STRINGS = {
     en: 'Rate confirmed at this review step.',
   },
   'common.pickupTime': { ko: '수령 시간', en: 'Pickup time' },
+
+  // ── 랜딩 홈 (외국인 웹사이트 첫 화면). 공항수령 없음 ──
+  'home.hero.title': { ko: '가장 빠른 환전의 시작\n머니박스', en: 'The fastest way to exchange\nMoneyBox' },
+  'home.hero.sub': {
+    ko: '환전부터 eSIM까지, 머니박스로 간편하게 시작하세요.',
+    en: 'From FX to eSIM — start simply with MoneyBox.',
+  },
+  'home.card.branch.t': { ko: '지점에서 수령하기', en: 'Pick up at a branch' },
+  'home.card.branch.d': { ko: '가까운 지점에서 빠르게 수령하기', en: 'Fast pickup at a nearby branch' },
+  'home.card.branch.cta': { ko: '신청하기', en: 'Reserve' },
+  'home.card.esim.t': { ko: 'eSIM 구매하기', en: 'Buy eSIM' },
+  'home.card.esim.d': { ko: '여행 준비 필수 eSIM 구매하기', en: 'Get a must-have travel eSIM' },
+  'home.card.esim.cta': { ko: '구매하기', en: 'Buy' },
+  'home.rate.label': { ko: '실시간 환율', en: 'Live rates' },
+
+  'home.svc.title': { ko: '어떤 서비스를 이용할 수 있나요?', en: 'What can you use?' },
+  'home.svc.tab.branch': { ko: '지점 수령', en: 'Branch pickup' },
+  'home.svc.tab.esim': { ko: 'eSIM 서비스', en: 'eSIM service' },
+  'home.svc.branch.cap': { ko: '온라인으로 예약하고, 지점에서 바로 수령', en: 'Reserve online, pick up at the branch' },
+  'home.svc.branch.sub': {
+    ko: '번거로운 절차 없이 폰 안에서 예약 완료, 방문해서 신분증 확인 후 수령하세요.',
+    en: 'Book on your phone with no hassle — verify ID at the branch and collect.',
+  },
+  'home.svc.esim.cap': { ko: '여행 전 미리 준비하는 eSIM', en: 'Prepare your eSIM before the trip' },
+  'home.svc.esim.sub': {
+    ko: '도착 즉시 데이터 사용, 유심 교체 없이 간편하게.',
+    en: 'Use data on arrival — no SIM swap needed.',
+  },
+
+  'home.stats.title': {
+    ko: '이미 180만+명의 고객이 머니박스로\n간편한 시작을 함께하고 있어요.',
+    en: '1.8M+ customers already start\nsimply with MoneyBox.',
+  },
+  'home.stats.customers.l': { ko: '누적 이용 고객 수', en: 'Total customers' },
+  'home.stats.customers.v': { ko: '180만+', en: '1.8M+' },
+  'home.stats.time.l': { ko: '평균 수령 소요 시간', en: 'Avg. pickup time' },
+  'home.stats.time.v': { ko: '10초 이내', en: 'Under 10s' },
+  'home.stats.sat.l': { ko: '이용 만족도', en: 'Satisfaction' },
+  'home.stats.sat.v': { ko: '97% 이상', en: '97%+' },
+  'home.stats.note': { ko: '2025년 기준 · 목데이터', en: 'As of 2025 · mock data' },
+
+  'home.map.title': { ko: '전국 어디서든 머니박스를 만날 수 있어요.', en: 'Find MoneyBox anywhere nationwide.' },
+  'home.map.sub': {
+    ko: '전국 지점과 무인환전기에서 간편하게 이용해 보세요.',
+    en: 'Use our branches and self-service kiosks across the country.',
+  },
+  'home.map.branch.l': { ko: '지점 수', en: 'Branches' },
+  'home.map.branch.v': { ko: '40개+', en: '40+' },
+  'home.map.branch.cta': { ko: '예약 가능한 지점 찾기', en: 'Find a branch' },
+  'home.map.kiosk.l': { ko: '무인기 수', en: 'Kiosks' },
+  'home.map.kiosk.v': { ko: '120개+', en: '120+' },
+  'home.map.kiosk.cta': { ko: '가까운 무인기 찾기', en: 'Find a kiosk' },
+
+  'home.help.title': { ko: '도움이 필요하신가요?', en: 'Need help?' },
+  'home.help.email': { ko: '이메일로 문의하기', en: 'Email us' },
+  'home.help.call': { ko: '전화 상담받기', en: 'Call us' },
+
+  'home.biz.title': { ko: '제휴 및 투자 관련 문의가 있으신가요?', en: 'Partnership or investment inquiries?' },
+  'home.biz.sub': {
+    ko: '머니박스의 제휴·투자·지점 개설 등 비즈니스 문의를 남겨주세요.',
+    en: 'Reach out about partnerships, investment, or opening a branch.',
+  },
+  'home.biz.cta': { ko: '문의하기', en: 'Contact us' },
+
+  // 푸터
+  'footer.company': { ko: '(주) 머니박스', en: 'MoneyBox Inc.' },
+  'footer.addr': { ko: '서울특별시 ○○구 ○○로 000 (프로토타입 더미 주소)', en: 'Seoul, Korea (placeholder address)' },
+  'footer.tel': { ko: 'Tel. 00-0000-0000 (더미)', en: 'Tel. 00-0000-0000 (dummy)' },
+  'footer.email': { ko: 'help@moneybox.example', en: 'help@moneybox.example' },
+  'footer.col.service': { ko: '서비스', en: 'Service' },
+  'footer.col.company': { ko: '회사', en: 'Company' },
+  'footer.terms': { ko: '이용약관', en: 'Terms' },
+  'footer.privacy': { ko: '개인정보처리방침', en: 'Privacy' },
 }
