@@ -1987,3 +1987,19 @@ th.num {
   font-weight: 800;
   color: var(--text);
 }
+
+/* 환전율관리 채널 테이블 — 매각/매입 2개 설정 컬럼 대응 */
+.channel-table {
+  min-width: 920px;
+}
+.channel-table .ratemode {
+  justify-content: center;
+  gap: 8px;
+}
+.channel-table .cell-na {
+  display: inline-block;
+  text-align: center;
+  color: var(--text-faint);
+  font-weight: 800;
+  font-size: 16px;
+}

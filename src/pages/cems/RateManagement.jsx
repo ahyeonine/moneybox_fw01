@@ -11,15 +11,27 @@ const round = (n) => Math.round(n * 100) / 100
 
 // 채널 목록. 적용처는 특정 지점명 노출 없이 일반 명칭 사용.
 //  - '지점'          : 기존 "강남 신논현 환전" → 일반 명칭으로 변경
-//  - '외국인 웹사이트' : 기존 "신논현 무인환전기" 자리에 새로 추가된 행 (매입 기준으로 운영)
+//  - '외국인 웹사이트' : 기존 "신논현 무인환전기" 자리에 새로 추가된 행
 //  - '환전예약' / '온라인환전' : 그대로 유지
-// 참고: 외국인 웹사이트 예약은 전부 매입(원화구매)으로 처리되므로 외국인서비스 데이터는 매입 기준.
+// 외국인 웹사이트 채널은 매입(원화구매)만 영구 지원 → 매각 값 자체가 없음(saleNA).
 const CHANNELS = [
   { key: 'branch', name: '지점', flags: { hide: false, apply: true, exSell: false, sameDayBlock: false } },
-  { key: 'foreign', name: '외국인 웹사이트', flags: { hide: false, apply: true, exSell: false, sameDayBlock: false }, editable: true },
+  { key: 'foreign', name: '외국인 웹사이트', flags: { hide: false, apply: true, exSell: false, sameDayBlock: false }, saleNA: true },
   { key: 'reservation', name: '환전예약', flags: { hide: false, apply: true, exSell: false, sameDayBlock: true } },
   { key: 'online', name: '온라인환전', flags: { hide: true, apply: false, exSell: true, sameDayBlock: false } },
 ]
+
+// 채널×사이드(매각/매입) 환율 설정 기본값. mode: 'auto'(%) | 'manual'(직접 환율값)
+function initRows() {
+  const o = {}
+  for (const ch of CHANNELS) {
+    o[ch.key] = {
+      sale: { mode: 'auto', value: '1.75' }, // 고객 외화구매시(매각)
+      purchase: { mode: 'auto', value: '1.75' }, // 고객 외화판매시(매입)
+    }
+  }
+  return o
+}
 
 // 보유량 요약 — 지점명 익명화(카테고리 명칭). 특정 지점 이름 노출 금지.
 const HOLDINGS = [
@@ -27,17 +39,49 @@ const HOLDINGS = [
   { name: '무인기', hold: 8500 },
 ]
 
+// 채널 행의 매각/매입 환율 설정 셀 (수동=직접 환율값 입력 / 자동=% 입력)
+function RateCell({ cell, name, onChange }) {
+  return (
+    <div className="ratemode">
+      <label>
+        <input
+          type="radio"
+          name={name}
+          checked={cell.mode === 'manual'}
+          onChange={() => onChange({ mode: 'manual' })}
+        />
+        수동
+      </label>
+      <label>
+        <input
+          type="radio"
+          name={name}
+          checked={cell.mode === 'auto'}
+          onChange={() => onChange({ mode: 'auto' })}
+        />
+        자동(%)
+      </label>
+      <input
+        type="number"
+        step={cell.mode === 'auto' ? '0.1' : '1'}
+        value={cell.value}
+        onChange={(e) => onChange({ value: e.target.value })}
+        className="ratemode-input"
+      />
+      <span className="tiny">{cell.mode === 'auto' ? '%' : 'KRW'}</span>
+    </div>
+  )
+}
+
 export default function RateManagement() {
   const [currency, setCurrency] = useState('USD')
-  const [webRow, setWebRow] = useState({ mode: 'auto', value: '1.5' }) // 외국인 웹사이트 환전소환율
+  const [rows, setRows] = useState(initRows) // 채널×사이드 환율 설정 (데모 상태)
 
   const base = getRate(currency)
   const dr = getDisplayRates(currency)
-  // 4단계 표시용 티어 (더미)
-  const sellHigh = round(base * 1.025) // 사실때(매도)
-  const buy = dr.buy // 사실때
-  const sell = dr.sell // 파실때
-  const buyLow = round(base * 0.975) // 파실때(매입)
+
+  const setCell = (chKey, side, patch) =>
+    setRows((r) => ({ ...r, [chKey]: { ...r[chKey], [side]: { ...r[chKey][side], ...patch } } }))
 
   return (
     <div>
@@ -123,15 +167,14 @@ export default function RateManagement() {
                 <th>매각제외</th>
                 <th>당일수령불가</th>
                 <th>적용처</th>
-                <th className="num">사실때(매도)</th>
-                <th className="num">사실때</th>
-                <th className="num">파실때</th>
-                <th className="num">파실때(매입)</th>
+                <th className="num">기준율</th>
+                <th>고객 외화구매시(매각)</th>
+                <th>고객 외화판매시(매입)</th>
               </tr>
             </thead>
             <tbody>
               {CHANNELS.map((ch) => (
-                <tr key={ch.key} className={ch.editable ? 'row-editable' : ''}>
+                <tr key={ch.key}>
                   <td>
                     <input type="checkbox" defaultChecked={ch.flags.hide} disabled />
                   </td>
@@ -145,52 +188,38 @@ export default function RateManagement() {
                     <input type="checkbox" defaultChecked={ch.flags.sameDayBlock} disabled />
                   </td>
                   <td className="ch-name">{ch.name}</td>
-                  {ch.editable ? (
-                    <td className="num ch-edit" colSpan={4}>
-                      <div className="ratemode">
-                        <label>
-                          <input
-                            type="radio"
-                            name="webmode"
-                            checked={webRow.mode === 'manual'}
-                            onChange={() => setWebRow((r) => ({ ...r, mode: 'manual' }))}
-                          />
-                          수동
-                        </label>
-                        <label>
-                          <input
-                            type="radio"
-                            name="webmode"
-                            checked={webRow.mode === 'auto'}
-                            onChange={() => setWebRow((r) => ({ ...r, mode: 'auto' }))}
-                          />
-                          자동(%)
-                        </label>
-                        <input
-                          type="number"
-                          step="0.1"
-                          value={webRow.value}
-                          onChange={(e) => setWebRow((r) => ({ ...r, value: e.target.value }))}
-                          className="ratemode-input"
-                        />
-                        <span className="tiny">{webRow.mode === 'auto' ? '%' : 'KRW'}</span>
-                      </div>
-                    </td>
-                  ) : (
-                    <>
-                      <td className="num">{formatNumber(sellHigh)}</td>
-                      <td className="num">{formatNumber(buy)}</td>
-                      <td className="num">{formatNumber(sell)}</td>
-                      <td className="num">{formatNumber(buyLow)}</td>
-                    </>
-                  )}
+                  {/* 기준율: 읽기 전용 */}
+                  <td className="num">{formatNumber(dr.base)}</td>
+                  {/* 고객 외화구매시(매각): 외국인 웹사이트는 매입만 지원 → 해당없음(—) */}
+                  <td>
+                    {ch.saleNA ? (
+                      <span className="cell-na" title="이 채널은 매각을 지원하지 않음">
+                        —
+                      </span>
+                    ) : (
+                      <RateCell
+                        cell={rows[ch.key].sale}
+                        name={`${ch.key}-sale`}
+                        onChange={(p) => setCell(ch.key, 'sale', p)}
+                      />
+                    )}
+                  </td>
+                  {/* 고객 외화판매시(매입) */}
+                  <td>
+                    <RateCell
+                      cell={rows[ch.key].purchase}
+                      name={`${ch.key}-purchase`}
+                      onChange={(p) => setCell(ch.key, 'purchase', p)}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <div className="tiny" style={{ marginTop: 8 }}>
-          ※ 읽기 전용 데모입니다. "외국인 웹사이트" 행의 수동/자동 입력만 화면 상태로 반영됩니다.
+          ※ 데모: 기준율은 읽기 전용이며, 매각/매입의 수동(직접 환율)/자동(%) 설정은 화면 상태로만
+          반영됩니다. "외국인 웹사이트"는 매입만 지원하여 매각은 해당없음(—).
         </div>
       </div>
     </div>
