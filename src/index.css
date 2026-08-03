@@ -1873,3 +1873,85 @@ th.num {
   border-radius: 8px;
   padding: 12px 14px;
 }
+
+/* ================================================================
+   DEV NOTE — 개발 참고 설명 플로팅 패널 (프로토타입 검토용 주석)
+   실제 프로덕트 UI와 헷갈리지 않도록 노란 포스트잇 + 점선 테두리로 구분
+   ================================================================ */
+.devnote {
+  position: fixed;
+  top: 56px;
+  right: 14px;
+  z-index: 60;
+  width: 320px;
+  max-width: calc(100vw - 28px);
+  max-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  background: #fff8c4;
+  border: 2px dashed #c9a227;
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(90, 70, 0, 0.22);
+  color: #4a3d05;
+  font-family: 'Pretendard', ui-monospace, SFMono-Regular, Menlo, monospace;
+  transform: rotate(-0.6deg);
+}
+.devnote.collapsed {
+  width: auto;
+}
+.devnote-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-bottom: 1px dashed #d8b73e;
+}
+.devnote.collapsed .devnote-head {
+  border-bottom: 0;
+}
+.devnote-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #7a5c00;
+}
+.devnote-toggle {
+  border: 1px solid #c9a227;
+  background: #fdefa0;
+  color: #6b5200;
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+.devnote-toggle:hover {
+  background: #fce884;
+}
+.devnote-body {
+  margin: 0;
+  padding: 10px 10px 12px 26px;
+  overflow-y: auto;
+  list-style: disc;
+}
+.devnote-body li {
+  font-size: 12.5px;
+  line-height: 1.6;
+  font-weight: 600;
+  color: #4a3d05;
+  margin-bottom: 8px;
+}
+.devnote-body li:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 640px) {
+  .devnote {
+    width: 260px;
+    top: 50px;
+  }
+}

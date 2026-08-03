@@ -9,6 +9,7 @@ import { pickupRange } from '../lib/date.js'
 import { formatKrw, formatForeign, formatDate, formatNumber } from '../lib/format.js'
 import { StatusBadge, CustomerTxBadge } from '../components/Badges.jsx'
 import Modal from '../components/Modal.jsx'
+import DevNote from '../components/DevNote.jsx'
 
 export default function LookupPage() {
   const { t, lang } = useI18n()
@@ -58,6 +59,12 @@ export default function LookupPage() {
 
   return (
     <div>
+      <DevNote
+        items={[
+          '조회 조건: 예약번호 + 이메일 (전화번호 없음)',
+          '"예약" 상태일 때만 취소/변경 가능, 취소 컷오프는 없음(현재 정책상 자유롭게 취소 가능)',
+        ]}
+      />
       <h1>{t('lookup.title')}</h1>
       <p className="muted">{t('lookup.sub')}</p>
 

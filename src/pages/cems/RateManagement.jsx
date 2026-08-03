@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { BRANCHES } from '../../data/branches.js'
 import { CURRENCY_ORDER, CURRENCY_META, getRate, getDisplayRates } from '../../data/rates.js'
 import { formatNumber, formatKrw } from '../../lib/format.js'
+import DevNote from '../../components/DevNote.jsx'
 
 // 화면 2 · 설정 → 환전율관리 (레퍼런스 재현, 대부분 읽기전용 데모)
 // 상단 통화 선택 / 사실때·기준·파실때 / 보유량 요약 / 채널별 환율 테이블.
@@ -31,6 +32,11 @@ export default function RateManagement() {
 
   return (
     <div>
+      <DevNote
+        items={[
+          '"외국인 웹사이트" 행은 기존 "신논현 무인환전기" 행의 이름만 바꿔 재사용한 것 (레퍼런스 UI 구조 그대로)',
+        ]}
+      />
       <h1 className="cems-h1">환전율관리</h1>
 
       {/* 통화 선택 + 요약 3숫자 */}

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import Logo from '../../components/Logo.jsx'
+import DevNote from '../../components/DevNote.jsx'
 
 // 탭 3 · POS 홈: 카드형 타일. "환전예약" 타일만 거래처리 화면으로 이동.
 // 나머지 타일(SELL/BUY/MORE/ONLINE EXCHANGE)은 시각적으로만 존재(서비스 범위 밖).
@@ -8,6 +9,11 @@ export default function PosHome() {
   const nav = useNavigate()
   return (
     <div className="pos-home">
+      <DevNote
+        items={[
+          'SELL / BUY / MORE / 온라인환전 타일은 이번 서비스 범위 밖이라 클릭 비활성 (장식용). "환전예약" 타일만 동작함',
+        ]}
+      />
       <div className="pos-top">
         <Logo to="/pos" className="logo pos-logo" />
       </div>

@@ -1,6 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useReservations } from '../../store/ReservationContext.jsx'
+import DevNote from '../../components/DevNote.jsx'
+
+// POS 환전예약 검색/결과 공통 개발 참고 설명
+export const POS_RESV_NOTES = [
+  '"방문확인만 보기 / 전체보기" 토글: 리마인더에 응답 안 한 예약은 기본적으로 숨겨지고(전일 기준), 수령예정일 당일이 되면 응답 여부와 상관없이 노출됨',
+  '무응답이어도 수령기한(수령예정일 당일) 전까지는 자동취소하지 않음, 그 이후 자동취소',
+]
 
 // 화면 A · POS 환전예약 검색 폼 (최초 진입)
 // 좌상단: 아이콘 + "환전예약" / 우상단: "홈" 버튼(이전 없음)
@@ -23,6 +30,7 @@ export default function PosReservationSearch() {
 
   return (
     <div className="pos-resv">
+      <DevNote items={POS_RESV_NOTES} />
       <header className="pos-resv-head">
         <div className="prh-title">
           <span className="prh-icon">📋</span>

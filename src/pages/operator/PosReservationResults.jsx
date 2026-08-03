@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useReservations } from '../../store/ReservationContext.jsx'
 import { diffDays } from '../../lib/date.js'
 import { formatDate } from '../../lib/format.js'
+import DevNote from '../../components/DevNote.jsx'
+import { POS_RESV_NOTES } from './PosReservationSearch.jsx'
 
 // 리마인더 응답별 노출 기준 (05_어드민기능정의서 로직 재사용):
 //  - 취소/자동취소(CANCELLED) → 미노출
@@ -55,6 +57,7 @@ export default function PosReservationResults() {
 
   return (
     <div className="pos-resv">
+      <DevNote items={POS_RESV_NOTES} />
       <header className="pos-resv-head">
         <div className="prh-title">
           <span className="prh-icon">📋</span>

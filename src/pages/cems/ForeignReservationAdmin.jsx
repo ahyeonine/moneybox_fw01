@@ -3,6 +3,7 @@ import { useReservations } from '../../store/ReservationContext.jsx'
 import { CURRENCY_META } from '../../data/rates.js'
 import { formatDate, formatKrw, formatNumber } from '../../lib/format.js'
 import { StatusBadge, TxBadge } from '../../components/Badges.jsx'
+import DevNote from '../../components/DevNote.jsx'
 
 // 화면 1 · 외국인 환전예약관리 — 기존 신규예약 리스트를 CEMS 레이아웃/컬럼으로 재구성.
 // 컬럼: No | 상태 | 수령일자 | 예약자명 | 이메일 | 환전구분 | 통화 | 환율 | 거래금액 | 원화금액 | 신청일시
@@ -66,6 +67,13 @@ export default function ForeignReservationAdmin() {
 
   return (
     <div>
+      <DevNote
+        items={[
+          '본사관리자 화면은 이번 프로젝트에서 신규 개발 대상 아님 (예약금을 받지 않아 본사가 확인할 입금 건 자체가 없음)',
+          '이 리스트의 목적은 입금확인이 아니라 시재 준비용',
+          '기존 CEMS 컬럼(성명/생년월일/휴대전화/입금상태/예약금) 중 상당수가 이번 서비스에는 없음 — 이메일/여권영문명 등으로 대체',
+        ]}
+      />
       <h1 className="cems-h1">외국인 환전예약관리</h1>
 
       {/* 필터 행 */}

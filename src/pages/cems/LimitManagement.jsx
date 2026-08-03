@@ -3,6 +3,7 @@ import { BRANCHES } from '../../data/branches.js'
 import { CURRENCY_ORDER, CURRENCY_META, getRate } from '../../data/rates.js'
 import { useSettings } from '../../store/SettingsContext.jsx'
 import { formatNumber } from '../../lib/format.js'
+import DevNote from '../../components/DevNote.jsx'
 
 // 화면 3 (신규) · 설정 → 외국인서비스 한도관리
 // 섹션1: 통화별 최소 환전금액 (전체 지점 공통)
@@ -64,6 +65,13 @@ export default function LimitManagement() {
 
   return (
     <div>
+      <DevNote
+        items={[
+          '최소금액: 통화별, 전체 지점 공통',
+          '최대금액: 지점별로 다르게, USD 기준 1개 입력하면 로드환율로 전체 통화 자동 환산되는 방식',
+          '⚠️ 이 최대금액 하드리밋은 애초 정책회의에서 "최대금액 제한 없음"으로 확정됐던 것과 상충하는 부분이라 정책 재확인이 필요한 상태',
+        ]}
+      />
       <h1 className="cems-h1">외국인서비스 한도관리</h1>
 
       {/* 섹션 1 */}

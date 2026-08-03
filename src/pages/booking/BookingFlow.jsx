@@ -5,6 +5,31 @@ import { useReservations } from '../../store/ReservationContext.jsx'
 import Stepper from '../../components/Stepper.jsx'
 import Modal from '../../components/Modal.jsx'
 import BranchMap from '../../components/BranchMap.jsx'
+import DevNote from '../../components/DevNote.jsx'
+
+// 화면(스테이지)별 개발 참고 설명
+const DEV_NOTES = {
+  branch: ['지점별 취급통화·재고는 목데이터, 실제로는 지점마다 다르게 동적 노출되어야 함'],
+  apply: [
+    '통화별 최소금액 / 지점별 최대금액(하드리밋) 적용됨 — 초과입력 시 자동보정(단위 올림 → 최대초과시 최대로 → 최소미만시 최소로)',
+    '여기 보이는 환율은 참고용 예상값. 실제 환율 픽스는 최종확인 단계에서 확정됨',
+    '"원화구매" 단일 버튼만 존재 (외화구매 방향은 이번 버전 UI에서 비활성, 데이터모델상으로는 매입/매출 둘 다 지원 가능)',
+    '수령일 선택 최대 범위: 리드타임 이후 ~ 2주 이내',
+  ],
+  info: ['필수 항목은 예약자명 + 이메일만. 메신저ID, 휴대전화, 생년월일 수집 안 함 (온라인 최소수집 원칙)'],
+  review: [
+    '이 시점에 환율이 픽스됨',
+    '예약자명과 실제 현장 방문자의 명의 동일성은 요구하지 않음 (정책상 확정)',
+  ],
+  consent: [
+    '노쇼에 대한 제재는 없음 — 문구는 "안내" 톤으로 작성됨 (페널티 성격 아님)',
+    '클릭 시 펼쳐지는 약관 전문은 프로토타입용 더미 텍스트, 실제 법무 검토 문구 아님',
+  ],
+  done: [
+    '예약번호는 임의 생성 목데이터, 실제로는 서버에서 채번 로직 필요',
+    '예약 완료 즉시 상태값 "예약"으로 저장됨',
+  ],
+}
 import { BRANCHES, getBranch, branchCurrencies, currencyLimit } from '../../data/branches.js'
 import { CURRENCY_META, getRate, toKrw, getDisplayRates, getBankCompare } from '../../data/rates.js'
 import { validateAmount, isValidEmail, isValidName, correctAmount } from '../../lib/validation.js'
@@ -157,6 +182,7 @@ export default function BookingFlow() {
 
   return (
     <div>
+      <DevNote items={DEV_NOTES[stage]} />
       <Stepper steps={stepLabels} current={stageIndex} />
 
       {stage === 'branch' && <StepBranch selectedId={draft.branchId} onSelect={selectBranch} />}
