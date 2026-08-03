@@ -1,8 +1,10 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useReservations } from '../../store/ReservationContext.jsx'
 import { CURRENCY_META } from '../../data/rates.js'
 import { formatDate, formatKrw, formatNumber } from '../../lib/format.js'
 import { StatusBadge, TxBadge } from '../../components/Badges.jsx'
+import Modal from '../../components/Modal.jsx'
 import DevNote from '../../components/DevNote.jsx'
 
 // 화면 1 · 외국인 환전예약관리 — 기존 신규예약 리스트를 CEMS 레이아웃/컬럼으로 재구성.
@@ -25,12 +27,20 @@ const emptyFilter = {
 
 export default function ForeignReservationAdmin() {
   const { reservations } = useReservations()
+  const navigate = useNavigate()
 
   const [form, setForm] = useState(emptyFilter)
   const [applied, setApplied] = useState(emptyFilter)
   const [page, setPage] = useState(1)
+  const [selected, setSelected] = useState(null) // 거래내용 확인 모달 대상
 
   const setF = (patch) => setForm((f) => ({ ...f, ...patch }))
+
+  // 모달 "확인" → 모달 닫고 기존 환전예약플로우(플레이스홀더)로 이동
+  function confirmSelected() {
+    setSelected(null)
+    navigate('/cems/reservations/flow')
+  }
 
   const currencies = useMemo(
     () => Array.from(new Set(reservations.map((r) => r.currency))),
@@ -183,7 +193,12 @@ export default function ForeignReservationAdmin() {
               </tr>
             ) : (
               pageRows.map((r, i) => (
-                <tr key={r.reservationNo}>
+                <tr
+                  key={r.reservationNo}
+                  className="row-click"
+                  onClick={() => setSelected(r)}
+                  title="거래내용 확인"
+                >
                   <td>{(curPage - 1) * PAGE_SIZE + i + 1}</td>
                   <td>
                     <StatusBadge status={r.status} />
@@ -222,6 +237,77 @@ export default function ForeignReservationAdmin() {
           ›
         </button>
       </div>
+
+      {/* 거래내용 확인 모달 */}
+      {selected && (
+        <Modal onClose={() => setSelected(null)}>
+          <h2>거래내용 확인</h2>
+          <div className="summary" style={{ marginTop: 8 }}>
+            <div className="row">
+              <span className="k">예약번호</span>
+              <span className="v">{selected.reservationNo}</span>
+            </div>
+            <div className="row">
+              <span className="k">상태</span>
+              <span className="v">
+                <StatusBadge status={selected.status} />
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">예약자명</span>
+              <span className="v">{selected.customerName}</span>
+            </div>
+            <div className="row">
+              <span className="k">이메일</span>
+              <span className="v">{selected.email}</span>
+            </div>
+            <div className="row">
+              <span className="k">환전구분</span>
+              <span className="v">
+                <TxBadge type={selected.transactionType} />
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">통화</span>
+              <span className="v">
+                {CURRENCY_META[selected.currency]?.flag} {selected.currency}
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">예약환율</span>
+              <span className="v">
+                1 {selected.currency} = {formatNumber(selected.rate)} KRW
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">거래금액</span>
+              <span className="v">
+                {formatNumber(selected.foreignAmount)} {selected.currency}
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">원화금액</span>
+              <span className="v">{formatKrw(selected.krwAmount)}</span>
+            </div>
+            <div className="row">
+              <span className="k">수령일자</span>
+              <span className="v">{formatDate(selected.pickupDate, 'ko')}</span>
+            </div>
+            <div className="row">
+              <span className="k">신청일시</span>
+              <span className="v">{selected.createdAt.slice(0, 10)}</span>
+            </div>
+          </div>
+          <div className="btn-row">
+            <button className="btn ghost" onClick={() => setSelected(null)}>
+              닫기
+            </button>
+            <button className="btn primary" onClick={confirmSelected}>
+              확인
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   )
 }

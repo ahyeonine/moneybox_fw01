@@ -2008,3 +2008,28 @@ th.num {
 .limit-tab {
   margin-left: 0;
 }
+
+/* 클릭 가능한 리스트 행 */
+.cems-table tr.row-click {
+  cursor: pointer;
+}
+.cems-table tr.row-click:hover {
+  background: var(--brand-soft);
+}
+
+/* 기존 환전예약플로우 플레이스홀더 */
+.fxflow-placeholder {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  text-align: center;
+}
+.fxflow-text {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}

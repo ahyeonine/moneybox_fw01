@@ -13,6 +13,7 @@ import PosTransaction from './pages/operator/PosTransaction.jsx'
 import PosReservationSearch from './pages/operator/PosReservationSearch.jsx'
 import PosReservationResults from './pages/operator/PosReservationResults.jsx'
 import ForeignReservationAdmin from './pages/cems/ForeignReservationAdmin.jsx'
+import FxFlowPlaceholder from './pages/cems/FxFlowPlaceholder.jsx'
 import RateManagement from './pages/cems/RateManagement.jsx'
 import LimitManagement from './pages/cems/LimitManagement.jsx'
 
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="cems" element={<CemsShell />}>
           <Route index element={<Navigate to="/cems/reservations" replace />} />
           <Route path="reservations" element={<ForeignReservationAdmin />} />
+          <Route path="reservations/flow" element={<FxFlowPlaceholder />} />
           <Route path="settings" element={<Navigate to="/cems/settings/rates" replace />} />
           <Route path="settings/rates" element={<RateManagement />} />
           <Route path="settings/limits" element={<LimitManagement />} />
