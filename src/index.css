@@ -1955,3 +1955,35 @@ th.num {
     top: 50px;
   }
 }
+
+/* 환전율관리 — 통화 선택 가로 버튼(칩) */
+.cur-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cur-chip {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-2);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+.cur-chip:hover {
+  border-color: var(--brand);
+  color: var(--brand-dark);
+}
+.cur-chip.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+.rate-cur-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { BRANCHES } from '../../data/branches.js'
 import { CURRENCY_ORDER, CURRENCY_META, getRate, getDisplayRates } from '../../data/rates.js'
 import { formatNumber, formatKrw } from '../../lib/format.js'
 import DevNote from '../../components/DevNote.jsx'
@@ -10,12 +9,22 @@ import DevNote from '../../components/DevNote.jsx'
 
 const round = (n) => Math.round(n * 100) / 100
 
-// 채널 목록 — "신논현 무인환전기" → "외국인 웹사이트" 로 이름만 변경
+// 채널 목록. 적용처는 특정 지점명 노출 없이 일반 명칭 사용.
+//  - '지점'          : 기존 "강남 신논현 환전" → 일반 명칭으로 변경
+//  - '외국인 웹사이트' : 기존 "신논현 무인환전기" 자리에 새로 추가된 행 (매입 기준으로 운영)
+//  - '환전예약' / '온라인환전' : 그대로 유지
+// 참고: 외국인 웹사이트 예약은 전부 매입(원화구매)으로 처리되므로 외국인서비스 데이터는 매입 기준.
 const CHANNELS = [
-  { key: 'gangnam', name: '강남 신논현 환전', flags: { hide: false, apply: true, exSell: false, sameDayBlock: false } },
+  { key: 'branch', name: '지점', flags: { hide: false, apply: true, exSell: false, sameDayBlock: false } },
   { key: 'foreign', name: '외국인 웹사이트', flags: { hide: false, apply: true, exSell: false, sameDayBlock: false }, editable: true },
   { key: 'reservation', name: '환전예약', flags: { hide: false, apply: true, exSell: false, sameDayBlock: true } },
   { key: 'online', name: '온라인환전', flags: { hide: true, apply: false, exSell: true, sameDayBlock: false } },
+]
+
+// 보유량 요약 — 지점명 익명화(카테고리 명칭). 특정 지점 이름 노출 금지.
+const HOLDINGS = [
+  { name: '지점', hold: 12000 },
+  { name: '무인기', hold: 8500 },
 ]
 
 export default function RateManagement() {
@@ -32,25 +41,30 @@ export default function RateManagement() {
 
   return (
     <div>
-      <DevNote
-        items={[
-          '"외국인 웹사이트" 행은 기존 "신논현 무인환전기" 행의 이름만 바꿔 재사용한 것 (레퍼런스 UI 구조 그대로)',
-        ]}
-      />
+      <DevNote items={['"외국인 웹사이트" 행이 새로 추가됨']} />
       <h1 className="cems-h1">환전율관리</h1>
 
-      {/* 통화 선택 + 요약 3숫자 */}
+      {/* 통화 선택 — 18개 통화를 가로 버튼으로 나열, 클릭 시 활성 */}
+      <div className="cems-panel">
+        <div className="cur-chips" role="tablist" aria-label="통화 선택">
+          {CURRENCY_ORDER.map((c) => (
+            <button
+              key={c}
+              className={`cur-chip ${currency === c ? 'active' : ''}`}
+              onClick={() => setCurrency(c)}
+              aria-selected={currency === c}
+            >
+              {CURRENCY_META[c]?.flag} {c}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 선택 통화 요약 3숫자 */}
       <div className="cems-panel rate-top">
-        <label className="rate-cur">
-          <span>통화</span>
-          <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
-            {CURRENCY_ORDER.map((c) => (
-              <option key={c} value={c}>
-                {CURRENCY_META[c]?.flag} {c} · {CURRENCY_META[c]?.label.ko}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="rate-cur-title">
+          {CURRENCY_META[currency]?.flag} {currency} · {CURRENCY_META[currency]?.label.ko}
+        </div>
         <div className="rate-summary">
           <div className="rs buy">
             <div className="rs-l">사실 때</div>
@@ -74,22 +88,21 @@ export default function RateManagement() {
           <table className="cems-table">
             <thead>
               <tr>
-                <th>지점</th>
+                <th>지점명</th>
                 <th className="num">보유량</th>
                 <th className="num">평균환율</th>
                 <th className="num">원화금액</th>
               </tr>
             </thead>
             <tbody>
-              {BRANCHES.map((b, i) => {
-                const hold = [12000, 8500, 30000, 5000][i] || 5000 // 더미
-                const avg = round(base * (0.995 + i * 0.002))
+              {HOLDINGS.map((h, i) => {
+                const avg = round(base * (0.995 + i * 0.003)) // 더미
                 return (
-                  <tr key={b.id}>
-                    <td>{b.name.ko}</td>
-                    <td className="num">{formatNumber(hold)}</td>
+                  <tr key={h.name}>
+                    <td>{h.name}</td>
+                    <td className="num">{formatNumber(h.hold)}</td>
                     <td className="num">{formatNumber(avg)}</td>
-                    <td className="num">{formatKrw(Math.round(hold * avg))}</td>
+                    <td className="num">{formatKrw(Math.round(h.hold * avg))}</td>
                   </tr>
                 )
               })}
