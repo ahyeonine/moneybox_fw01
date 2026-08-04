@@ -1292,6 +1292,11 @@ th.num {
   color: #fff;
   border-color: var(--brand);
 }
+.cems-btn.active {
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  border-color: var(--brand);
+}
 .cems-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;

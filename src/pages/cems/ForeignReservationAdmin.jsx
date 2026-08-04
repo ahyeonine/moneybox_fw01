@@ -23,10 +23,13 @@ const emptyFilter = {
 }
 
 export default function ForeignReservationAdmin() {
-  const { reservations } = useReservations()
+  const { reservations, today } = useReservations()
 
-  const [form, setForm] = useState(emptyFilter)
-  const [applied, setApplied] = useState(emptyFilter)
+  // 진입 시 기본 필터: 수령예정일 = 오늘. ("전체 기간" 버튼으로 날짜 제한 해제 가능)
+  const defaultFilter = { ...emptyFilter, pickFrom: today, pickTo: today }
+
+  const [form, setForm] = useState(defaultFilter)
+  const [applied, setApplied] = useState(defaultFilter)
   const [page, setPage] = useState(1)
 
   const setF = (patch) => setForm((f) => ({ ...f, ...patch }))
@@ -46,7 +49,8 @@ export default function ForeignReservationAdmin() {
       .filter((r) => (f.appTo ? r.createdAt.slice(0, 10) <= f.appTo : true))
       .filter((r) => (f.pickFrom ? r.pickupDate >= f.pickFrom : true))
       .filter((r) => (f.pickTo ? r.pickupDate <= f.pickTo : true))
-      .sort((a, b) => (a.pickupDate < b.pickupDate ? -1 : a.pickupDate > b.pickupDate ? 1 : 0))
+      // 신청일시 최신순 — 최근 신청 건이 1번 행으로 상단 노출
+      .sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0))
   }, [reservations, applied])
 
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE))
@@ -58,10 +62,18 @@ export default function ForeignReservationAdmin() {
     setPage(1)
   }
   function reset() {
-    setForm(emptyFilter)
-    setApplied(emptyFilter)
+    setForm(defaultFilter)
+    setApplied(defaultFilter)
     setPage(1)
   }
+  // 전체 기간 보기 — 수령기간 날짜 제한을 해제하고 즉시 적용
+  function showAllPeriod() {
+    const next = { ...form, pickFrom: '', pickTo: '' }
+    setForm(next)
+    setApplied(next)
+    setPage(1)
+  }
+  const allPeriod = !applied.pickFrom && !applied.pickTo
 
   return (
     <div>
@@ -133,7 +145,14 @@ export default function ForeignReservationAdmin() {
           <button className="cems-btn primary" onClick={search}>
             검색
           </button>
-          <button className="cems-btn" onClick={reset}>
+          <button
+            className={`cems-btn ${allPeriod ? 'active' : ''}`}
+            onClick={showAllPeriod}
+            title="수령기간 제한 없이 전체 예약 보기"
+          >
+            전체 기간
+          </button>
+          <button className="cems-btn" onClick={reset} title="기본값(오늘 수령예정일)으로 초기화">
             초기화
           </button>
           <button className="cems-btn" onClick={() => {}} title="데모: 동작 안 함">
