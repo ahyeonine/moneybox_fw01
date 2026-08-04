@@ -2085,7 +2085,7 @@ th.num {
 .hero-hd {
   border-radius: 18px;
   background: linear-gradient(135deg, #0f766e 0%, #1d6fd0 60%, #2563eb 100%);
-  padding: 44px 24px 0;
+  padding: 44px 24px 32px;
   color: #fff;
   box-shadow: var(--shadow);
   overflow: hidden;
@@ -2111,11 +2111,12 @@ th.num {
 }
 .hero-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  /* 3열을 기본으로 하되 min(100%, …)로 좁아지면 자동 줄바꿈 — 어떤 폭에서도 넘치거나 잘리지 않음 */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 12px;
+  width: 100%;
   max-width: 900px;
-  margin: 26px auto 0;
-  transform: translateY(22px);
+  margin: 24px auto 0;
 }
 .hero-card {
   background: #fff;
@@ -2126,6 +2127,7 @@ th.num {
   text-align: left;
   display: flex;
   flex-direction: column;
+  min-width: 0; /* 그리드 트랙 축소 허용 (내용에 의한 넘침 방지) */
 }
 .hero-card .btn {
   margin-top: auto;
@@ -2148,11 +2150,6 @@ th.num {
 .hero-card .btn {
   padding: 9px 16px;
   font-size: 14px;
-}
-@media (max-width: 720px) {
-  .hero-cards {
-    grid-template-columns: 1fr;
-  }
 }
 @media (max-width: 560px) {
   .hero-hd-copy h1 {
