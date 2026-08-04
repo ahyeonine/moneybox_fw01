@@ -17,7 +17,8 @@ function clone(arr) {
   return arr.map((r) => ({ ...r }))
 }
 
-// 재고(동시성) 시드: 지점×통화 조합별 재고 수량. 데모용으로 B001+USD 만 1개로 세팅.
+// 가용시재(동시성) 시드: 지점×통화 조합별 잔여 수량. 데모용으로 B004+USD 만 1개로 세팅.
+// 재고는 예약 생성 시점이 아니라 리마인더 "방문 예정" 확인 시점(confirmVisit)에 차감된다.
 function seedStock() {
   const s = {}
   for (const b of BRANCHES) {
@@ -25,7 +26,7 @@ function seedStock() {
       s[`${b.id}:${cur}`] = 50 // 충분한 기본 재고 (목데이터)
     }
   }
-  s['B001:USD'] = 1 // 데모: 재고 1개만 남은 상태
+  s['B004:USD'] = 1 // 데모: 재고 1개만 남은 상태 (방문예정 확정 경쟁 시연용)
   return s
 }
 
@@ -143,20 +144,38 @@ export function ReservationProvider({ children }) {
     [today]
   )
 
-  // ── 재고(동시성) ──
+  // ── 가용시재(동시성) ──
   const getStock = useCallback((branchId, currency) => stockRef.current[`${branchId}:${currency}`] ?? 0, [])
-  // 재고 차감 시도: 남아있으면 차감 후 true, 없으면 false. (예약완료 직전 동시성 확인)
-  const consumeStock = useCallback((branchId, currency) => {
+  // 가용시재 차감 시도(내부): 남아있으면 차감 후 true, 없으면 false.
+  const consumeStock = (branchId, currency) => {
     const k = `${branchId}:${currency}`
     const cur = stockRef.current[k] ?? 999
     if (cur <= 0) return false
     stockRef.current = { ...stockRef.current, [k]: cur - 1 }
     return true
-  }, [])
-  // 데모: "다른 사용자가 방금 이 재고를 가져갔다" → 해당 조합 재고 0으로
-  const takeStockDemo = useCallback((branchId, currency) => {
-    stockRef.current = { ...stockRef.current, [`${branchId}:${currency}`]: 0 }
-  }, [])
+  }
+
+  // 리마인더 "방문 예정" 확인 → 이 시점에 가용시재 재확인·차감(예약시재 반영).
+  //  - 재고 없으면 { ok:false, reason:'SOLD_OUT' } (상태 불변) → "다른 고객이 이미 확정" 안내
+  //  - 성공 시 reminderStatus='CONFIRMED'. (취소/무응답 자동취소는 재고 반영 전이라 복구 불필요)
+  const confirmVisit = useCallback(
+    (reservationNo) => {
+      const rec = reservations.find(
+        (r) => r.reservationNo.toUpperCase() === (reservationNo || '').trim().toUpperCase()
+      )
+      if (!rec) return { ok: false, reason: 'NOT_FOUND' }
+      if (rec.status !== 'BOOKED') return { ok: false, reason: 'NOT_BOOKED' }
+      if (rec.reminderStatus === 'CONFIRMED') return { ok: true, reason: 'ALREADY' }
+      if (!consumeStock(rec.branchId, rec.currency)) return { ok: false, reason: 'SOLD_OUT' }
+      setReservations((prev) =>
+        prev.map((r) =>
+          r.reservationNo === rec.reservationNo ? { ...r, reminderStatus: 'CONFIRMED' } : r
+        )
+      )
+      return { ok: true, reason: 'CONFIRMED' }
+    },
+    [reservations]
+  )
 
   // 시뮬레이션: 기준일 하루 넘기기 (KST 달력 기준, UTC 산술로 결정적 처리)
   const advanceDay = useCallback(() => {
@@ -197,8 +216,7 @@ export function ReservationProvider({ children }) {
     cancelReservation,
     completeReservation,
     getStock,
-    consumeStock,
-    takeStockDemo,
+    confirmVisit,
     advanceDay,
     runAutoCancel,
     resetData,

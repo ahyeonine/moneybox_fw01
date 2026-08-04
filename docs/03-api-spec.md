@@ -201,9 +201,12 @@
 200 OK { "cancelledCount": 3 }
 ```
 
-### 리마인더 발송 (참고, 프로토타입 미구현)
-- `POST /system/reminders/send` — 수령 전일/당일 이메일 발송, `reminderStatus` 갱신 트리거
-- 고객 응답 링크: `POST /reservations/{no}/reminder-response { "response": "CONFIRMED" }`
+### 리마인더 발송/응답
+- `POST /system/reminders/send` — 수령 전일/당일 이메일 발송, `reminderStatus` 갱신 트리거 (프로토타입 미구현)
+- 고객 응답(방문예정 확인): `POST /reservations/{no}/reminder-response { "response": "CONFIRMED" }`
+  - **이 시점에 재고를 차감**한다(예약시재 반영·가용시재 차감). 재고가 남아있으면 `reminderStatus=CONFIRMED`,
+    소진 시 `409 SOLD_OUT`(상태는 `BOOKED` 유지) — 예약 생성(8단계)은 재고를 잡지 않으므로 경쟁은 여기서 해소.
+  - → 프로토타입: `ReservationContext.confirmVisit()` (예약조회 화면 "방문 예정 확인" 버튼)
 
 ---
 

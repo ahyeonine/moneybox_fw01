@@ -170,4 +170,33 @@ export const SEED_RESERVATIONS = [
     idVerified: true,
     reminderStatus: 'CONFIRMED',
   }),
+  // ── 재고 경쟁 데모: 같은 지점·통화(B004+USD, 재고 1개)에 방문예정 미확인 예약 2건 ──
+  // 같은 이메일(rush@example.com)로 조회 → 첫 건 "방문 예정 확인" 성공(재고 1→0),
+  // 둘째 건 확인 시 "다른 고객이 이미 확정하여 재고가 소진되었습니다".
+  make({
+    reservationNo: 'RSV-20260729-0201',
+    status: 'BOOKED',
+    transactionType: 'BUY',
+    branchId: 'B004',
+    currency: 'USD',
+    foreignAmount: 500,
+    customerName: 'RUSH ONE',
+    email: 'rush@example.com',
+    pickupDate: '2026-08-01',
+    createdAt: '2026-07-29T09:30:00+09:00',
+    reminderStatus: 'NO_RESPONSE',
+  }),
+  make({
+    reservationNo: 'RSV-20260729-0202',
+    status: 'BOOKED',
+    transactionType: 'BUY',
+    branchId: 'B004',
+    currency: 'USD',
+    foreignAmount: 300,
+    customerName: 'RUSH TWO',
+    email: 'rush@example.com',
+    pickupDate: '2026-08-01',
+    createdAt: '2026-07-29T09:31:00+09:00',
+    reminderStatus: 'NO_RESPONSE',
+  }),
 ]

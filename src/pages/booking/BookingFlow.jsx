@@ -49,12 +49,11 @@ const emptyDraft = {
 
 export default function BookingFlow() {
   const { t } = useI18n()
-  const { today, createReservation, countNoShow, consumeStock, takeStockDemo } = useReservations()
+  const { today, createReservation, countNoShow } = useReservations()
 
   const [stage, setStage] = useState('branch')
   const [draft, setDraft] = useState(emptyDraft)
-  const [soldOut, setSoldOut] = useState(false) // 재고 소진(신청 시점, 데모 규칙)
-  const [finalSoldOut, setFinalSoldOut] = useState(false) // 예약완료 직전 동시성 마감
+  const [soldOut, setSoldOut] = useState(false) // 재고 소진(신청 시점, 데모 규칙: B003+VND)
   const [consent, setConsent] = useState({ noshow: false, privacy: false })
   const [result, setResult] = useState(null)
 
@@ -119,12 +118,8 @@ export default function BookingFlow() {
   }
 
   function submit() {
-    // 동시성(재고 경쟁): 1~7단계에선 재고를 잡지 않고, 예약완료 직전에 재확인·차감한다.
-    // 남아있으면 차감 후 완료, 없으면 "방금 마감" 처리 후 지점선택으로 되돌린다.
-    if (!consumeStock(draft.branchId, draft.currency)) {
-      setFinalSoldOut(true)
-      return
-    }
+    // 예약완료(8단계): 예약 레코드(상태="예약")만 생성한다. 이 시점에는 재고를 반영하지 않는다.
+    // 가용시재 차감(예약시재 반영)은 이후 리마인더 "방문 예정" 확인 시점(예약조회 화면)에 발생.
     const fixedRate = draft.rate ?? rate
     const rec = createReservation({
       transactionType: draft.transactionType,
@@ -146,7 +141,6 @@ export default function BookingFlow() {
     setDraft(emptyDraft)
     setConsent({ noshow: false, privacy: false })
     setSoldOut(false)
-    setFinalSoldOut(false)
     setResult(null)
     setStage('branch')
   }
@@ -170,20 +164,6 @@ export default function BookingFlow() {
         <div className="notice danger">
           <strong>{t('err.soldout.t')}</strong>
           <div style={{ marginTop: 4 }}>{t('err.soldout.d')}</div>
-        </div>
-        <button className="btn primary block" onClick={restart}>
-          {t('err.soldout.restart')}
-        </button>
-      </div>
-    )
-  }
-
-  if (finalSoldOut) {
-    return (
-      <div className="card">
-        <div className="notice danger">
-          <strong>{t('err.soldFinal.t')}</strong>
-          <div style={{ marginTop: 4 }}>{t('err.soldFinal.d')}</div>
         </div>
         <button className="btn primary block" onClick={restart}>
           {t('err.soldout.restart')}
@@ -246,13 +226,6 @@ export default function BookingFlow() {
       {stage === 'consent' && (
         <div className="card">
           <StepConsent consent={consent} setConsent={setConsent} />
-          {/* 데모: 동시성(재고 경쟁) 시뮬레이션 — 다른 사용자가 방금 이 재고를 가져갔다 */}
-          <button
-            className="btn ghost block sim-take-btn"
-            onClick={() => takeStockDemo(draft.branchId, draft.currency)}
-          >
-            🧪 {t('sim.takeStock')}
-          </button>
           <div className="btn-row">
             <button className="btn ghost" onClick={() => setStage('review')}>
               {t('common.prev')}

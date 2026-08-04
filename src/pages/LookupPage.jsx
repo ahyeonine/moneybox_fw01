@@ -13,7 +13,7 @@ import DevNote from '../components/DevNote.jsx'
 
 export default function LookupPage() {
   const { t } = useI18n()
-  const { findReservationsForLookup, getByNo, cancelReservation, updateReservation, today } =
+  const { findReservationsForLookup, getByNo, cancelReservation, updateReservation, confirmVisit, today } =
     useReservations()
   const [params] = useSearchParams()
 
@@ -70,12 +70,23 @@ export default function LookupPage() {
     setFlash({ type: 'success', msg: t('lookup.change.saved') })
   }
 
+  // 리마인더 "방문 예정" 확인 → 이 시점에 가용시재 재확인·차감(동시성). 재고 없으면 안내.
+  function onConfirmVisit() {
+    const res = confirmVisit(detailNo)
+    if (res.ok) {
+      setFlash({ type: 'success', msg: t('lookup.visitConfirmed.msg') })
+    } else if (res.reason === 'SOLD_OUT') {
+      setFlash({ type: 'danger', msg: t('lookup.visitSoldOut.msg') })
+    }
+  }
+
   return (
     <div>
       <DevNote
         items={[
           '조회 조건: 예약번호 + 이메일 (전화번호 없음)',
           '"예약" 상태일 때만 취소/변경 가능, 취소 컷오프는 없음',
+          '가용시재 차감(예약시재 반영)은 예약완료가 아니라 여기 "방문 예정 확인" 시점에 발생 — 이 시점에 재고 재확인(동시성). 데모: rush@example.com (B004+USD 재고 1개, 예약 2건)',
         ]}
       />
       <h1>{t('lookup.title')}</h1>
@@ -137,6 +148,7 @@ export default function LookupPage() {
           rec={detailRec}
           onBack={backToList}
           onCancel={() => setShowCancel(true)}
+          onConfirmVisit={onConfirmVisit}
           onEdit={() => {
             setEditing(true)
             setFlash(null)
@@ -193,10 +205,11 @@ function ResultList({ results, onSelect }) {
   )
 }
 
-function Detail({ rec, onBack, onCancel, onEdit }) {
+function Detail({ rec, onBack, onCancel, onConfirmVisit, onEdit }) {
   const { t, lang } = useI18n()
   const branch = getBranch(rec.branchId)
   const editable = rec.status === 'BOOKED'
+  const confirmed = rec.reminderStatus === 'CONFIRMED'
   return (
     <div className="card" style={{ marginTop: 14 }}>
       <button className="btn ghost" style={{ marginBottom: 12 }} onClick={onBack}>
@@ -245,16 +258,33 @@ function Detail({ rec, onBack, onCancel, onEdit }) {
         </div>
       </div>
 
-      {editable ? (
-        <div className="btn-row">
-          <button className="btn ghost" onClick={onEdit}>
-            {t('lookup.changeBtn')}
-          </button>
-          <button className="btn danger" onClick={onCancel}>
-            {t('lookup.cancelBtn')}
-          </button>
-        </div>
-      ) : (
+      {editable && (
+        <>
+          {/* 리마인더 방문 예정 확인 — 이 시점에 가용시재 반영(동시성) */}
+          {confirmed ? (
+            <div className="notice success" style={{ marginTop: 16 }}>
+              ✔ {t('lookup.visitConfirmedNote')}
+            </div>
+          ) : (
+            <button
+              className="btn success block"
+              style={{ marginTop: 16 }}
+              onClick={onConfirmVisit}
+            >
+              {t('lookup.confirmVisit')}
+            </button>
+          )}
+          <div className="btn-row">
+            <button className="btn ghost" onClick={onEdit}>
+              {t('lookup.changeBtn')}
+            </button>
+            <button className="btn danger" onClick={onCancel}>
+              {t('lookup.cancelBtn')}
+            </button>
+          </div>
+        </>
+      )}
+      {!editable && (
         <div className="notice info" style={{ marginTop: 16 }}>
           {t('lookup.onlyBookedEditable')}
         </div>

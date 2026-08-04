@@ -137,11 +137,6 @@ export const STRINGS = {
     en: 'Stock is sold out for this branch/currency/date. Please try different options.',
   },
   'err.soldout.restart': { ko: '처음부터 다시', en: 'Start over' },
-  'err.soldFinal.t': { ko: '방금 마감되었습니다', en: 'Just sold out' },
-  'err.soldFinal.d': {
-    ko: '선택하신 재고가 방금 마감되었습니다. 지점 선택부터 다시 시도해 주세요.',
-    en: 'The stock you selected just sold out. Please start again from branch selection.',
-  },
   'err.noshowBlocked': {
     ko: '반복된 노쇼로 인해 서비스 이용이 제한되었습니다',
     en: 'Your access is restricted due to repeated no-shows',
@@ -157,6 +152,19 @@ export const STRINGS = {
   'lookup.detail': { ko: '예약 상세', en: 'Reservation details' },
   'lookup.listTitle': { ko: '조회 결과', en: 'Results' },
   'lookup.backToList': { ko: '목록으로', en: 'Back to list' },
+  'lookup.confirmVisit': { ko: '방문 예정 확인 (리마인더 응답)', en: 'Confirm visit (reminder)' },
+  'lookup.visitConfirmed.msg': {
+    ko: '방문 예정이 확인되었습니다. 가용 시재가 배정(예약시재 반영)되었습니다.',
+    en: 'Your visit is confirmed. Stock has been allocated for your reservation.',
+  },
+  'lookup.visitSoldOut.msg': {
+    ko: '다른 고객이 이미 확정하여 재고가 소진되었습니다.',
+    en: 'Another customer already confirmed and the stock is sold out.',
+  },
+  'lookup.visitConfirmedNote': {
+    ko: '방문 예정이 확인된 예약입니다. (가용 시재 배정 완료)',
+    en: 'Visit confirmed — stock allocated.',
+  },
   'lookup.cancelBtn': { ko: '예약 취소', en: 'Cancel reservation' },
   'lookup.changeBtn': { ko: '예약 변경', en: 'Change reservation' },
   'lookup.cancelConfirm.t': { ko: '예약을 취소할까요?', en: 'Cancel this reservation?' },
@@ -216,10 +224,6 @@ export const STRINGS = {
   'sim.hint': {
     ko: '실제 스케줄러 대신, 기준일을 넘기고 자동취소를 실행해 볼 수 있습니다. (수령일 경과 예약 → 자동취소, KST 자정 기준)',
     en: 'Instead of a real scheduler, advance the date and run auto-cancel (overdue booked → cancelled, at KST midnight).',
-  },
-  'sim.takeStock': {
-    ko: '다른 사용자가 방금 이 재고를 가져갔다 (데모)',
-    en: 'Another user just took this stock (demo)',
   },
 
   // About / eSIM
