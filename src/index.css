@@ -2560,3 +2560,12 @@ th.num {
   color: var(--text-3);
   font-size: 12px;
 }
+
+/* 예약 플로우 내 동시성 데모 버튼 (정책동의 화면) */
+.sim-take-btn {
+  margin-top: 14px;
+  border-style: dashed !important;
+  border-color: var(--warn) !important;
+  color: var(--warn) !important;
+  font-size: 13px;
+}

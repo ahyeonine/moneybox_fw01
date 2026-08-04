@@ -25,6 +25,8 @@ function make(o) {
     idVerified: o.idVerified ?? false,
     // 리마인더 응답: CONFIRMED(방문예정확인) | NO_RESPONSE(무응답) | NONE(발송전)
     reminderStatus: o.reminderStatus ?? 'NONE',
+    // 취소 사유: 'AUTO'(노쇼/자동취소) | 'CUSTOMER'(고객취소) | null
+    cancelReason: o.cancelReason ?? null,
   }
 }
 
@@ -108,6 +110,36 @@ export const SEED_RESERVATIONS = [
     pickupDate: '2026-07-26',
     createdAt: '2026-07-24T08:15:00+09:00',
     reminderStatus: 'NO_RESPONSE',
+    cancelReason: 'CUSTOMER', // 고객취소 (노쇼 아님)
+  }),
+  // ── 노쇼(자동취소) 2회 누적된 더미 이메일 (신규예약 차단 테스트용) ──
+  make({
+    reservationNo: 'RSV-20260710-0101',
+    status: 'CANCELLED',
+    transactionType: 'BUY',
+    branchId: 'B001',
+    currency: 'USD',
+    foreignAmount: 500,
+    customerName: 'NOSHOW USER',
+    email: 'noshow@example.com',
+    pickupDate: '2026-07-12',
+    createdAt: '2026-07-10T09:00:00+09:00',
+    reminderStatus: 'NO_RESPONSE',
+    cancelReason: 'AUTO', // 노쇼 1
+  }),
+  make({
+    reservationNo: 'RSV-20260718-0102',
+    status: 'CANCELLED',
+    transactionType: 'BUY',
+    branchId: 'B002',
+    currency: 'USD',
+    foreignAmount: 300,
+    customerName: 'NOSHOW USER',
+    email: 'noshow@example.com',
+    pickupDate: '2026-07-20',
+    createdAt: '2026-07-18T09:00:00+09:00',
+    reminderStatus: 'NO_RESPONSE',
+    cancelReason: 'AUTO', // 노쇼 2 → 임계값(2) 도달, 신규예약 차단 대상
   }),
   // ── 같은 이메일(john@example.com)로 여러 건 예약된 케이스 (예약조회 리스트 데모) ──
   make({

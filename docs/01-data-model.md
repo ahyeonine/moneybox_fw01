@@ -28,6 +28,13 @@
 | `processedAt` | datetime \| null | | 완료 처리 일시 (완료 시 세팅) | `null` |
 | `idVerified` | boolean | ✔ | 지점 현장 신분증 대조 완료 여부 (시뮬레이션) | `false` |
 | `reminderStatus` | enum | ✔ | `NONE`(발송전) \| `CONFIRMED`(방문예정확인) \| `NO_RESPONSE`(무응답) | `CONFIRMED` |
+| `cancelReason` | enum \| null | | 취소 사유: `AUTO`(노쇼/자동취소) \| `CUSTOMER`(고객취소) \| null | `AUTO` |
+
+> **`transactionType` 화면 미노출**: 외국인 웹사이트는 매입(BUY, 원화구매)만 영구 지원. 내부 저장값은 그대로
+> 유지하되, 고객·CEMS·POS 화면에는 "환전구분"을 노출하지 않는다. (CEMS/POS는 데이터상 매입/매출 모두 처리 가능)
+>
+> **노쇼 차단**: `cancelReason='AUTO'` 누적 횟수를 이메일 기준으로 세어(`countNoShow`) `NOSHOW_LIMIT`(현재 2,
+> `// TODO` 정책 확정 필요) 이상이면 예약자정보 단계에서 신규예약을 차단한다.
 
 ### 파생/계산 규칙
 - `krwAmount = round(foreignAmount * rate)` — 프로토타입은 매출/매입 동일 공식(스프레드 미반영). `// TODO: 스프레드/우대율 반영`

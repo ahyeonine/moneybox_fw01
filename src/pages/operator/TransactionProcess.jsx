@@ -5,7 +5,7 @@ import { useReservations } from '../../store/ReservationContext.jsx'
 import { getBranch } from '../../data/branches.js'
 import { CURRENCY_META } from '../../data/rates.js'
 import { formatDate, formatKrw, formatForeign, formatNumber } from '../../lib/format.js'
-import { StatusBadge, TxBadge } from '../../components/Badges.jsx'
+import { StatusBadge } from '../../components/Badges.jsx'
 
 export default function TransactionProcess() {
   const { t, lang } = useI18n()
@@ -98,7 +98,6 @@ export default function TransactionProcess() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
             <h2 style={{ margin: 0 }}>{rec.reservationNo}</h2>
             <StatusBadge status={rec.status} />
-            <TxBadge type={rec.transactionType} />
           </div>
 
           <div className="summary">

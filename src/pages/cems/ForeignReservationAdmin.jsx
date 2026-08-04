@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useReservations } from '../../store/ReservationContext.jsx'
 import { CURRENCY_META } from '../../data/rates.js'
 import { formatDate, formatKrw, formatNumber } from '../../lib/format.js'
-import { StatusBadge, TxBadge } from '../../components/Badges.jsx'
+import { StatusBadge } from '../../components/Badges.jsx'
 import DevNote from '../../components/DevNote.jsx'
 
 // 화면 1 · 외국인 환전예약관리 — 기존 신규예약 리스트를 CEMS 레이아웃/컬럼으로 재구성.
@@ -18,7 +18,6 @@ const emptyFilter = {
   pickFrom: '',
   pickTo: '',
   status: 'ALL',
-  txType: 'ALL',
   currency: 'ALL',
   name: '',
 }
@@ -41,7 +40,6 @@ export default function ForeignReservationAdmin() {
     const f = applied
     return reservations
       .filter((r) => (f.status === 'ALL' ? true : r.status === f.status))
-      .filter((r) => (f.txType === 'ALL' ? true : r.transactionType === f.txType))
       .filter((r) => (f.currency === 'ALL' ? true : r.currency === f.currency))
       .filter((r) => (f.name ? r.customerName.toLowerCase().includes(f.name.toLowerCase()) : true))
       .filter((r) => (f.appFrom ? r.createdAt.slice(0, 10) >= f.appFrom : true))
@@ -111,14 +109,6 @@ export default function ForeignReservationAdmin() {
           </select>
         </label>
         <label>
-          <span>환전구분</span>
-          <select value={form.txType} onChange={(e) => setF({ txType: e.target.value })}>
-            <option value="ALL">전체</option>
-            <option value="SELL">매출</option>
-            <option value="BUY">매입</option>
-          </select>
-        </label>
-        <label>
           <span>통화</span>
           <select value={form.currency} onChange={(e) => setF({ currency: e.target.value })}>
             <option value="ALL">전체</option>
@@ -166,7 +156,6 @@ export default function ForeignReservationAdmin() {
               <th>수령일자</th>
               <th>예약자명</th>
               <th>이메일</th>
-              <th>환전구분</th>
               <th>통화</th>
               <th className="num">환율</th>
               <th className="num">거래금액</th>
@@ -177,7 +166,7 @@ export default function ForeignReservationAdmin() {
           <tbody>
             {pageRows.length === 0 ? (
               <tr>
-                <td colSpan={11} style={{ textAlign: 'center', padding: 24, color: 'var(--text-3)' }}>
+                <td colSpan={10} style={{ textAlign: 'center', padding: 24, color: 'var(--text-3)' }}>
                   조회된 예약이 없습니다.
                 </td>
               </tr>
@@ -191,9 +180,6 @@ export default function ForeignReservationAdmin() {
                   <td>{formatDate(r.pickupDate, 'ko')}</td>
                   <td>{r.customerName}</td>
                   <td>{r.email}</td>
-                  <td>
-                    <TxBadge type={r.transactionType} />
-                  </td>
                   <td>
                     {CURRENCY_META[r.currency]?.flag} {r.currency}
                   </td>

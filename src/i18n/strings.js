@@ -137,6 +137,15 @@ export const STRINGS = {
     en: 'Stock is sold out for this branch/currency/date. Please try different options.',
   },
   'err.soldout.restart': { ko: '처음부터 다시', en: 'Start over' },
+  'err.soldFinal.t': { ko: '방금 마감되었습니다', en: 'Just sold out' },
+  'err.soldFinal.d': {
+    ko: '선택하신 재고가 방금 마감되었습니다. 지점 선택부터 다시 시도해 주세요.',
+    en: 'The stock you selected just sold out. Please start again from branch selection.',
+  },
+  'err.noshowBlocked': {
+    ko: '반복된 노쇼로 인해 서비스 이용이 제한되었습니다',
+    en: 'Your access is restricted due to repeated no-shows',
+  },
 
   // 예약조회
   'lookup.title': { ko: '예약 조회', en: 'Find my reservation' },
@@ -205,8 +214,12 @@ export const STRINGS = {
   'sim.reset': { ko: '데이터 초기화', en: 'Reset data' },
   'sim.autoCancelled': { ko: '건이 자동취소되었습니다.', en: 'reservation(s) auto-cancelled.' },
   'sim.hint': {
-    ko: '실제 스케줄러 대신, 기준일을 넘기고 자동취소를 실행해 볼 수 있습니다. (수령일 경과 예약 → 자동취소)',
-    en: 'Instead of a real scheduler, advance the date and run auto-cancel (overdue booked → cancelled).',
+    ko: '실제 스케줄러 대신, 기준일을 넘기고 자동취소를 실행해 볼 수 있습니다. (수령일 경과 예약 → 자동취소, KST 자정 기준)',
+    en: 'Instead of a real scheduler, advance the date and run auto-cancel (overdue booked → cancelled, at KST midnight).',
+  },
+  'sim.takeStock': {
+    ko: '다른 사용자가 방금 이 재고를 가져갔다 (데모)',
+    en: 'Another user just took this stock (demo)',
   },
 
   // About / eSIM

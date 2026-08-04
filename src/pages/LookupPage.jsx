@@ -7,7 +7,7 @@ import { CURRENCY_META, getRate, toKrw } from '../data/rates.js'
 import { validateAmount } from '../lib/validation.js'
 import { pickupRange } from '../lib/date.js'
 import { formatKrw, formatForeign, formatDate, formatNumber } from '../lib/format.js'
-import { StatusBadge, CustomerTxBadge } from '../components/Badges.jsx'
+import { StatusBadge } from '../components/Badges.jsx'
 import Modal from '../components/Modal.jsx'
 import DevNote from '../components/DevNote.jsx'
 
@@ -205,7 +205,6 @@ function Detail({ rec, onBack, onCancel, onEdit }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
         <h2 style={{ margin: 0 }}>{t('lookup.detail')}</h2>
         <StatusBadge status={rec.status} />
-        <CustomerTxBadge type={rec.transactionType} />
       </div>
       <div className="summary">
         <div className="row">

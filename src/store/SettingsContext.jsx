@@ -30,7 +30,9 @@ export function SettingsProvider({ children }) {
     setMinAmounts({ ...next })
   }, [])
 
-  // 특정 지점의 통화별 최대금액 저장
+  // 특정 지점의 통화별 최대금액 저장.
+  // 주의: 최대금액을 낮춰도 이미 생성된 예약 레코드(reservations)는 절대 일괄 수정하지 않는다.
+  //       새 상한은 이 시점 이후 새로 생성되는 예약에만 적용된다. (기존 예약 데이터 불변)
   const saveBranchMax = useCallback((branchId, currencyMap) => {
     setBranchMaxAmounts((prev) => ({ ...prev, [branchId]: { ...currencyMap } }))
   }, [])

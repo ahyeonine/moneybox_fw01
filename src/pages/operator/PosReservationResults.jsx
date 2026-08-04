@@ -4,7 +4,7 @@ import { useReservations } from '../../store/ReservationContext.jsx'
 import { CURRENCY_META } from '../../data/rates.js'
 import { diffDays } from '../../lib/date.js'
 import { formatDate, formatKrw, formatNumber } from '../../lib/format.js'
-import { StatusBadge, TxBadge } from '../../components/Badges.jsx'
+import { StatusBadge } from '../../components/Badges.jsx'
 import Modal from '../../components/Modal.jsx'
 import DevNote from '../../components/DevNote.jsx'
 import { POS_RESV_NOTES } from './PosReservationSearch.jsx'
@@ -168,12 +168,6 @@ export default function PosReservationResults() {
             <div className="row">
               <span className="k">이메일</span>
               <span className="v">{selected.email}</span>
-            </div>
-            <div className="row">
-              <span className="k">환전구분</span>
-              <span className="v">
-                <TxBadge type={selected.transactionType} />
-              </span>
             </div>
             <div className="row">
               <span className="k">통화</span>

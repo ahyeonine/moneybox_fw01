@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../../i18n/I18nContext.jsx'
-import { useReservations } from '../../store/ReservationContext.jsx'
+import { useReservations, NOSHOW_LIMIT } from '../../store/ReservationContext.jsx'
 import Stepper from '../../components/Stepper.jsx'
 import Modal from '../../components/Modal.jsx'
 import BranchMap from '../../components/BranchMap.jsx'
@@ -49,11 +49,12 @@ const emptyDraft = {
 
 export default function BookingFlow() {
   const { t } = useI18n()
-  const { today, createReservation } = useReservations()
+  const { today, createReservation, countNoShow, consumeStock, takeStockDemo } = useReservations()
 
   const [stage, setStage] = useState('branch')
   const [draft, setDraft] = useState(emptyDraft)
-  const [soldOut, setSoldOut] = useState(false)
+  const [soldOut, setSoldOut] = useState(false) // 재고 소진(신청 시점, 데모 규칙)
+  const [finalSoldOut, setFinalSoldOut] = useState(false) // 예약완료 직전 동시성 마감
   const [consent, setConsent] = useState({ noshow: false, privacy: false })
   const [result, setResult] = useState(null)
 
@@ -118,6 +119,12 @@ export default function BookingFlow() {
   }
 
   function submit() {
+    // 동시성(재고 경쟁): 1~7단계에선 재고를 잡지 않고, 예약완료 직전에 재확인·차감한다.
+    // 남아있으면 차감 후 완료, 없으면 "방금 마감" 처리 후 지점선택으로 되돌린다.
+    if (!consumeStock(draft.branchId, draft.currency)) {
+      setFinalSoldOut(true)
+      return
+    }
     const fixedRate = draft.rate ?? rate
     const rec = createReservation({
       transactionType: draft.transactionType,
@@ -139,6 +146,7 @@ export default function BookingFlow() {
     setDraft(emptyDraft)
     setConsent({ noshow: false, privacy: false })
     setSoldOut(false)
+    setFinalSoldOut(false)
     setResult(null)
     setStage('branch')
   }
@@ -151,7 +159,9 @@ export default function BookingFlow() {
     !!draft.pickupTime &&
     draft.pickupDate >= (range?.minDate || '') &&
     draft.pickupDate <= (range?.maxDate || '9999-12-31')
-  const infoValid = isValidName(draft.customerName) && isValidEmail(draft.email)
+  // 노쇼(자동취소) 누적 N회 이상 이메일은 신규예약 차단
+  const noshowBlocked = isValidEmail(draft.email) && countNoShow(draft.email) >= NOSHOW_LIMIT
+  const infoValid = isValidName(draft.customerName) && isValidEmail(draft.email) && !noshowBlocked
   const consentValid = consent.noshow && consent.privacy
 
   if (soldOut) {
@@ -160,6 +170,20 @@ export default function BookingFlow() {
         <div className="notice danger">
           <strong>{t('err.soldout.t')}</strong>
           <div style={{ marginTop: 4 }}>{t('err.soldout.d')}</div>
+        </div>
+        <button className="btn primary block" onClick={restart}>
+          {t('err.soldout.restart')}
+        </button>
+      </div>
+    )
+  }
+
+  if (finalSoldOut) {
+    return (
+      <div className="card">
+        <div className="notice danger">
+          <strong>{t('err.soldFinal.t')}</strong>
+          <div style={{ marginTop: 4 }}>{t('err.soldFinal.d')}</div>
         </div>
         <button className="btn primary block" onClick={restart}>
           {t('err.soldout.restart')}
@@ -193,7 +217,7 @@ export default function BookingFlow() {
 
       {stage === 'info' && (
         <div className="card">
-          <StepInfo draft={draft} set={set} />
+          <StepInfo draft={draft} set={set} noshowBlocked={noshowBlocked} />
           <div className="btn-row">
             <button className="btn ghost" onClick={() => setStage('apply')}>
               {t('common.prev')}
@@ -222,6 +246,13 @@ export default function BookingFlow() {
       {stage === 'consent' && (
         <div className="card">
           <StepConsent consent={consent} setConsent={setConsent} />
+          {/* 데모: 동시성(재고 경쟁) 시뮬레이션 — 다른 사용자가 방금 이 재고를 가져갔다 */}
+          <button
+            className="btn ghost block sim-take-btn"
+            onClick={() => takeStockDemo(draft.branchId, draft.currency)}
+          >
+            🧪 {t('sim.takeStock')}
+          </button>
           <div className="btn-row">
             <button className="btn ghost" onClick={() => setStage('review')}>
               {t('common.prev')}
@@ -556,7 +587,7 @@ function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canAp
 }
 
 /* ================= STEP 5: 예약자 정보 ================= */
-function StepInfo({ draft, set }) {
+function StepInfo({ draft, set, noshowBlocked }) {
   const { t } = useI18n()
   const nameOk = draft.customerName === '' || isValidName(draft.customerName)
   const emailOk = draft.email === '' || isValidEmail(draft.email)
@@ -586,6 +617,7 @@ function StepInfo({ draft, set }) {
           placeholder="you@example.com"
         />
         {!emailOk && <div className="err-text">{t('err.email')}</div>}
+        {emailOk && noshowBlocked && <div className="err-text">{t('err.noshowBlocked')}</div>}
       </label>
     </div>
   )
@@ -601,10 +633,6 @@ function StepReview({ draft, branch, rate, krw }) {
         <div className="row">
           <span className="k">{t('common.branch')}</span>
           <span className="v">{branch?.name[lang]}</span>
-        </div>
-        <div className="row">
-          <span className="k">{t('common.txType')}</span>
-          <span className="v">{t(`txc.${draft.transactionType}`)}</span>
         </div>
         <div className="row">
           <span className="k">{t('common.currency')}</span>
@@ -712,10 +740,6 @@ function StepDone({ rec, onNew }) {
       </p>
       <div className="result-code">{rec.reservationNo}</div>
       <div className="summary" style={{ marginTop: 12 }}>
-        <div className="row">
-          <span className="k">{t('common.txType')}</span>
-          <span className="v">{t(`txc.${rec.transactionType}`)}</span>
-        </div>
         <div className="row">
           <span className="k">{t('stepB.dateTime')}</span>
           <span className="v">{formatDateTime(rec.pickupDate, rec.pickupTime, lang)}</span>
