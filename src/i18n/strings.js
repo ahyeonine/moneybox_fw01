@@ -61,7 +61,7 @@ export const STRINGS = {
   'home.cta.book': { ko: '환전 예약 시작', en: 'Start a reservation' },
   'home.cta.lookup': { ko: '예약 조회 / 변경', en: 'Find / change reservation' },
   'home.feature.1.t': { ko: '예약 시 환율 픽스', en: 'Rate locked at booking' },
-  'home.feature.1.d': { ko: '최종확인 시점의 환율로 고정됩니다.', en: 'Your rate is fixed at the confirmation step.' },
+  'home.feature.1.d': { ko: '"신청하기" 클릭 시점의 환율로 고정됩니다.', en: 'Your rate is fixed when you tap "Reserve".' },
   'home.feature.2.t': { ko: '무결제 예약', en: 'No prepayment' },
   'home.feature.2.d': { ko: '지점에서 전액 현장 결제합니다.', en: 'Pay the full amount in person.' },
   'home.feature.3.t': { ko: '지점 수령', en: 'Branch pickup' },
@@ -93,7 +93,7 @@ export const STRINGS = {
   'book.step5.title': { ko: '예약자 정보를 입력하세요', en: 'Enter your details' },
   'book.step5.namehint': { ko: '여권 영문 표기와 동일하게 입력', en: 'Match your passport exactly' },
   'book.step6.title': { ko: '아래 내용으로 예약합니다', en: 'Review your reservation' },
-  'book.step6.ratefixed': { ko: '이 환율로 픽스됩니다', en: 'This rate will be locked' },
+  'book.step6.ratefixed': { ko: '예약 시 확정된 환율', en: 'Rate fixed at booking' },
   'book.step7.title': { ko: '안내 및 동의', en: 'Notices & consent' },
   'book.step7.noshow.t': { ko: '노쇼 안내', en: 'No-show notice' },
   'book.step7.noshow.d': {
@@ -334,10 +334,6 @@ export const STRINGS = {
   'stepB.rateNote': {
     ko: '표시 금액은 참고용이며, 최종 확인 단계에서 확정 환율로 재계산됩니다.',
     en: 'Amounts are indicative; the final rate is confirmed at the review step.',
-  },
-  'review.ratefixed.note': {
-    ko: '이 환율로 확정되었습니다 (최종확인 시점 픽스).',
-    en: 'Rate confirmed at this review step.',
   },
   'common.pickupTime': { ko: '수령 시간', en: 'Pickup time' },
 

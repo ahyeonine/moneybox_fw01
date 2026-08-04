@@ -15,6 +15,7 @@ export default function PosTransaction() {
       <DevNote
         items={[
           '신분증 대조 시 예약자명과 실제 방문자 명의가 달라도 그대로 진행 가능 (정책상 동일성 요구 안 함)',
+          '환전구분(매입/매출) 확인 후 처리',
         ]}
       />
       <header className="admin-header">

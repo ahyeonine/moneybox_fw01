@@ -104,6 +104,8 @@ export default function BookingFlow() {
       setSoldOut(true)
       return
     }
+    // "신청하기" 클릭 시점에 환율을 픽스한다. 이후 화면(최종확인 등)은 이 값을 표시만 함.
+    set({ rate })
     setStage('info')
   }
 
@@ -111,9 +113,8 @@ export default function BookingFlow() {
     setStage('review')
   }
 
-  // 최종확인 → 동의: 이 시점에 환율 픽스
-  function fixRateAndConsent() {
-    set({ rate })
+  // 최종확인 → 동의: 환율은 이미 STEP B에서 픽스됨. 여기서는 단계 전환만.
+  function goConsent() {
     setStage('consent')
   }
 
@@ -216,7 +217,7 @@ export default function BookingFlow() {
             <button className="btn ghost" onClick={() => setStage('info')}>
               {t('common.prev')}
             </button>
-            <button className="btn primary" onClick={fixRateAndConsent}>
+            <button className="btn primary" onClick={goConsent}>
               {t('common.next')}
             </button>
           </div>
@@ -633,9 +634,6 @@ function StepReview({ draft, branch, rate, krw }) {
           <span className="k">{t('common.krwAmount')}</span>
           <span className="v">{formatKrw(krw)}</span>
         </div>
-      </div>
-      <div className="notice info" style={{ marginTop: 12 }}>
-        {t('review.ratefixed.note')}
       </div>
     </div>
   )

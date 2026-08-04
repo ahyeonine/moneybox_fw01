@@ -133,7 +133,7 @@
 ```
 
 ### `POST /reservations/{reservationNo}/cancel`
-고객 취소. `BOOKED` → `CANCELLED`. 컷오프 없음(항상 취소 가능).
+고객 취소. `BOOKED` → `CANCELLED`. (취소 컷오프 정책은 미확정 — `// TODO`)
 → 프로토타입: `cancelReservation()`
 
 **Request** `{ "email": "john@example.com" }`

@@ -29,7 +29,7 @@
 |---|---|---|
 | 통화별 최소/최대금액 | 임의 목데이터 + `// TODO` | `src/data/branches.js` |
 | 회원/비회원 우대율 | 비회원 환율만 | `src/data/rates.js` |
-| 취소 컷오프 | 항상 취소 가능 | `store/ReservationContext.js#cancelReservation` |
+| 취소 컷오프 | 정책 미확정(`// TODO`) — 화면에는 확정적 문구 미노출 | `store/ReservationContext.js#cancelReservation` |
 | 이메일 인증 | 형식 검증만 | `src/lib/validation.js` |
 | 재고 소진 | 데모용 결정성 규칙(B003+VND) | `pages/booking/BookingFlow.jsx#isSoldOut` |
 | eSIM 연동 | 더미 외부링크 | `src/pages/EsimPage.jsx` |
