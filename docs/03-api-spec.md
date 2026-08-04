@@ -194,11 +194,13 @@
 ## 4. 배치/시스템
 
 ### `POST /system/auto-cancel` (스케줄러/크론)
-수령예정일 경과한 `BOOKED` 예약을 `CANCELLED` 로 일괄 전환.
-→ 프로토타입: `runAutoCancel()` (관리자 버튼으로 시뮬레이션)
+수령기한(당일 KST 자정) 경과한 `BOOKED` 예약을 `CANCELLED`(`cancelReason=AUTO`)로 일괄 전환.
+리마인더 응답상태(방문예정확인/미응답)와 무관하게 동일 적용하며, 노쇼 이력에도 동일 카운트.
+방문예정확인(`CONFIRMED`)이었던 건은 차감했던 예약시재/가용시재를 **복구**한다(미응답 건은 미반영이라 복구 없음).
+→ 프로토타입: `runAutoCancel()` (관리자 버튼으로 시뮬레이션, `{ cancelled, restored }` 반환)
 
 ```json
-200 OK { "cancelledCount": 3 }
+200 OK { "cancelledCount": 3, "restoredStock": 2 }
 ```
 
 ### 리마인더 발송/응답

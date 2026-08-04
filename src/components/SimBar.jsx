@@ -22,8 +22,9 @@ export default function SimBar() {
         className="btn ghost"
         style={{ padding: '6px 10px' }}
         onClick={() => {
-          const n = runAutoCancel()
-          setMsg(`${n} ${t('sim.autoCancelled')}`)
+          const { cancelled, restored } = runAutoCancel()
+          const base = `${cancelled} ${t('sim.autoCancelled')}`
+          setMsg(restored > 0 ? `${base} (${t('sim.restored')}: ${restored})` : base)
         }}
       >
         {t('sim.runAutoCancel')}

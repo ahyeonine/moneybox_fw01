@@ -199,4 +199,21 @@ export const SEED_RESERVATIONS = [
     createdAt: '2026-07-29T09:31:00+09:00',
     reminderStatus: 'NO_RESPONSE',
   }),
+  // ── 방문예정확인 후 미방문(노쇼) 데모 ──
+  // reminderStatus=CONFIRMED(방문예정확인) 이므로 시드 재고(B002+USD)에서 1개 미리 차감된 상태.
+  // 기준일을 수령기한(2026-07-31) 이후로 넘긴 뒤 "자동취소 실행" → 이 건도 자동취소되고
+  // 확인 시점에 잡았던 가용시재가 복구된다. (노쇼 누적에도 카운트)
+  make({
+    reservationNo: 'RSV-20260729-0301',
+    status: 'BOOKED',
+    transactionType: 'BUY',
+    branchId: 'B002',
+    currency: 'USD',
+    foreignAmount: 400,
+    customerName: 'CONFIRMED NOSHOW',
+    email: 'visit@example.com',
+    pickupDate: '2026-07-31',
+    createdAt: '2026-07-29T09:00:00+09:00',
+    reminderStatus: 'CONFIRMED',
+  }),
 ]

@@ -26,7 +26,15 @@ function seedStock() {
       s[`${b.id}:${cur}`] = 50 // 충분한 기본 재고 (목데이터)
     }
   }
-  s['B004:USD'] = 1 // 데모: 재고 1개만 남은 상태 (방문예정 확정 경쟁 시연용)
+  s['B004:USD'] = 1 // 데모: 재고 1개만 남은 상태 (방문예정 확정 경쟁 시연용, 미응답 2건이라 미차감)
+  // 시드 예약 중 이미 "방문예정확인(CONFIRMED)"된 BOOKED 건은 확인 시점에 가용시재를 잡은 상태이므로
+  // 초기 재고에서 미리 차감해 둔다. (수령기한 경과로 자동취소되면 이 재고가 복구되는 것을 시연 가능)
+  for (const r of SEED_RESERVATIONS) {
+    if (r.status === 'BOOKED' && r.reminderStatus === 'CONFIRMED') {
+      const k = `${r.branchId}:${r.currency}`
+      s[k] = (s[k] ?? 0) - 1
+    }
+  }
   return s
 }
 
@@ -154,6 +162,11 @@ export function ReservationProvider({ children }) {
     stockRef.current = { ...stockRef.current, [k]: cur - 1 }
     return true
   }
+  // 가용시재 복구(내부): 방문예정확인 후 자동취소된 건의 예약시재/가용시재를 되돌린다.
+  const restoreStock = (branchId, currency) => {
+    const k = `${branchId}:${currency}`
+    stockRef.current = { ...stockRef.current, [k]: (stockRef.current[k] ?? 0) + 1 }
+  }
 
   // 리마인더 "방문 예정" 확인 → 이 시점에 가용시재 재확인·차감(예약시재 반영).
   //  - 재고 없으면 { ok:false, reason:'SOLD_OUT' } (상태 불변) → "다른 고객이 이미 확정" 안내
@@ -184,19 +197,31 @@ export function ReservationProvider({ children }) {
 
   // 시뮬레이션: 자동취소(노쇼) — 수령예정일(KST)이 오늘보다 이전인 BOOKED 예약을 취소.
   // 수령기한 = 수령예정일 당일. 당일까지는 유지하고, KST 자정을 넘겨 경과하면 자동취소한다.
+  // 리마인더 응답상태(방문예정확인/미응답)와 무관하게 동일 적용. (방문예정확인 후 미방문도 노쇼)
   const runAutoCancel = useCallback(() => {
-    let count = 0
-    setReservations((prev) =>
-      prev.map((r) => {
-        if (r.status === 'BOOKED' && diffDays(r.pickupDate, today) < 0) {
-          count += 1
-          return { ...r, status: 'CANCELLED', cancelReason: 'AUTO' }
-        }
-        return r
-      })
+    const targets = reservations.filter(
+      (r) => r.status === 'BOOKED' && diffDays(r.pickupDate, today) < 0
     )
-    return count
-  }, [today])
+    if (!targets.length) return { cancelled: 0, restored: 0 }
+    // 재고 복구는 분기 처리:
+    //  - 방문예정확인(CONFIRMED): 확인 시점에 차감했던 예약시재/가용시재를 복구
+    //  - 미응답(NO_RESPONSE/NONE): 애초 재고 미반영 → 복구 없음
+    let restored = 0
+    targets.forEach((r) => {
+      if (r.reminderStatus === 'CONFIRMED') {
+        restoreStock(r.branchId, r.currency)
+        restored += 1
+      }
+    })
+    const cancelSet = new Set(targets.map((r) => r.reservationNo))
+    // 노쇼 이력(이메일별 자동취소 누적)에는 두 경우 모두 cancelReason='AUTO' 로 동일 카운트.
+    setReservations((prev) =>
+      prev.map((r) =>
+        cancelSet.has(r.reservationNo) ? { ...r, status: 'CANCELLED', cancelReason: 'AUTO' } : r
+      )
+    )
+    return { cancelled: targets.length, restored }
+  }, [reservations, today])
 
   const resetData = useCallback(() => {
     setReservations(clone(SEED_RESERVATIONS))

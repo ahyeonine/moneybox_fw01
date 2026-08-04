@@ -221,9 +221,10 @@ export const STRINGS = {
   'sim.runAutoCancel': { ko: '자동취소 실행', en: 'Run auto-cancel' },
   'sim.reset': { ko: '데이터 초기화', en: 'Reset data' },
   'sim.autoCancelled': { ko: '건이 자동취소되었습니다.', en: 'reservation(s) auto-cancelled.' },
+  'sim.restored': { ko: '재고 복구', en: 'stock restored' },
   'sim.hint': {
-    ko: '실제 스케줄러 대신, 기준일을 넘기고 자동취소를 실행해 볼 수 있습니다. (수령일 경과 예약 → 자동취소, KST 자정 기준)',
-    en: 'Instead of a real scheduler, advance the date and run auto-cancel (overdue booked → cancelled, at KST midnight).',
+    ko: '실제 스케줄러 대신, 기준일을 넘기고 자동취소를 실행해 볼 수 있습니다. (수령기한 경과 예약 → 자동취소, KST 자정 기준. 방문예정확인 건도 미방문 시 동일하게 자동취소되며 잡았던 재고는 복구됨)',
+    en: 'Instead of a real scheduler, advance the date and run auto-cancel (overdue booked → cancelled at KST midnight; confirmed-but-no-visit is also auto-cancelled and its reserved stock is restored).',
   },
 
   // About / eSIM
