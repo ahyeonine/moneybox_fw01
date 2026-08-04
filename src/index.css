@@ -2111,9 +2111,9 @@ th.num {
 }
 .hero-cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 14px;
-  max-width: 720px;
+  max-width: 900px;
   margin: 26px auto 0;
   transform: translateY(22px);
 }
@@ -2124,6 +2124,12 @@ th.num {
   box-shadow: 0 10px 24px rgba(16, 24, 40, 0.14);
   padding: 18px 18px 16px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+.hero-card .btn {
+  margin-top: auto;
+  align-self: flex-start;
 }
 .hero-card .hc-icon {
   font-size: 30px;
@@ -2143,10 +2149,12 @@ th.num {
   padding: 9px 16px;
   font-size: 14px;
 }
-@media (max-width: 560px) {
+@media (max-width: 720px) {
   .hero-cards {
     grid-template-columns: 1fr;
   }
+}
+@media (max-width: 560px) {
   .hero-hd-copy h1 {
     font-size: 24px;
   }
@@ -2561,3 +2569,33 @@ th.num {
   font-size: 12px;
 }
 
+
+/* 선불카드 안내(플레이스홀더) 페이지 */
+.card .lead {
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 600;
+  line-height: 1.6;
+  margin: 10px 0 14px;
+}
+.card .feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: grid;
+  gap: 8px;
+}
+.card .feature-list li {
+  position: relative;
+  padding-left: 24px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.card .feature-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--brand);
+  font-weight: 800;
+}

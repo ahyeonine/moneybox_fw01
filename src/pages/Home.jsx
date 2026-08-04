@@ -36,7 +36,8 @@ export default function Home() {
       <DevNote
         items={[
           '랜딩 홈은 마케팅용 화면으로 통계·후기·지점수 등은 목데이터입니다',
-          '공항수령 서비스는 이번 버전에서 제외됨 (지점수령 + eSIM만 노출)',
+          '공항수령 서비스는 이번 버전에서 제외됨 (지점수령·선불카드·eSIM 3종 노출)',
+          '"선불카드"는 신규 카드로, 클릭 시 안내(플레이스홀더) 화면으로 이동 — 실제 구매/충전은 미구현',
         ]}
       />
 
@@ -53,6 +54,14 @@ export default function Home() {
             <div className="hc-d">{t('home.card.branch.d')}</div>
             <button className="btn primary" onClick={() => nav('/site/book')}>
               {t('home.card.branch.cta')}
+            </button>
+          </div>
+          <div className="hero-card">
+            <div className="hc-icon">💳</div>
+            <div className="hc-t">{t('home.card.prepaid.t')}</div>
+            <div className="hc-d">{t('home.card.prepaid.d')}</div>
+            <button className="btn primary" onClick={() => nav('/site/prepaid')}>
+              {t('home.card.prepaid.cta')}
             </button>
           </div>
           <div className="hero-card">

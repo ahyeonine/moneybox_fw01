@@ -6,6 +6,7 @@ import BookingFlow from './pages/booking/BookingFlow.jsx'
 import LookupPage from './pages/LookupPage.jsx'
 import AboutPage from './pages/AboutPage.jsx'
 import EsimPage from './pages/EsimPage.jsx'
+import PrepaidCardPage from './pages/PrepaidCardPage.jsx'
 import CemsShell from './pages/operator/CemsShell.jsx'
 import PosShell from './pages/operator/PosShell.jsx'
 import PosHome from './pages/operator/PosHome.jsx'
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="site" element={<CustomerSite />}>
           <Route index element={<Home />} /> {/* 기본 진입 = 랜딩 홈 */}
           <Route path="book" element={<BookingFlow />} /> {/* 지점 수령 예약 */}
+          <Route path="prepaid" element={<PrepaidCardPage />} /> {/* 선불카드 안내(플레이스홀더) */}
           <Route path="esim" element={<EsimPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="lookup" element={<LookupPage />} />
