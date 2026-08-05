@@ -2601,3 +2601,48 @@ th.num {
   color: var(--brand);
   font-weight: 800;
 }
+
+/* STEP B 실시간 환율 표시 (2분 주기 자동 갱신) */
+.live-rate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.live-rate-num {
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  animation: rateFlash 0.9s ease;
+}
+@keyframes rateFlash {
+  0% { background: var(--accent-soft); color: var(--accent-dark); }
+  100% { background: transparent; }
+}
+.live-rate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--success);
+}
+
+/* 환전율관리 · 외국인 웹사이트 채널 환율 제어 */
+.webrate .webrate-edit {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  align-items: center;
+}
+.webrate .ratemode-input {
+  max-width: 130px;
+}
+.webrate .wr-manual {
+  color: var(--accent-dark);
+  font-weight: 800;
+}
+.webrate .wr-auto {
+  color: var(--success);
+  font-weight: 800;
+}

@@ -3,7 +3,8 @@ import { useSearchParams } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { useReservations } from '../store/ReservationContext.jsx'
 import { getBranch, branchCurrencies, currencyLimit, BRANCHES } from '../data/branches.js'
-import { CURRENCY_META, getRate, toKrw } from '../data/rates.js'
+import { CURRENCY_META, toKrw } from '../data/rates.js'
+import { useRates } from '../store/RatesContext.jsx'
 import { validateAmount } from '../lib/validation.js'
 import { pickupRange } from '../lib/date.js'
 import { formatKrw, formatForeign, formatDate, formatNumber } from '../lib/format.js'
@@ -295,6 +296,7 @@ function Detail({ rec, onBack, onCancel, onConfirmVisit, onEdit }) {
 
 function ChangeForm({ rec, today, onSave, onCancel }) {
   const { t, lang } = useI18n()
+  const { getRate } = useRates() // 변경 시에도 실시간 환율로 재계산
   const [branchId, setBranchId] = useState(rec.branchId)
   const [currency, setCurrency] = useState(rec.currency)
   const [amount, setAmount] = useState(String(rec.foreignAmount))

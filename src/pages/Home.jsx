@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
-import { CURRENCY_ORDER, CURRENCY_META, getDisplayRates } from '../data/rates.js'
+import { CURRENCY_ORDER, CURRENCY_META } from '../data/rates.js'
+import { useRates } from '../store/RatesContext.jsx'
 import { formatNumber } from '../lib/format.js'
 import DevNote from '../components/DevNote.jsx'
 
@@ -28,17 +29,13 @@ const REGIONS = [
 
 export default function Home() {
   const { t, lang } = useI18n()
+  const { getDisplayRates } = useRates() // 실시간 환율(2분 주기 자동 변동)
   const nav = useNavigate()
   const [svcTab, setSvcTab] = useState('branch')
 
   return (
     <div className="home">
-      <DevNote
-        items={[
-          '랜딩 홈은 마케팅용 화면으로 통계·후기·지점수 등은 목데이터입니다',
-          '공항수령 서비스는 이번 버전에서 제외됨',
-        ]}
-      />
+      <DevNote items={['공항수령 서비스는 이번 버전에서 제외됨']} />
 
       {/* 1. 히어로 */}
       <section className="hero-hd">

@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
 import { BRANCHES } from '../../data/branches.js'
-import { CURRENCY_ORDER, CURRENCY_META, getRate } from '../../data/rates.js'
+import { CURRENCY_ORDER, CURRENCY_META } from '../../data/rates.js'
 import { useSettings } from '../../store/SettingsContext.jsx'
+import { useRates } from '../../store/RatesContext.jsx'
 import { formatNumber } from '../../lib/format.js'
 import DevNote from '../../components/DevNote.jsx'
+
+// 최대금액(하드리밋) 설정 상한: 통화별 9,999 USD 상당액.
+const MAX_USD_CAP = 9999
 
 // 화면 3 (신규) · 설정 → 외국인서비스 한도관리
 // [최소금액][최대금액] 토글로 전환 (기본 최소금액)
@@ -12,7 +16,17 @@ import DevNote from '../../components/DevNote.jsx'
 
 export default function LimitManagement() {
   const { minAmounts, saveMinAmounts, getBranchMax, saveBranchMax } = useSettings()
+  const { getRate } = useRates()
   const [tab, setTab] = useState('min') // 'min' | 'max' (기본 최소금액)
+
+  // 통화 금액을 USD 상당액으로 환산 (KRW 경유). 상한(9,999 USD) 검증에 사용.
+  const usdCapKrw = () => MAX_USD_CAP * (getRate('USD') || 0) // 9,999 USD의 원화 상당액
+  const usdEquiv = (value, currency) => {
+    const usd = getRate('USD')
+    const r = getRate(currency)
+    if (!usd || !r) return 0
+    return (Number(value) * r) / usd
+  }
 
   /* ── 최소금액 ── */
   const [minTable, setMinTable] = useState(() => ({ ...minAmounts }))
@@ -31,17 +45,26 @@ export default function LimitManagement() {
   const [maxTable, setMaxTable] = useState({})
   const [bulkKrw, setBulkKrw] = useState('')
   const [maxSaved, setMaxSaved] = useState(false)
+  const [maxError, setMaxError] = useState('')
 
   // 지점 변경 시 저장된 값 로드 (없으면 빈 값)
   useEffect(() => {
     setMaxTable({ ...getBranchMax(branchId) })
     setBulkKrw('')
+    setMaxError('')
   }, [branchId, getBranchMax])
 
   // 원화(KRW) 기준 금액 → 전체 통화 상한 자동계산 (로드환율)
   function applyBulk() {
     const krw = Number(bulkKrw)
     if (!krw) return
+    // 상한: 원화 일괄금액이 9,999 USD 상당액을 넘으면 적용 불가
+    if (krw > usdCapKrw()) {
+      setMaxError(
+        `설정 가능한 최대금액은 9,999 USD 상당액(약 ${formatNumber(Math.floor(usdCapKrw()))}원)까지입니다.`
+      )
+      return
+    }
     const next = {}
     for (const c of CURRENCY_ORDER) {
       const rate = getRate(c)
@@ -50,15 +73,28 @@ export default function LimitManagement() {
       next[c] = roundNice(krw / rate)
     }
     setMaxTable(next)
+    setMaxError('')
   }
 
   function saveMaxes() {
+    // 개별수정 포함 — 각 통화값이 9,999 USD 상당액을 넘으면 저장 불가 (경계 반올림 오차 0.5% 허용)
+    const over = CURRENCY_ORDER.filter((c) => {
+      const v = Number(maxTable[c])
+      return v > 0 && usdEquiv(v, c) > MAX_USD_CAP * 1.005
+    })
+    if (over.length) {
+      setMaxError(
+        `설정 가능한 최대금액은 9,999 USD 상당액까지입니다. 초과 통화: ${over.join(', ')}`
+      )
+      return
+    }
     const cleaned = {}
     for (const c of CURRENCY_ORDER) {
       const v = Number(maxTable[c])
       if (v) cleaned[c] = v
     }
     saveBranchMax(branchId, cleaned)
+    setMaxError('')
     setMaxSaved(true)
     setTimeout(() => setMaxSaved(false), 1500)
   }
@@ -69,6 +105,7 @@ export default function LimitManagement() {
         items={[
           '최소금액: 통화별, 전체 지점 공통',
           '최대금액(하드리밋): 지점별로 다르게, 원화(KRW) 기준 1개 입력하면 로드환율로 전체 통화 자동 환산되는 방식',
+          '설정 가능한 최대금액 상한은 통화별 9,999 USD 상당액 — 초과 입력 시 저장/적용 차단 + 에러 표시',
           '⚠️ 이 최대금액 하드리밋은 애초 정책회의에서 "최대금액 제한 없음"으로 확정됐던 것과 상충하는 부분이라 정책 재확인이 필요한 상태',
         ]}
       />
@@ -170,6 +207,16 @@ export default function LimitManagement() {
                 </button>
               </div>
             </label>
+          </div>
+
+          {maxError && (
+            <div className="notice danger" style={{ margin: '4px 0 12px' }}>
+              {maxError}
+            </div>
+          )}
+          <div className="tiny" style={{ marginBottom: 12 }}>
+            ※ 설정 가능한 최대금액 상한: 통화별 <b>9,999 USD 상당액</b>
+            (약 {formatNumber(Math.floor(usdCapKrw()))}원). 초과 시 저장·적용이 차단됩니다.
           </div>
 
           <div className="table-wrap">

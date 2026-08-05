@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { CURRENCY_ORDER, CURRENCY_META, getRate, getDisplayRates } from '../../data/rates.js'
+import { useState, useEffect } from 'react'
+import { CURRENCY_ORDER, CURRENCY_META } from '../../data/rates.js'
+import { useRates } from '../../store/RatesContext.jsx'
 import { formatNumber, formatKrw } from '../../lib/format.js'
 import DevNote from '../../components/DevNote.jsx'
 
@@ -73,11 +74,56 @@ function RateCell({ cell, name, onChange }) {
   )
 }
 
+// "외국인 웹사이트" 채널 환율 제어 — 공유 상태(RatesContext)에 직접 반영.
+//  · 직접 입력(KRW) → setWebRate → STEP B 신청화면 환율에 실시간 반영(수동 고정)
+//  · "자동" → 오버라이드 해제 → 2분 주기 자동 변동 기준환율로 복귀
+function WebRateControl({ currency }) {
+  const { getRate, webOverride, setWebRate } = useRates()
+  const [val, setVal] = useState('')
+  useEffect(() => setVal(''), [currency]) // 통화 전환 시 입력창 초기화
+  const isManual = webOverride[currency] != null
+  const eff = getRate(currency)
+  return (
+    <div className="webrate">
+      <div className="tiny">
+        현재 적용 <b>{formatNumber(eff)}</b> KRW{' '}
+        <span className={isManual ? 'wr-manual' : 'wr-auto'}>
+          {isManual ? '수동 고정' : '자동 변동'}
+        </span>
+      </div>
+      <div className="webrate-edit">
+        <input
+          type="number"
+          className="ratemode-input"
+          placeholder="직접 입력(KRW)"
+          value={val}
+          onChange={(e) => setVal(e.target.value)}
+        />
+        <button className="cems-btn" onClick={() => val && setWebRate(currency, val)} disabled={!val}>
+          적용
+        </button>
+        {isManual && (
+          <button
+            className="cems-btn"
+            onClick={() => {
+              setWebRate(currency, '')
+              setVal('')
+            }}
+          >
+            자동
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function RateManagement() {
+  const { getRate, getDisplayRates } = useRates()
   const [currency, setCurrency] = useState('USD')
   const [rows, setRows] = useState(initRows) // 채널×사이드 환율 설정 (데모 상태)
 
-  const base = getRate(currency)
+  const base = getRate(currency) // 공유 상태(2분 자동 변동 + 외국인 웹사이트 수동값) 실시간 반영
   const dr = getDisplayRates(currency)
 
   const setCell = (chKey, side, patch) =>
@@ -85,7 +131,13 @@ export default function RateManagement() {
 
   return (
     <div>
-      <DevNote items={['"외국인 웹사이트" 행이 새로 추가됨']} />
+      <DevNote
+        items={[
+          '"외국인 웹사이트" 행이 새로 추가됨',
+          '"외국인 웹사이트" 매입 환율을 직접 입력하면 외국인 웹사이트 신청화면(STEP B) 환율에 실시간 반영됨',
+          '환율은 2분마다 자동 소폭 변동(±0.1~0.5%) — 프로토타입 시뮬레이션(실제 환율 API 아님)',
+        ]}
+      />
       <h1 className="cems-h1">환전율관리</h1>
 
       {/* 통화 선택 — 18개 통화를 가로 버튼으로 나열, 클릭 시 활성 */}
@@ -204,13 +256,17 @@ export default function RateManagement() {
                       />
                     )}
                   </td>
-                  {/* 고객 외화판매시(매입) */}
+                  {/* 고객 외화판매시(매입) — 외국인 웹사이트는 공유 환율(STEP B)과 직접 연동 */}
                   <td>
-                    <RateCell
-                      cell={rows[ch.key].purchase}
-                      name={`${ch.key}-purchase`}
-                      onChange={(p) => setCell(ch.key, 'purchase', p)}
-                    />
+                    {ch.key === 'foreign' ? (
+                      <WebRateControl currency={currency} />
+                    ) : (
+                      <RateCell
+                        cell={rows[ch.key].purchase}
+                        name={`${ch.key}-purchase`}
+                        onChange={(p) => setCell(ch.key, 'purchase', p)}
+                      />
+                    )}
                   </td>
                 </tr>
               ))}
@@ -218,8 +274,9 @@ export default function RateManagement() {
           </table>
         </div>
         <div className="tiny" style={{ marginTop: 8 }}>
-          ※ 데모: 기준율은 읽기 전용이며, 매각/매입의 수동(직접 환율)/자동(%) 설정은 화면 상태로만
-          반영됩니다. "외국인 웹사이트"는 매입만 지원하여 매각은 해당없음(—).
+          ※ 기준율/사실때·파실때는 2분마다 자동 변동됩니다. 다른 채널의 매각/매입 수동·자동(%) 설정은 화면
+          상태로만 반영되며, <b>"외국인 웹사이트" 매입 환율만 신청화면(STEP B)과 실시간 연동</b>됩니다(직접
+          입력=수동 고정 / 자동=2분 주기 변동). 매각은 해당없음(—).
         </div>
       </div>
     </div>

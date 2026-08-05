@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../../i18n/I18nContext.jsx'
 import { useReservations, NOSHOW_LIMIT } from '../../store/ReservationContext.jsx'
 import { useSettings } from '../../store/SettingsContext.jsx'
+import { useRates } from '../../store/RatesContext.jsx'
 import Stepper from '../../components/Stepper.jsx'
 import Modal from '../../components/Modal.jsx'
 import BranchMap from '../../components/BranchMap.jsx'
@@ -20,7 +21,7 @@ const DEV_NOTES = {
   done: ['예약 완료 즉시 상태값 "예약"으로 저장됨'],
 }
 import { BRANCHES, getBranch, branchCurrencies, currencyLimit } from '../../data/branches.js'
-import { CURRENCY_META, getRate, toKrw, getDisplayRates, getBankCompare } from '../../data/rates.js'
+import { CURRENCY_META, toKrw } from '../../data/rates.js'
 import { validateAmount, isValidEmail, isValidName, correctAmount } from '../../lib/validation.js'
 import { pickupRange, timeSlots } from '../../lib/date.js'
 import { formatKrw, formatForeign, formatNumber, formatDate, formatDateTime } from '../../lib/format.js'
@@ -53,6 +54,8 @@ export default function BookingFlow() {
   const { today, createReservation, countNoShow } = useReservations()
   // 한도(최소/최대)는 CEMS 한도관리 공유 상태에서 읽는다. (관리자 변경이 즉시 반영)
   const { minAmounts, getBranchMax } = useSettings()
+  // 환율은 공유 상태(2분마다 자동 변동 + 관리자 "외국인 웹사이트" 수동값)에서 읽는다.
+  const { getRate, lastUpdated } = useRates()
 
   const [stage, setStage] = useState('branch')
   const [draft, setDraft] = useState(emptyDraft)
@@ -325,6 +328,7 @@ function StepApply({ branch, draft, set, limit, amountCheck, rate, krw, range, o
 
 function BranchDetailLeft({ branch }) {
   const { t, lang } = useI18n()
+  const { getDisplayRates, getBankCompare } = useRates()
   const [rateTab, setRateTab] = useState('buy') // buy(외화 살 때) | sell(외화 팔 때)
   const [showAll, setShowAll] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -456,8 +460,10 @@ function BranchDetailLeft({ branch }) {
 
 function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canApply }) {
   const { t, lang } = useI18n()
+  const { lastUpdated } = useRates()
   const currencies = branchCurrencies(branch.id)
   const slots = timeSlots(branch.hours)
+  const updatedLabel = new Date(lastUpdated).toLocaleTimeString(lang === 'ko' ? 'ko-KR' : 'en-US')
 
   // 금액 자동보정: 포커스 아웃 시 단위→최대→최소 순으로 맞추고 안내 문구를 잠깐 표시
   const [adjust, setAdjust] = useState(null)
@@ -558,8 +564,15 @@ function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canAp
           <div className="cv-arrow">↓</div>
           <div className="cv-krw">{formatKrw(krw)}</div>
         </div>
-        <div className="tiny" style={{ margin: '8px 0 4px' }}>
-          {t('common.rate')} 1 {draft.currency} = {formatNumber(rate)} KRW
+        <div className="tiny live-rate" style={{ margin: '8px 0 4px' }}>
+          {t('common.rate')} 1 {draft.currency} ={' '}
+          <span key={rate} className="live-rate-num">
+            {formatNumber(rate)}
+          </span>{' '}
+          KRW
+          <span className="live-rate-badge" title={t('stepB.liveRateHint')}>
+            ● {t('stepB.liveRateLabel')} · {updatedLabel}
+          </span>
         </div>
 
         <button className="btn primary block" style={{ marginTop: 10 }} onClick={onApply} disabled={!canApply}>

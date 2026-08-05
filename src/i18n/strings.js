@@ -332,9 +332,14 @@ export const STRINGS = {
   'stepB.unitHint': { ko: '입력 단위', en: 'Input unit' },
   'stepB.estKrw': { ko: '예상 원화 금액', en: 'Estimated KRW' },
   'stepB.apply': { ko: '신청하기', en: 'Apply' },
+  'stepB.liveRateLabel': { ko: '실시간', en: 'Live' },
+  'stepB.liveRateHint': {
+    ko: '환율은 2분마다 자동 갱신됩니다. "신청하기" 클릭 시점의 환율로 확정됩니다.',
+    en: 'Rates auto-refresh every 2 minutes. Locked when you tap "Apply".',
+  },
   'stepB.rateNote': {
-    ko: '표시 금액은 참고용이며, 최종 확인 단계에서 확정 환율로 재계산됩니다.',
-    en: 'Amounts are indicative; the final rate is confirmed at the review step.',
+    ko: '표시 환율은 실시간으로 변동하며(2분 주기 자동 갱신), "신청하기" 클릭 시점의 환율로 확정됩니다.',
+    en: 'The displayed rate changes live (auto-refresh every 2 min) and is locked when you tap "Apply".',
   },
   'common.pickupTime': { ko: '수령 시간', en: 'Pickup time' },
 
