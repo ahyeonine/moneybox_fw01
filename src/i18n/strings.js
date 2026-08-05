@@ -241,8 +241,8 @@ export const STRINGS = {
   'esim.link': { ko: '외부 eSIM 페이지 열기', en: 'Open external eSIM page' },
   'prepaid.title': { ko: '선불카드', en: 'Prepaid card' },
   'prepaid.lead': {
-    ko: '한국에서 바로 쓸 수 있는 선불카드예요. 교통카드로도 사용 가능하고, 원하는 금액을 미리 충전해서 쓸 수 있어요.',
-    en: 'A prepaid card you can use right away in Korea. It works as a transit card too, and you can top it up in advance with any amount.',
+    ko: '원하는 금액을 미리 충전해서 쓸 수 있어요.',
+    en: 'Top it up in advance with any amount and use it right away.',
   },
   'prepaid.point1': {
     ko: '한국 도착 즉시 사용 가능',
@@ -352,14 +352,14 @@ export const STRINGS = {
   },
   'home.card.branch.t': { ko: '지점에서 수령하기', en: 'Pick up at a branch' },
   'home.card.branch.d': {
-    ko: '원하는 금액을 미리 예약하면, 예약 시점의 환율로 고정돼요. 지점에 방문해서 편하게 수령하세요.',
-    en: 'Reserve the amount you want and lock in the rate at reservation time. Visit a branch to pick it up with ease.',
+    ko: '원하는 금액을 예약 시점 환율로 미리 예약하고, 지점에서 편하게 수령하세요.',
+    en: 'Reserve the amount you want at the current rate and pick it up easily at a branch.',
   },
   'home.card.branch.cta': { ko: '신청하기', en: 'Reserve' },
   'home.card.prepaid.t': { ko: '선불카드 구매하기', en: 'Buy a prepaid card' },
   'home.card.prepaid.d': {
-    ko: '한국에서 바로 쓸 수 있는 선불카드예요. 교통카드로도 사용 가능하고, 원하는 금액을 미리 충전해서 쓸 수 있어요.',
-    en: 'A prepaid card you can use right away in Korea. It works as a transit card too, and you can top it up in advance with any amount.',
+    ko: '원하는 금액을 미리 충전해서 쓸 수 있어요.',
+    en: 'Top it up in advance with any amount and use it right away.',
   },
   'home.card.prepaid.cta': { ko: '자세히 보기', en: 'Learn more' },
   'home.card.esim.t': { ko: 'eSIM 구매하기', en: 'Buy an eSIM' },
