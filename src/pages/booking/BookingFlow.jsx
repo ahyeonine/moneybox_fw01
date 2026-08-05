@@ -2,6 +2,7 @@ import { useState, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../../i18n/I18nContext.jsx'
 import { useReservations, NOSHOW_LIMIT } from '../../store/ReservationContext.jsx'
+import { useSettings } from '../../store/SettingsContext.jsx'
 import Stepper from '../../components/Stepper.jsx'
 import Modal from '../../components/Modal.jsx'
 import BranchMap from '../../components/BranchMap.jsx'
@@ -50,6 +51,8 @@ const emptyDraft = {
 export default function BookingFlow() {
   const { t } = useI18n()
   const { today, createReservation, countNoShow } = useReservations()
+  // 한도(최소/최대)는 CEMS 한도관리 공유 상태에서 읽는다. (관리자 변경이 즉시 반영)
+  const { minAmounts, getBranchMax } = useSettings()
 
   const [stage, setStage] = useState('branch')
   const [draft, setDraft] = useState(emptyDraft)
@@ -60,8 +63,18 @@ export default function BookingFlow() {
   const set = (patch) => setDraft((d) => ({ ...d, ...patch }))
 
   const branch = getBranch(draft.branchId)
-  const limit =
-    draft.branchId && draft.currency ? currencyLimit(draft.branchId, draft.currency) : null
+  // 한도 조합: 최소=통화별 공통(minAmounts), 최대=지점별(branchMaxAmounts), 단위=지점 정적값(unitStep).
+  // 관리자가 CEMS 한도관리에서 값을 바꾸면 공유 상태를 통해 즉시 이 검증에 반영된다.
+  const limit = useMemo(() => {
+    if (!draft.branchId || !draft.currency) return null
+    const stat = currencyLimit(draft.branchId, draft.currency)
+    if (!stat) return null
+    return {
+      min: minAmounts[draft.currency] ?? stat.min,
+      max: getBranchMax(draft.branchId)?.[draft.currency] ?? stat.max,
+      unitStep: stat.unitStep,
+    }
+  }, [draft.branchId, draft.currency, minAmounts, getBranchMax])
   const amountCheck = validateAmount(draft.amount, limit)
   const rate = draft.currency ? getRate(draft.currency) : null
   const krw = amountCheck.ok ? toKrw(Number(draft.amount), rate) : 0
