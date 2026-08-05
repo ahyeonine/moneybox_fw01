@@ -248,7 +248,7 @@ export default function BookingFlow() {
               {t('common.prev')}
             </button>
             <button className="btn primary" onClick={submit} disabled={!consentValid}>
-              {t('site.nav.branch')}
+              {t('book.complete')}
             </button>
           </div>
         </div>

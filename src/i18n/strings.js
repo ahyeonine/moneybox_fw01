@@ -332,6 +332,7 @@ export const STRINGS = {
   'stepB.unitHint': { ko: '입력 단위', en: 'Input unit' },
   'stepB.estKrw': { ko: '예상 원화 금액', en: 'Estimated KRW' },
   'stepB.apply': { ko: '신청하기', en: 'Apply' },
+  'book.complete': { ko: '예약 완료하기', en: 'Complete reservation' },
   'stepB.liveRateLabel': { ko: '실시간', en: 'Live' },
   'stepB.liveRateHint': {
     ko: '환율은 2분마다 자동 갱신됩니다. "신청하기" 클릭 시점의 환율로 확정됩니다.',
