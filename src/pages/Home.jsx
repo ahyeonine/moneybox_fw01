@@ -35,7 +35,13 @@ export default function Home() {
 
   return (
     <div className="home">
-      <DevNote items={['공항수령 서비스는 이번 버전에서 제외됨']} />
+      <DevNote
+        items={[
+          '공항수령 서비스는 이번 버전에서 제외됨',
+          '서비스 카드 3종: 지점수령(예약 플로우) · 선불카드(안내 플레이스홀더) · eSIM(외부 더미링크)',
+          '상단 "실시간 환율" 티커는 공유 환율 상태(2분마다 ±0.1~0.5% 자동 변동) 값을 표시 — 관리자(CEMS 환전율관리) 변경도 반영됨',
+        ]}
+      />
 
       {/* 1. 히어로 */}
       <section className="hero-hd">

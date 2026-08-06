@@ -9,7 +9,7 @@ export default function DevNote({ items = [] }) {
   return (
     <aside className={`devnote ${open ? 'open' : 'collapsed'}`} aria-label="개발 참고 설명">
       <div className="devnote-head">
-        <span className="devnote-label">📌 DEV NOTE</span>
+        <span className="devnote-label">📌 메모</span>
         <button
           className="devnote-toggle"
           onClick={() => setOpen((o) => !o)}
