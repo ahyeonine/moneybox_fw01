@@ -1,0 +1,36 @@
+name: Daily Exchange Rate Report
+
+# 08:30 KST = 23:30 UTC (전일). KST 월~금(08:30) = UTC 일~목(23:30).
+# GitHub Actions cron 은 UTC 기준이며 부하에 따라 수 분 지연될 수 있음(09:00 전 30분 버퍼).
+on:
+  schedule:
+    - cron: "30 23 * * 0-4"
+  workflow_dispatch: {}   # 수동 실행(테스트)
+
+concurrency:
+  group: daily-exchange-report
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Generate & send report
+        env:
+          TWELVEDATA_API_KEY: ${{ secrets.TWELVEDATA_API_KEY }}
+          HOLIDAY_API_KEY: ${{ secrets.HOLIDAY_API_KEY }}
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: python src/exchange_report.py run
