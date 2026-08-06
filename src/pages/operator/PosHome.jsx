@@ -12,8 +12,6 @@ export default function PosHome() {
       <DevNote
         items={[
           'SELL / BUY / MORE / 온라인환전 타일은 이번 서비스 범위 밖이라 클릭 비활성 (장식용). "환전예약" 타일만 동작함',
-          '"환전예약" 타일 → /pos/reservation 검색폼(화면 A)으로 이동',
-          'footer 지점명은 특정 지점 노출 없이 일반 명칭 사용',
         ]}
       />
       <div className="pos-top">
