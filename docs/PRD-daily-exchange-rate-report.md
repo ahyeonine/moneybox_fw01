@@ -6,7 +6,7 @@
 | 작성일 | 2026-08-06 |
 | 작성자 | admin@m-box.com |
 | 상태 | 확정 (구현 착수 가능) |
-| 구현 도구 | Claude Code (옵션 A · Routine 기반) |
+| 구현 도구 | Claude Code (구현) · **GitHub Actions cron (스케줄러)** |
 | 데이터 소스 | **Twelve Data REST API (단일, `timezone=Asia/Seoul`)** + 공휴일 판정용 특일정보 API |
 | 발송 대상 | **Notion** (보고서·시계열), **Slackbot** (실패 알림) |
 | 발송 시각 | **영업일 08:30 KST** (한국 장 시작 09:00 이전) |
@@ -160,7 +160,10 @@
 
 ---
 
-## 9. 시스템 아키텍처 — 옵션 A (Claude Code Routine) 확정
+## 9. 시스템 아키텍처 — GitHub Actions cron 확정
+
+> **실행 방식 확정:** 스케줄러는 **GitHub Actions cron**(`30 23 * * 0-4` UTC = 08:30 KST 월~금)으로 운영한다. 오픈 네트워크라 `api.twelvedata.com` 접근 제약이 없고 이 저장소에서 바로 돌아간다. (Claude Routine 방식은 현 환경의 이그레스 정책이 Twelve Data를 차단하여 별도 allowlist가 필요하므로 미채택.) 아래 다이어그램의 트리거만 GitHub Actions로 치환된다.
+
 
 ```
 [Claude Routine  (영업일 08:30 KST = 23:30 UTC 전일 트리거)]
