@@ -16,6 +16,7 @@ export default function PosTransaction() {
         items={[
           '신분증 대조 시 예약자명과 실제 방문자 명의가 달라도 그대로 진행 가능 (정책상 동일성 요구 안 함)',
           '환전구분(매입/매출) 확인 후 처리',
+          '자세히: 05_어드민기능정의서_해외환전예약서비스.md',
         ]}
       />
       <header className="admin-header">

@@ -2646,3 +2646,163 @@ th.num {
   color: var(--success);
   font-weight: 800;
 }
+
+/* 최상단 탭의 "기획문서" 링크 */
+.toptabs .toptabs-docs {
+  font-size: 12.5px;
+  color: #9aa6b4;
+  padding: 12px 12px;
+}
+.toptabs .toptabs-docs.active {
+  color: #ffd8a8;
+  border-bottom-color: var(--accent);
+}
+
+/* 메모(DevNote) 내부 기획문서 링크 */
+.devnote-doclink {
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+/* 기획문서 뷰어 (/docs) */
+.docs-page {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 0;
+  min-height: calc(100vh - 46px);
+  background: var(--bg);
+}
+.docs-sidebar {
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+.docs-side-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}
+.docs-side-sub {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-bottom: 10px;
+  font-family: ui-monospace, Menlo, monospace;
+}
+.docs-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.docs-nav-item {
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  line-height: 1.35;
+  word-break: break-all;
+}
+.docs-nav-item:hover {
+  background: var(--surface-2);
+}
+.docs-nav-item.active {
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-weight: 700;
+}
+.docs-back {
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.docs-content {
+  padding: 26px 32px 80px;
+  max-width: 900px;
+  overflow-x: auto;
+}
+.docs-filename {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  color: var(--text-3);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border-strong);
+  word-break: break-all;
+}
+.docs-mermaid {
+  background: #0f151d;
+  color: #d7e2ee;
+  padding: 16px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+/* 마크다운 렌더 결과 타이포 */
+.docs-md {
+  color: var(--text);
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+.docs-md h1 { font-size: 24px; margin: 8px 0 14px; }
+.docs-md h2 { font-size: 19px; margin: 26px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.docs-md h3 { font-size: 16px; margin: 20px 0 8px; }
+.docs-md p { margin: 10px 0; }
+.docs-md ul, .docs-md ol { margin: 10px 0; padding-left: 22px; }
+.docs-md li { margin: 4px 0; }
+.docs-md code {
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  font-family: ui-monospace, Menlo, monospace;
+}
+.docs-md pre {
+  background: #0f151d;
+  color: #d7e2ee;
+  padding: 14px;
+  border-radius: 10px;
+  overflow-x: auto;
+}
+.docs-md pre code { background: transparent; padding: 0; color: inherit; }
+.docs-md table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 14px 0;
+  font-size: 13px;
+  display: block;
+  overflow-x: auto;
+}
+.docs-md th, .docs-md td {
+  border: 1px solid var(--border-strong);
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.docs-md th { background: var(--surface-2); font-weight: 700; }
+.docs-md blockquote {
+  margin: 12px 0;
+  padding: 6px 14px;
+  border-left: 3px solid var(--brand);
+  background: var(--brand-soft);
+  color: var(--text-2);
+}
+.docs-md a { color: var(--brand); text-decoration: underline; }
+@media (max-width: 720px) {
+  .docs-page { grid-template-columns: 1fr; }
+  .docs-sidebar { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--border); }
+  .docs-content { padding: 20px 16px 60px; }
+}

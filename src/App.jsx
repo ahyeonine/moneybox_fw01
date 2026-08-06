@@ -17,6 +17,7 @@ import FxFlowPlaceholder from './pages/operator/FxFlowPlaceholder.jsx'
 import ForeignReservationAdmin from './pages/cems/ForeignReservationAdmin.jsx'
 import RateManagement from './pages/cems/RateManagement.jsx'
 import LimitManagement from './pages/cems/LimitManagement.jsx'
+import DocsViewer from './pages/DocsViewer.jsx'
 
 export default function App() {
   return (
@@ -51,6 +52,9 @@ export default function App() {
           <Route path="reservation/flow" element={<FxFlowPlaceholder />} />
           <Route path="transaction" element={<PosTransaction />} />
         </Route>
+
+        {/* 기획문서 뷰어 (내부 검토용) */}
+        <Route path="docs" element={<DocsViewer />} />
 
         <Route path="*" element={<Navigate to="/site" replace />} />
       </Route>

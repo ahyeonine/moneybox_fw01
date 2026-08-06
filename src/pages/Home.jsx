@@ -35,7 +35,12 @@ export default function Home() {
 
   return (
     <div className="home">
-      <DevNote items={['공항수령 서비스는 이번 버전에서 제외됨']} />
+      <DevNote
+        items={[
+          '공항수령 서비스는 이번 버전에서 제외됨',
+          '자세히: 02_IA_사이트맵_해외환전예약서비스.md',
+        ]}
+      />
 
       {/* 1. 히어로 */}
       <section className="hero-hd">
