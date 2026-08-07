@@ -5,6 +5,7 @@ import { useReservations } from '../store/ReservationContext.jsx'
 import { getBranch, branchCurrencies, currencyLimit, BRANCHES } from '../data/branches.js'
 import { CURRENCY_META, toKrw } from '../data/rates.js'
 import { useRates } from '../store/RatesContext.jsx'
+import { useEmail } from '../store/EmailContext.jsx'
 import { validateAmount } from '../lib/validation.js'
 import { pickupRange } from '../lib/date.js'
 import { formatKrw, formatForeign, formatDate, formatNumber } from '../lib/format.js'
@@ -16,6 +17,7 @@ export default function LookupPage() {
   const { t } = useI18n()
   const { findReservationsForLookup, getByNo, cancelReservation, updateReservation, confirmVisit, today } =
     useReservations()
+  const { sendEmail } = useEmail()
   const [params] = useSearchParams()
 
   const [form, setForm] = useState({ no: params.get('no') || '', email: params.get('email') || '' })
@@ -60,9 +62,12 @@ export default function LookupPage() {
   }
 
   function onCancel() {
+    const rec = getByNo(detailNo)
     cancelReservation(detailNo)
     setShowCancel(false)
     setFlash({ type: 'success', msg: t('lookup.cancelled.msg') })
+    // 고객 취소 완료 이메일 발송
+    if (rec) sendEmail('customerCancel', rec.email, { name: rec.customerName, reservationNo: rec.reservationNo })
   }
 
   function onSaved(patch) {

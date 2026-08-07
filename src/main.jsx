@@ -6,6 +6,7 @@ import { I18nProvider } from './i18n/I18nContext.jsx'
 import { ReservationProvider } from './store/ReservationContext.jsx'
 import { SettingsProvider } from './store/SettingsContext.jsx'
 import { RatesProvider } from './store/RatesContext.jsx'
+import { EmailProvider } from './store/EmailContext.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <RatesProvider>
           <ReservationProvider>
             <SettingsProvider>
-              <App />
+              <EmailProvider>
+                <App />
+              </EmailProvider>
             </SettingsProvider>
           </ReservationProvider>
         </RatesProvider>

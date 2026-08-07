@@ -229,6 +229,11 @@ export const STRINGS = {
   'op.tx.idcheck': { ko: '신분증 대조 완료 (현장 OCR 시뮬레이션)', en: 'ID verified (on-site OCR, simulated)' },
   'op.tx.complete': { ko: '거래완료 처리', en: 'Complete transaction' },
   'op.tx.completed.msg': { ko: '거래가 완료 처리되었습니다.', en: 'Transaction completed.' },
+  'op.tx.branchCancel': { ko: '지점 예약 취소', en: 'Cancel (branch)' },
+  'op.tx.branchCancelled': {
+    ko: '지점 취소 처리되었습니다. 고객에게 취소 안내 이메일이 발송되었습니다.',
+    en: 'Cancelled by branch. A cancellation email was sent to the customer.',
+  },
   'op.tx.needId': { ko: '먼저 신분증 대조를 완료하세요.', en: 'Verify ID first.' },
   'op.tx.notBooked': { ko: '예약 상태가 아니어서 처리할 수 없습니다.', en: 'Not in Booked state — cannot process.' },
 
@@ -237,6 +242,8 @@ export const STRINGS = {
   'sim.today': { ko: '기준일(오늘)', en: 'Today (simulated)' },
   'sim.advance': { ko: '하루 넘기기', en: 'Advance 1 day' },
   'sim.runAutoCancel': { ko: '자동취소 실행', en: 'Run auto-cancel' },
+  'sim.sendReminder': { ko: '방문전일 리마인더 발송', en: 'Send day-before reminders' },
+  'sim.reminderSent': { ko: '리마인더 발송', en: 'Reminders sent' },
   'sim.reset': { ko: '데이터 초기화', en: 'Reset data' },
   'sim.autoCancelled': { ko: '건이 자동취소되었습니다.', en: 'reservation(s) auto-cancelled.' },
   'sim.restored': { ko: '재고 복구', en: 'stock restored' },

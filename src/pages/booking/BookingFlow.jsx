@@ -4,6 +4,7 @@ import { useI18n } from '../../i18n/I18nContext.jsx'
 import { useReservations, NOSHOW_LIMIT } from '../../store/ReservationContext.jsx'
 import { useSettings } from '../../store/SettingsContext.jsx'
 import { useRates } from '../../store/RatesContext.jsx'
+import { useEmail } from '../../store/EmailContext.jsx'
 import Stepper from '../../components/Stepper.jsx'
 import Modal from '../../components/Modal.jsx'
 import BranchMap from '../../components/BranchMap.jsx'
@@ -77,6 +78,8 @@ export default function BookingFlow() {
   const { minAmounts, getBranchMax, isWebExcluded } = useSettings()
   // 환율은 공유 상태(2분마다 자동 변동 + 관리자 "외국인 웹사이트" 수동값)에서 읽는다.
   const { getRate, lastUpdated } = useRates()
+  // 이메일 발송(시뮬레이션) — 인증번호/신청완료 등
+  const { sendEmail } = useEmail()
 
   const [stage, setStage] = useState('branch')
   const [draft, setDraft] = useState(emptyDraft)
@@ -186,6 +189,16 @@ export default function BookingFlow() {
     })
     setResult(rec)
     setStage('done')
+    // 신청 완료 이메일 발송 (예약 정보 포함) — 기존 예약 흐름과 독립
+    sendEmail('applied', rec.email, {
+      name: rec.customerName,
+      reservationNo: rec.reservationNo,
+      branch: branch?.name?.ko || rec.branchId,
+      pickupDate: rec.pickupDate,
+      currency: rec.currency,
+      amount: formatNumber(rec.foreignAmount),
+      krw: formatKrw(rec.krwAmount),
+    })
   }
 
   function restart() {
@@ -638,6 +651,7 @@ function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canAp
 /* ================= STEP 5: 예약자 정보 (+ 이메일 OTP 인증) ================= */
 function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }) {
   const { t } = useI18n()
+  const { sendEmail } = useEmail()
   const nameOk = draft.customerName === '' || isValidName(draft.customerName)
   const emailOk = draft.email === '' || isValidEmail(draft.email)
   // 노쇼 차단은 인증보다 먼저 판정. 차단 대상이면 OTP 절차 자체를 열지 않는다.
@@ -676,6 +690,8 @@ function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }
     setCooldownUntil(t0 + OTP_RESEND_COOLDOWN_MS)
     setNow(t0)
     setBanner({ type: 'info', text: `${t('book.otp.demoPrefix')} ${c}` })
+    // 입력한 이메일로 인증번호 발송(시뮬레이션) → 이메일 발송 이력에 기록
+    sendEmail('auth', draft.email.trim(), { name: draft.customerName, code: c })
   }
   function onSend() {
     if (!canStartOtp) return

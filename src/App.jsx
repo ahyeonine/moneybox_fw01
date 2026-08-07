@@ -18,6 +18,7 @@ import ForeignReservationAdmin from './pages/cems/ForeignReservationAdmin.jsx'
 import RateManagement from './pages/cems/RateManagement.jsx'
 import LimitManagement from './pages/cems/LimitManagement.jsx'
 import DocsViewer from './pages/DocsViewer.jsx'
+import EmailAdmin from './pages/email/EmailAdmin.jsx'
 
 export default function App() {
   return (
@@ -55,6 +56,9 @@ export default function App() {
 
         {/* 기획문서 뷰어 (내부 검토용) */}
         <Route path="docs" element={<DocsViewer />} />
+
+        {/* 이메일 관리 (템플릿 + 발송 이력) */}
+        <Route path="email" element={<EmailAdmin />} />
 
         <Route path="*" element={<Navigate to="/site" replace />} />
       </Route>

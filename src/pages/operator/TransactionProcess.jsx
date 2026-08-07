@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useI18n } from '../../i18n/I18nContext.jsx'
 import { useReservations } from '../../store/ReservationContext.jsx'
+import { useEmail } from '../../store/EmailContext.jsx'
 import { getBranch } from '../../data/branches.js'
 import { CURRENCY_META } from '../../data/rates.js'
 import { formatDate, formatKrw, formatForeign, formatNumber } from '../../lib/format.js'
@@ -9,7 +10,8 @@ import { StatusBadge } from '../../components/Badges.jsx'
 
 export default function TransactionProcess() {
   const { t, lang } = useI18n()
-  const { getByNo, completeReservation } = useReservations()
+  const { getByNo, completeReservation, cancelByBranch } = useReservations()
+  const { sendEmail } = useEmail()
   const [params] = useSearchParams()
 
   const [query, setQuery] = useState(params.get('no') || '')
@@ -61,6 +63,20 @@ export default function TransactionProcess() {
     }
     completeReservation(rec.reservationNo)
     setFlash({ type: 'success', msg: t('op.tx.completed.msg') })
+  }
+
+  // 지점 취소 → 상태 취소(사유=지점) + 지점취소 안내 이메일 발송
+  function cancelBranch() {
+    if (rec.status !== 'BOOKED') {
+      setFlash({ type: 'danger', msg: t('op.tx.notBooked') })
+      return
+    }
+    cancelByBranch(rec.reservationNo)
+    sendEmail('branchCancel', rec.email, {
+      name: rec.customerName,
+      reservationNo: rec.reservationNo,
+    })
+    setFlash({ type: 'warn', msg: t('op.tx.branchCancelled') })
   }
 
   const branch = rec ? getBranch(rec.branchId) : null
@@ -153,6 +169,13 @@ export default function TransactionProcess() {
               </label>
               <button className="btn success block" onClick={complete} disabled={!idChecked}>
                 {t('op.tx.complete')}
+              </button>
+              <button
+                className="btn ghost block"
+                style={{ marginTop: 8, color: 'var(--danger)', borderColor: 'var(--danger)' }}
+                onClick={cancelBranch}
+              >
+                {t('op.tx.branchCancel')}
               </button>
             </>
           ) : (

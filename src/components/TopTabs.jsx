@@ -22,6 +22,9 @@ export default function TopTabs() {
             {tab.label}
           </NavLink>
         ))}
+        <NavLink to="/email" className={({ isActive }) => `toptabs-docs ${isActive ? 'active' : ''}`}>
+          ✉️ 이메일
+        </NavLink>
         <NavLink to="/docs" className={({ isActive }) => `toptabs-docs ${isActive ? 'active' : ''}`}>
           📄 기획문서
         </NavLink>

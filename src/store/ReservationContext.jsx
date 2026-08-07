@@ -139,6 +139,17 @@ export function ReservationProvider({ children }) {
     )
   }, [])
 
+  // 지점 취소 (운영자) — 노쇼 카운트 제외. cancelReason='BRANCH'
+  const cancelByBranch = useCallback((reservationNo) => {
+    setReservations((prev) =>
+      prev.map((r) =>
+        r.reservationNo === reservationNo && r.status === 'BOOKED'
+          ? { ...r, status: 'CANCELLED', cancelReason: 'BRANCH', processedAt: null }
+          : r
+      )
+    )
+  }, [])
+
   const completeReservation = useCallback(
     (reservationNo) => {
       setReservations((prev) =>
@@ -239,6 +250,7 @@ export function ReservationProvider({ children }) {
     countNoShow,
     updateReservation,
     cancelReservation,
+    cancelByBranch,
     completeReservation,
     getStock,
     confirmVisit,

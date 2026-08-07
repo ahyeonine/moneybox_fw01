@@ -2875,3 +2875,94 @@ th.num {
 .otp-banner {
   margin-top: 10px;
 }
+
+/* 이메일 관리 화면 */
+.email-type-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.email-type-tab {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-2);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.email-type-tab.active {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+.email-body-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1.6;
+  resize: vertical;
+  background: var(--surface);
+  color: var(--text);
+}
+.email-outbox {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.email-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  background: var(--surface);
+}
+.email-item-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.email-tag {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text-2);
+}
+.email-tag.t-auth { background: #e5efff; color: #1d4ed8; }
+.email-tag.t-applied { background: var(--success-soft); color: var(--success); }
+.email-tag.t-reminder { background: var(--warn-soft); color: var(--warn); }
+.email-tag.t-branchCancel, .email-tag.t-customerCancel { background: var(--danger-soft); color: var(--danger); }
+.email-to { font-size: 13px; font-weight: 700; color: var(--text); }
+.email-time { font-size: 11px; color: var(--text-3); }
+.email-status {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-3);
+}
+.email-status.responded { color: var(--success); }
+.email-subject { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.email-body {
+  white-space: pre-wrap;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 0;
+}
+.email-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.email-actions .btn { padding: 8px 16px; font-size: 13px; }
