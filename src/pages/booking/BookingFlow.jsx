@@ -5,6 +5,7 @@ import { useReservations, NOSHOW_LIMIT } from '../../store/ReservationContext.js
 import { useSettings } from '../../store/SettingsContext.jsx'
 import { useRates } from '../../store/RatesContext.jsx'
 import { useEmail } from '../../store/EmailContext.jsx'
+import { useBooking } from '../../store/BookingContext.jsx'
 import Stepper from '../../components/Stepper.jsx'
 import Modal from '../../components/Modal.jsx'
 import BranchMap from '../../components/BranchMap.jsx'
@@ -55,21 +56,9 @@ function fmtMMSS(ms) {
   return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
 }
 
+// (신청 위저드 상태는 BookingContext에서 보관 — 메뉴 이동 후 복귀 시 유지)
 // 진행 단계: 지점선택(A) + 환전신청(B) 이 기존 8단계의 1~4단계를 흡수 통합.
 const STAGES = ['branch', 'apply', 'info', 'review', 'consent', 'done']
-
-const emptyDraft = {
-  branchId: '',
-  // 외국인 웹사이트는 원화구매(=매입, BUY)로 고정. (데이터 모델은 매입/매출 둘 다 유지)
-  transactionType: 'BUY',
-  currency: '',
-  amount: '',
-  pickupDate: '',
-  pickupTime: '',
-  customerName: '',
-  email: '',
-  rate: null,
-}
 
 export default function BookingFlow() {
   const { t } = useI18n()
@@ -81,14 +70,23 @@ export default function BookingFlow() {
   // 이메일 발송(시뮬레이션) — 인증번호/신청완료 등
   const { sendEmail } = useEmail()
 
-  const [stage, setStage] = useState('branch')
-  const [draft, setDraft] = useState(emptyDraft)
-  const [soldOut, setSoldOut] = useState(false) // 재고 소진(신청 시점, 데모 규칙: B003+VND)
-  const [consent, setConsent] = useState({ noshow: false, privacy: false })
-  const [emailVerified, setEmailVerified] = useState(false) // 이메일 OTP 인증 완료 여부
-  const [result, setResult] = useState(null)
-
-  const set = (patch) => setDraft((d) => ({ ...d, ...patch }))
+  // 신청 위저드 상태는 BookingContext에서 보관 → 메뉴 이동 후 복귀해도 단계·입력값 유지
+  const {
+    stage,
+    setStage,
+    draft,
+    setDraft,
+    set,
+    soldOut,
+    setSoldOut,
+    consent,
+    setConsent,
+    emailVerified,
+    setEmailVerified,
+    result,
+    setResult,
+    resetBooking,
+  } = useBooking()
 
   const branch = getBranch(draft.branchId)
   // 한도 조합: 최소=통화별 공통(minAmounts), 최대=지점별(branchMaxAmounts), 단위=지점 정적값(unitStep).
@@ -203,12 +201,7 @@ export default function BookingFlow() {
   }
 
   function restart() {
-    setDraft(emptyDraft)
-    setConsent({ noshow: false, privacy: false })
-    setEmailVerified(false)
-    setSoldOut(false)
-    setResult(null)
-    setStage('branch')
+    resetBooking()
   }
 
   // 금액은 양수이기만 하면 진행 가능(범위/단위는 신청 시 자동보정으로 맞춤)
