@@ -17,17 +17,31 @@ export const EMPTY_DRAFT = {
   rate: null,
 }
 
+// 이메일 OTP 진행 상태 (메뉴 이동 후에도 유지 — 새로고침/만료 시에만 리셋)
+export const EMPTY_OTP = {
+  sent: false,
+  code: null, // 현재 유효한 6자리 코드 (null = 미발급/무효화)
+  input: '',
+  expiresAt: 0, // 절대 시각(ms) — 남은 시간은 항상 여기서 재계산
+  cooldownUntil: 0,
+  attempts: 0,
+  banner: null, // { type, text }
+}
+
 export function BookingProvider({ children }) {
   const [stage, setStage] = useState('branch')
   const [draft, setDraft] = useState(EMPTY_DRAFT)
   const [soldOut, setSoldOut] = useState(false)
   const [consent, setConsent] = useState({ noshow: false, privacy: false })
   const [emailVerified, setEmailVerified] = useState(false)
+  const [otp, setOtpState] = useState(EMPTY_OTP) // 이메일 OTP 진행 상태
   const [result, setResult] = useState(null)
   // 마지막으로 머문 외국인 웹사이트(/site/*) 경로 — 탭 복귀 시 첫 화면을 거치지 않고 바로 이동
   const [lastSitePath, setLastSitePath] = useState('/site')
 
   const set = useCallback((patch) => setDraft((d) => ({ ...d, ...patch })), [])
+  const setOtp = useCallback((patch) => setOtpState((o) => ({ ...o, ...patch })), [])
+  const resetOtp = useCallback(() => setOtpState(EMPTY_OTP), [])
 
   // 의도적 초기화(처음부터 다시 / 새 예약)에서만 호출 — 메뉴 이동으로는 리셋되지 않음
   const resetBooking = useCallback(() => {
@@ -36,6 +50,7 @@ export function BookingProvider({ children }) {
     setSoldOut(false)
     setConsent({ noshow: false, privacy: false })
     setEmailVerified(false)
+    setOtpState(EMPTY_OTP)
     setResult(null)
   }, [])
 
@@ -51,6 +66,9 @@ export function BookingProvider({ children }) {
     setConsent,
     emailVerified,
     setEmailVerified,
+    otp,
+    setOtp,
+    resetOtp,
     result,
     setResult,
     resetBooking,

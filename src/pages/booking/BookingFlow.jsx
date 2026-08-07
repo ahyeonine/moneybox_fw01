@@ -646,44 +646,41 @@ function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canAp
 function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }) {
   const { t } = useI18n()
   const { sendEmail } = useEmail()
+  // OTP 진행 상태는 BookingContext에 보관 → 메뉴 이동 후 복귀해도 유지
+  const { otp, setOtp, resetOtp } = useBooking()
   const nameOk = draft.customerName === '' || isValidName(draft.customerName)
   const emailOk = draft.email === '' || isValidEmail(draft.email)
   // 노쇼 차단은 인증보다 먼저 판정. 차단 대상이면 OTP 절차 자체를 열지 않는다.
   const canStartOtp = isValidEmail(draft.email) && !noshowBlocked
 
-  // OTP 로컬 상태 (새로고침/언마운트 시 자동 초기화 — 임시저장 없음 원칙)
-  const [sent, setSent] = useState(false)
-  const [code, setCode] = useState(null) // 현재 유효한 6자리 코드 (null = 없음/무효화)
-  const [input, setInput] = useState('')
-  const [expiresAt, setExpiresAt] = useState(0)
-  const [cooldownUntil, setCooldownUntil] = useState(0)
-  const [attempts, setAttempts] = useState(0)
-  const [now, setNow] = useState(() => Date.now())
-  const [banner, setBanner] = useState(null) // { type, text }
+  const [now, setNow] = useState(() => Date.now()) // 카운트다운용 로컬 클록(렌더 전용)
 
-  // 1초 틱 (발송 후 · 미인증 동안만)
+  // 1초 틱 (발송 후 · 미인증 동안만). 남은시간은 절대시각(expiresAt)에서 재계산되므로
+  // 메뉴 이동 후 복귀해도 유효시간이 이어진다.
   useEffect(() => {
-    if (!sent || emailVerified) return
+    if (!otp.sent || emailVerified) return
     const id = setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(id)
-  }, [sent, emailVerified])
+  }, [otp.sent, emailVerified])
 
-  const remainMs = Math.max(0, expiresAt - now)
-  const expired = sent && !emailVerified && !!code && remainMs <= 0
-  const cooldownMs = Math.max(0, cooldownUntil - now)
-  const codeUnusable = !code || expired // 재발송 필요 상태 (무효화 or 만료)
+  const remainMs = Math.max(0, otp.expiresAt - now)
+  const expired = otp.sent && !emailVerified && !!otp.code && remainMs <= 0
+  const cooldownMs = Math.max(0, otp.cooldownUntil - now)
+  const codeUnusable = !otp.code || expired // 재발송 필요 상태 (무효화 or 만료)
 
   function genAndSend() {
     const c = String(Math.floor(100000 + Math.random() * 900000)) // 6자리
     const t0 = Date.now()
-    setCode(c)
-    setInput('')
-    setAttempts(0)
-    setSent(true)
-    setExpiresAt(t0 + OTP_TTL_MS)
-    setCooldownUntil(t0 + OTP_RESEND_COOLDOWN_MS)
+    setOtp({
+      sent: true,
+      code: c,
+      input: '',
+      attempts: 0,
+      expiresAt: t0 + OTP_TTL_MS,
+      cooldownUntil: t0 + OTP_RESEND_COOLDOWN_MS,
+      banner: { type: 'info', text: `${t('book.otp.demoPrefix')} ${c}` },
+    })
     setNow(t0)
-    setBanner({ type: 'info', text: `${t('book.otp.demoPrefix')} ${c}` })
     // 입력한 이메일로 인증번호 발송(시뮬레이션) → 이메일 발송 이력에 기록
     sendEmail('auth', draft.email.trim(), { name: draft.customerName, code: c })
   }
@@ -697,22 +694,23 @@ function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }
   }
   function onVerify() {
     if (codeUnusable) {
-      setBanner({ type: 'danger', text: t('book.otp.expired') })
+      setOtp({ banner: { type: 'danger', text: t('book.otp.expired') } })
       return
     }
-    if (input.trim() === code) {
+    if (otp.input.trim() === otp.code) {
       setEmailVerified(true)
-      setBanner({ type: 'success', text: t('book.otp.verified') })
+      setOtp({ banner: { type: 'success', text: t('book.otp.verified') } })
     } else {
-      const n = attempts + 1
-      setAttempts(n)
+      const n = otp.attempts + 1
       if (n >= OTP_MAX_ATTEMPTS) {
-        setCode(null) // 무효화 → 재발송 필요
-        setBanner({ type: 'danger', text: t('book.otp.locked') })
+        setOtp({ attempts: n, code: null, banner: { type: 'danger', text: t('book.otp.locked') } }) // 무효화 → 재발송
       } else {
-        setBanner({
-          type: 'danger',
-          text: `${t('book.otp.wrong')} (${OTP_MAX_ATTEMPTS - n}/${OTP_MAX_ATTEMPTS})`,
+        setOtp({
+          attempts: n,
+          banner: {
+            type: 'danger',
+            text: `${t('book.otp.wrong')} (${OTP_MAX_ATTEMPTS - n}/${OTP_MAX_ATTEMPTS})`,
+          },
         })
       }
     }
@@ -720,11 +718,7 @@ function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }
   // 이메일 수정 → 인증/코드 상태 전체 초기화 (재인증 필요)
   function onEmailChange(v) {
     set({ email: v })
-    setSent(false)
-    setCode(null)
-    setInput('')
-    setAttempts(0)
-    setBanner(null)
+    resetOtp()
     if (emailVerified) setEmailVerified(false)
   }
 
@@ -764,7 +758,7 @@ function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }
       {/* 이메일 OTP 인증 — 노쇼 차단 대상이 아니고 이메일 형식 통과 시에만 노출 */}
       {canStartOtp && !emailVerified && (
         <div className="otp-box">
-          {!sent ? (
+          {!otp.sent ? (
             <button type="button" className="btn primary block" onClick={onSend}>
               {t('book.otp.send')}
             </button>
@@ -776,8 +770,8 @@ function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }
                   inputMode="numeric"
                   maxLength={6}
                   className="otp-input"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  value={otp.input}
+                  onChange={(e) => setOtp({ input: e.target.value.replace(/\D/g, '').slice(0, 6) })}
                   placeholder={t('book.otp.placeholder')}
                   disabled={codeUnusable}
                 />
@@ -785,7 +779,7 @@ function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }
                   type="button"
                   className="btn primary"
                   onClick={onVerify}
-                  disabled={codeUnusable || input.length < 6}
+                  disabled={codeUnusable || otp.input.length < 6}
                 >
                   {t('book.otp.verify')}
                 </button>
@@ -807,7 +801,9 @@ function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }
               </div>
             </>
           )}
-          {banner && <div className={`notice ${banner.type} otp-banner`}>{banner.text}</div>}
+          {otp.banner && (
+            <div className={`notice ${otp.banner.type} otp-banner`}>{otp.banner.text}</div>
+          )}
         </div>
       )}
 
