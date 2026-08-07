@@ -76,7 +76,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. 실시간 환율 티커 */}
+      {/* 2. 기준환율 티커 (기준환율=dr.base 노출) */}
       <section className="rate-ticker">
         <span className="rt-label">{t('home.rate.label')}</span>
         <div className="rt-items">

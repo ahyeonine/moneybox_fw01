@@ -393,7 +393,7 @@ export const STRINGS = {
     en: 'A travel must-have',
   },
   'home.card.esim.cta': { ko: '구매하기', en: 'Buy' },
-  'home.rate.label': { ko: '실시간 환율', en: 'Live rates' },
+  'home.rate.label': { ko: '기준환율', en: 'Base rate' },
 
   'home.svc.title': { ko: '어떤 서비스를 이용할 수 있나요?', en: 'What can you use?' },
   'home.svc.tab.branch': { ko: '지점 수령', en: 'Branch pickup' },
