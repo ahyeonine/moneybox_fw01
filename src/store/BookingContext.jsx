@@ -24,6 +24,8 @@ export function BookingProvider({ children }) {
   const [consent, setConsent] = useState({ noshow: false, privacy: false })
   const [emailVerified, setEmailVerified] = useState(false)
   const [result, setResult] = useState(null)
+  // 마지막으로 머문 외국인 웹사이트(/site/*) 경로 — 탭 복귀 시 첫 화면을 거치지 않고 바로 이동
+  const [lastSitePath, setLastSitePath] = useState('/site')
 
   const set = useCallback((patch) => setDraft((d) => ({ ...d, ...patch })), [])
 
@@ -52,6 +54,8 @@ export function BookingProvider({ children }) {
     result,
     setResult,
     resetBooking,
+    lastSitePath,
+    setLastSitePath,
   }
   return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>
 }
