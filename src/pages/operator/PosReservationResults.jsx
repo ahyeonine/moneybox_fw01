@@ -2,23 +2,19 @@ import { useState, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useReservations } from '../../store/ReservationContext.jsx'
 import { CURRENCY_META } from '../../data/rates.js'
-import { diffDays } from '../../lib/date.js'
 import { formatDate, formatKrw, formatNumber } from '../../lib/format.js'
 import { StatusBadge } from '../../components/Badges.jsx'
 import Modal from '../../components/Modal.jsx'
 import DevNote from '../../components/DevNote.jsx'
 import { POS_RESV_NOTES } from './PosReservationSearch.jsx'
 
-// 리마인더 응답별 노출 기준 (05_어드민기능정의서 로직 재사용):
+// 리마인더 응답별 노출 기준 (날짜 필터와 독립적으로 동작):
 //  - 취소/자동취소(CANCELLED) → 미노출
-//  - 수령예정일 당일 도달 건 → 토글과 무관하게 항상 노출
 //  - "방문확인만 보기"(기본) → CONFIRMED(방문예정 확인)만 노출
 //  - "전체보기" → 무응답/발송전 건도 함께 노출
-function reminderVisible(rec, today, showAll) {
+function reminderVisible(rec, showAll) {
   if (rec.status === 'CANCELLED') return false
-  if (diffDays(rec.pickupDate, today) === 0) return true // 당일 항상 노출
-  if (showAll) return true
-  return rec.reminderStatus === 'CONFIRMED'
+  return showAll ? true : rec.reminderStatus === 'CONFIRMED'
 }
 
 // 화면 B · POS 환전예약 결과 리스트 (검색 후)
@@ -35,8 +31,13 @@ export default function PosReservationResults() {
   }
   const [form, setForm] = useState(applied)
   const set = (patch) => setForm((f) => ({ ...f, ...patch }))
-  const [showAll, setShowAll] = useState(false) // false = 방문확인만 보기(기본)
+  const [showAll, setShowAll] = useState(false) // 응답 토글: false = 방문확인만 보기(기본)
+  const [dateAll, setDateAll] = useState(false) // 날짜 토글: false = 오늘(해당일)만(기본), true = 전체 날짜
   const [selected, setSelected] = useState(null) // 거래내용 확인 모달 대상
+
+  // 날짜 필터 기준: 검색된 수령일(없으면 오늘). 두 토글은 서로 독립.
+  const dateBase = applied.date || today
+  const dateLabel = dateBase === today ? '오늘' : formatDate(dateBase, 'ko')
 
   // 모달 "확인" → 모달 닫고 기존 환전예약플로우(플레이스홀더)로 이동
   function confirmSelected() {
@@ -58,12 +59,14 @@ export default function PosReservationResults() {
     const email = applied.email.toLowerCase()
     return reservations
       .filter((r) => (name ? r.customerName.toLowerCase().includes(name) : true))
-      .filter((r) => (applied.date ? r.pickupDate >= applied.date : true)) // 일치 또는 이후
       .filter((r) => (email ? r.email.toLowerCase().includes(email) : true))
-      .filter((r) => reminderVisible(r, today, showAll))
+      // 날짜 필터: 오늘(해당일) 정확히 일치 / 전체 → 제한 없음 (응답 토글과 독립)
+      .filter((r) => (dateAll ? true : r.pickupDate === dateBase))
+      // 응답 필터: 방문확인만(CONFIRMED) / 전체보기 (날짜와 독립)
+      .filter((r) => reminderVisible(r, showAll))
       .sort((a, b) => (a.pickupDate < b.pickupDate ? -1 : a.pickupDate > b.pickupDate ? 1 : 0))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reservations, applied.name, applied.date, applied.email, showAll, today])
+  }, [reservations, applied.name, applied.email, dateAll, dateBase, showAll])
 
   return (
     <div className="pos-resv">
@@ -101,8 +104,18 @@ export default function PosReservationResults() {
           검색
         </button>
 
-        {/* 방문확인만 보기 / 전체보기 토글 */}
-        <div className="visit-toggle" role="group" aria-label="노출 범위">
+        {/* 날짜 필터: 오늘(해당일) / 전체 — 응답 토글과 독립 */}
+        <div className="visit-toggle" role="group" aria-label="날짜 필터">
+          <button type="button" className={!dateAll ? 'active' : ''} onClick={() => setDateAll(false)}>
+            {dateLabel}
+          </button>
+          <button type="button" className={dateAll ? 'active' : ''} onClick={() => setDateAll(true)}>
+            전체
+          </button>
+        </div>
+
+        {/* 응답상태 토글: 방문확인만 보기(기본) / 전체보기 — 날짜 필터와 독립 */}
+        <div className="visit-toggle" role="group" aria-label="응답 범위">
           <button
             type="button"
             className={!showAll ? 'active' : ''}
@@ -121,7 +134,7 @@ export default function PosReservationResults() {
       </form>
 
       <div className="pos-result-count">
-        {rows.length}건 {showAll ? '(전체보기)' : '(방문확인만)'}
+        {rows.length}건 · {dateAll ? '전체 날짜' : dateLabel} · {showAll ? '전체보기' : '방문확인만'}
       </div>
 
       {/* 결과 테이블 */}

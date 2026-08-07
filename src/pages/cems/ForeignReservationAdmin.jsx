@@ -31,6 +31,8 @@ export default function ForeignReservationAdmin() {
   const [form, setForm] = useState(defaultFilter)
   const [applied, setApplied] = useState(defaultFilter)
   const [page, setPage] = useState(1)
+  // 응답상태 토글: false = 방문확인만 보기(기본, CONFIRMED만), true = 전체보기. 날짜 필터와 독립.
+  const [showAll, setShowAll] = useState(false)
 
   const setF = (patch) => setForm((f) => ({ ...f, ...patch }))
 
@@ -49,9 +51,11 @@ export default function ForeignReservationAdmin() {
       .filter((r) => (f.appTo ? r.createdAt.slice(0, 10) <= f.appTo : true))
       .filter((r) => (f.pickFrom ? r.pickupDate >= f.pickFrom : true))
       .filter((r) => (f.pickTo ? r.pickupDate <= f.pickTo : true))
+      // 응답상태 필터: 방문확인만(CONFIRMED) / 전체보기 — 날짜 필터와 독립
+      .filter((r) => (showAll ? true : r.reminderStatus === 'CONFIRMED'))
       // 신청일시 최신순 — 최근 신청 건이 1번 행으로 상단 노출
       .sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0))
-  }, [reservations, applied])
+  }, [reservations, applied, showAll])
 
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE))
   const curPage = Math.min(page, totalPages)
@@ -82,6 +86,7 @@ export default function ForeignReservationAdmin() {
           '본사관리자 화면은 이번 프로젝트에서 신규 개발 대상 아님 (예약금을 받지 않아 본사가 확인할 입금 건 자체가 없음)',
           '이 리스트의 목적은 입금확인이 아니라 시재 준비용',
           '기존 CEMS 컬럼(성명/생년월일/휴대전화/입금상태/예약금) 중 상당수가 이번 서비스에는 없음 — 이메일/여권영문명 등으로 대체',
+          '진입 기본값: 수령예정일="오늘" + 응답상태="방문확인만 보기". 날짜(오늘/전체 기간)와 응답 토글은 독립 동작',
           '자세히: 05_어드민기능정의서_해외환전예약서비스.md',
         ]}
       />
@@ -162,8 +167,19 @@ export default function ForeignReservationAdmin() {
         </div>
       </div>
 
-      <div className="cems-count">
-        총 <strong>{rows.length}</strong>건
+      <div className="cems-count-row">
+        <div className="cems-count">
+          총 <strong>{rows.length}</strong>건
+        </div>
+        {/* 응답상태 토글: 방문확인만 보기(기본) / 전체보기 — 날짜 필터와 독립 */}
+        <div className="visit-toggle" role="group" aria-label="응답 범위">
+          <button className={!showAll ? 'active' : ''} onClick={() => setShowAll(false)}>
+            방문확인만 보기
+          </button>
+          <button className={showAll ? 'active' : ''} onClick={() => setShowAll(true)}>
+            전체보기
+          </button>
+        </div>
       </div>
 
       {/* 테이블 */}

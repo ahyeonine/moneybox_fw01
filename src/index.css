@@ -1301,10 +1301,17 @@ th.num {
   opacity: 0.45;
   cursor: not-allowed;
 }
+.cems-count-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
 .cems-count {
   font-size: 13px;
   color: var(--text-2);
-  margin-bottom: 8px;
 }
 .cems-count strong {
   color: var(--brand-dark);
