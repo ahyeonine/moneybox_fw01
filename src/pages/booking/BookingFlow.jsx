@@ -73,8 +73,8 @@ const emptyDraft = {
 export default function BookingFlow() {
   const { t } = useI18n()
   const { today, createReservation, countNoShow } = useReservations()
-  // 한도(최소/최대)는 CEMS 한도관리 공유 상태에서 읽는다. (관리자 변경이 즉시 반영)
-  const { minAmounts, getBranchMax } = useSettings()
+  // 한도(최소/최대)·통화 노출은 CEMS 공유 상태에서 읽는다. (관리자 변경이 즉시 반영)
+  const { minAmounts, getBranchMax, isWebExcluded } = useSettings()
   // 환율은 공유 상태(2분마다 자동 변동 + 관리자 "외국인 웹사이트" 수동값)에서 읽는다.
   const { getRate, lastUpdated } = useRates()
 
@@ -107,6 +107,18 @@ export default function BookingFlow() {
     () => (branch ? pickupRange(today, branch.leadTimeDays, 14) : null),
     [branch, today]
   )
+
+  // 관리자 "매입제외"로 현재 선택 통화가 제외되면, 노출 가능한 첫 통화로 자동 교체
+  const availableCurrencies = useMemo(
+    () => (branch ? branchCurrencies(branch.id).filter((c) => !isWebExcluded(c)) : []),
+    [branch, isWebExcluded]
+  )
+  useEffect(() => {
+    if (draft.branchId && draft.currency && isWebExcluded(draft.currency)) {
+      set({ currency: availableCurrencies[0] || '' })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [draft.currency, availableCurrencies])
 
   const stepLabels = [
     t('wz.branch'),
@@ -496,7 +508,9 @@ function BranchDetailLeft({ branch }) {
 function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canApply }) {
   const { t, lang } = useI18n()
   const { lastUpdated } = useRates()
-  const currencies = branchCurrencies(branch.id)
+  const { isWebExcluded } = useSettings()
+  // 관리자 "매입제외" 통화는 선택 목록에서 제외
+  const currencies = branchCurrencies(branch.id).filter((c) => !isWebExcluded(c))
   const slots = timeSlots(branch.hours)
   const updatedLabel = new Date(lastUpdated).toLocaleTimeString(lang === 'ko' ? 'ko-KR' : 'en-US')
 

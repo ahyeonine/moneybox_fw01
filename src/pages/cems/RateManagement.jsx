@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { CURRENCY_ORDER, CURRENCY_META } from '../../data/rates.js'
 import { useRates } from '../../store/RatesContext.jsx'
+import { useSettings } from '../../store/SettingsContext.jsx'
 import { formatNumber, formatKrw } from '../../lib/format.js'
 import DevNote from '../../components/DevNote.jsx'
 
@@ -120,6 +121,7 @@ function WebRateControl({ currency }) {
 
 export default function RateManagement() {
   const { getRate, getDisplayRates } = useRates()
+  const { isWebExcluded, toggleWebExcluded } = useSettings()
   const [currency, setCurrency] = useState('USD')
   const [rows, setRows] = useState(initRows) // 채널×사이드 환율 설정 (데모 상태)
 
@@ -135,6 +137,7 @@ export default function RateManagement() {
         items={[
           '"외국인 웹사이트" 행이 새로 추가됨',
           '"외국인 웹사이트" 매입 환율을 직접 입력하면 외국인 웹사이트 신청화면(STEP B) 환율에 실시간 반영됨',
+          '"외국인 웹사이트" 매각제외는 기본 체크+잠금(매각 미지원 확정). 매입제외는 선택된 통화 기준으로 체크 시 신청화면 통화선택에서 즉시 제외',
           '환율은 2분마다 자동 소폭 변동(±0.1~0.5%) — 프로토타입 시뮬레이션(실제 환율 API 아님)',
           '자세히: 05_어드민기능정의서_해외환전예약서비스.md',
         ]}
@@ -217,6 +220,7 @@ export default function RateManagement() {
               <tr>
                 <th>숨김</th>
                 <th>적용여부</th>
+                <th>매입제외</th>
                 <th>매각제외</th>
                 <th>당일수령불가</th>
                 <th>적용처</th>
@@ -234,8 +238,31 @@ export default function RateManagement() {
                   <td>
                     <input type="checkbox" defaultChecked={ch.flags.apply} disabled />
                   </td>
+                  {/* 매입제외: 외국인 웹사이트만 통화별 상호작용 (체크 시 신청화면 통화선택에서 제외) */}
                   <td>
-                    <input type="checkbox" defaultChecked={ch.flags.exSell} disabled />
+                    {ch.key === 'foreign' ? (
+                      <input
+                        type="checkbox"
+                        checked={isWebExcluded(currency)}
+                        onChange={() => toggleWebExcluded(currency)}
+                        title={`${currency} 매입제외 — 체크 시 외국인 웹사이트 통화선택에서 제외`}
+                      />
+                    ) : (
+                      <input type="checkbox" defaultChecked={false} disabled />
+                    )}
+                  </td>
+                  {/* 매각제외: 외국인 웹사이트는 매각 미지원 확정 → 기본 체크 + 잠금(수정 불가) */}
+                  <td>
+                    {ch.key === 'foreign' ? (
+                      <input
+                        type="checkbox"
+                        checked
+                        disabled
+                        title="외국인 웹사이트는 매각(외화구매) 미지원 — 항상 제외(잠금)"
+                      />
+                    ) : (
+                      <input type="checkbox" defaultChecked={ch.flags.exSell} disabled />
+                    )}
                   </td>
                   <td>
                     <input type="checkbox" defaultChecked={ch.flags.sameDayBlock} disabled />

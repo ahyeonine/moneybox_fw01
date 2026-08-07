@@ -24,6 +24,9 @@ function seedBranchMax() {
 export function SettingsProvider({ children }) {
   const [minAmounts, setMinAmounts] = useState(() => ({ ...POLICY_MIN_AMOUNTS }))
   const [branchMaxAmounts, setBranchMaxAmounts] = useState(seedBranchMax)
+  // 외국인 웹사이트 채널 "매입제외" — 통화별로 신청화면 통화선택 목록에서 제외한다.
+  // { [currency]: true }
+  const [webExcluded, setWebExcluded] = useState({})
 
   // 통화별 최소금액 일괄 저장
   const saveMinAmounts = useCallback((next) => {
@@ -42,7 +45,23 @@ export function SettingsProvider({ children }) {
     [branchMaxAmounts]
   )
 
-  const value = { minAmounts, branchMaxAmounts, saveMinAmounts, saveBranchMax, getBranchMax }
+  // 외국인 웹사이트 "매입제외" 통화 조회/토글
+  const isWebExcluded = useCallback((cur) => !!webExcluded[cur], [webExcluded])
+  const toggleWebExcluded = useCallback(
+    (cur) => setWebExcluded((prev) => ({ ...prev, [cur]: !prev[cur] })),
+    []
+  )
+
+  const value = {
+    minAmounts,
+    branchMaxAmounts,
+    saveMinAmounts,
+    saveBranchMax,
+    getBranchMax,
+    webExcluded,
+    isWebExcluded,
+    toggleWebExcluded,
+  }
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>
 }
 
