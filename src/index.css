@@ -2813,3 +2813,65 @@ th.num {
   .docs-sidebar { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--border); }
   .docs-content { padding: 20px 16px 60px; }
 }
+
+/* 이메일 OTP 인증 (STEP 5) */
+.otp-verified-badge {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--success);
+}
+.otp-box {
+  margin-top: -4px;
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.otp-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.otp-input {
+  flex: 1;
+  letter-spacing: 0.35em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.otp-row .btn {
+  flex-shrink: 0;
+  padding: 12px 18px;
+}
+.otp-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.otp-timer {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+.otp-timer.expired {
+  color: var(--danger);
+}
+.otp-resend {
+  border: 0;
+  background: transparent;
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 6px;
+}
+.otp-resend:disabled {
+  color: var(--text-faint);
+  cursor: not-allowed;
+}
+.otp-banner {
+  margin-top: 10px;
+}

@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../../i18n/I18nContext.jsx'
 import { useReservations, NOSHOW_LIMIT } from '../../store/ReservationContext.jsx'
@@ -20,6 +20,7 @@ const DEV_NOTES = {
   ],
   info: [
     '필수 항목은 예약자명 + 이메일만. 메신저ID, 휴대전화, 생년월일 수집 안 함 (온라인 최소수집 원칙)',
+    '이메일 OTP 인증 완료해야 다음 단계 진행 (데모: 인증번호를 배너로 표시, 5분 유효·30초 후 재발송·5회 오답 시 무효화)',
     '자세히: 04_데이터정의서_해외환전예약서비스.md',
   ],
   consent: [
@@ -42,6 +43,15 @@ import { formatKrw, formatForeign, formatNumber, formatDate, formatDateTime } fr
 // TODO: 실제 재고 API 연동으로 교체
 function isSoldOut(branchId, currency) {
   return branchId === 'B003' && currency === 'VND'
+}
+
+// 이메일 OTP 정책 (프로토타입 시뮬레이션 — 실제 발송 없음)
+const OTP_TTL_MS = 5 * 60 * 1000 // 코드 유효시간 5분
+const OTP_RESEND_COOLDOWN_MS = 30 * 1000 // 재발송 쿨다운 30초
+const OTP_MAX_ATTEMPTS = 5 // 오답 5회 시 코드 무효화
+function fmtMMSS(ms) {
+  const s = Math.ceil(ms / 1000)
+  return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
 }
 
 // 진행 단계: 지점선택(A) + 환전신청(B) 이 기존 8단계의 1~4단계를 흡수 통합.
@@ -72,6 +82,7 @@ export default function BookingFlow() {
   const [draft, setDraft] = useState(emptyDraft)
   const [soldOut, setSoldOut] = useState(false) // 재고 소진(신청 시점, 데모 규칙: B003+VND)
   const [consent, setConsent] = useState({ noshow: false, privacy: false })
+  const [emailVerified, setEmailVerified] = useState(false) // 이메일 OTP 인증 완료 여부
   const [result, setResult] = useState(null)
 
   const set = (patch) => setDraft((d) => ({ ...d, ...patch }))
@@ -168,6 +179,7 @@ export default function BookingFlow() {
   function restart() {
     setDraft(emptyDraft)
     setConsent({ noshow: false, privacy: false })
+    setEmailVerified(false)
     setSoldOut(false)
     setResult(null)
     setStage('branch')
@@ -183,7 +195,8 @@ export default function BookingFlow() {
     draft.pickupDate <= (range?.maxDate || '9999-12-31')
   // 노쇼(자동취소) 누적 N회 이상 이메일은 신규예약 차단
   const noshowBlocked = isValidEmail(draft.email) && countNoShow(draft.email) >= NOSHOW_LIMIT
-  const infoValid = isValidName(draft.customerName) && isValidEmail(draft.email) && !noshowBlocked
+  const infoValid =
+    isValidName(draft.customerName) && isValidEmail(draft.email) && !noshowBlocked && emailVerified
   const consentValid = consent.noshow && consent.privacy
 
   if (soldOut) {
@@ -225,7 +238,13 @@ export default function BookingFlow() {
 
       {stage === 'info' && (
         <div className="card">
-          <StepInfo draft={draft} set={set} noshowBlocked={noshowBlocked} />
+          <StepInfo
+            draft={draft}
+            set={set}
+            noshowBlocked={noshowBlocked}
+            emailVerified={emailVerified}
+            setEmailVerified={setEmailVerified}
+          />
           <div className="btn-row">
             <button className="btn ghost" onClick={() => setStage('apply')}>
               {t('common.prev')}
@@ -234,6 +253,11 @@ export default function BookingFlow() {
               {t('common.next')}
             </button>
           </div>
+          {isValidName(draft.customerName) && isValidEmail(draft.email) && !noshowBlocked && !emailVerified && (
+            <div className="tiny" style={{ marginTop: 8, color: 'var(--warn)' }}>
+              {t('book.otp.needVerify')}
+            </div>
+          )}
         </div>
       )}
 
@@ -597,11 +621,89 @@ function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canAp
   )
 }
 
-/* ================= STEP 5: 예약자 정보 ================= */
-function StepInfo({ draft, set, noshowBlocked }) {
+/* ================= STEP 5: 예약자 정보 (+ 이메일 OTP 인증) ================= */
+function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }) {
   const { t } = useI18n()
   const nameOk = draft.customerName === '' || isValidName(draft.customerName)
   const emailOk = draft.email === '' || isValidEmail(draft.email)
+  // 노쇼 차단은 인증보다 먼저 판정. 차단 대상이면 OTP 절차 자체를 열지 않는다.
+  const canStartOtp = isValidEmail(draft.email) && !noshowBlocked
+
+  // OTP 로컬 상태 (새로고침/언마운트 시 자동 초기화 — 임시저장 없음 원칙)
+  const [sent, setSent] = useState(false)
+  const [code, setCode] = useState(null) // 현재 유효한 6자리 코드 (null = 없음/무효화)
+  const [input, setInput] = useState('')
+  const [expiresAt, setExpiresAt] = useState(0)
+  const [cooldownUntil, setCooldownUntil] = useState(0)
+  const [attempts, setAttempts] = useState(0)
+  const [now, setNow] = useState(() => Date.now())
+  const [banner, setBanner] = useState(null) // { type, text }
+
+  // 1초 틱 (발송 후 · 미인증 동안만)
+  useEffect(() => {
+    if (!sent || emailVerified) return
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [sent, emailVerified])
+
+  const remainMs = Math.max(0, expiresAt - now)
+  const expired = sent && !emailVerified && !!code && remainMs <= 0
+  const cooldownMs = Math.max(0, cooldownUntil - now)
+  const codeUnusable = !code || expired // 재발송 필요 상태 (무효화 or 만료)
+
+  function genAndSend() {
+    const c = String(Math.floor(100000 + Math.random() * 900000)) // 6자리
+    const t0 = Date.now()
+    setCode(c)
+    setInput('')
+    setAttempts(0)
+    setSent(true)
+    setExpiresAt(t0 + OTP_TTL_MS)
+    setCooldownUntil(t0 + OTP_RESEND_COOLDOWN_MS)
+    setNow(t0)
+    setBanner({ type: 'info', text: `${t('book.otp.demoPrefix')} ${c}` })
+  }
+  function onSend() {
+    if (!canStartOtp) return
+    genAndSend()
+  }
+  function onResend() {
+    if (cooldownMs > 0) return
+    genAndSend() // 이전 코드 무효화 + 새 코드로 교체
+  }
+  function onVerify() {
+    if (codeUnusable) {
+      setBanner({ type: 'danger', text: t('book.otp.expired') })
+      return
+    }
+    if (input.trim() === code) {
+      setEmailVerified(true)
+      setBanner({ type: 'success', text: t('book.otp.verified') })
+    } else {
+      const n = attempts + 1
+      setAttempts(n)
+      if (n >= OTP_MAX_ATTEMPTS) {
+        setCode(null) // 무효화 → 재발송 필요
+        setBanner({ type: 'danger', text: t('book.otp.locked') })
+      } else {
+        setBanner({
+          type: 'danger',
+          text: `${t('book.otp.wrong')} (${OTP_MAX_ATTEMPTS - n}/${OTP_MAX_ATTEMPTS})`,
+        })
+      }
+    }
+  }
+  // 이메일 수정 → 인증/코드 상태 전체 초기화 (재인증 필요)
+  function onEmailChange(v) {
+    set({ email: v })
+    setSent(false)
+    setCode(null)
+    setInput('')
+    setAttempts(0)
+    setBanner(null)
+    if (emailVerified) setEmailVerified(false)
+  }
+
   return (
     <div>
       <h2>{t('book.step5.title')}</h2>
@@ -619,17 +721,75 @@ function StepInfo({ draft, set, noshowBlocked }) {
         </div>
         {!nameOk && <div className="err-text">{t('err.name')}</div>}
       </label>
+
       <label className="field">
-        <span className="lbl">{t('common.email')}</span>
+        <span className="lbl">
+          {t('common.email')}
+          {emailVerified && <span className="otp-verified-badge">✔ {t('book.otp.badge')}</span>}
+        </span>
         <input
           type="email"
           value={draft.email}
-          onChange={(e) => set({ email: e.target.value })}
+          onChange={(e) => onEmailChange(e.target.value)}
           placeholder="you@example.com"
         />
         {!emailOk && <div className="err-text">{t('err.email')}</div>}
         {emailOk && noshowBlocked && <div className="err-text">{t('err.noshowBlocked')}</div>}
       </label>
+
+      {/* 이메일 OTP 인증 — 노쇼 차단 대상이 아니고 이메일 형식 통과 시에만 노출 */}
+      {canStartOtp && !emailVerified && (
+        <div className="otp-box">
+          {!sent ? (
+            <button type="button" className="btn primary block" onClick={onSend}>
+              {t('book.otp.send')}
+            </button>
+          ) : (
+            <>
+              <div className="otp-row">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  className="otp-input"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  placeholder={t('book.otp.placeholder')}
+                  disabled={codeUnusable}
+                />
+                <button
+                  type="button"
+                  className="btn primary"
+                  onClick={onVerify}
+                  disabled={codeUnusable || input.length < 6}
+                >
+                  {t('book.otp.verify')}
+                </button>
+              </div>
+              <div className="otp-meta">
+                <span className={`otp-timer ${expired ? 'expired' : ''}`}>
+                  {expired ? t('book.otp.expiredShort') : `⏱ ${fmtMMSS(remainMs)}`}
+                </span>
+                <button
+                  type="button"
+                  className="otp-resend"
+                  onClick={onResend}
+                  disabled={cooldownMs > 0}
+                >
+                  {cooldownMs > 0
+                    ? `${t('book.otp.resend')} (${Math.ceil(cooldownMs / 1000)}s)`
+                    : t('book.otp.resend')}
+                </button>
+              </div>
+            </>
+          )}
+          {banner && <div className={`notice ${banner.type} otp-banner`}>{banner.text}</div>}
+        </div>
+      )}
+
+      {emailVerified && (
+        <div className="notice success otp-banner">✔ {t('book.otp.verified')}</div>
+      )}
     </div>
   )
 }
