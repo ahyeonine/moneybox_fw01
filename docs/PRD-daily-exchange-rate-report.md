@@ -2,7 +2,7 @@
 
 | 항목 | 내용 |
 |------|------|
-| 문서 버전 | v0.5 (KST 일봉 · 장 시작 전 발송 확정) |
+| 문서 버전 | v0.6 (워크스페이스 독립 · 이관용) |
 | 작성일 | 2026-08-06 |
 | 작성자 | admin@m-box.com |
 | 상태 | 확정 (구현 착수 가능) |
@@ -10,6 +10,8 @@
 | 데이터 소스 | **Twelve Data REST API (단일, `timezone=Asia/Seoul`)** + 공휴일 판정용 특일정보 API |
 | 발송 대상 | **Notion** (보고서·시계열), **Slackbot** (실패 알림) |
 | 발송 시각 | **영업일 08:30 KST** (한국 장 시작 09:00 이전) |
+
+> **⚠️ 이관 안내:** GitHub·Slack·Notion을 **새 워크스페이스**에서 구성한다. 문서 내 워크스페이스 전용 값(Notion 페이지 ID, 저장소 이름, 채널 등)은 모두 `<PLACEHOLDER>` 로 표기했으며, **[부록 A. 환경 설정값](#부록-a-환경-설정값-새-워크스페이스에서-채우기)** 표에서 새 워크스페이스 값으로 채운다. 이전 워크스페이스의 Notion 페이지 ID(`3b4ecd34…`)는 **새 워크스페이스에서 재사용 불가** — 대상 페이지를 새로 만들고 그 ID를 사용한다.
 
 ---
 
@@ -81,8 +83,9 @@
 - R9. 숫자는 천 단위 구분, 소수 2자리 통일. JPY는 100엔 기준.
 
 ### 5.3 Notion 기록
-- R10. **대상 Notion 위치(확정):** 페이지 `https://app.notion.com/p/3b4ecd34b1c780ef920ff9190533edec` (page id `3b4ecd34b1c780ef920ff9190533edec`).
+- R10. **대상 Notion 위치:** 새 워크스페이스에 생성한 페이지 `<NOTION_PAGE_ID>` (부록 A).
   - 해당 페이지 하위에 **시계열 데이터베이스(DB)**를 생성/사용하고, 매 영업일 심볼별 행을 추가한다.
+  - 새 워크스페이스에서 Notion **내부 통합(Integration)** 을 만들고, 이 페이지에 통합을 **연결/공유**해야 API 쓰기가 가능하다.
 - R11. **DB 스키마(권장):**
   | 컬럼 | 타입 | 설명 |
   |------|------|------|
@@ -162,7 +165,7 @@
 
 ## 9. 시스템 아키텍처 — GitHub Actions cron 확정
 
-> **실행 방식 확정:** 스케줄러는 **GitHub Actions cron**(`30 23 * * 0-4` UTC = 08:30 KST 월~금)으로 운영한다. 오픈 네트워크라 `api.twelvedata.com` 접근 제약이 없고 이 저장소에서 바로 돌아간다. (Claude Routine 방식은 현 환경의 이그레스 정책이 Twelve Data를 차단하여 별도 allowlist가 필요하므로 미채택.) 아래 다이어그램의 트리거만 GitHub Actions로 치환된다.
+> **실행 방식 확정:** 스케줄러는 **새 워크스페이스의 GitHub 저장소(`<GITHUB_REPO>`)에 두는 GitHub Actions cron**(`30 23 * * 0-4` UTC = 08:30 KST 월~금)으로 운영한다. GitHub Actions 러너는 오픈 네트워크라 `api.twelvedata.com` 접근 제약이 없다. (Claude Routine 방식은 실행 환경에 따라 Twelve Data 호스트 allowlist가 필요할 수 있어 미채택.) 아래 다이어그램의 트리거만 GitHub Actions로 치환된다.
 
 
 ```
@@ -194,13 +197,15 @@
 
 ## 10. 사전 준비물 (Prerequisites for Implementation)
 
-1. **Twelve Data API Key** (무료 가입).
-2. **공공데이터포털 특일정보 API 키** (한국천문연구원 특일정보).
-3. **Notion 연동 권한** — 대상 페이지(`3b4ecd34b1…`)에 통합(Integration) 접근 허용 및 하위 DB 생성 권한.
-4. **Slackbot 알림 대상** — 실패 알림을 받을 Slack 채널/봇 토큰.
-5. **네트워크 허용** — 실행 환경에서 `api.twelvedata.com` 아웃바운드 허용 필요(현 세션 이그레스 정책은 차단 상태이므로 배포 환경에서 확인).
+> **모두 새 워크스페이스 기준으로 준비한다.** 발급받은 값은 [부록 A](#부록-a-환경-설정값-새-워크스페이스에서-채우기)에 채운다.
 
-> 키/토큰은 코드·저장소에 하드코딩하지 않고 환경변수/시크릿으로 관리한다.
+1. **Twelve Data API Key** (무료 가입).
+2. **공공데이터포털 특일정보 API 키** (선택 — 없으면 `holidays` 라이브러리로 공휴일 판정 폴백).
+3. **새 워크스페이스 Notion** — 대상 페이지 생성 → 내부 통합(Integration) 생성 → 페이지에 통합 연결/공유(하위 DB 생성 권한).
+4. **새 워크스페이스 Slack** — 실패 알림용 Incoming Webhook URL(또는 봇 토큰 + 채널) 발급.
+5. **새 워크스페이스 GitHub** — 저장소 생성/이관 후 코드 배치, Actions Secrets 등록.
+
+> 키/토큰은 코드·저장소에 하드코딩하지 않고 **GitHub Actions Secrets/환경변수**로만 관리한다.
 
 ---
 
@@ -239,3 +244,31 @@
 - 크론 UTC↔KST 변환/요일 시프트 오류 → 트리거 검증 및 첫 주 모니터링.
 - 공휴일 판정 누락 → 특일정보 API 실패 시 폴백(수기 목록) 및 알림.
 - Notion/Slack 토큰 만료, 실행 환경 `api.twelvedata.com` 차단 → 실패 감지·알림 및 네트워크 사전 확인.
+
+---
+
+## 부록 A. 환경 설정값 (새 워크스페이스에서 채우기)
+
+> GitHub·Slack·Notion을 **새 워크스페이스**에서 구성한다. 아래 값을 발급/생성 후 채우고, 시크릿은 **GitHub Actions Secrets**에만 저장한다(문서·코드에 평문 금지).
+
+| 키 (GitHub Actions Secret) | 필수 | 어디서 (새 워크스페이스) | 값 |
+|------|:---:|------|------|
+| `TWELVEDATA_API_KEY` | ✅ | twelvedata.com 가입 → API Key | `________` |
+| `NOTION_TOKEN` | ✅ | Notion → my-integrations → 내부 통합 생성 | `________` |
+| `NOTION_PAGE_ID` (`<NOTION_PAGE_ID>`) | ✅ | 새 Notion 페이지 URL 끝 32자리 ID | `________` |
+| `NOTION_DATABASE_ID` | ✅ | `setup-notion` 실행 결과로 생성 | `________` |
+| `SLACK_WEBHOOK_URL` | ✅ | 새 Slack → Incoming Webhook 발급 | `________` |
+| `HOLIDAY_API_KEY` | ⭕ | 공공데이터포털 특일정보(선택) | `________` |
+| `<GITHUB_REPO>` | ✅ | 새 GitHub `owner/repo` (코드·워크플로 위치) | `________` |
+| `<SLACK_CHANNEL>` | ✅ | Webhook이 향하는 알림 채널명 | `________` |
+
+## 부록 B. 새 워크스페이스 이관 가이드
+
+1. **GitHub** — 새 워크스페이스/조직에 저장소 생성 → 본 코드(`src/exchange_report.py`, `.github/workflows/daily-exchange-report.yml`, `requirements.txt`) 배치 → **Settings → Secrets and variables → Actions**에 부록 A의 시크릿 등록.
+2. **Notion** — 새 워크스페이스에서 (a) 대상 페이지 생성 → URL 끝 32자리 = `NOTION_PAGE_ID`, (b) `my-integrations`에서 내부 통합 생성 → `NOTION_TOKEN`, (c) **대상 페이지 ⋯ → 연결(Connections) → 만든 통합 추가**.
+3. **Notion DB 생성** — 로컬에서 `NOTION_TOKEN`·`NOTION_PAGE_ID` 설정 후 `python src/exchange_report.py setup-notion` → 출력된 id를 `NOTION_DATABASE_ID` 시크릿으로 등록.
+4. **Slack** — 새 워크스페이스에서 알림 채널용 Incoming Webhook 발급 → `SLACK_WEBHOOK_URL`.
+5. **검증** — GitHub → Actions → "Daily Exchange Rate Report" → **Run workflow**(수동)로 1회 실행 → Notion 기록/Slack 알림 확인. 이후 매 영업일 08:30 KST 자동.
+6. **코드 내 하드코딩 없음 확인** — 페이지 ID·토큰·채널은 전부 시크릿/환경변수로 주입되며, 이전 워크스페이스 값(`3b4ecd34…`)은 사용하지 않는다.
+
+> 코드는 워크스페이스 독립적으로 작성되어 있어 **재작성 없이 시크릿 값만 교체**하면 새 워크스페이스에서 동작한다.
