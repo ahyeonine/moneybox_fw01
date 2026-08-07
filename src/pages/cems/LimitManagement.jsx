@@ -15,9 +15,10 @@ const MAX_USD_CAP = 9999
 //  - 최대금액: 지점별 건당 최대 환전금액 (원화 기준 일괄입력 → 통화별 상한 자동계산)
 
 export default function LimitManagement() {
-  const { minAmounts, saveMinAmounts, getBranchMax, saveBranchMax } = useSettings()
+  const { minAmounts, unitAmounts, saveMinAmounts, saveUnitAmounts, getBranchMax, saveBranchMax } =
+    useSettings()
   const { getRate } = useRates()
-  const [tab, setTab] = useState('min') // 'min' | 'max' (기본 최소금액)
+  const [tab, setTab] = useState('min') // 'min' | 'unit' | 'max' (기본 최소금액)
 
   // 통화 금액을 USD 상당액으로 환산 (KRW 경유). 상한(9,999 USD) 검증에 사용.
   const usdCapKrw = () => MAX_USD_CAP * (getRate('USD') || 0) // 9,999 USD의 원화 상당액
@@ -38,6 +39,18 @@ export default function LimitManagement() {
     saveMinAmounts(cleaned)
     setMinSaved(true)
     setTimeout(() => setMinSaved(false), 1500)
+  }
+
+  /* ── 신청 단위 ── */
+  const [unitTable, setUnitTable] = useState(() => ({ ...unitAmounts }))
+  const [unitSaved, setUnitSaved] = useState(false)
+
+  function saveUnits() {
+    const cleaned = {}
+    for (const c of CURRENCY_ORDER) cleaned[c] = Number(unitTable[c]) || 0
+    saveUnitAmounts(cleaned)
+    setUnitSaved(true)
+    setTimeout(() => setUnitSaved(false), 1500)
   }
 
   /* ── 최대금액 ── */
@@ -104,6 +117,7 @@ export default function LimitManagement() {
       <DevNote
         items={[
           '최소금액: 통화별, 전체 지점 공통',
+          '신청 단위: 통화별, 전체 지점 공통. 외국인 웹사이트 신청화면에서만 상위 단위로 올림 적용(CEMS/POS/이메일 미적용)',
           '최대금액(하드리밋): 지점별로 다르게, 원화(KRW) 기준 1개 입력하면 로드환율로 전체 통화 자동 환산되는 방식',
           '설정 가능한 최대금액 상한은 통화별 9,999 USD 상당액 — 초과 입력 시 저장/적용 차단 + 에러 표시',
           '⚠️ 이 최대금액 하드리밋은 애초 정책회의에서 "최대금액 제한 없음"으로 확정됐던 것과 상충하는 부분이라 정책 재확인이 필요한 상태',
@@ -112,11 +126,14 @@ export default function LimitManagement() {
       />
       <h1 className="cems-h1">외국인서비스 한도관리</h1>
 
-      {/* 최소금액 / 최대금액 토글 */}
+      {/* 최소금액 / 신청 단위 / 최대금액 토글 */}
       <div className="cems-panel">
         <div className="visit-toggle limit-tab">
           <button className={tab === 'min' ? 'active' : ''} onClick={() => setTab('min')}>
             최소금액
+          </button>
+          <button className={tab === 'unit' ? 'active' : ''} onClick={() => setTab('unit')}>
+            신청 단위
           </button>
           <button className={tab === 'max' ? 'active' : ''} onClick={() => setTab('max')}>
             최대금액
@@ -165,6 +182,55 @@ export default function LimitManagement() {
           </div>
           <div className="tiny" style={{ marginTop: 8 }}>
             ※ 최대금액은 지점별 리스크 상한으로 "최대금액" 탭에서 관리합니다.
+          </div>
+        </div>
+      )}
+
+      {/* 신청 단위 */}
+      {tab === 'unit' && (
+        <div className="cems-panel">
+          <div className="panel-head">
+            <h2 className="cems-h2">
+              통화별 신청 단위 <span className="tiny">(전체 지점 공통)</span>
+            </h2>
+            <div>
+              {unitSaved && <span className="saved-flash">저장됨</span>}
+              <button className="cems-btn primary" onClick={saveUnits}>
+                전체 저장
+              </button>
+            </div>
+          </div>
+          <div className="table-wrap">
+            <table className="cems-table limit-table">
+              <thead>
+                <tr>
+                  <th>통화</th>
+                  <th className="num">신청 단위</th>
+                </tr>
+              </thead>
+              <tbody>
+                {CURRENCY_ORDER.map((c) => (
+                  <tr key={c}>
+                    <td>
+                      {CURRENCY_META[c]?.flag} {c} · {CURRENCY_META[c]?.label.ko}
+                    </td>
+                    <td className="num">
+                      <input
+                        type="number"
+                        value={unitTable[c] ?? ''}
+                        onChange={(e) => setUnitTable((t) => ({ ...t, [c]: e.target.value }))}
+                        className="cell-input"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="tiny" style={{ marginTop: 8 }}>
+            ※ 신청 단위는 <b>외국인 웹사이트 신청화면에서만</b> 적용됩니다. 신청 금액이 단위와 맞지
+            않으면 가장 가까운 상위 단위로 자동 올림됩니다. (CEMS·POS·이메일은 미적용) 값을 비우거나
+            0으로 두면 해당 통화는 단위 올림 없이 동작합니다.
           </div>
         </div>
       )}

@@ -74,8 +74,8 @@ const emptyDraft = {
 export default function BookingFlow() {
   const { t } = useI18n()
   const { today, createReservation, countNoShow } = useReservations()
-  // 한도(최소/최대)·통화 노출은 CEMS 공유 상태에서 읽는다. (관리자 변경이 즉시 반영)
-  const { minAmounts, getBranchMax, isWebExcluded } = useSettings()
+  // 한도(최소/최대)·신청단위·통화 노출은 CEMS 공유 상태에서 읽는다. (관리자 변경이 즉시 반영)
+  const { minAmounts, unitAmounts, getBranchMax, isWebExcluded } = useSettings()
   // 환율은 공유 상태(2분마다 자동 변동 + 관리자 "외국인 웹사이트" 수동값)에서 읽는다.
   const { getRate, lastUpdated } = useRates()
   // 이메일 발송(시뮬레이션) — 인증번호/신청완료 등
@@ -100,9 +100,10 @@ export default function BookingFlow() {
     return {
       min: minAmounts[draft.currency] ?? stat.min,
       max: getBranchMax(draft.branchId)?.[draft.currency] ?? stat.max,
-      unitStep: stat.unitStep,
+      // 신청 단위: CEMS 설정값 우선, 미설정 시 지점 정적값(fallback). 외국인 웹사이트에서만 올림 적용.
+      unitStep: unitAmounts[draft.currency] ?? stat.unitStep,
     }
-  }, [draft.branchId, draft.currency, minAmounts, getBranchMax])
+  }, [draft.branchId, draft.currency, minAmounts, unitAmounts, getBranchMax])
   const amountCheck = validateAmount(draft.amount, limit)
   const rate = draft.currency ? getRate(draft.currency) : null
   const krw = amountCheck.ok ? toKrw(Number(draft.amount), rate) : 0

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback } from 'react'
 import { BRANCHES } from '../data/branches.js'
-import { POLICY_MIN_AMOUNTS } from '../data/rates.js'
+import { POLICY_MIN_AMOUNTS, POLICY_UNIT_STEPS } from '../data/rates.js'
 
 // 어드민(CEMS) 한도관리용 프론트 상태.
 // - minAmounts: 통화별 최소 환전금액 (전체 지점 공통)
@@ -23,6 +23,8 @@ function seedBranchMax() {
 
 export function SettingsProvider({ children }) {
   const [minAmounts, setMinAmounts] = useState(() => ({ ...POLICY_MIN_AMOUNTS }))
+  // 통화별 신청 단위 (전체 지점 공통). 외국인 웹사이트 신청화면에서만 올림 적용.
+  const [unitAmounts, setUnitAmounts] = useState(() => ({ ...POLICY_UNIT_STEPS }))
   const [branchMaxAmounts, setBranchMaxAmounts] = useState(seedBranchMax)
   // 외국인 웹사이트 채널 "매입제외" — 통화별로 신청화면 통화선택 목록에서 제외한다.
   // { [currency]: true }
@@ -31,6 +33,11 @@ export function SettingsProvider({ children }) {
   // 통화별 최소금액 일괄 저장
   const saveMinAmounts = useCallback((next) => {
     setMinAmounts({ ...next })
+  }, [])
+
+  // 통화별 신청 단위 일괄 저장
+  const saveUnitAmounts = useCallback((next) => {
+    setUnitAmounts({ ...next })
   }, [])
 
   // 특정 지점의 통화별 최대금액 저장.
@@ -54,8 +61,10 @@ export function SettingsProvider({ children }) {
 
   const value = {
     minAmounts,
+    unitAmounts,
     branchMaxAmounts,
     saveMinAmounts,
+    saveUnitAmounts,
     saveBranchMax,
     getBranchMax,
     webExcluded,

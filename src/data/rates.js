@@ -60,6 +60,15 @@ export const POLICY_MIN_AMOUNTS = {
   MYR: 200, IDR: 500000, VND: 500000, INR: 3000,
 }
 
+// 통화별 신청 단위(입력 단위) 정책 기본값 (전체 지점 공통, 어드민 화면 시드)
+// 외국인 웹사이트 신청화면에서만 이 단위로 올림(ceil) 처리한다. (CEMS/POS/이메일 미적용)
+// TODO: 실제 정책 수치로 교체
+export const POLICY_UNIT_STEPS = {
+  USD: 10, JPY: 1000, EUR: 5, CNY: 50, GBP: 5, HKD: 50, THB: 100,
+  TWD: 100, SGD: 10, AUD: 10, CAD: 10, CHF: 10, NZD: 10, PHP: 100,
+  MYR: 10, IDR: 10000, VND: 10000, INR: 100,
+}
+
 /** 예약 시점 환율 조회 (비회원 기준) */
 export function getRate(currency) {
   return MOCK_RATES[currency] ?? null
