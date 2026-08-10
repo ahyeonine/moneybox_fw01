@@ -17,6 +17,13 @@ function reminderVisible(rec, showAll) {
   return showAll ? true : rec.reminderStatus === 'CONFIRMED'
 }
 
+// 예약번호(RSV-YYYYMMDD-0001) 끝자리 매칭 — 마지막 세그먼트가 입력 숫자로 끝나면 매칭.
+function matchNo4(reservationNo, digits) {
+  if (!digits) return false
+  const seq = reservationNo.split('-').pop() || reservationNo
+  return seq.endsWith(digits)
+}
+
 // 화면 B · POS 환전예약 결과 리스트 (검색 후)
 export default function PosReservationResults() {
   const nav = useNavigate()
@@ -28,6 +35,7 @@ export default function PosReservationResults() {
     name: params.get('name') || '',
     date: params.get('date') || '',
     email: params.get('email') || '',
+    no4: params.get('no4') || '',
   }
   const [form, setForm] = useState(applied)
   const set = (patch) => setForm((f) => ({ ...f, ...patch }))
@@ -48,13 +56,26 @@ export default function PosReservationResults() {
   function search(e) {
     e?.preventDefault()
     const q = new URLSearchParams()
-    if (form.name.trim()) q.set('name', form.name.trim())
-    if (form.date) q.set('date', form.date)
-    if (form.email.trim()) q.set('email', form.email.trim())
+    const digits = form.no4.replace(/\D/g, '')
+    if (digits) {
+      // 예약번호 끝자리 단독 검색 — 다른 조건 무시
+      q.set('no4', digits)
+    } else {
+      if (form.name.trim()) q.set('name', form.name.trim())
+      if (form.date) q.set('date', form.date)
+      if (form.email.trim()) q.set('email', form.email.trim())
+    }
     setParams(q)
   }
 
   const rows = useMemo(() => {
+    // 예약번호 끝자리 단독 검색: 이름/이메일/날짜/응답 토글과 무관하게 끝자리만으로 매칭
+    if (applied.no4) {
+      const digits = applied.no4.replace(/\D/g, '')
+      return reservations
+        .filter((r) => matchNo4(r.reservationNo, digits))
+        .sort((a, b) => (a.pickupDate < b.pickupDate ? -1 : a.pickupDate > b.pickupDate ? 1 : 0))
+    }
     const name = applied.name.toLowerCase()
     const email = applied.email.toLowerCase()
     return reservations
@@ -66,7 +87,7 @@ export default function PosReservationResults() {
       .filter((r) => reminderVisible(r, showAll))
       .sort((a, b) => (a.pickupDate < b.pickupDate ? -1 : a.pickupDate > b.pickupDate ? 1 : 0))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reservations, applied.name, applied.email, dateAll, dateBase, showAll])
+  }, [reservations, applied.no4, applied.name, applied.email, dateAll, dateBase, showAll])
 
   return (
     <div className="pos-resv">
@@ -100,26 +121,48 @@ export default function PosReservationResults() {
           <span>이메일</span>
           <input type="email" value={form.email} onChange={(e) => set({ email: e.target.value })} />
         </label>
+        <label>
+          <span>예약번호 끝 4자리</span>
+          <input
+            type="text"
+            inputMode="numeric"
+            maxLength={4}
+            value={form.no4}
+            onChange={(e) => set({ no4: e.target.value.replace(/\D/g, '').slice(0, 4) })}
+            placeholder="예: 0001"
+          />
+        </label>
         <button type="submit" className="cems-btn primary">
           검색
         </button>
 
-        {/* 날짜 필터: 오늘(해당일) / 전체 — 응답 토글과 독립 */}
+        {/* 날짜 필터: 오늘(해당일) / 전체 — 응답 토글과 독립 (끝자리 검색 시 무시) */}
         <div className="visit-toggle" role="group" aria-label="날짜 필터">
-          <button type="button" className={!dateAll ? 'active' : ''} onClick={() => setDateAll(false)}>
+          <button
+            type="button"
+            className={!dateAll ? 'active' : ''}
+            onClick={() => setDateAll(false)}
+            disabled={!!applied.no4}
+          >
             {dateLabel}
           </button>
-          <button type="button" className={dateAll ? 'active' : ''} onClick={() => setDateAll(true)}>
+          <button
+            type="button"
+            className={dateAll ? 'active' : ''}
+            onClick={() => setDateAll(true)}
+            disabled={!!applied.no4}
+          >
             전체
           </button>
         </div>
 
-        {/* 응답상태 토글: 방문확인만 보기(기본) / 전체보기 — 날짜 필터와 독립 */}
+        {/* 응답상태 토글: 방문확인만 보기(기본) / 전체보기 — 날짜 필터와 독립 (끝자리 검색 시 무시) */}
         <div className="visit-toggle" role="group" aria-label="응답 범위">
           <button
             type="button"
             className={!showAll ? 'active' : ''}
             onClick={() => setShowAll(false)}
+            disabled={!!applied.no4}
           >
             방문확인만 보기
           </button>
@@ -127,6 +170,7 @@ export default function PosReservationResults() {
             type="button"
             className={showAll ? 'active' : ''}
             onClick={() => setShowAll(true)}
+            disabled={!!applied.no4}
           >
             전체보기
           </button>
@@ -134,7 +178,9 @@ export default function PosReservationResults() {
       </form>
 
       <div className="pos-result-count">
-        {rows.length}건 · {dateAll ? '전체 날짜' : dateLabel} · {showAll ? '전체보기' : '방문확인만'}
+        {applied.no4
+          ? `예약번호 끝자리 "${applied.no4}" · ${rows.length}건`
+          : `${rows.length}건 · ${dateAll ? '전체 날짜' : dateLabel} · ${showAll ? '전체보기' : '방문확인만'}`}
       </div>
 
       {/* 결과 테이블 */}

@@ -234,4 +234,20 @@ export const SEED_RESERVATIONS = [
     createdAt: '2026-07-29T09:45:00+09:00',
     reminderStatus: 'CONFIRMED',
   }),
+  // ── 예약번호 끝자리 중복 데모 ──
+  // 끝 4자리(0001)가 RSV-20260728-0001 과 겹치는 다른 날짜 예약.
+  // POS "예약번호 끝 4자리" 검색에서 같은 끝자리 여러 건이 리스트로 노출되는 것을 시연.
+  make({
+    reservationNo: 'RSV-20260805-0001',
+    status: 'BOOKED',
+    transactionType: 'BUY',
+    branchId: 'B002',
+    currency: 'JPY',
+    foreignAmount: 60000,
+    customerName: 'MEI LIN',
+    email: 'mei@example.com',
+    pickupDate: '2026-08-05',
+    createdAt: '2026-08-01T10:00:00+09:00',
+    reminderStatus: 'CONFIRMED',
+  }),
 ]
