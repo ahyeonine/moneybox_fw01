@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How to get your card — MONEY BOX All-in-One Prepaid Card</title>
+<style>
+  /* ============ TOKENS ============ */
+  :root {
+    --ground: #F4F3FA;
+    --surface: #FFFFFF;
+    --surface-2: #FAF9FE;
+    --ink: #17161F;
+    --muted: #56545F;
+    --faint: #8A8894;
+    --border: #E7E5F0;
+    --border-strong: #D5D2E4;
+
+    --prepaid: #4F46E5;       /* indigo — Prepaid / Payments wallet */
+    --prepaid-ink: #3E37B0;   /* AA text on light */
+    --prepaid-soft: #EEEDFB;
+
+    --transit: #0D9488;       /* teal — Transit wallet */
+    --transit-ink: #0C6D63;   /* AA text on light */
+    --transit-soft: #E1F4F0;
+
+    --shadow: 0 1px 2px rgba(23,22,31,.04), 0 12px 32px -12px rgba(23,22,31,.18);
+    --shadow-card: 0 24px 60px -22px rgba(23,22,31,.55);
+
+    --maxw: 68rem;
+    --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0F0F16;
+      --surface: #1A1922;
+      --surface-2: #22212C;
+      --ink: #F3F2F8;
+      --muted: #ABA9B6;
+      --faint: #7C7A88;
+      --border: #2B2937;
+      --border-strong: #3A3848;
+
+      --prepaid: #8B84FF;
+      --prepaid-ink: #A9A4FF;
+      --prepaid-soft: rgba(139,132,255,.14);
+
+      --transit: #3AD0BF;
+      --transit-ink: #58D9C9;
+      --transit-soft: rgba(58,208,191,.14);
+
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.6);
+      --shadow-card: 0 24px 60px -22px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0F0F16;
+    --surface: #1A1922;
+    --surface-2: #22212C;
+    --ink: #F3F2F8;
+    --muted: #ABA9B6;
+    --faint: #7C7A88;
+    --border: #2B2937;
+    --border-strong: #3A3848;
+    --prepaid: #8B84FF;
+    --prepaid-ink: #A9A4FF;
+    --prepaid-soft: rgba(139,132,255,.14);
+    --transit: #3AD0BF;
+    --transit-ink: #58D9C9;
+    --transit-soft: rgba(58,208,191,.14);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.6);
+    --shadow-card: 0 24px 60px -22px rgba(0,0,0,.8);
+  }
+
+  /* ============ RESET ============ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -.02em; }
+  p { margin: 0; }
+  a { color: inherit; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  :focus-visible { outline: 2px solid var(--prepaid); outline-offset: 3px; border-radius: 4px; }
+
+  /* ============ LAYOUT ============ */
+  .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: 1.25rem; }
+  main { display: block; }
+  section { padding-block: clamp(3rem, 7vw, 5.5rem); }
+  section + section { border-top: 1px solid var(--border); }
+
+  .eyebrow {
+    font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--faint); margin: 0 0 1rem;
+  }
+  .section-head { max-width: 46rem; margin-bottom: 2.5rem; }
+  .section-head h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 800; line-height: 1.1; }
+  .section-head p { margin-top: 1rem; color: var(--muted); font-size: 1.05rem; }
+
+  /* ============ HERO ============ */
+  .hero { padding-top: clamp(3rem, 8vw, 6rem); }
+  .hero-grid { display: grid; grid-template-columns: 1fr; gap: clamp(2.5rem, 6vw, 4rem); align-items: center; }
+  @media (min-width: 60rem) { .hero-grid { grid-template-columns: 1.05fr .95fr; } }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 4.4rem);
+    font-weight: 800; line-height: 1.02; letter-spacing: -.035em;
+  }
+  .hero h1 .wallets { color: var(--prepaid-ink); }
+  .hero .lede { margin-top: 1.5rem; font-size: 1.12rem; color: var(--muted); max-width: 34rem; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--font-display); font-size: 1rem; font-weight: 600;
+    padding: .85rem 1.4rem; border-radius: 999px; border: 1.5px solid transparent;
+    cursor: pointer; text-decoration: none; transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    white-space: nowrap;
+  }
+  .btn svg { width: 1.05em; height: 1.05em; }
+  .btn.primary { background: var(--ink); color: var(--surface); }
+  .btn.secondary { background: transparent; color: var(--ink); border-color: var(--border-strong); }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.secondary:hover { border-color: var(--ink); }
+
+  /* ============ CARD VISUAL ============ */
+  .card-stage { perspective: 1200px; display: flex; justify-content: center; }
+  .fxcard {
+    width: 100%; max-width: 30rem; aspect-ratio: 1.586 / 1;
+    border-radius: 1.25rem; padding: clamp(1.1rem, 3.5vw, 1.6rem);
+    background:
+      radial-gradient(120% 140% at 85% 0%, #2c2b3a 0%, #1b1a26 55%, #121119 100%);
+    color: #F5F5FA; box-shadow: var(--shadow-card);
+    display: flex; flex-direction: column; gap: .9rem;
+    position: relative; overflow: hidden;
+    transition: transform .4s cubic-bezier(.2,.7,.2,1);
+  }
+  .fxcard::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.07) 48%, transparent 56%);
+    pointer-events: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .card-stage:hover .fxcard { transform: rotateX(4deg) rotateY(-7deg); }
+  }
+  .fxcard-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  .fxcard-brand { font-family: var(--font-display); font-weight: 800; letter-spacing: -.01em; font-size: 1.02rem; }
+  .fxcard-kind { font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(245,245,250,.62); margin-top: .15rem; }
+  .fxcard-marks { display: flex; align-items: center; gap: .55rem; }
+  .chip { width: 2.35rem; height: 1.75rem; border-radius: .3rem; }
+  .wave { width: 1.15rem; height: 1.35rem; color: rgba(245,245,250,.72); }
+
+  .wallets-row { display: flex; align-items: stretch; gap: 0; margin-top: auto; }
+  .wchamber { flex: 1; min-width: 0; padding: .1rem .2rem; }
+  .wchamber.right { padding-left: 1rem; }
+  .wchamber.left { padding-right: 1rem; }
+  .seam {
+    width: 0; border-left: 2px dashed rgba(245,245,250,.28);
+    margin-block: .1rem; align-self: stretch;
+  }
+  .wlabel { display: flex; align-items: center; gap: .4rem; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(245,245,250,.7); }
+  .wdot { width: .5rem; height: .5rem; border-radius: 999px; flex: none; }
+  .wdot.prepaid { background: #8B84FF; }
+  .wdot.transit { background: #3AD3C2; }
+  .wamount { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; font-size: clamp(1.05rem, 3.6vw, 1.45rem); margin-top: .3rem; letter-spacing: -.01em; }
+  .wamount .cur { font-size: .62em; color: rgba(245,245,250,.6); margin-right: .25em; font-weight: 500; }
+  .wchamber.left .wamount { color: #C9C4FF; }
+  .wchamber.right .wamount { color: #7FE6D8; }
+  .fxcard-number {
+    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    font-size: clamp(.9rem, 3.2vw, 1.05rem); letter-spacing: .18em;
+    color: rgba(245,245,250,.9); margin-top: .35rem;
+  }
+
+  /* ============ TWO-WALLET PANELS (Why two wallets) ============ */
+  .why-body { color: var(--muted); font-size: 1.05rem; max-width: 46rem; margin-bottom: 2.25rem; }
+  .wallet-panels { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 46rem) { .wallet-panels { grid-template-columns: 1fr 1fr; } }
+  .wpanel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 1rem; padding: 1.5rem; box-shadow: var(--shadow);
+    border-top: 4px solid var(--pc);
+  }
+  .wpanel.prepaid { --pc: var(--prepaid); }
+  .wpanel.transit { --pc: var(--transit); }
+  .wpanel .tag {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--tc); background: var(--tb); padding: .35rem .7rem; border-radius: 999px;
+  }
+  .wpanel.prepaid .tag { --tc: var(--prepaid-ink); --tb: var(--prepaid-soft); }
+  .wpanel.transit .tag { --tc: var(--transit-ink); --tb: var(--transit-soft); }
+  .wpanel h3 { font-size: 1.2rem; font-weight: 700; margin-top: 1rem; }
+  .wpanel .sub { font-size: .82rem; color: var(--faint); font-weight: 600; }
+  .wpanel p { margin-top: .6rem; color: var(--muted); }
+
+  /* ============ TABLES ============ */
+  .table-shell { border: 1px solid var(--border); border-radius: 1rem; overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  table.rtable { width: 100%; border-collapse: collapse; }
+  .rtable caption { text-align: left; padding: 0; }
+  .rtable th, .rtable td { text-align: left; padding: 1rem 1.15rem; vertical-align: middle; }
+  .rtable thead th {
+    font-family: var(--font-display); font-size: .74rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
+    background: var(--surface-2); border-bottom: 1px solid var(--border);
+  }
+  .rtable tbody tr + tr td { border-top: 1px solid var(--border); }
+  .rtable td.key { font-weight: 600; }
+  .rtable td.val, .rtable th.center { text-align: left; }
+  .rtable .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .rtable .colnote { display: block; font-weight: 500; font-size: .8rem; color: var(--faint); font-family: var(--font-body); letter-spacing: normal; text-transform: none; margin-top: .15rem; }
+
+  /* yes / no marks */
+  .mark { display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; border-radius: 999px; }
+  .mark svg { width: 1rem; height: 1rem; }
+  .mark.yes { background: var(--prepaid-soft); color: var(--prepaid-ink); }
+  .mark.yes.transit { background: var(--transit-soft); color: var(--transit-ink); }
+  .mark.yes.neutral { background: color-mix(in srgb, var(--ink) 10%, transparent); color: var(--ink); }
+  .mark.no { background: transparent; color: var(--faint); }
+
+  .callout {
+    margin-top: 1.5rem; display: flex; gap: 1rem; align-items: flex-start;
+    background: var(--transit-soft); border: 1px solid color-mix(in srgb, var(--transit) 30%, transparent);
+    border-radius: 1rem; padding: 1.25rem 1.4rem; color: var(--ink);
+  }
+  .callout .ci { color: var(--transit-ink); flex: none; margin-top: .1rem; }
+  .callout .ci svg { width: 1.4rem; height: 1.4rem; }
+  .callout p { color: var(--muted); }
+  .callout strong { color: var(--ink); }
+
+  .footnote { margin-top: 1.4rem; color: var(--muted); font-size: .95rem; max-width: 52rem; }
+
+  /* ============ WHERE TO GET IT ============ */
+  .place-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 46rem) { .place-grid { grid-template-columns: 1fr 1fr; } }
+  .place {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 1.15rem;
+    padding: 1.75rem; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 1rem;
+  }
+  .place-ico { width: 2.75rem; height: 2.75rem; border-radius: .8rem; display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--border); color: var(--ink); }
+  .place-ico svg { width: 1.5rem; height: 1.5rem; }
+  .place h3 { font-size: 1.3rem; font-weight: 700; }
+  .place p { color: var(--muted); }
+  .badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: auto; }
+  .badge {
+    font-size: .8rem; font-weight: 600; color: var(--muted);
+    background: var(--surface-2); border: 1px solid var(--border);
+    padding: .35rem .7rem; border-radius: 999px;
+  }
+
+  /* ============ TRIP STEPS ============ */
+  .trip-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 46rem) { .trip-grid { grid-template-columns: repeat(3, 1fr); } }
+  .trip {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 1.15rem;
+    padding: 1.6rem; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: .85rem;
+    border-top: 4px solid var(--tcolor, var(--border-strong));
+  }
+  .trip.prepaid { --tcolor: var(--prepaid); }
+  .trip.transit { --tcolor: var(--transit); }
+  .trip.cash { --tcolor: var(--border-strong); }
+  .trip-ico { width: 2.5rem; height: 2.5rem; border-radius: .7rem; display: grid; place-items: center; }
+  .trip.prepaid .trip-ico { background: var(--prepaid-soft); color: var(--prepaid-ink); }
+  .trip.transit .trip-ico { background: var(--transit-soft); color: var(--transit-ink); }
+  .trip.cash .trip-ico { background: var(--surface-2); color: var(--ink); border: 1px solid var(--border); }
+  .trip-ico svg { width: 1.4rem; height: 1.4rem; }
+  .trip h3 { font-size: 1.1rem; font-weight: 700; }
+  .trip p { color: var(--muted); font-size: .98rem; }
+  .tbd { color: var(--faint); font-style: italic; }
+
+  /* ============ FAQ ============ */
+  .faq-list { display: flex; flex-direction: column; gap: .75rem; max-width: 52rem; }
+  .faq {
+    background: var(--surface); border: 1px solid var(--border); border-radius: .9rem;
+    overflow: hidden;
+  }
+  .faq summary {
+    list-style: none; cursor: pointer; padding: 1.15rem 1.3rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    font-family: var(--font-display); font-weight: 650; font-size: 1.05rem;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary:hover { background: var(--surface-2); }
+  .faq .chev { flex: none; width: 1.1rem; height: 1.1rem; color: var(--faint); transition: transform .2s ease; }
+  .faq[open] .chev { transform: rotate(180deg); }
+  .faq .answer { padding: 0 1.3rem 1.3rem; color: var(--muted); }
+  .faq .answer .tbd { color: var(--faint); }
+
+  /* ============ CLOSING CTA ============ */
+  .closing { text-align: center; }
+  .closing-inner {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 1.5rem;
+    padding: clamp(2.25rem, 6vw, 3.5rem); box-shadow: var(--shadow);
+    max-width: 48rem; margin-inline: auto;
+  }
+  .closing h2 { font-size: clamp(1.6rem, 4vw, 2.3rem); font-weight: 800; line-height: 1.12; }
+  .closing p { margin-top: 1rem; color: var(--muted); font-size: 1.08rem; }
+  .closing .cta-row { justify-content: center; }
+
+  /* ============ FOOTER ============ */
+  footer { border-top: 1px solid var(--border); background: var(--surface); }
+  .foot-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; padding-block: 3rem; }
+  @media (min-width: 46rem) { .foot-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
+  .foot-brand .fb-name { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; }
+  .foot-brand p { margin-top: .75rem; color: var(--muted); font-size: .95rem; max-width: 22rem; }
+  .foot-col h4 { font-size: .74rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin: 0 0 .9rem; }
+  .foot-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+  .foot-col a { color: var(--muted); text-decoration: none; font-size: .96rem; }
+  .foot-col a:hover { color: var(--ink); }
+  .legal { border-top: 1px solid var(--border); padding-block: 1.5rem; color: var(--faint); font-size: .85rem; line-height: 1.7; }
+
+  /* ============ MOBILE: TABLES -> STACKED CARDS ============ */
+  @media (max-width: 40rem) {
+    .table-shell { border: none; background: transparent; box-shadow: none; border-radius: 0; overflow: visible; }
+    .rtable thead {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+    .rtable, .rtable tbody, .rtable tr, .rtable td { display: block; width: 100%; }
+    .rtable tr {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 1rem;
+      box-shadow: var(--shadow); padding: .35rem .25rem .5rem; margin-bottom: .85rem;
+    }
+    .rtable tbody tr + tr td { border-top: none; }
+    .rtable td {
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: .7rem 1rem; border-top: 1px solid var(--border); text-align: right;
+    }
+    .rtable td::before {
+      content: attr(data-label); font-family: var(--font-body); text-transform: none;
+      letter-spacing: normal; font-weight: 600; font-size: .85rem; color: var(--faint); text-align: left;
+    }
+    .rtable td.key {
+      display: block; text-align: left; border-top: none;
+      font-family: var(--font-display); font-size: 1.05rem; font-weight: 700;
+      padding: .55rem 1rem .35rem;
+    }
+    .rtable td.key::before { content: none; }
+    /* 2-column key/value table: value sits under the key, no redundant "Value" label */
+    .rtable.kv td.val { text-align: left; }
+    .rtable.kv td.val::before { content: none; }
+    .rtable.kv td.val { color: var(--muted); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    .card-stage:hover .fxcard { transform: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <!-- ============ 1. HERO ============ -->
+  <section class="hero" aria-labelledby="hero-h1">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">How to get your card</p>
+        <h1 id="hero-h1">One card.<br /><span class="wallets">Two wallets</span> inside.</h1>
+        <p class="lede">A prepaid card with no name on it and no registration required. One wallet pays in shops and restaurants; the other opens subway gates and pays bus fares. You decide how much goes where.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#where">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+            Find a kiosk
+          </a>
+          <a class="btn secondary" href="#where">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-4.5h15L21 9M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9zM4 9h16"/><path d="M9 20v-6h6v6"/></svg>
+            Find a branch
+          </a>
+        </div>
+      </div>
+
+      <!-- ============ 2. CARD VISUAL ============ -->
+      <div class="card-stage">
+        <div class="fxcard" role="img" aria-label="MONEY BOX All-in-One prepaid card showing a Prepaid Payments wallet with KRW 240,000 and a Transit wallet with KRW 18,500. Card number 1234 5678 9012 3456.">
+          <div class="fxcard-top">
+            <div>
+              <div class="fxcard-brand">MONEY BOX</div>
+              <div class="fxcard-kind">All-in-One Prepaid Card</div>
+            </div>
+            <div class="fxcard-marks">
+              <svg class="chip" viewBox="0 0 40 30" aria-hidden="true">
+                <defs><linearGradient id="chipg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d7d7e0"/><stop offset="1" stop-color="#9a9aad"/></linearGradient></defs>
+                <rect x="1" y="1" width="38" height="28" rx="5" fill="url(#chipg)"/>
+                <g stroke="#6c6c80" stroke-width="1" opacity=".8">
+                  <line x1="14" y1="1" x2="14" y2="29"/><line x1="26" y1="1" x2="26" y2="29"/>
+                  <line x1="1" y1="10" x2="39" y2="10"/><line x1="1" y1="20" x2="39" y2="20"/>
+                </g>
+              </svg>
+              <svg class="wave" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 8.5a7 7 0 0 1 0 7M10 6a11 11 0 0 1 0 12M14 4a15 15 0 0 1 0 16"/></svg>
+            </div>
+          </div>
+
+          <div class="wallets-row">
+            <div class="wchamber left">
+              <div class="wlabel"><span class="wdot prepaid"></span> Prepaid · Payments</div>
+              <div class="wamount"><span class="cur">KRW</span>240,000</div>
+            </div>
+            <div class="seam" aria-hidden="true"></div>
+            <div class="wchamber right">
+              <div class="wlabel"><span class="wdot transit"></span> Transit</div>
+              <div class="wamount"><span class="cur">KRW</span>18,500</div>
+            </div>
+          </div>
+
+          <div class="fxcard-number">1234&nbsp;5678&nbsp;9012&nbsp;3456</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. WHY TWO WALLETS ============ -->
+  <section aria-labelledby="why-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">The idea</p>
+        <h2 id="why-h2">Why two wallets?</h2>
+      </div>
+      <p class="why-body">Korean transit gates read a transit balance. Shops read a payment balance. They are genuinely separate systems, which is why most visitors end up carrying two cards. This one holds both, and you move money between them at any kiosk.</p>
+      <div class="wallet-panels">
+        <div class="wpanel prepaid">
+          <span class="tag"><span class="wdot prepaid" style="background:var(--prepaid)"></span> Prepaid wallet</span>
+          <h3>The main one <span class="sub">— pays like a card</span></h3>
+          <p>Shops, restaurants, convenience stores and other affiliated merchants.</p>
+        </div>
+        <div class="wpanel transit">
+          <span class="tag"><span class="wdot transit" style="background:var(--transit)"></span> Transit wallet</span>
+          <h3>Taps you through gates</h3>
+          <p>Bus, subway, and convenience stores that accept transit cards.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. CARD BASICS ============ -->
+  <section aria-labelledby="basics-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Good to know</p>
+        <h2 id="basics-h2">Card basics</h2>
+      </div>
+      <div class="table-shell">
+        <table class="rtable kv">
+          <caption class="sr-only">Card basics: detail and value</caption>
+          <thead>
+            <tr><th scope="col">Detail</th><th scope="col">Value</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="key" data-label="Detail">Card issue fee</td>
+              <td class="val" data-label="Value"><span class="num">KRW 5,000</span>, separate from what you load</td>
+            </tr>
+            <tr>
+              <td class="key" data-label="Detail">Maximum balance</td>
+              <td class="val" data-label="Value"><span class="num">KRW 500,000</span> per wallet</td>
+            </tr>
+            <tr>
+              <td class="key" data-label="Detail">Name on card</td>
+              <td class="val" data-label="Value">None — bearer card, no ID needed to top up</td>
+            </tr>
+            <tr>
+              <td class="key" data-label="Detail">Above the limit</td>
+              <td class="val" data-label="Value">Handed back to you in KRW cash on the spot</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. ADD MONEY ============ -->
+  <section aria-labelledby="add-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Top-ups</p>
+        <h2 id="add-h2">How you can add money</h2>
+      </div>
+      <div class="table-shell">
+        <table class="rtable">
+          <caption class="sr-only">How you can add money, by method and wallet</caption>
+          <thead>
+            <tr>
+              <th scope="col">Method</th>
+              <th scope="col" class="center">Prepaid <span class="colnote">Payments wallet</span></th>
+              <th scope="col" class="center">Transit <span class="colnote">Transit wallet</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="key" data-label="Method">KRW cash</td>
+              <td data-label="Prepaid"><span class="mark yes"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Prepaid wallet: yes</span></td>
+              <td data-label="Transit"><span class="mark yes transit"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Transit wallet: yes</span></td>
+            </tr>
+            <tr>
+              <td class="key" data-label="Method">Foreign banknotes, exchanged</td>
+              <td data-label="Prepaid"><span class="mark yes"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Prepaid wallet: yes</span></td>
+              <td data-label="Transit"><span class="mark yes transit"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Transit wallet: yes</span></td>
+            </tr>
+            <tr>
+              <td class="key" data-label="Method">Alipay / WeChat Pay</td>
+              <td data-label="Prepaid"><span class="mark no"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 10h10"/></svg></span><span class="sr-only">Prepaid wallet: no</span></td>
+              <td data-label="Transit"><span class="mark yes transit"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Transit wallet: yes</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">
+        <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v4h1"/></svg></span>
+        <p><strong>No won in your pocket?</strong> Alipay and WeChat Pay can buy the card and fill the transit wallet, so you can be moving before you've changed a single note.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. WHERE TO GET IT ============ -->
+  <section id="where" aria-labelledby="where-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Two ways</p>
+        <h2 id="where-h2">Where to get it</h2>
+      </div>
+      <div class="place-grid">
+        <div class="place">
+          <div class="place-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div>
+          <h3>At a kiosk</h3>
+          <p>The machine issues the card and loads it on the spot. Choose your language on screen and follow the pictures.</p>
+          <div class="badges">
+            <span class="badge">Open 24 hours</span>
+            <span class="badge">Issued instantly</span>
+            <span class="badge">Alipay · WeChat Pay</span>
+          </div>
+        </div>
+        <div class="place">
+          <div class="place-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-4.5h15L21 9M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9zM9 20v-6h6v6"/></svg></div>
+          <h3>At a branch</h3>
+          <p>Buy the card in the PAYCO app first, then collect it at the counter. You settle every choice on your own phone before you queue.</p>
+          <div class="badges">
+            <span class="badge">Staffed</span>
+            <span class="badge">Bought in the app</span>
+            <span class="badge">Balance refunds</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. COMPARISON ============ -->
+  <section aria-labelledby="compare-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Kiosk vs. branch</p>
+        <h2 id="compare-h2">What you can do at each</h2>
+      </div>
+      <div class="table-shell">
+        <table class="rtable">
+          <caption class="sr-only">What you can do at a kiosk versus a branch</caption>
+          <thead>
+            <tr>
+              <th scope="col">What you can do</th>
+              <th scope="col" class="center">Kiosk</th>
+              <th scope="col" class="center">Branch</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="key" data-label="What you can do">Get a new card</td>
+              <td data-label="Kiosk">Issued on the spot</td>
+              <td data-label="Branch">Collect an app purchase</td>
+            </tr>
+            <tr>
+              <td class="key" data-label="What you can do">Top up with KRW cash</td>
+              <td data-label="Kiosk"><span class="mark yes neutral"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Kiosk: yes</span></td>
+              <td data-label="Branch"><span class="mark yes neutral"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Branch: yes</span></td>
+            </tr>
+            <tr>
+              <td class="key" data-label="What you can do">Top up by exchanging foreign notes</td>
+              <td data-label="Kiosk"><span class="mark yes neutral"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Kiosk: yes</span></td>
+              <td data-label="Branch"><span class="mark yes neutral"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Branch: yes</span></td>
+            </tr>
+            <tr>
+              <td class="key" data-label="What you can do">Top up with Alipay / WeChat Pay</td>
+              <td data-label="Kiosk"><span class="mark yes neutral"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Kiosk: yes</span></td>
+              <td data-label="Branch"><span class="mark no"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 10h10"/></svg></span><span class="sr-only">Branch: no</span></td>
+            </tr>
+            <tr>
+              <td class="key" data-label="What you can do">Refund your prepaid balance</td>
+              <td data-label="Kiosk"><span class="mark no"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 10h10"/></svg></span><span class="sr-only">Kiosk: no</span></td>
+              <td data-label="Branch"><span class="mark yes neutral"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg></span><span class="sr-only">Branch: yes</span></td>
+            </tr>
+            <tr>
+              <td class="key" data-label="What you can do">Opening hours</td>
+              <td class="num" data-label="Kiosk">24 hours</td>
+              <td class="num" data-label="Branch">09:00–22:00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="footnote">Either way, no Korean needed. Kiosk screens and the branch request form both run in Korean, English, Japanese, Simplified and Traditional Chinese — and at a branch you make every choice on your own phone, so staff only hand things over.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#where">Find a kiosk</a>
+        <a class="btn secondary" href="#where">Find a branch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8. DURING / OUT ============ -->
+  <section aria-labelledby="trip-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">While you're here</p>
+        <h2 id="trip-h2">During your trip, and on the way out</h2>
+      </div>
+      <div class="trip-grid">
+        <div class="trip prepaid">
+          <div class="trip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8M20 4v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 16M4 20v-4h4"/></svg></div>
+          <h3>Top up the prepaid wallet</h3>
+          <p class="tbd">[TBD]</p>
+        </div>
+        <div class="trip transit">
+          <div class="trip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="14" rx="2"/><path d="M4 11h16M8 17l-2 3M16 17l2 3M8.5 14h.01M15.5 14h.01"/></svg></div>
+          <h3>Top up the transit wallet</h3>
+          <p class="tbd">[TBD]</p>
+        </div>
+        <div class="trip cash">
+          <div class="trip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg></div>
+          <h3>Cash out what's left</h3>
+          <p class="tbd">[TBD]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9. FAQ ============ -->
+  <section aria-labelledby="faq-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Questions</p>
+        <h2 id="faq-h2">Frequently asked</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq">
+          <summary>Do I need a Korean bank account or phone number?<svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg></summary>
+          <div class="answer">No. The card carries no name and needs no registration. At a kiosk you can buy it and top it up without a Korean bank account, phone number, or ID.</div>
+        </details>
+        <details class="faq">
+          <summary>Do I need ID?<svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg></summary>
+          <div class="answer">No. It is a bearer card with no name on it, and no ID is needed to top up.</div>
+        </details>
+        <details class="faq">
+          <summary>What if I load more than the limit?<svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg></summary>
+          <div class="answer">Each wallet holds up to <span class="mono">KRW 500,000</span>. Anything above that limit is handed back to you in KRW cash on the spot.</div>
+        </details>
+        <details class="faq">
+          <summary>Can I top up a Korean transit card I already own?<svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg></summary>
+          <div class="answer"><span class="tbd">[TBD]</span></div>
+        </details>
+        <details class="faq">
+          <summary>Can I get the leftover balance back?<svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg></summary>
+          <div class="answer">Yes — at a branch. Branches refund your prepaid balance; kiosks do not handle refunds.</div>
+        </details>
+        <details class="faq">
+          <summary>What if I lose the card?<svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg></summary>
+          <div class="answer"><span class="tbd">[TBD]</span></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 10. CLOSING CTA ============ -->
+  <section class="closing" aria-labelledby="close-h2">
+    <div class="wrap">
+      <div class="closing-inner">
+        <h2 id="close-h2">Pick up a card today.</h2>
+        <p>Kiosks issue on the spot around the clock. Branches hand over what you bought in the app.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#where">Find a kiosk</a>
+          <a class="btn secondary" href="#where">Find a branch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ 11. FOOTER ============ -->
+<footer>
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <div class="fb-name">MONEY BOX GLOBAL</div>
+      <p>Currency exchange, the All-in-One Card and travel eSIM for visitors to Korea. Branches and 24-hour kiosks nationwide.</p>
+    </div>
+    <div class="foot-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Currency exchange</a></li>
+        <li><a href="#">All-in-One Card</a></li>
+        <li><a href="#">Travel eSIM</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Locations</h4>
+      <ul>
+        <li><a href="#">Branches</a></li>
+        <li><a href="#">Kiosks</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About MONEY BOX</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Partnership &amp; investment</a></li>
+        <li><a href="#">Terms &amp; policies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap legal">
+    MONEY BOX Co., Ltd. · CEO Lee Jung-mu · Business reg. 736-81-01053 · 5F Dongsan Bldg, 393 Hangang-daero, Yongsan-gu, Seoul
+  </div>
+</footer>
+
+</body>
+</html>
