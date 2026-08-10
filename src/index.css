@@ -2047,12 +2047,13 @@ th.num {
    ================================================================ */
 .devnote {
   position: fixed;
-  top: 56px;
+  /* 헤더(상단 탭 + 사이트/어드민 헤더, z-index 70) 아래로 내려 겹치지 않게 함 */
+  top: 118px;
   right: 14px;
   z-index: 60;
   width: 320px;
   max-width: calc(100vw - 28px);
-  max-height: calc(100vh - 80px);
+  max-height: calc(100vh - 134px);
   display: flex;
   flex-direction: column;
   background: #fff8c4;
@@ -2119,7 +2120,7 @@ th.num {
 @media (max-width: 640px) {
   .devnote {
     width: 260px;
-    top: 50px;
+    top: 112px;
   }
 }
 
