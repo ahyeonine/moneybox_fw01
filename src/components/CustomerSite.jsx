@@ -23,6 +23,15 @@ export default function CustomerSite() {
     { type: 'link', to: '/site/book', label: t('site.nav.exchange') },
     {
       type: 'group',
+      key: 'service',
+      label: t('site.nav.group.service'),
+      items: [
+        { to: '/site/esim', label: t('site.nav.esim') },
+        { to: '/site/prepaid', label: t('site.nav.card') },
+      ],
+    },
+    {
+      type: 'group',
       key: 'location',
       label: t('site.nav.group.location'),
       items: [
@@ -32,15 +41,6 @@ export default function CustomerSite() {
     },
     { type: 'link', to: '/site/about', label: t('site.nav.company') },
     { type: 'link', to: '/site/contact', label: t('site.nav.contact') },
-    {
-      type: 'group',
-      key: 'service',
-      label: t('site.nav.group.service'),
-      items: [
-        { to: '/site/esim', label: t('site.nav.esim') },
-        { to: '/site/prepaid', label: t('site.nav.card') },
-      ],
-    },
   ]
 
   const [openGroup, setOpenGroup] = useState(null) // 클릭으로 열린 드롭다운 key
