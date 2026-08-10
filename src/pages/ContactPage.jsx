@@ -105,7 +105,6 @@ export default function ContactPage() {
 
       <DevNote
         items={[
-          '외국인 웹사이트 "문의" 메뉴 → 이 페이지(/site/contact).',
           '간단 문의 폼(이름/이메일/문의유형/내용). 제출 시 실제 전송 없이 "접수되었습니다" 안내만 표시(프로토타입).',
           '자세히: 02_사이트맵.md',
         ]}

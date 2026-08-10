@@ -5,6 +5,9 @@ import { useBooking } from '../store/BookingContext.jsx'
 import LanguageDropdown from './LanguageDropdown.jsx'
 import Logo from './Logo.jsx'
 
+// 자사 eSIM 웹사이트 (외부, 새 탭)
+const ESIM_URL = 'https://imoneybox.cafe24.com/shop3/'
+
 // 외국인 웹사이트 (고객용) 헤더 + 네비게이션.
 // 그룹형 네비: 서비스 ▾(eSIM·카드) / 환전(→지점수령예약) / 위치 ▾(지점·키오스크) / 회사 / 문의
 // 데스크톱: 드롭다운(호버 + 클릭). 모바일: 햄버거로 접히는 메뉴.
@@ -26,7 +29,7 @@ export default function CustomerSite() {
       key: 'service',
       label: t('site.nav.group.service'),
       items: [
-        { to: '/site/esim', label: t('site.nav.esim') },
+        { href: ESIM_URL, external: true, label: t('site.nav.esim') },
         { to: '/site/prepaid', label: t('site.nav.card') },
       ],
     },
@@ -98,17 +101,30 @@ export default function CustomerSite() {
                     <span className="nav-caret" aria-hidden="true">▾</span>
                   </button>
                   <div className="site-nav-menu" role="menu">
-                    {item.items.map((s) => (
-                      <NavLink
-                        key={s.to}
-                        to={s.to}
-                        role="menuitem"
-                        className={({ isActive }) => (isActive ? 'active' : '')}
-                        onClick={() => setOpenGroup(null)}
-                      >
-                        {s.label}
-                      </NavLink>
-                    ))}
+                    {item.items.map((s) =>
+                      s.external ? (
+                        <a
+                          key={s.href}
+                          href={s.href}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          role="menuitem"
+                          onClick={() => setOpenGroup(null)}
+                        >
+                          {s.label}
+                        </a>
+                      ) : (
+                        <NavLink
+                          key={s.to}
+                          to={s.to}
+                          role="menuitem"
+                          className={({ isActive }) => (isActive ? 'active' : '')}
+                          onClick={() => setOpenGroup(null)}
+                        >
+                          {s.label}
+                        </NavLink>
+                      )
+                    )}
                   </div>
                 </div>
               )
@@ -149,15 +165,28 @@ export default function CustomerSite() {
               ) : (
                 <div key={item.key} className="snm-group">
                   <div className="snm-group-label">{item.label}</div>
-                  {item.items.map((s) => (
-                    <NavLink
-                      key={s.to}
-                      to={s.to}
-                      className={({ isActive }) => `snm-link snm-sub ${isActive ? 'active' : ''}`}
-                    >
-                      {s.label}
-                    </NavLink>
-                  ))}
+                  {item.items.map((s) =>
+                    s.external ? (
+                      <a
+                        key={s.href}
+                        href={s.href}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="snm-link snm-sub"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {s.label}
+                      </a>
+                    ) : (
+                      <NavLink
+                        key={s.to}
+                        to={s.to}
+                        className={({ isActive }) => `snm-link snm-sub ${isActive ? 'active' : ''}`}
+                      >
+                        {s.label}
+                      </NavLink>
+                    )
+                  )}
                 </div>
               )
             )}
@@ -184,7 +213,9 @@ export default function CustomerSite() {
             <div className="sf-col">
               <div className="sf-col-h">{t('footer.col.service')}</div>
               <NavLink to="/site/book">{t('site.nav.branch')}</NavLink>
-              <NavLink to="/site/esim">{t('site.nav.esim')}</NavLink>
+              <a href={ESIM_URL} target="_blank" rel="noreferrer noopener">
+                {t('site.nav.esim')}
+              </a>
               <NavLink to="/site/lookup">{t('nav.lookup')}</NavLink>
             </div>
             <div className="sf-col">

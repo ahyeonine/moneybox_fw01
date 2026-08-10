@@ -140,8 +140,7 @@ export default function PrepaidCardPage() {
 
       <DevNote
         items={[
-          '외국인 웹사이트 "카드" 메뉴 → 이 페이지(/site/prepaid).',
-          '기존 사이트 디자인 컴포넌트 재사용(.home-section/.card/.summary/.hero-cards/.feature-list), 문구는 i18n(ko/en).',
+          '올인원 선불카드 소개 페이지. 기존 사이트 디자인 컴포넌트 재사용, 문구는 i18n(ko/en).',
           '실제 상품 구매·충전 기능은 프로토타입 범위 밖(안내 위주).',
           '자세히: 02_사이트맵.md',
         ]}

@@ -328,14 +328,6 @@ export const STRINGS = {
   'about.info.addr.v': { ko: '서울특별시 용산구 한강대로 393 동산빌딩 5층', en: '5F Dongsan Bldg, 393 Hangang-daero, Yongsan-gu, Seoul' },
   'about.info.tel.k': { ko: '대표 연락처', en: 'Contact' },
   'about.info.tel.v': { ko: '[TBD]', en: '[TBD]' },
-  // 문의 및 제휴
-  'about.contact.h2': { ko: '문의 및 제휴', en: 'Contact & partnership' },
-  'about.contact.svc.t': { ko: '서비스 문의', en: 'Service inquiries' },
-  'about.contact.svc.d': { ko: '이용 중 궁금한 점이나 도움이 필요하시면 문의해 주세요.', en: 'Questions or need help while using our services? Get in touch.' },
-  'about.contact.svc.cta': { ko: '문의하기', en: 'Contact us' },
-  'about.contact.biz.t': { ko: '제휴 문의', en: 'Partnerships' },
-  'about.contact.biz.d': { ko: '지점 입점, 제휴, 투자와 관련한 제안을 기다립니다.', en: 'We welcome proposals for locations, partnerships, and investment.' },
-  'about.contact.biz.cta': { ko: '제휴 문의하기', en: 'Partner with us' },
   'esim.title': { ko: 'eSIM', en: 'eSIM' },
   'esim.body': {
     ko: 'eSIM은 외부 파트너 페이지에서 제공됩니다. (프로토타입에서는 더미 외부 링크입니다.)',

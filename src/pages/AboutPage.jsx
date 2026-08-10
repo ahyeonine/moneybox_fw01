@@ -119,35 +119,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 문의 및 제휴 */}
-      <section className="home-section">
-        <h2 className="home-h2">{t('about.contact.h2')}</h2>
-        <div className="hero-cards">
-          <div className="hero-card">
-            <div className="hc-icon">✉️</div>
-            <div className="hc-t">{t('about.contact.svc.t')}</div>
-            <div className="hc-d">{t('about.contact.svc.d')}</div>
-            <button className="btn primary" onClick={() => {}}>
-              {t('about.contact.svc.cta')}
-            </button>
-          </div>
-          <div className="hero-card">
-            <div className="hc-icon">🤝</div>
-            <div className="hc-t">{t('about.contact.biz.t')}</div>
-            <div className="hc-d">{t('about.contact.biz.d')}</div>
-            <button className="btn ghost" onClick={() => {}}>
-              {t('about.contact.biz.cta')}
-            </button>
-          </div>
-        </div>
-      </section>
-
       <DevNote
         items={[
-          '외국인 웹사이트 "회사 소개" 메뉴 → 이 페이지(/site/about).',
-          '기존 사이트 디자인 컴포넌트 재사용, 문구는 i18n(ko/en).',
+          '회사 소개 페이지. 기존 사이트 디자인 컴포넌트 재사용, 문구는 i18n(ko/en).',
           '회사 정보는 프로젝트 등록 실제 정보 사용, 미등록 항목(대표 연락처)은 [TBD].',
-          '문의/제휴 버튼은 별도 문의 페이지가 없어 데모 플레이스홀더(동작 없음).',
           '자세히: 02_사이트맵.md',
         ]}
       />
