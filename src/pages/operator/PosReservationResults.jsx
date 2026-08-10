@@ -34,7 +34,6 @@ export default function PosReservationResults() {
   const applied = {
     name: params.get('name') || '',
     date: params.get('date') || '',
-    email: params.get('email') || '',
     no4: params.get('no4') || '',
   }
   const [form, setForm] = useState(applied)
@@ -63,7 +62,6 @@ export default function PosReservationResults() {
     } else {
       if (form.name.trim()) q.set('name', form.name.trim())
       if (form.date) q.set('date', form.date)
-      if (form.email.trim()) q.set('email', form.email.trim())
     }
     setParams(q)
   }
@@ -77,17 +75,15 @@ export default function PosReservationResults() {
         .sort((a, b) => (a.pickupDate < b.pickupDate ? -1 : a.pickupDate > b.pickupDate ? 1 : 0))
     }
     const name = applied.name.toLowerCase()
-    const email = applied.email.toLowerCase()
     return reservations
       .filter((r) => (name ? r.customerName.toLowerCase().includes(name) : true))
-      .filter((r) => (email ? r.email.toLowerCase().includes(email) : true))
       // 날짜 필터: 오늘(해당일) 정확히 일치 / 전체 → 제한 없음 (응답 토글과 독립)
       .filter((r) => (dateAll ? true : r.pickupDate === dateBase))
       // 응답 필터: 방문확인만(CONFIRMED) / 전체보기 (날짜와 독립)
       .filter((r) => reminderVisible(r, showAll))
       .sort((a, b) => (a.pickupDate < b.pickupDate ? -1 : a.pickupDate > b.pickupDate ? 1 : 0))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reservations, applied.no4, applied.name, applied.email, dateAll, dateBase, showAll])
+  }, [reservations, applied.no4, applied.name, dateAll, dateBase, showAll])
 
   return (
     <div className="pos-resv">
@@ -116,10 +112,6 @@ export default function PosReservationResults() {
         <label>
           <span>수령일</span>
           <input type="date" value={form.date} onChange={(e) => set({ date: e.target.value })} />
-        </label>
-        <label>
-          <span>이메일</span>
-          <input type="email" value={form.email} onChange={(e) => set({ email: e.target.value })} />
         </label>
         <label>
           <span>예약번호 끝 4자리</span>
