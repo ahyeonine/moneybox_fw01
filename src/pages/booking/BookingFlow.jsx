@@ -967,7 +967,13 @@ function StepDone({ rec, onNew }) {
         </button>
         <button
           className="btn primary"
-          onClick={() => nav(`/site/lookup?no=${rec.reservationNo}&email=${encodeURIComponent(rec.email)}`)}
+          onClick={() =>
+            nav(
+              `/site/lookup?name=${encodeURIComponent(rec.customerName)}&email=${encodeURIComponent(
+                rec.email
+              )}&no=${rec.reservationNo}`
+            )
+          }
         >
           {t('book.step8.gotoLookup')}
         </button>

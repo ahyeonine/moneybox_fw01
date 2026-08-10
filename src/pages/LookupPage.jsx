@@ -15,21 +15,21 @@ import DevNote from '../components/DevNote.jsx'
 
 export default function LookupPage() {
   const { t } = useI18n()
-  const { findReservationsForLookup, getByNo, cancelReservation, updateReservation, confirmVisit, today } =
+  const { findReservationsByNameEmail, getByNo, cancelReservation, updateReservation, confirmVisit, today } =
     useReservations()
   const { sendEmail } = useEmail()
   const [params] = useSearchParams()
 
-  const [form, setForm] = useState({ no: params.get('no') || '', email: params.get('email') || '' })
+  const [form, setForm] = useState({ name: params.get('name') || '', email: params.get('email') || '' })
   const [searched, setSearched] = useState(false)
-  const [results, setResults] = useState([]) // 조회 결과 리스트 (같은 이메일 다건)
+  const [results, setResults] = useState([]) // 조회 결과 리스트 (같은 이름+이메일 다건)
   const [detailNo, setDetailNo] = useState(null) // 상세 보기 대상 예약번호
   const [showCancel, setShowCancel] = useState(false)
   const [editing, setEditing] = useState(false)
   const [flash, setFlash] = useState(null)
 
-  function runSearch(no, email, autoSelectNo) {
-    const list = findReservationsForLookup(no, email)
+  function runSearch(name, email, autoSelectNo) {
+    const list = findReservationsByNameEmail(name, email)
     setResults(list)
     setSearched(true)
     setEditing(false)
@@ -41,14 +41,14 @@ export default function LookupPage() {
 
   function doSearch(e) {
     e?.preventDefault()
-    runSearch(form.no, form.email, null)
+    runSearch(form.name, form.email, null)
   }
 
-  // 딥링크(예약완료 → 조회): 자동 조회 후 해당 예약 상세로 바로 진입
+  // 딥링크(예약완료·이메일 → 신청내역조회): 이름+이메일 자동 조회, no 있으면 해당 예약 상세로 바로 진입
   useEffect(() => {
-    const no = params.get('no')
+    const name = params.get('name')
     const email = params.get('email')
-    if (no && email) runSearch(no, email, no)
+    if (name && email) runSearch(name, email, params.get('no'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -90,7 +90,7 @@ export default function LookupPage() {
     <div>
       <DevNote
         items={[
-          '조회 조건: 예약번호 + 이메일 (전화번호 없음)',
+          '조회 조건: 이름 + 이메일 (같은 이메일의 신청내역 전체 조회)',
           '"예약" 상태일 때만 취소/변경 가능',
           '가용시재 차감(예약시재 반영)은 예약완료가 아니라 "방문 예정 확인" 시점에 발생 — 이 시점에 재고 재확인(동시성)',
           '자세히: 03_예약플로우_화면정의서.md',
@@ -101,12 +101,12 @@ export default function LookupPage() {
 
       <form className="card" onSubmit={doSearch}>
         <label className="field">
-          <span className="lbl">{t('common.reservationNo')}</span>
+          <span className="lbl">{t('common.name')}</span>
           <input
             type="text"
-            value={form.no}
-            onChange={(e) => setForm((f) => ({ ...f, no: e.target.value }))}
-            placeholder="RSV-20260728-0001"
+            value={form.name}
+            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+            placeholder="HONG GILDONG"
           />
         </label>
         <label className="field">
@@ -118,11 +118,11 @@ export default function LookupPage() {
             placeholder="you@example.com"
           />
         </label>
-        <button className="btn primary block" type="submit" disabled={!form.no || !form.email}>
+        <button className="btn primary block" type="submit" disabled={!form.name || !form.email}>
           {t('common.search')}
         </button>
         <div className="tiny" style={{ marginTop: 10 }}>
-          demo: RSV-20260728-0001 / john@example.com (같은 이메일 3건) · RSV-20260724-0006 / akira@example.com
+          demo: JOHN SMITH / john@example.com (같은 이메일 3건) · AKIRA SATO / akira@example.com
         </div>
       </form>
 

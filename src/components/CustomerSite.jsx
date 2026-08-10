@@ -44,6 +44,7 @@ export default function CustomerSite() {
     },
     { type: 'link', to: '/site/about', label: t('site.nav.company') },
     { type: 'link', to: '/site/contact', label: t('site.nav.contact') },
+    { type: 'link', to: '/site/lookup', label: t('site.nav.lookup') },
   ]
 
   const [openGroup, setOpenGroup] = useState(null) // 클릭으로 열린 드롭다운 key

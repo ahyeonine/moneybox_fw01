@@ -110,6 +110,20 @@ export function ReservationProvider({ children }) {
     [reservations]
   )
 
+  // 신청내역조회: (예약자명 + 이메일)로 같은 이메일의 신청내역 리스트 반환.
+  //  · 이메일은 정확히 일치, 이름은 대소문자 무시 부분일치(여권영문명 입력 편의).
+  const findReservationsByNameEmail = useCallback(
+    (name, email) => {
+      const nm = (name || '').trim().toLowerCase()
+      const em = (email || '').trim().toLowerCase()
+      if (!nm || !em) return []
+      return reservations
+        .filter((r) => r.email.toLowerCase() === em && r.customerName.toLowerCase().includes(nm))
+        .sort((a, b) => (a.pickupDate < b.pickupDate ? -1 : a.pickupDate > b.pickupDate ? 1 : 0))
+    },
+    [reservations]
+  )
+
   // 노쇼(자동취소) 누적 횟수 — 이메일 기준. 신규예약 차단 판정에 사용.
   const countNoShow = useCallback(
     (email) => {
@@ -266,6 +280,7 @@ export function ReservationProvider({ children }) {
     createReservation,
     findReservation,
     findReservationsForLookup,
+    findReservationsByNameEmail,
     getByNo,
     countNoShow,
     updateReservation,

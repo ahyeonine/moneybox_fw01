@@ -55,6 +55,15 @@ export default function EmailAdmin() {
     setPreview(sent)
   }
 
+  // 신청완료 메일 → 신청내역조회 화면(이름+이메일 자동조회, 해당 예약 상세로 진입)
+  function gotoLookup(m) {
+    const q = new URLSearchParams()
+    if (m.name) q.set('name', m.name)
+    q.set('email', m.to)
+    if (m.reservationNo) q.set('no', m.reservationNo)
+    nav(`/site/lookup?${q.toString()}`)
+  }
+
   // 리마인더 이메일의 고객 응답(데모): 방문 예정 / 예약 취소
   function onReminderConfirm(rec) {
     const res = confirmVisit(rec.reservationNo)
@@ -189,6 +198,14 @@ export default function EmailAdmin() {
                   {MAP_TYPES.includes(m.type) && m.branchId && (
                     <StaticBranchMap branchId={m.branchId} />
                   )}
+                  {/* 신청완료 메일: 신청내역조회 화면으로 바로 이동(이름+이메일 자동조회) */}
+                  {m.type === 'applied' && (
+                    <div className="email-actions">
+                      <button className="btn primary" onClick={() => gotoLookup(m)}>
+                        신청내역조회
+                      </button>
+                    </div>
+                  )}
                   {m.type === 'reminder' && m.status !== 'RESPONDED' && (
                     <div className="email-actions">
                       <button className="btn success" onClick={() => onReminderConfirm(m)}>
@@ -220,7 +237,12 @@ export default function EmailAdmin() {
             <StaticBranchMap branchId={preview.branchId} />
           )}
           <div className="btn-row">
-            <button className="btn primary block" onClick={() => setPreview(null)}>
+            {preview.type === 'applied' && (
+              <button className="btn primary" onClick={() => gotoLookup(preview)}>
+                신청내역조회
+              </button>
+            )}
+            <button className="btn ghost block" onClick={() => setPreview(null)}>
               닫기
             </button>
           </div>

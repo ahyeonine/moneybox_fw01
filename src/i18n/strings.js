@@ -166,8 +166,8 @@ export const STRINGS = {
   },
 
   // 예약조회
-  'lookup.title': { ko: '예약 조회', en: 'Find my reservation' },
-  'lookup.sub': { ko: '예약번호와 이메일로 조회하세요.', en: 'Look up with your reservation number and email.' },
+  'lookup.title': { ko: '신청내역조회', en: 'My reservations' },
+  'lookup.sub': { ko: '이름과 이메일로 신청내역을 조회하세요.', en: 'Look up your reservations with your name and email.' },
   'lookup.notfound': {
     ko: '일치하는 예약을 찾을 수 없습니다. 예약번호와 이메일을 확인하세요.',
     en: 'No matching reservation. Check your number and email.',
@@ -418,6 +418,7 @@ export const STRINGS = {
   'site.nav.branches': { ko: '지점', en: 'Branches' },
   'site.nav.company': { ko: '회사', en: 'Company' },
   'site.nav.contact': { ko: '문의', en: 'Contact' },
+  'site.nav.lookup': { ko: '신청내역조회', en: 'My Reservations' },
   // 그룹형 네비게이션
   'site.nav.group.service': { ko: '서비스', en: 'Services' },
   'site.nav.group.location': { ko: '위치', en: 'Locations' },
