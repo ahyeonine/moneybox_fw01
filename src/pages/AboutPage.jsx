@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
-import DevNote from '../components/DevNote.jsx'
 
 // 회사 소개 페이지 — 외국인 웹사이트 "회사 소개" 메뉴 진입점.
 // 기존 사이트 디자인 컴포넌트를 재사용하고, 모든 문구는 i18n(ko/en).
@@ -118,13 +117,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      <DevNote
-        items={[
-          '회사 정보는 프로젝트 등록 실제 정보 사용, 미등록 항목(대표 연락처)은 [TBD].',
-          '자세히: 02_사이트맵.md',
-        ]}
-      />
     </div>
   )
 }

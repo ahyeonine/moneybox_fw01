@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useI18n } from '../i18n/I18nContext.jsx'
-import DevNote from '../components/DevNote.jsx'
 
 // 문의 페이지 — 간단한 폼(이름/이메일/문의유형/내용). 실제 전송 없이 접수 안내만 표시.
 const TYPES = [
@@ -102,13 +101,6 @@ export default function ContactPage() {
           </form>
         )}
       </div>
-
-      <DevNote
-        items={[
-          '간단 문의 폼(이름/이메일/문의유형/내용). 제출 시 실제 전송 없이 "접수되었습니다" 안내만 표시.',
-          '자세히: 02_사이트맵.md',
-        ]}
-      />
     </div>
   )
 }
