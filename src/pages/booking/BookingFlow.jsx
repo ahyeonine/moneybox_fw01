@@ -18,21 +18,21 @@ const DEV_NOTES = {
     '"신청하기" 버튼 클릭 시점에 환율이 픽스됨',
     '수령일 선택 최대 범위: 리드타임 이후 ~ 2주 이내',
     '기존 외화구매/외화판매 두 개 탭이었으나, 현재는 원화구매만 남음 (외화구매 탭 제거됨)',
-    '자세히: 03_예약플로우_화면정의서_해외환전예약서비스.md',
-    '자세히: 02_IA_사이트맵_해외환전예약서비스.md',
+    '자세히: 03_booking_flow_screens.md',
+    '자세히: 02_IA_sitemap.md',
   ],
   info: [
     '필수 항목은 예약자명 + 이메일만. 메신저ID, 휴대전화, 생년월일 수집 안 함 (온라인 최소수집 원칙)',
     '이메일 OTP 인증 완료해야 다음 단계 진행 (데모: 인증번호를 배너로 표시, 5분 유효·30초 후 재발송·5회 오답 시 무효화)',
-    '자세히: 04_데이터정의서_해외환전예약서비스.md',
+    '자세히: 04_data_definition.md',
   ],
   consent: [
     '클릭 시 펼쳐지는 약관 전문은 프로토타입용 더미 텍스트, 실제 법무 검토 문구 아님',
-    '자세히: 03_예약플로우_화면정의서_해외환전예약서비스.md',
+    '자세히: 03_booking_flow_screens.md',
   ],
   done: [
     '예약 완료 즉시 상태값 "예약"으로 저장됨',
-    '자세히: 03_예약플로우_화면정의서_해외환전예약서비스.md',
+    '자세히: 03_booking_flow_screens.md',
   ],
 }
 import { BRANCHES, getBranch, branchCurrencies, currencyLimit } from '../../data/branches.js'
@@ -198,6 +198,7 @@ export default function BookingFlow() {
       pickupDate: rec.pickupDate,
       currency: rec.currency,
       amount: formatNumber(rec.foreignAmount),
+      rate: formatNumber(rec.rate),
       krw: formatKrw(rec.krwAmount),
     })
   }

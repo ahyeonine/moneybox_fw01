@@ -609,6 +609,8 @@ th.num {
   padding: 22px;
   max-width: 420px;
   width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
@@ -3023,4 +3025,28 @@ th.num {
 }
 .docs-related-link:hover {
   border-color: var(--brand);
+}
+
+/* 이메일 템플릿 액션 행 (테스트 발송 + 저장) */
+.email-tpl-actions {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.email-test-pick {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 220px;
+}
+.email-test-pick select {
+  max-width: 420px;
+}
+.email-tpl-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }

@@ -3,12 +3,12 @@
 //  - 문서 → 메모: 아래 매핑을 역참조해 기획문서 뷰어에서 "관련 화면"으로 이동
 //  - 한 화면에 여러 문서를 연결할 수 있다(docs 배열).
 const D = {
-  prd: '01_요구사항정의서(PRD)_해외환전예약서비스.md',
-  ia: '02_IA_사이트맵_해외환전예약서비스.md',
-  flow: '03_예약플로우_화면정의서_해외환전예약서비스.md',
-  data: '04_데이터정의서_해외환전예약서비스.md',
-  admin: '05_어드민기능정의서_해외환전예약서비스.md',
-  reminder: '06_알림리마인더_시나리오_템플릿_해외환전예약서비스.md',
+  prd: '01_PRD.md',
+  ia: '02_IA_sitemap.md',
+  flow: '03_booking_flow_screens.md',
+  data: '04_data_definition.md',
+  admin: '05_admin_spec.md',
+  reminder: '06_notification_reminder.md',
 }
 
 export const DOC_REFS = [

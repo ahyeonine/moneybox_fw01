@@ -231,7 +231,8 @@ export function ReservationProvider({ children }) {
         cancelSet.has(r.reservationNo) ? { ...r, status: 'CANCELLED', cancelReason: 'AUTO' } : r
       )
     )
-    return { cancelled: targets.length, restored }
+    // 자동취소된 예약 레코드도 반환 → 호출측(SimBar)에서 자동취소 안내 이메일 발송에 사용
+    return { cancelled: targets.length, restored, records: targets }
   }, [reservations, today])
 
   const resetData = useCallback(() => {

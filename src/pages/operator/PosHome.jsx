@@ -12,7 +12,7 @@ export default function PosHome() {
       <DevNote
         items={[
           'SELL / BUY / MORE / 온라인환전 타일은 이번 서비스 범위 밖이라 클릭 비활성 (장식용). "환전예약" 타일만 동작함',
-          '자세히: 05_어드민기능정의서_해외환전예약서비스.md',
+          '자세히: 05_admin_spec.md',
         ]}
       />
       <div className="pos-top">

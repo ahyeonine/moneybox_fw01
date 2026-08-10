@@ -4,60 +4,74 @@ import { createContext, useContext, useState, useRef, useCallback } from 'react'
 // 실제 발송 없음. 외국인 웹사이트 예약 데이터와 연동해 "발송" 시 Outbox에 기록한다.
 const EmailContext = createContext(null)
 
-// 이메일 종류 메타 (표시 순서/라벨)
+// 이메일 종류 메타 (표시 순서/라벨) — 06_notification_reminder.md 기준 7종
 export const EMAIL_TYPES = [
   { key: 'auth', label: '인증번호 발송' },
   { key: 'applied', label: '신청 완료' },
-  { key: 'reminder', label: '방문 하루 전 안내' },
-  { key: 'branchCancel', label: '지점 취소' },
-  { key: 'customerCancel', label: '고객 취소' },
+  { key: 'reminder', label: '수령 전일 리마인더' },
+  { key: 'dayOfNoResponse', label: '당일 무응답 리마인더' },
+  { key: 'autoCancel', label: '자동취소 안내' },
+  { key: 'branchCancel', label: '지점 취소 안내' },
+  { key: 'customerCancel', label: '고객 취소완료' },
 ]
 
 // 기본 템플릿 (관리자 수정 가능). 본문의 {{token}} 은 발송 시 치환된다.
+// (문안은 docs-plan/06_notification_reminder.md 와 동일 정책)
 function seedTemplates() {
   return {
     auth: {
-      subject: '[머니박스] 이메일 인증번호 안내',
+      subject: '[MONEY BOX] 이메일 인증번호입니다',
       body:
-        '안녕하세요, 머니박스입니다.\n\n' +
-        '요청하신 이메일 인증번호는 [ {{code}} ] 입니다.\n' +
-        '인증번호는 5분간 유효합니다.\n\n' +
-        '본인이 요청하지 않았다면 이 메일을 무시해 주세요.',
+        '인증번호: {{code}}\n5분 이내에 입력해 주세요.\n\n' +
+        '본인이 요청하지 않았다면 이 메일을 무시하셔도 됩니다.',
     },
     applied: {
-      subject: '[머니박스] 환전 예약이 완료되었습니다 ({{reservationNo}})',
+      subject: '[MONEY BOX] 환전 예약이 완료되었습니다 (예약번호: {{reservationNo}})',
       body:
-        '{{name}} 고객님, 환전 예약이 완료되었습니다.\n\n' +
-        '· 예약번호: {{reservationNo}}\n' +
-        '· 수령지점: {{branch}}\n' +
-        '· 방문일: {{pickupDate}}\n' +
-        '· 통화/금액: {{currency}} {{amount}}\n' +
-        '· 결제 예정 원화: {{krw}}\n\n' +
-        '예약하신 날짜에 지점을 방문해 신분증 확인 후 수령해 주세요.',
+        '{{name}}님, 환전 예약이 완료되었습니다.\n\n' +
+        '- 예약번호: {{reservationNo}}\n' +
+        '- 지점: {{branch}}\n' +
+        '- 통화/금액: {{currency}} {{amount}}\n' +
+        '- 예약환율: {{rate}}\n' +
+        '- 원화금액: {{krw}}\n' +
+        '- 수령 예정일: {{pickupDate}}\n\n' +
+        '(아래 지점 위치 지도·주소 참고)\n\n' +
+        '예약 조회/취소는 예약조회 화면에서 가능합니다.\n\n' +
+        '⚠ 방문이 어려우실 경우 미리 취소해 주세요. 수령 예정일이 지나도록 방문하지 않으실 경우 예약이 자동 취소되며, 반복될 경우 서비스 이용에 제한이 있을 수 있습니다.',
     },
     reminder: {
-      subject: '[머니박스] 내일 방문 예정 안내 ({{reservationNo}})',
+      subject: '[MONEY BOX] 내일 환전 수령 예정이에요 (예약번호: {{reservationNo}})',
       body:
-        '{{name}} 고객님, 내일은 환전 수령 예정일입니다.\n\n' +
-        '· 예약번호: {{reservationNo}}\n' +
-        '· 수령지점: {{branch}}\n' +
-        '· 방문일: {{pickupDate}}\n' +
-        '· 통화/금액: {{currency}} {{amount}}\n\n' +
-        '아래에서 방문 여부를 선택해 주세요.',
+        '{{name}}님, 내일({{pickupDate}}) {{branch}}에서 환전 수령 예정입니다.\n\n' +
+        '(아래 지점 위치 지도·주소 참고)\n\n' +
+        '아래에서 방문 여부를 선택해 주세요.\n[방문 예정] / [예약 취소]\n\n' +
+        '오늘 안에는 취소되지 않습니다. 단, 수령 예정일 당일까지 응답이 없으면 자동으로 취소돼요.',
+    },
+    dayOfNoResponse: {
+      subject: '[MONEY BOX] 오늘 환전 수령일이에요 — 응답이 필요해요 (예약번호: {{reservationNo}})',
+      body:
+        '{{name}}님, 오늘({{pickupDate}}) {{branch}} 방문 예정이신가요?\n' +
+        '오늘 안에 응답이 없으면 예약이 자동으로 취소됩니다.\n\n' +
+        '[방문 예정] / [예약 취소]',
+    },
+    autoCancel: {
+      subject: '[MONEY BOX] 예약이 자동 취소되었습니다 (예약번호: {{reservationNo}})',
+      body:
+        '{{name}}님의 예약({{reservationNo}})이 수령 예정일 경과로 자동 취소되었습니다.\n' +
+        '다시 예약하시려면 예약 화면을 이용해 주세요.',
     },
     branchCancel: {
-      subject: '[머니박스] 예약이 취소되었습니다 ({{reservationNo}})',
+      subject: '[MONEY BOX] 예약이 취소되었습니다 (예약번호: {{reservationNo}})',
       body:
-        '{{name}} 고객님께 안내드립니다.\n\n' +
-        '지점 사정으로 예약({{reservationNo}})이 취소되었습니다.\n' +
+        '{{name}}님, 죄송합니다. 지점 사정으로 예약({{reservationNo}})이 취소되었습니다.\n' +
         '이용에 불편을 드려 죄송합니다.\n\n' +
-        '다시 예약해 주시면 정성껏 준비하겠습니다.',
+        '다시 예약하시려면 예약 화면을 이용해 주세요.',
     },
     customerCancel: {
-      subject: '[머니박스] 예약 취소가 완료되었습니다 ({{reservationNo}})',
+      subject: '[MONEY BOX] 취소가 완료되었습니다 (예약번호: {{reservationNo}})',
       body:
-        '{{name}} 고객님, 요청하신 예약({{reservationNo}})이 정상적으로 취소되었습니다.\n\n' +
-        '이용해 주셔서 감사합니다.',
+        '{{name}}님의 예약({{reservationNo}})이 정상적으로 취소되었습니다.\n' +
+        '언제든 다시 예약해 주세요.',
     },
   }
 }
