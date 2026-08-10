@@ -17,6 +17,7 @@ export default function CustomerSite() {
   }, [location.pathname, location.search, setLastSitePath])
   const nav = [
     { to: '/site/book', label: t('site.nav.branch') },
+    { to: '/site/prepaid', label: t('site.nav.card') },
     { to: '/site/esim', label: t('site.nav.esim') },
     { to: '/site/about', label: t('site.nav.about') },
   ]

@@ -3081,3 +3081,32 @@ th.num {
 .cems-table tbody tr.cems-row-click:hover {
   background: var(--brand-soft);
 }
+
+/* ── 카드 페이지(선불카드) 전용 소량 스타일 ── */
+/* 두 지갑 카드: 지갑별 상단 강조색 (결제=브랜드 블루 / 교통=틸) */
+.mb-wallet { border-top: 4px solid var(--border-strong); }
+.mb-wallet-pay { border-top-color: var(--brand); }
+.mb-wallet-transit { border-top-color: #0f766e; }
+/* hero-card 안의 feature-list 여백 보정 */
+.hero-card .mb-feature { margin: 6px 0 0; padding: 0; }
+.hero-card .mb-feature li { font-size: 13px; }
+
+/* FAQ 아코디언 (details/summary, 키보드 접근 가능) */
+.mb-faq .mb-faq-item { border-bottom: 1px dashed var(--border); }
+.mb-faq .mb-faq-item:last-child { border-bottom: 0; }
+.mb-faq-item > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 2px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+.mb-faq-item > summary::-webkit-details-marker { display: none; }
+.mb-faq-chev { color: var(--text-3); transition: transform 0.2s ease; font-size: 18px; }
+.mb-faq-item[open] .mb-faq-chev { transform: rotate(180deg); }
+.mb-faq-a { padding: 0 2px 14px; color: var(--text-2); font-size: 14px; line-height: 1.6; }
