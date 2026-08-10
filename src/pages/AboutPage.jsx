@@ -121,7 +121,6 @@ export default function AboutPage() {
 
       <DevNote
         items={[
-          '회사 소개 페이지. 기존 사이트 디자인 컴포넌트 재사용, 문구는 i18n(ko/en).',
           '회사 정보는 프로젝트 등록 실제 정보 사용, 미등록 항목(대표 연락처)은 [TBD].',
           '자세히: 02_사이트맵.md',
         ]}

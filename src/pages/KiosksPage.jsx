@@ -42,8 +42,7 @@ export default function KiosksPage() {
       <LocationLocator items={items} labels={labels} showNearest />
       <DevNote
         items={[
-          '무인 환전기(키오스크) 찾기 페이지. 검색 + 지역칩 + 리스트 + 구글맵 임베드(iframe). "가까운 키오스크 찾기"는 브라우저 Geolocation으로 최단거리 자동 정렬/선택.',
-          '키오스크 목데이터(24시간)와 위경도는 프로토타입 근사값 — 실제 위치/운영정보로 교체 필요.',
+          '무인 환전기(키오스크) 찾기 페이지. 검색 + 지역칩 + 리스트 + 지도. "가까운 키오스크 찾기"는 위치 정보(Geolocation)로 최단거리 자동 정렬/선택.',
           '자세히: 02_사이트맵.md',
         ]}
       />
