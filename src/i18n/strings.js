@@ -440,7 +440,6 @@ export const STRINGS = {
   'kiosks.lead': { ko: '24시간 운영되는 무인 환전기에서 환전하고 카드를 발급받으세요.', en: 'Exchange money and get a card at a 24-hour self-service kiosk.' },
   'kiosks.search': { ko: '지역·역명으로 검색 (예: 서울역, 강남)', en: 'Search by area or station (e.g., Seoul Station, Gangnam)' },
   'kiosks.nearest': { ko: '가까운 키오스크 찾기', en: 'Find nearest kiosk' },
-  'kiosks.badge24': { ko: '24시간', en: '24h' },
 
   // ── 지점 페이지 ──
   'branches.title': { ko: '지점 찾기', en: 'Find a branch' },

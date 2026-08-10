@@ -2,20 +2,19 @@ import { useState, useMemo } from 'react'
 import { useReservations } from '../../store/ReservationContext.jsx'
 import { useEmail, BRANCH_CANCEL_REASON } from '../../store/EmailContext.jsx'
 import { CURRENCY_META } from '../../data/rates.js'
-import { getBranch } from '../../data/branches.js'
+import { BRANCHES, getBranch } from '../../data/branches.js'
 import { formatDate, formatKrw, formatNumber } from '../../lib/format.js'
 import { StatusBadge } from '../../components/Badges.jsx'
 import Modal from '../../components/Modal.jsx'
 import DevNote from '../../components/DevNote.jsx'
 
-// 화면 1 · 외국인 환전예약관리 — 기존 신규예약 리스트를 CEMS 레이아웃/컬럼으로 재구성.
-// 컬럼: No | 상태 | 수령일자 | 예약자명 | 이메일 | 환전구분 | 통화 | 환율 | 거래금액 | 원화금액 | 신청일시
-// (레퍼런스의 생년월일·휴대전화·입금상태·예약금 컬럼은 우리 서비스에 없어 제외)
+// 본사관리자 · 전 지점 외국인 환전예약 — 모든 지점의 예약을 한 화면에서 조회.
+// 지점별 화면(외국인 환전예약관리)과 달리 지점 필터 + 지점 컬럼을 제공한다.
 
 const PAGE_SIZE = 10
 
 const emptyFilter = {
-  gubun: 'ALL', // 구분 (수령방식 — 지점수령 단일, 데모용 표시)
+  branchId: 'ALL', // 지점 (본사 전용)
   appFrom: '',
   appTo: '',
   pickFrom: '',
@@ -25,22 +24,20 @@ const emptyFilter = {
   name: '',
 }
 
-export default function ForeignReservationAdmin() {
+export default function HqReservationAdmin() {
   const { reservations, today, cancelByBranch } = useReservations()
   const { sendEmail } = useEmail()
 
-  // 진입 시 기본 필터: 수령예정일 = 오늘. ("전체 기간" 버튼으로 날짜 제한 해제 가능)
-  const defaultFilter = { ...emptyFilter, pickFrom: today, pickTo: today }
+  // 본사 기본값: 전 지점 + 전체 기간(날짜 제한 없음)으로 한번에 조회
+  const defaultFilter = { ...emptyFilter }
 
   const [form, setForm] = useState(defaultFilter)
   const [applied, setApplied] = useState(defaultFilter)
   const [page, setPage] = useState(1)
-  // 응답상태 토글: false = 방문확인만 보기(기본, CONFIRMED만), true = 전체보기. 날짜 필터와 독립.
-  const [showAll, setShowAll] = useState(false)
-  const [selNo, setSelNo] = useState(null) // 행 클릭 → 예약 상세 모달 대상(예약번호)
+  const [showAll, setShowAll] = useState(true) // 본사는 기본 전체보기
+  const [selNo, setSelNo] = useState(null)
   const [modalFlash, setModalFlash] = useState(null)
 
-  // 항상 store 최신 상태를 참조 (취소 후 상태 갱신 반영)
   const selected = selNo ? reservations.find((r) => r.reservationNo === selNo) : null
 
   function openDetail(no) {
@@ -52,9 +49,7 @@ export default function ForeignReservationAdmin() {
     setModalFlash(null)
   }
 
-  // 지점(직원) 예약취소 — 사유입력/추가확인 없이 즉시 취소.
-  //  · 상태→취소(사유=지점), 재고 복구(방문예정확인 건 포함), CEMS는 행 유지(상태만 취소).
-  //  · 지점 취소 안내 이메일 발송(고정 사유 문구). 고객취소(고객 취소완료)와 구분되는 별도 템플릿.
+  // 예약취소(지점·직원 취소와 동일 처리) — 상태→취소, 재고 복구, 지점 취소 안내 이메일
   function cancelBranch() {
     if (!selected || selected.status !== 'BOOKED') return
     cancelByBranch(selected.reservationNo)
@@ -76,6 +71,7 @@ export default function ForeignReservationAdmin() {
   const rows = useMemo(() => {
     const f = applied
     return reservations
+      .filter((r) => (f.branchId === 'ALL' ? true : r.branchId === f.branchId))
       .filter((r) => (f.status === 'ALL' ? true : r.status === f.status))
       .filter((r) => (f.currency === 'ALL' ? true : r.currency === f.currency))
       .filter((r) => (f.name ? r.customerName.toLowerCase().includes(f.name.toLowerCase()) : true))
@@ -83,9 +79,7 @@ export default function ForeignReservationAdmin() {
       .filter((r) => (f.appTo ? r.createdAt.slice(0, 10) <= f.appTo : true))
       .filter((r) => (f.pickFrom ? r.pickupDate >= f.pickFrom : true))
       .filter((r) => (f.pickTo ? r.pickupDate <= f.pickTo : true))
-      // 응답상태 필터: 방문확인만(CONFIRMED) / 전체보기 — 날짜 필터와 독립
       .filter((r) => (showAll ? true : r.reminderStatus === 'CONFIRMED'))
-      // 신청일시 최신순 — 최근 신청 건이 1번 행으로 상단 노출
       .sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0))
   }, [reservations, applied, showAll])
 
@@ -102,36 +96,29 @@ export default function ForeignReservationAdmin() {
     setApplied(defaultFilter)
     setPage(1)
   }
-  // 전체 기간 보기 — 수령기간 날짜 제한을 해제하고 즉시 적용
-  function showAllPeriod() {
-    const next = { ...form, pickFrom: '', pickTo: '' }
-    setForm(next)
-    setApplied(next)
-    setPage(1)
-  }
-  const allPeriod = !applied.pickFrom && !applied.pickTo
 
   return (
     <div>
       <DevNote
         items={[
-          '이 화면은 (본인 지점 기준) 시재 준비용 예약 조회. 전 지점 통합 조회는 좌측 "본사관리자 (전 지점)" 화면 참고',
-          '이 리스트의 목적은 입금확인이 아니라 시재 준비용',
-          '기존 CEMS 컬럼(성명/생년월일/휴대전화/입금상태/예약금) 중 상당수가 이번 서비스에는 없음 — 이메일/여권영문명 등으로 대체',
-          '진입 기본값: 수령예정일="오늘" + 응답상태="방문확인만 보기". 날짜(오늘/전체 기간)와 응답 토글은 독립 동작',
-          '행 클릭 → 예약 상세 모달. [예약취소] 버튼으로 지점(직원) 취소 가능(사유입력 없이 즉시): 상태→취소, 재고 복구, 지점 취소 안내 이메일 발송. CEMS는 행 유지(상태만 취소), POS는 목록에서 제외',
+          '본사관리자 화면: 전 지점의 외국인 환전예약을 한 화면에서 조회. 검색 필터에 지점 선택 포함',
+          '행 클릭 → 예약 상세 모달. 예약취소(지점·직원 취소) 가능: 상태→취소, 재고 복구, 지점 취소 안내 이메일 발송',
           '자세히: 05_어드민기능정의서.md',
         ]}
       />
-      <h1 className="cems-h1">외국인 환전예약관리</h1>
+      <h1 className="cems-h1">본사관리자 · 전 지점 외국인 환전예약</h1>
 
       {/* 필터 행 */}
       <div className="cems-filter">
         <label>
-          <span>구분</span>
-          <select value={form.gubun} onChange={(e) => setF({ gubun: e.target.value })}>
-            <option value="ALL">전체</option>
-            <option value="BRANCH">지점수령</option>
+          <span>지점</span>
+          <select value={form.branchId} onChange={(e) => setF({ branchId: e.target.value })}>
+            <option value="ALL">전체 지점</option>
+            {BRANCHES.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name.ko}
+              </option>
+            ))}
           </select>
         </label>
         <label>
@@ -184,14 +171,7 @@ export default function ForeignReservationAdmin() {
           <button className="cems-btn primary" onClick={search}>
             검색
           </button>
-          <button
-            className={`cems-btn ${allPeriod ? 'active' : ''}`}
-            onClick={showAllPeriod}
-            title="수령기간 제한 없이 전체 예약 보기"
-          >
-            전체 기간
-          </button>
-          <button className="cems-btn" onClick={reset} title="기본값(오늘 수령예정일)으로 초기화">
+          <button className="cems-btn" onClick={reset} title="필터 초기화(전 지점·전체 기간)">
             초기화
           </button>
           <button className="cems-btn" onClick={() => {}} title="데모: 동작 안 함">
@@ -203,8 +183,12 @@ export default function ForeignReservationAdmin() {
       <div className="cems-count-row">
         <div className="cems-count">
           총 <strong>{rows.length}</strong>건
+          {applied.branchId !== 'ALL' && (
+            <span className="tiny" style={{ marginLeft: 8 }}>
+              · {getBranch(applied.branchId)?.name.ko}
+            </span>
+          )}
         </div>
-        {/* 응답상태 토글: 방문확인만 보기(기본) / 전체보기 — 날짜 필터와 독립 */}
         <div className="visit-toggle" role="group" aria-label="응답 범위">
           <button className={!showAll ? 'active' : ''} onClick={() => setShowAll(false)}>
             방문확인만 보기
@@ -221,6 +205,7 @@ export default function ForeignReservationAdmin() {
           <thead>
             <tr>
               <th>No</th>
+              <th>지점</th>
               <th>상태</th>
               <th>수령일자</th>
               <th>예약자명</th>
@@ -235,7 +220,7 @@ export default function ForeignReservationAdmin() {
           <tbody>
             {pageRows.length === 0 ? (
               <tr>
-                <td colSpan={10} style={{ textAlign: 'center', padding: 24, color: 'var(--text-3)' }}>
+                <td colSpan={11} style={{ textAlign: 'center', padding: 24, color: 'var(--text-3)' }}>
                   조회된 예약이 없습니다.
                 </td>
               </tr>
@@ -248,6 +233,7 @@ export default function ForeignReservationAdmin() {
                   title="예약 상세 보기"
                 >
                   <td>{(curPage - 1) * PAGE_SIZE + i + 1}</td>
+                  <td>{getBranch(r.branchId)?.name.ko || r.branchId}</td>
                   <td>
                     <StatusBadge status={r.status} />
                   </td>

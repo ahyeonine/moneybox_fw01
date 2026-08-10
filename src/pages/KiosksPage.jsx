@@ -14,7 +14,6 @@ export default function KiosksPage() {
     region: k.region,
     lat: k.lat,
     lng: k.lng,
-    badge: k.hours24 ? t('kiosks.badge24') : null,
   }))
 
   const labels = {

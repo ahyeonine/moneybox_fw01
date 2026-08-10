@@ -16,6 +16,7 @@ const TOP_TABS = [
 // 환전예약 탭 사이드바
 const RESV_MENU = [
   { label: '외국인 환전예약관리', to: '/cems/reservations', enabled: true },
+  { label: '본사관리자 (전 지점)', to: '/cems/hq', enabled: true },
   { label: '가상계좌입금조회', enabled: false },
   { label: '가상계좌설정', enabled: false },
   { label: '휴일관리', enabled: false },
