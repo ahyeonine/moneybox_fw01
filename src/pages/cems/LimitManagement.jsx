@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { BRANCHES } from '../../data/branches.js'
+import { useState } from 'react'
 import { CURRENCY_ORDER, CURRENCY_META } from '../../data/rates.js'
 import { useSettings } from '../../store/SettingsContext.jsx'
 import { useRates } from '../../store/RatesContext.jsx'
@@ -10,12 +9,12 @@ import DevNote from '../../components/DevNote.jsx'
 const MAX_USD_CAP = 9999
 
 // 화면 3 (신규) · 설정 → 외국인서비스 한도관리
-// [최소금액][최대금액] 토글로 전환 (기본 최소금액)
+// [최소금액][신청 단위][최대금액] 토글로 전환 (기본 최소금액)
 //  - 최소금액: 통화별 최소 환전금액 (전체 지점 공통)
-//  - 최대금액: 지점별 건당 최대 환전금액 (원화 기준 일괄입력 → 통화별 상한 자동계산)
+//  - 최대금액: 건당 최대 환전금액 (전체 지점 공통, 원화 기준 일괄입력 → 통화별 상한 자동계산)
 
 export default function LimitManagement() {
-  const { minAmounts, unitAmounts, saveMinAmounts, saveUnitAmounts, getBranchMax, saveBranchMax } =
+  const { minAmounts, unitAmounts, maxAmounts, saveMinAmounts, saveUnitAmounts, saveMaxAmounts } =
     useSettings()
   const { getRate } = useRates()
   const [tab, setTab] = useState('min') // 'min' | 'unit' | 'max' (기본 최소금액)
@@ -53,19 +52,11 @@ export default function LimitManagement() {
     setTimeout(() => setUnitSaved(false), 1500)
   }
 
-  /* ── 최대금액 ── */
-  const [branchId, setBranchId] = useState(BRANCHES[0].id)
-  const [maxTable, setMaxTable] = useState({})
+  /* ── 최대금액 (전체 지점 공통) ── */
+  const [maxTable, setMaxTable] = useState(() => ({ ...maxAmounts }))
   const [bulkKrw, setBulkKrw] = useState('')
   const [maxSaved, setMaxSaved] = useState(false)
   const [maxError, setMaxError] = useState('')
-
-  // 지점 변경 시 저장된 값 로드 (없으면 빈 값)
-  useEffect(() => {
-    setMaxTable({ ...getBranchMax(branchId) })
-    setBulkKrw('')
-    setMaxError('')
-  }, [branchId, getBranchMax])
 
   // 원화(KRW) 기준 금액 → 전체 통화 상한 자동계산 (로드환율)
   function applyBulk() {
@@ -106,7 +97,7 @@ export default function LimitManagement() {
       const v = Number(maxTable[c])
       if (v) cleaned[c] = v
     }
-    saveBranchMax(branchId, cleaned)
+    saveMaxAmounts(cleaned)
     setMaxError('')
     setMaxSaved(true)
     setTimeout(() => setMaxSaved(false), 1500)
@@ -118,7 +109,7 @@ export default function LimitManagement() {
         items={[
           '최소금액: 통화별, 전체 지점 공통',
           '신청 단위: 통화별, 전체 지점 공통. 외국인 웹사이트 신청화면에서만 상위 단위로 올림 적용(CEMS/POS/이메일 미적용)',
-          '최대금액(하드리밋): 지점별로 다르게, 원화(KRW) 기준 1개 입력하면 로드환율로 전체 통화 자동 환산되는 방식',
+          '건당 최대금액(하드리밋): 지점 구분 없이 전체 공통. 원화(KRW) 기준 1개 입력하면 로드환율로 전체 통화 자동 환산되는 방식',
           '설정 가능한 최대금액 상한은 통화별 9,999 USD 상당액 — 초과 입력 시 저장/적용 차단 + 에러 표시',
           '⚠️ 이 최대금액 하드리밋은 애초 정책회의에서 "최대금액 제한 없음"으로 확정됐던 것과 상충하는 부분이라 정책 재확인이 필요한 상태',
           '자세히: 05_어드민기능정의서.md',
@@ -181,7 +172,7 @@ export default function LimitManagement() {
             </table>
           </div>
           <div className="tiny" style={{ marginTop: 8 }}>
-            ※ 최대금액은 지점별 리스크 상한으로 "최대금액" 탭에서 관리합니다.
+            ※ 최대금액은 "최대금액" 탭에서 관리합니다. (건당 최대금액, 전체 지점 공통)
           </div>
         </div>
       )}
@@ -239,26 +230,16 @@ export default function LimitManagement() {
       {tab === 'max' && (
         <div className="cems-panel">
           <div className="panel-head">
-            <h2 className="cems-h2">지점별 건당 최대 환전금액 <span className="tiny">(환율 리스크 상한)</span></h2>
+            <h2 className="cems-h2">건당 최대금액 <span className="tiny">(전체 지점 공통 · 환율 리스크 상한)</span></h2>
             <div>
               {maxSaved && <span className="saved-flash">저장됨</span>}
               <button className="cems-btn primary" onClick={saveMaxes}>
-                지점 저장
+                전체 저장
               </button>
             </div>
           </div>
 
           <div className="limit-controls">
-            <label>
-              <span>지점 선택</span>
-              <select value={branchId} onChange={(e) => setBranchId(e.target.value)}>
-                {BRANCHES.map((b) => (
-                  <option key={b.id} value={b.id}>
-                    {b.name.ko}
-                  </option>
-                ))}
-              </select>
-            </label>
             <label>
               <span>최대 환전 가능 금액(원화 기준)</span>
               <div className="range">
@@ -318,9 +299,9 @@ export default function LimitManagement() {
             </table>
           </div>
           <div className="tiny" style={{ marginTop: 8 }}>
-            ※ 원화 금액을 입력·적용하면 로드환율로 통화별 상한이 자동계산됩니다. 지점을 바꾸면 저장된 값을
-            불러오고(없으면 빈 값), 이후 개별 통화만 따로 수정할 수 있습니다. 저장/적용은 화면 상태에만
-            반영되며 새로고침 시 초기화됩니다.
+            ※ 원화 금액을 입력·적용하면 로드환율로 통화별 상한이 자동계산되며, 이후 개별 통화만 따로 수정할
+            수 있습니다. 이 상한은 전체 지점에 공통으로 적용됩니다. 저장/적용은 화면 상태에만 반영되며
+            새로고침 시 초기화됩니다.
           </div>
         </div>
       )}
