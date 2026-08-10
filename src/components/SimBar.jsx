@@ -43,16 +43,9 @@ export default function SimBar() {
   function onAdvance() {
     const next = addDays(today, 1)
     advanceDay()
-    // 하루 넘긴 뒤: (1) 수령 전일 리마인더  (2) 수령 당일 무응답 리마인더
+    // 하루 넘긴 뒤: 수령 전일 리마인더 발송 (당일 무응답 리마인더는 제거됨)
     const rem = sendBatch('reminder', (r) => r.pickupDate === addDays(next, 1))
-    const day = sendBatch(
-      'dayOfNoResponse',
-      (r) => r.pickupDate === next && r.reminderStatus !== 'CONFIRMED'
-    )
-    const parts = []
-    if (rem) parts.push(`${t('sim.reminderSent')}: ${rem}`)
-    if (day) parts.push(`${t('sim.dayReminderSent')}: ${day}`)
-    setMsg(parts.join(' · ') || null)
+    setMsg(rem ? `${t('sim.reminderSent')}: ${rem}` : null)
   }
 
   // 참고 표시: 지금 시점에서 "내일 수령"인 건 수

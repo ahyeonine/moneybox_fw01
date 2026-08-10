@@ -829,7 +829,7 @@ th.num {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 70; /* 드롭다운·모바일 메뉴가 플로팅 메모(z-index 60) 위에 오도록 */
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
@@ -854,23 +854,176 @@ th.num {
 }
 .site-nav {
   display: flex;
-  gap: 4px;
-  overflow-x: auto;
+  gap: 2px;
+  align-items: center;
 }
-.site-nav a {
+.site-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 8px 12px;
   font-size: 14px;
   font-weight: 600;
   color: var(--text-2);
   border-radius: 8px;
   white-space: nowrap;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
-.site-nav a:hover {
+.site-nav-link:hover {
   background: var(--surface-2);
 }
-.site-nav a.active {
+.site-nav-link.active {
   color: var(--brand);
   background: var(--brand-soft);
+}
+.nav-caret {
+  font-size: 10px;
+  color: var(--text-3);
+  transition: transform 0.15s ease;
+}
+/* 그룹 드롭다운 */
+.site-nav-group {
+  position: relative;
+}
+.site-nav-group.open .nav-caret,
+.site-nav-group:hover .nav-caret {
+  transform: rotate(180deg);
+}
+.site-nav-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 168px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 30;
+}
+.site-nav-group:hover .site-nav-menu,
+.site-nav-group.open .site-nav-menu {
+  display: flex;
+}
+/* 트리거와 메뉴 사이 여백에서 호버가 끊기지 않도록 브리지 */
+.site-nav-group::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 8px;
+}
+.site-nav-menu a {
+  padding: 9px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.site-nav-menu a:hover {
+  background: var(--surface-2);
+}
+.site-nav-menu a.active {
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+
+/* 햄버거 버튼 (모바일 전용) */
+.site-burger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+.burger-ic {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 22px;
+  height: 18px;
+}
+.burger-ic span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.burger-ic.x span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.burger-ic.x span:nth-child(2) {
+  opacity: 0;
+}
+.burger-ic.x span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* 모바일 접이식 메뉴 패널 */
+.site-nav-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.site-nav-mobile .snm-link {
+  padding: 11px 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  border-radius: 8px;
+}
+.site-nav-mobile .snm-link.active {
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+.site-nav-mobile .snm-sub {
+  padding-left: 24px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.snm-group {
+  margin-top: 4px;
+}
+.snm-group-label {
+  padding: 8px 12px 2px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 760px) {
+  .site-nav {
+    display: none;
+  }
+  .site-burger {
+    display: inline-flex;
+  }
+}
+@media (min-width: 761px) {
+  .site-nav-mobile {
+    display: none;
+  }
 }
 .lang-dd {
   display: inline-flex;

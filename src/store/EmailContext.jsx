@@ -7,12 +7,12 @@ const EmailContext = createContext(null)
 // 지점(직원) 취소 시 고정 사유 문구 — 지점 취소 안내 메일의 {{branchReason}} 치환값
 export const BRANCH_CANCEL_REASON = '지점 사정으로 인해 예약이 취소되었습니다.'
 
-// 이메일 종류 메타 (표시 순서/라벨) — 06_알림리마인더_템플릿.md 기준 7종
+// 이메일 종류 메타 (표시 순서/라벨) — 06_알림리마인더_템플릿.md 기준 6종
+// (수령 당일 무응답 리마인더는 제거됨: 전일 리마인더 무응답 → 수령기한 경과 시 자동취소 안내로 처리)
 export const EMAIL_TYPES = [
   { key: 'auth', label: '인증번호 발송' },
   { key: 'applied', label: '신청 완료' },
   { key: 'reminder', label: '수령 전일 리마인더' },
-  { key: 'dayOfNoResponse', label: '당일 무응답 리마인더' },
   { key: 'autoCancel', label: '자동취소 안내' },
   { key: 'branchCancel', label: '지점 취소 안내' },
   { key: 'customerCancel', label: '고객 취소완료' },
@@ -50,13 +50,6 @@ function seedTemplates() {
         '(아래 지점 위치 지도·주소 참고)\n\n' +
         '아래에서 방문 여부를 선택해 주세요.\n[방문 예정] / [예약 취소]\n\n' +
         '오늘 안에는 취소되지 않습니다. 단, 수령 예정일 당일까지 응답이 없으면 자동으로 취소돼요.',
-    },
-    dayOfNoResponse: {
-      subject: '[MONEY BOX] 오늘 환전 수령일이에요 — 응답이 필요해요 (예약번호: {{reservationNo}})',
-      body:
-        '{{name}}님, 오늘({{pickupDate}}) {{branch}} 방문 예정이신가요?\n' +
-        '오늘 안에 응답이 없으면 예약이 자동으로 취소됩니다.\n\n' +
-        '[방문 예정] / [예약 취소]',
     },
     autoCancel: {
       subject: '[MONEY BOX] 예약이 자동 취소되었습니다 (예약번호: {{reservationNo}})',

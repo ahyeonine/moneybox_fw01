@@ -263,7 +263,6 @@ export const STRINGS = {
   'sim.runAutoCancel': { ko: '자동취소 실행', en: 'Run auto-cancel' },
   'sim.sendReminder': { ko: '방문전일 리마인더 발송', en: 'Send day-before reminders' },
   'sim.reminderSent': { ko: '전일 리마인더 발송', en: 'Day-before reminders sent' },
-  'sim.dayReminderSent': { ko: '당일 무응답 리마인더 발송', en: 'Same-day reminders sent' },
   'sim.reset': { ko: '데이터 초기화', en: 'Reset data' },
   'sim.autoCancelled': { ko: '건이 자동취소되었습니다.', en: 'reservation(s) auto-cancelled.' },
   'sim.restored': { ko: '재고 복구', en: 'stock restored' },
@@ -427,6 +426,11 @@ export const STRINGS = {
   'site.nav.branches': { ko: '지점', en: 'Branches' },
   'site.nav.company': { ko: '회사', en: 'Company' },
   'site.nav.contact': { ko: '문의', en: 'Contact' },
+  // 그룹형 네비게이션
+  'site.nav.group.service': { ko: '서비스', en: 'Services' },
+  'site.nav.group.location': { ko: '위치', en: 'Locations' },
+  'site.nav.exchange': { ko: '환전', en: 'Exchange' },
+  'site.nav.menu': { ko: '메뉴', en: 'Menu' },
   'site.nav.esim': { ko: 'eSIM', en: 'eSIM' },
   'site.nav.about': { ko: '회사 소개·문의', en: 'About & Contact' },
 
