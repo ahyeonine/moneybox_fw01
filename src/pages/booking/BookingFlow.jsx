@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useI18n } from '../../i18n/I18nContext.jsx'
 import { useReservations, NOSHOW_LIMIT } from '../../store/ReservationContext.jsx'
 import { useSettings } from '../../store/SettingsContext.jsx'
@@ -147,6 +147,22 @@ export default function BookingFlow() {
     }))
     setStage('apply')
   }
+
+  // 지점 정보 페이지("환전 예약하기")에서 ?branch=<id> 로 진입 시 해당 지점 선택 후 신청 단계로 바로 이동.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const branchParamHandled = useRef(false)
+  useEffect(() => {
+    if (branchParamHandled.current) return
+    const bid = searchParams.get('branch')
+    if (bid && getBranch(bid)) {
+      branchParamHandled.current = true
+      selectBranch(bid)
+      const next = new URLSearchParams(searchParams)
+      next.delete('branch')
+      setSearchParams(next, { replace: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
 
   // STEP B: 신청하기 → 금액 자동보정 → 재고 확인 후 예약자정보로
   function submitApply() {

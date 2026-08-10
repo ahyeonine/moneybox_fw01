@@ -22,6 +22,8 @@ export const BRANCHES = [
     rating: 0,
     reviewCount: 0,
     mapPos: { x: 44, y: 34 }, // 더미 지도 마커 위치(%)
+    lat: 37.5636, // 지도 임베드용 근사 좌표(프로토타입)
+    lng: 126.985,
     currencyLimits: {
       // TODO: 실제 정책 수치로 교체
       USD: { min: 100, max: 10000, unitStep: 20 },
@@ -40,6 +42,8 @@ export const BRANCHES = [
     rating: 0,
     reviewCount: 0,
     mapPos: { x: 50, y: 62 }, // 더미
+    lat: 37.4979,
+    lng: 127.0276,
     currencyLimits: {
       // TODO: 실제 정책 수치로 교체
       USD: { min: 100, max: 12000, unitStep: 20 },
@@ -57,6 +61,8 @@ export const BRANCHES = [
     rating: 0,
     reviewCount: 0,
     mapPos: { x: 14, y: 40 }, // 더미
+    lat: 37.4491,
+    lng: 126.4509,
     currencyLimits: {
       // TODO: 실제 정책 수치로 교체
       USD: { min: 100, max: 8000, unitStep: 20 },
@@ -76,6 +82,8 @@ export const BRANCHES = [
     rating: 0,
     reviewCount: 0,
     mapPos: { x: 78, y: 82 }, // 더미
+    lat: 35.1577,
+    lng: 129.0594,
     currencyLimits: {
       // TODO: 실제 정책 수치로 교체
       USD: { min: 100, max: 7000, unitStep: 20 },

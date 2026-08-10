@@ -1,0 +1,78 @@
+// 무인 환전기(키오스크) 목데이터
+// 24시간 운영, 서울/인천/부산 등 분산. 위경도(lat/lng)는 지도 임베드(구글맵)용 근사 좌표(프로토타입).
+// TODO: 실제 키오스크 위치/운영정보로 교체
+
+export const KIOSKS = [
+  {
+    id: 'K01',
+    name: { ko: '서울역 키오스크', en: 'Seoul Station Kiosk' },
+    region: '서울',
+    address: { ko: '서울 중구 한강대로 405 서울역', en: '405 Hangang-daero, Jung-gu, Seoul (Seoul Station)' },
+    lat: 37.5559,
+    lng: 126.9723,
+    hours24: true,
+  },
+  {
+    id: 'K02',
+    name: { ko: '명동 관광안내소 키오스크', en: 'Myeongdong Tourist Center Kiosk' },
+    region: '서울',
+    address: { ko: '서울 중구 명동길 14', en: '14 Myeongdong-gil, Jung-gu, Seoul' },
+    lat: 37.5636,
+    lng: 126.985,
+    hours24: true,
+  },
+  {
+    id: 'K03',
+    name: { ko: '홍대입구역 키오스크', en: 'Hongik Univ. Station Kiosk' },
+    region: '서울',
+    address: { ko: '서울 마포구 양화로 160 홍대입구역', en: '160 Yanghwa-ro, Mapo-gu, Seoul' },
+    lat: 37.5572,
+    lng: 126.9245,
+    hours24: true,
+  },
+  {
+    id: 'K04',
+    name: { ko: '강남역 키오스크', en: 'Gangnam Station Kiosk' },
+    region: '서울',
+    address: { ko: '서울 강남구 강남대로 396 강남역', en: '396 Gangnam-daero, Gangnam-gu, Seoul' },
+    lat: 37.4979,
+    lng: 127.0276,
+    hours24: true,
+  },
+  {
+    id: 'K05',
+    name: { ko: '인천공항 T1 키오스크', en: 'Incheon Airport T1 Kiosk' },
+    region: '인천',
+    address: { ko: '인천 중구 공항로 272 제1여객터미널', en: '272 Gonghang-ro, Jung-gu, Incheon (T1)' },
+    lat: 37.4491,
+    lng: 126.4509,
+    hours24: true,
+  },
+  {
+    id: 'K06',
+    name: { ko: '인천공항 T2 키오스크', en: 'Incheon Airport T2 Kiosk' },
+    region: '인천',
+    address: { ko: '인천 중구 제2터미널대로 446 제2여객터미널', en: '446 Terminal 2-daero, Jung-gu, Incheon (T2)' },
+    lat: 37.4602,
+    lng: 126.4407,
+    hours24: true,
+  },
+  {
+    id: 'K07',
+    name: { ko: '부산역 키오스크', en: 'Busan Station Kiosk' },
+    region: '부산',
+    address: { ko: '부산 동구 중앙대로 206 부산역', en: '206 Jungang-daero, Dong-gu, Busan (Busan Station)' },
+    lat: 35.1151,
+    lng: 129.0413,
+    hours24: true,
+  },
+  {
+    id: 'K08',
+    name: { ko: '해운대 키오스크', en: 'Haeundae Kiosk' },
+    region: '부산',
+    address: { ko: '부산 해운대구 구남로 21', en: '21 Gunam-ro, Haeundae-gu, Busan' },
+    lat: 35.1587,
+    lng: 129.1604,
+    hours24: true,
+  },
+]

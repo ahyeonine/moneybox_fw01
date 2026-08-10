@@ -16,10 +16,11 @@ export default function CustomerSite() {
     setLastSitePath(location.pathname + location.search)
   }, [location.pathname, location.search, setLastSitePath])
   const nav = [
-    { to: '/site/book', label: t('site.nav.branch') },
     { to: '/site/prepaid', label: t('site.nav.card') },
-    { to: '/site/esim', label: t('site.nav.esim') },
-    { to: '/site/about', label: t('site.nav.about') },
+    { to: '/site/kiosks', label: t('site.nav.kiosk') },
+    { to: '/site/branches', label: t('site.nav.branches') },
+    { to: '/site/about', label: t('site.nav.company') },
+    { to: '/site/contact', label: t('site.nav.contact') },
   ]
   return (
     <div className="site">

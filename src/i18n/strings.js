@@ -423,8 +423,51 @@ export const STRINGS = {
   'site.nav.branch': { ko: '지점 수령', en: 'Branch Pickup' },
   'site.nav.airport': { ko: '공항 수령', en: 'Airport Pickup' },
   'site.nav.card': { ko: '카드', en: 'Card' },
+  'site.nav.kiosk': { ko: '키오스크', en: 'Kiosks' },
+  'site.nav.branches': { ko: '지점', en: 'Branches' },
+  'site.nav.company': { ko: '회사', en: 'Company' },
+  'site.nav.contact': { ko: '문의', en: 'Contact' },
   'site.nav.esim': { ko: 'eSIM', en: 'eSIM' },
   'site.nav.about': { ko: '회사 소개·문의', en: 'About & Contact' },
+
+  // ── 위치 찾기 공용(키오스크/지점) ──
+  'loc.chipAll': { ko: '전체', en: 'All' },
+  'loc.region': { ko: '지역', en: 'Region' },
+  'loc.map': { ko: '지도', en: 'Map' },
+  'loc.empty': { ko: '검색 결과가 없어요. 다른 검색어로 찾아보세요.', en: 'No results. Try a different search.' },
+  'loc.geo.locating': { ko: '현재 위치를 확인하는 중이에요…', en: 'Finding your location…' },
+  'loc.geo.unavailable': { ko: '위치 정보를 사용할 수 없어요. 아래 목록에서 직접 찾아보세요.', en: 'Location is not available. Please browse the list below.' },
+  'loc.geo.denied': { ko: '위치 정보를 사용할 수 없어요. 아래 목록에서 직접 찾아보세요.', en: 'Location is unavailable. Please browse the list below.' },
+
+  // ── 키오스크 페이지 ──
+  'kiosks.title': { ko: '가까운 키오스크 찾기', en: 'Find a nearby kiosk' },
+  'kiosks.lead': { ko: '24시간 운영되는 무인 환전기에서 환전하고 카드를 발급받으세요.', en: 'Exchange money and get a card at a 24-hour self-service kiosk.' },
+  'kiosks.search': { ko: '지역·역명으로 검색 (예: 서울역, 강남)', en: 'Search by area or station (e.g., Seoul Station, Gangnam)' },
+  'kiosks.nearest': { ko: '가까운 키오스크 찾기', en: 'Find nearest kiosk' },
+  'kiosks.badge24': { ko: '24시간', en: '24h' },
+
+  // ── 지점 페이지 ──
+  'branches.title': { ko: '지점 찾기', en: 'Find a branch' },
+  'branches.lead': { ko: '직원이 상주하는 오프라인 지점 정보예요. 지점을 고르고 바로 환전을 예약하세요.', en: 'Staffed offline branches. Pick one and reserve your exchange right away.' },
+  'branches.search': { ko: '지역·지점명으로 검색 (예: 명동, 부산)', en: 'Search by area or branch (e.g., Myeongdong, Busan)' },
+  'branches.reserve': { ko: '환전 예약하기', en: 'Reserve exchange' },
+
+  // ── 문의 페이지 ──
+  'contact.title': { ko: '문의하기', en: 'Contact us' },
+  'contact.lead': { ko: '궁금한 점을 남겨주시면 확인 후 이메일로 안내드릴게요.', en: 'Leave your question and we will reply by email.' },
+  'contact.name': { ko: '이름', en: 'Name' },
+  'contact.email': { ko: '이메일', en: 'Email' },
+  'contact.type': { ko: '문의 유형', en: 'Inquiry type' },
+  'contact.type.service': { ko: '서비스 이용', en: 'Using the service' },
+  'contact.type.card': { ko: '카드', en: 'Card' },
+  'contact.type.location': { ko: '지점·키오스크', en: 'Branch & kiosk' },
+  'contact.type.biz': { ko: '제휴·투자', en: 'Partnership & investment' },
+  'contact.type.other': { ko: '기타', en: 'Other' },
+  'contact.message': { ko: '문의 내용', en: 'Message' },
+  'contact.submit': { ko: '문의 접수', en: 'Submit inquiry' },
+  'contact.required': { ko: '이름, 이메일, 문의 내용을 입력해 주세요.', en: 'Please enter your name, email, and message.' },
+  'contact.success': { ko: '문의가 접수되었습니다. 확인 후 이메일로 안내드릴게요.', en: 'Your inquiry has been received. We will reply by email.' },
+  'contact.another': { ko: '새 문의 작성', en: 'New inquiry' },
   'site.lang': { ko: '언어', en: 'Language' },
   'airport.title': { ko: '공항 수령', en: 'Airport Pickup' },
   'airport.body': {
