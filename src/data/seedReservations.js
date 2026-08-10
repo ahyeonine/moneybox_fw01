@@ -216,4 +216,22 @@ export const SEED_RESERVATIONS = [
     createdAt: '2026-07-29T09:00:00+09:00',
     reminderStatus: 'CONFIRMED',
   }),
+  // ── 베스트레이트(환율 보장) 데모 ──
+  // 예약환율(1,300)을 현재 기준환율(USD 1,385)보다 낮게 고정해 둔 건.
+  // POS 거래완료 처리 시 예약환율 vs 오늘환율(기준)을 비교 → 더 유리한 오늘환율(1,385)로 정산되어
+  // 원화금액이 예약 시점보다 늘어나는 것을 시연한다. (실제적용환율은 별도 필드로 기록, 예약환율은 보존)
+  make({
+    reservationNo: 'RSV-20260729-0401',
+    status: 'BOOKED',
+    transactionType: 'BUY',
+    branchId: 'B001',
+    currency: 'USD',
+    rate: 1300, // 예약 시점 고정환율(현재 기준환율보다 낮음)
+    foreignAmount: 1000,
+    customerName: 'BEST RATE',
+    email: 'bestrate@example.com',
+    pickupDate: '2026-07-31',
+    createdAt: '2026-07-29T09:45:00+09:00',
+    reminderStatus: 'CONFIRMED',
+  }),
 ]

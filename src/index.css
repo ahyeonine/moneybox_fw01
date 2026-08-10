@@ -3050,3 +3050,34 @@ th.num {
   align-items: center;
   gap: 8px;
 }
+
+/* 기획문서 뷰어 · mermaid 다이어그램 렌더 영역 */
+.docs-mermaid-render {
+  overflow-x: auto;
+  padding: 8px 0;
+}
+.docs-mermaid-render svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* POS 거래처리 · 베스트레이트 정산 박스 */
+.bestrate-box {
+  border: 1px solid var(--brand-soft);
+  background: var(--brand-soft);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.bestrate-title {
+  font-weight: 700;
+  color: var(--brand-dark);
+  margin-bottom: 8px;
+}
+
+/* CEMS 외국인 환전예약관리 · 행 클릭(예약 상세) */
+.cems-table tbody tr.cems-row-click {
+  cursor: pointer;
+}
+.cems-table tbody tr.cems-row-click:hover {
+  background: var(--brand-soft);
+}

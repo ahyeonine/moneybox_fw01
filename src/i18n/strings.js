@@ -118,6 +118,11 @@ export const STRINGS = {
     ko: '방문이 어려우실 경우 예약 조회에서 미리 취소해 주세요. 수령 예정일이 지나도록 방문하지 않으실 경우 예약이 자동으로 취소되며, 반복될 경우 서비스 이용에 제한이 있을 수 있습니다.',
     en: 'If you cannot visit, please cancel in advance in My Reservation. If you do not visit by the pickup date, your reservation is auto-cancelled, and repeated no-shows may restrict your use of the service.',
   },
+  'book.step7.bestrate.t': { ko: '베스트레이트 보장', en: 'Best-rate guarantee' },
+  'book.step7.bestrate.d': {
+    ko: '현재 환율이 가장 유리해요. 혹시 방문하시는 날 환율이 더 좋아지면, 그날의 환율로 적용해드립니다.',
+    en: "The current rate is the most favorable. If the rate improves by the day you visit, we'll apply that day's better rate.",
+  },
   'book.step7.privacy.t': { ko: '개인정보 수집·이용 동의', en: 'Personal data consent' },
   'book.step7.privacy.d': {
     ko: '예약 처리 목적으로 예약자명·이메일을 수집하며, 예약 완료 후 관련 법령에 따라 보관 후 파기합니다.',
@@ -236,6 +241,20 @@ export const STRINGS = {
   },
   'op.tx.needId': { ko: '먼저 신분증 대조를 완료하세요.', en: 'Verify ID first.' },
   'op.tx.notBooked': { ko: '예약 상태가 아니어서 처리할 수 없습니다.', en: 'Not in Booked state — cannot process.' },
+  // 베스트레이트 정산(POS 거래처리)
+  'op.tx.bestRate.title': { ko: '베스트레이트 정산', en: 'Best-rate settlement' },
+  'op.tx.bestRate.reserved': { ko: '예약환율', en: 'Reserved rate' },
+  'op.tx.bestRate.today': { ko: '오늘환율(기준)', en: "Today's rate (base)" },
+  'op.tx.bestRate.applied': { ko: '적용환율(유리한 쪽)', en: 'Applied rate (best)' },
+  'op.tx.bestRate.appliedKrw': { ko: '최종 원화금액', en: 'Final KRW amount' },
+  'op.tx.bestRate.improved': {
+    ko: '방문일 환율이 더 유리해져 오늘환율로 적용됩니다.',
+    en: "Today's rate is more favorable — it will be applied.",
+  },
+  'op.tx.bestRate.same': {
+    ko: '예약환율이 여전히 가장 유리하여 예약환율로 적용됩니다.',
+    en: 'The reserved rate is still the most favorable — it will be applied.',
+  },
 
   // 시뮬레이션 도구
   'sim.title': { ko: '시뮬레이션', en: 'Simulation' },

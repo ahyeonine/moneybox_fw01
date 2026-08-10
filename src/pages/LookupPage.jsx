@@ -93,7 +93,7 @@ export default function LookupPage() {
           '조회 조건: 예약번호 + 이메일 (전화번호 없음)',
           '"예약" 상태일 때만 취소/변경 가능',
           '가용시재 차감(예약시재 반영)은 예약완료가 아니라 여기 "방문 예정 확인" 시점에 발생 — 이 시점에 재고 재확인(동시성). 데모: rush@example.com (B004+USD 재고 1개, 예약 2건)',
-          '자세히: 03_booking_flow_screens.md',
+          '자세히: 03_예약플로우_화면정의서.md',
         ]}
       />
       <h1>{t('lookup.title')}</h1>

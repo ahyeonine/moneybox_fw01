@@ -38,7 +38,7 @@ export default function Home() {
       <DevNote
         items={[
           '공항수령 서비스는 이번 버전에서 제외됨',
-          '자세히: 02_IA_sitemap.md',
+          '자세히: 02_사이트맵.md',
         ]}
       />
 

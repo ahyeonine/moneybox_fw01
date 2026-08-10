@@ -1,8 +1,11 @@
 import { useState, useMemo } from 'react'
 import { useReservations } from '../../store/ReservationContext.jsx'
+import { useEmail, BRANCH_CANCEL_REASON } from '../../store/EmailContext.jsx'
 import { CURRENCY_META } from '../../data/rates.js'
+import { getBranch } from '../../data/branches.js'
 import { formatDate, formatKrw, formatNumber } from '../../lib/format.js'
 import { StatusBadge } from '../../components/Badges.jsx'
+import Modal from '../../components/Modal.jsx'
 import DevNote from '../../components/DevNote.jsx'
 
 // 화면 1 · 외국인 환전예약관리 — 기존 신규예약 리스트를 CEMS 레이아웃/컬럼으로 재구성.
@@ -23,7 +26,8 @@ const emptyFilter = {
 }
 
 export default function ForeignReservationAdmin() {
-  const { reservations, today } = useReservations()
+  const { reservations, today, cancelByBranch } = useReservations()
+  const { sendEmail } = useEmail()
 
   // 진입 시 기본 필터: 수령예정일 = 오늘. ("전체 기간" 버튼으로 날짜 제한 해제 가능)
   const defaultFilter = { ...emptyFilter, pickFrom: today, pickTo: today }
@@ -33,6 +37,34 @@ export default function ForeignReservationAdmin() {
   const [page, setPage] = useState(1)
   // 응답상태 토글: false = 방문확인만 보기(기본, CONFIRMED만), true = 전체보기. 날짜 필터와 독립.
   const [showAll, setShowAll] = useState(false)
+  const [selNo, setSelNo] = useState(null) // 행 클릭 → 예약 상세 모달 대상(예약번호)
+  const [modalFlash, setModalFlash] = useState(null)
+
+  // 항상 store 최신 상태를 참조 (취소 후 상태 갱신 반영)
+  const selected = selNo ? reservations.find((r) => r.reservationNo === selNo) : null
+
+  function openDetail(no) {
+    setSelNo(no)
+    setModalFlash(null)
+  }
+  function closeDetail() {
+    setSelNo(null)
+    setModalFlash(null)
+  }
+
+  // 지점(직원) 예약취소 — 사유입력/추가확인 없이 즉시 취소.
+  //  · 상태→취소(사유=지점), 재고 복구(방문예정확인 건 포함), CEMS는 행 유지(상태만 취소).
+  //  · 지점 취소 안내 이메일 발송(고정 사유 문구). 고객취소(고객 취소완료)와 구분되는 별도 템플릿.
+  function cancelBranch() {
+    if (!selected || selected.status !== 'BOOKED') return
+    cancelByBranch(selected.reservationNo)
+    sendEmail('branchCancel', selected.email, {
+      name: selected.customerName,
+      reservationNo: selected.reservationNo,
+      branchReason: BRANCH_CANCEL_REASON,
+    })
+    setModalFlash('예약이 취소되었습니다. 고객에게 지점 취소 안내 이메일이 발송되었습니다.')
+  }
 
   const setF = (patch) => setForm((f) => ({ ...f, ...patch }))
 
@@ -87,7 +119,8 @@ export default function ForeignReservationAdmin() {
           '이 리스트의 목적은 입금확인이 아니라 시재 준비용',
           '기존 CEMS 컬럼(성명/생년월일/휴대전화/입금상태/예약금) 중 상당수가 이번 서비스에는 없음 — 이메일/여권영문명 등으로 대체',
           '진입 기본값: 수령예정일="오늘" + 응답상태="방문확인만 보기". 날짜(오늘/전체 기간)와 응답 토글은 독립 동작',
-          '자세히: 05_admin_spec.md',
+          '행 클릭 → 예약 상세 모달. [예약취소] 버튼으로 지점(직원) 취소 가능(사유입력 없이 즉시): 상태→취소, 재고 복구, 지점 취소 안내 이메일 발송. CEMS는 행 유지(상태만 취소), POS는 목록에서 제외',
+          '자세히: 05_어드민기능정의서.md',
         ]}
       />
       <h1 className="cems-h1">외국인 환전예약관리</h1>
@@ -208,7 +241,12 @@ export default function ForeignReservationAdmin() {
               </tr>
             ) : (
               pageRows.map((r, i) => (
-                <tr key={r.reservationNo}>
+                <tr
+                  key={r.reservationNo}
+                  className="cems-row-click"
+                  onClick={() => openDetail(r.reservationNo)}
+                  title="예약 상세 보기"
+                >
                   <td>{(curPage - 1) * PAGE_SIZE + i + 1}</td>
                   <td>
                     <StatusBadge status={r.status} />
@@ -244,6 +282,81 @@ export default function ForeignReservationAdmin() {
           ›
         </button>
       </div>
+
+      {/* 예약 상세 모달 (행 클릭) — 확인/예약취소 */}
+      {selected && (
+        <Modal onClose={closeDetail}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <h2 style={{ margin: 0 }}>{selected.reservationNo}</h2>
+            <StatusBadge status={selected.status} />
+          </div>
+          <div className="summary" style={{ marginTop: 12 }}>
+            <div className="row">
+              <span className="k">예약자명</span>
+              <span className="v">{selected.customerName}</span>
+            </div>
+            <div className="row">
+              <span className="k">이메일</span>
+              <span className="v">{selected.email}</span>
+            </div>
+            <div className="row">
+              <span className="k">지점</span>
+              <span className="v">{getBranch(selected.branchId)?.name.ko}</span>
+            </div>
+            <div className="row">
+              <span className="k">수령일자</span>
+              <span className="v">{formatDate(selected.pickupDate, 'ko')}</span>
+            </div>
+            <div className="row">
+              <span className="k">통화</span>
+              <span className="v">
+                {CURRENCY_META[selected.currency]?.flag} {selected.currency}
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">예약환율</span>
+              <span className="v">
+                1 {selected.currency} = {formatNumber(selected.rate)} KRW
+              </span>
+            </div>
+            <div className="row">
+              <span className="k">거래금액</span>
+              <span className="v">
+                {formatNumber(selected.foreignAmount)} {selected.currency}
+              </span>
+            </div>
+            <div className="row total">
+              <span className="k">원화금액</span>
+              <span className="v">{formatKrw(selected.krwAmount)}</span>
+            </div>
+            <div className="row">
+              <span className="k">신청일시</span>
+              <span className="v">{selected.createdAt.slice(0, 10)}</span>
+            </div>
+          </div>
+
+          {modalFlash && (
+            <div className="notice warn" style={{ marginTop: 12 }}>
+              {modalFlash}
+            </div>
+          )}
+
+          <div className="btn-row" style={{ marginTop: 14 }}>
+            <button className="btn ghost" onClick={closeDetail}>
+              확인
+            </button>
+            {selected.status === 'BOOKED' && (
+              <button
+                className="btn"
+                style={{ background: 'var(--danger)', color: '#fff' }}
+                onClick={cancelBranch}
+              >
+                예약취소
+              </button>
+            )}
+          </div>
+        </Modal>
+      )}
     </div>
   )
 }

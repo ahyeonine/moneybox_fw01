@@ -4,7 +4,10 @@ import { createContext, useContext, useState, useRef, useCallback } from 'react'
 // 실제 발송 없음. 외국인 웹사이트 예약 데이터와 연동해 "발송" 시 Outbox에 기록한다.
 const EmailContext = createContext(null)
 
-// 이메일 종류 메타 (표시 순서/라벨) — 06_notification_reminder.md 기준 7종
+// 지점(직원) 취소 시 고정 사유 문구 — 지점 취소 안내 메일의 {{branchReason}} 치환값
+export const BRANCH_CANCEL_REASON = '지점 사정으로 인해 예약이 취소되었습니다.'
+
+// 이메일 종류 메타 (표시 순서/라벨) — 06_알림리마인더_템플릿.md 기준 7종
 export const EMAIL_TYPES = [
   { key: 'auth', label: '인증번호 발송' },
   { key: 'applied', label: '신청 완료' },
@@ -16,7 +19,7 @@ export const EMAIL_TYPES = [
 ]
 
 // 기본 템플릿 (관리자 수정 가능). 본문의 {{token}} 은 발송 시 치환된다.
-// (문안은 docs-plan/06_notification_reminder.md 와 동일 정책)
+// (문안은 docs-plan/06_알림리마인더_템플릿.md 와 동일 정책)
 function seedTemplates() {
   return {
     auth: {
@@ -35,6 +38,7 @@ function seedTemplates() {
         '- 예약환율: {{rate}}\n' +
         '- 원화금액: {{krw}}\n' +
         '- 수령 예정일: {{pickupDate}}\n\n' +
+        '💱 현재 적용된 환율이 지금 기준 가장 유리한 환율이에요. 혹시 방문하시는 날 환율이 더 좋아졌다면, 그날의 환율로 적용해드립니다.\n\n' +
         '(아래 지점 위치 지도·주소 참고)\n\n' +
         '예약 조회/취소는 예약조회 화면에서 가능합니다.\n\n' +
         '⚠ 방문이 어려우실 경우 미리 취소해 주세요. 수령 예정일이 지나도록 방문하지 않으실 경우 예약이 자동 취소되며, 반복될 경우 서비스 이용에 제한이 있을 수 있습니다.',
@@ -63,7 +67,8 @@ function seedTemplates() {
     branchCancel: {
       subject: '[MONEY BOX] 예약이 취소되었습니다 (예약번호: {{reservationNo}})',
       body:
-        '{{name}}님, 죄송합니다. 지점 사정으로 예약({{reservationNo}})이 취소되었습니다.\n' +
+        '{{name}}님, 죄송합니다. 예약({{reservationNo}})이 취소되었습니다.\n' +
+        '- 취소 사유: {{branchReason}}\n\n' +
         '이용에 불편을 드려 죄송합니다.\n\n' +
         '다시 예약하시려면 예약 화면을 이용해 주세요.',
     },

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { marked } from 'marked'
 import { screensForDoc } from '../data/docRefs.js'
@@ -22,6 +23,32 @@ export default function DocsViewer() {
   const [params, setParams] = useSearchParams()
   const active = params.get('doc') || (DOCS[0] && DOCS[0].name)
   const current = DOCS.find((d) => d.name === active) || DOCS[0]
+  const mermaidRef = useRef(null)
+
+  // .mermaid 파일은 mermaid.js로 실제 다이어그램 렌더 (라이브러리는 지연 로딩)
+  const isMermaid = current?.name.endsWith('.mermaid')
+  useEffect(() => {
+    if (!isMermaid || !mermaidRef.current) return
+    let cancelled = false
+    mermaidRef.current.innerHTML = '<div class="tiny">다이어그램 렌더링 중…</div>'
+    import('mermaid')
+      .then(({ default: mermaid }) => {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: 'default' })
+        return mermaid.render('docsMermaidSvg', current.content)
+      })
+      .then(({ svg }) => {
+        if (!cancelled && mermaidRef.current) mermaidRef.current.innerHTML = svg
+      })
+      .catch((e) => {
+        if (mermaidRef.current) {
+          mermaidRef.current.innerHTML = `<pre class="docs-mermaid">${current.content}</pre>`
+        }
+        console.warn('mermaid render failed', e)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [isMermaid, current?.name, current?.content])
 
   const select = (name) => setParams({ doc: name })
 
@@ -62,8 +89,8 @@ export default function DocsViewer() {
                 ))}
               </div>
             )}
-            {current.name.endsWith('.mermaid') ? (
-              <pre className="docs-mermaid">{current.content}</pre>
+            {isMermaid ? (
+              <div className="docs-mermaid-render" ref={mermaidRef} />
             ) : (
               <article
                 className="docs-md"

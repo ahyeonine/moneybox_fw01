@@ -18,21 +18,21 @@ const DEV_NOTES = {
     '"신청하기" 버튼 클릭 시점에 환율이 픽스됨',
     '수령일 선택 최대 범위: 리드타임 이후 ~ 2주 이내',
     '기존 외화구매/외화판매 두 개 탭이었으나, 현재는 원화구매만 남음 (외화구매 탭 제거됨)',
-    '자세히: 03_booking_flow_screens.md',
-    '자세히: 02_IA_sitemap.md',
+    '자세히: 03_예약플로우_화면정의서.md',
+    '자세히: 02_사이트맵.md',
   ],
   info: [
     '필수 항목은 예약자명 + 이메일만. 메신저ID, 휴대전화, 생년월일 수집 안 함 (온라인 최소수집 원칙)',
     '이메일 OTP 인증 완료해야 다음 단계 진행 (데모: 인증번호를 배너로 표시, 5분 유효·30초 후 재발송·5회 오답 시 무효화)',
-    '자세히: 04_data_definition.md',
+    '자세히: 04_데이터정의서.md',
   ],
   consent: [
     '클릭 시 펼쳐지는 약관 전문은 프로토타입용 더미 텍스트, 실제 법무 검토 문구 아님',
-    '자세히: 03_booking_flow_screens.md',
+    '자세히: 03_예약플로우_화면정의서.md',
   ],
   done: [
     '예약 완료 즉시 상태값 "예약"으로 저장됨',
-    '자세히: 03_booking_flow_screens.md',
+    '자세히: 03_예약플로우_화면정의서.md',
   ],
 }
 import { BRANCHES, getBranch, branchCurrencies, currencyLimit } from '../../data/branches.js'
@@ -894,6 +894,10 @@ function StepConsent({ consent, setConsent }) {
   return (
     <div>
       <h2>{t('book.step7.title')}</h2>
+      <div className="notice info bestrate-notice" style={{ marginBottom: 12 }}>
+        <strong>💱 {t('book.step7.bestrate.t')}</strong>
+        <div style={{ marginTop: 4 }}>{t('book.step7.bestrate.d')}</div>
+      </div>
       <div className="check-row check-all">
         <input type="checkbox" checked={allChecked} onChange={toggleAll} />
         <div>

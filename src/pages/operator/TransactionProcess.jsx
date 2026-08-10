@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useI18n } from '../../i18n/I18nContext.jsx'
 import { useReservations } from '../../store/ReservationContext.jsx'
-import { useEmail } from '../../store/EmailContext.jsx'
+import { useRates } from '../../store/RatesContext.jsx'
+import { useEmail, BRANCH_CANCEL_REASON } from '../../store/EmailContext.jsx'
 import { getBranch } from '../../data/branches.js'
-import { CURRENCY_META } from '../../data/rates.js'
+import { CURRENCY_META, toKrw } from '../../data/rates.js'
 import { formatDate, formatKrw, formatForeign, formatNumber } from '../../lib/format.js'
 import { StatusBadge } from '../../components/Badges.jsx'
 
 export default function TransactionProcess() {
   const { t, lang } = useI18n()
   const { getByNo, completeReservation, cancelByBranch } = useReservations()
+  const { getRate } = useRates()
   const { sendEmail } = useEmail()
   const [params] = useSearchParams()
 
@@ -38,6 +40,13 @@ export default function TransactionProcess() {
   // 항상 store 최신 상태를 참조
   const rec = no ? getByNo(no) : null
 
+  // ── 베스트레이트 정산 ──
+  // 원화구매(BUY): 1통화당 원화가 많을수록 고객에게 유리 → 예약환율 vs 오늘환율 중 큰 값 적용.
+  const todayRate = rec ? getRate(rec.currency) : null
+  const appliedRate = rec && todayRate != null ? Math.max(rec.rate, todayRate) : rec?.rate
+  const appliedKrw = rec ? toKrw(rec.foreignAmount, appliedRate) : 0
+  const rateImproved = rec && todayRate != null && appliedRate > rec.rate
+
   function doLookup(e) {
     e?.preventDefault()
     const r = getByNo(query)
@@ -61,7 +70,10 @@ export default function TransactionProcess() {
       setFlash({ type: 'danger', msg: t('op.tx.notBooked') })
       return
     }
-    completeReservation(rec.reservationNo)
+    completeReservation(rec.reservationNo, {
+      appliedRate,
+      appliedKrwAmount: appliedKrw,
+    })
     setFlash({ type: 'success', msg: t('op.tx.completed.msg') })
   }
 
@@ -75,6 +87,7 @@ export default function TransactionProcess() {
     sendEmail('branchCancel', rec.email, {
       name: rec.customerName,
       reservationNo: rec.reservationNo,
+      branchReason: BRANCH_CANCEL_REASON,
     })
     setFlash({ type: 'warn', msg: t('op.tx.branchCancelled') })
   }
@@ -99,7 +112,7 @@ export default function TransactionProcess() {
           </button>
         </div>
         <div className="tiny" style={{ marginTop: 10 }}>
-          demo: RSV-20260728-0001 · RSV-20260728-0002
+          demo: RSV-20260728-0001 · RSV-20260728-0002 · RSV-20260729-0401(베스트레이트)
         </div>
       </form>
 
@@ -154,6 +167,70 @@ export default function TransactionProcess() {
               <span className="v">{formatKrw(rec.krwAmount)}</span>
             </div>
           </div>
+
+          {/* 베스트레이트 정산: 예약환율 vs 오늘환율 비교 → 유리한 쪽 적용 */}
+          {rec.status === 'BOOKED' && (
+            <div className="bestrate-box" style={{ marginTop: 14 }}>
+              <div className="bestrate-title">💱 {t('op.tx.bestRate.title')}</div>
+              <div className="summary">
+                <div className="row">
+                  <span className="k">{t('op.tx.bestRate.reserved')}</span>
+                  <span className="v">
+                    1 {rec.currency} = {formatNumber(rec.rate)} KRW
+                  </span>
+                </div>
+                <div className="row">
+                  <span className="k">{t('op.tx.bestRate.today')}</span>
+                  <span className="v">
+                    1 {rec.currency} = {formatNumber(todayRate)} KRW
+                  </span>
+                </div>
+                <div className="row">
+                  <span className="k">{t('op.tx.bestRate.applied')}</span>
+                  <span className="v" style={{ color: 'var(--brand)', fontWeight: 700 }}>
+                    1 {rec.currency} = {formatNumber(appliedRate)} KRW
+                  </span>
+                </div>
+                <div className="row total">
+                  <span className="k">{t('op.tx.bestRate.appliedKrw')}</span>
+                  <span className="v">{formatKrw(appliedKrw)}</span>
+                </div>
+              </div>
+              <div className="tiny" style={{ marginTop: 8 }}>
+                {rateImproved ? t('op.tx.bestRate.improved') : t('op.tx.bestRate.same')}
+              </div>
+            </div>
+          )}
+
+          {/* 완료된 거래: 실제 적용된 베스트레이트 결과 표기 */}
+          {rec.status === 'COMPLETED' && rec.appliedRate != null && (
+            <div className="bestrate-box" style={{ marginTop: 14 }}>
+              <div className="bestrate-title">💱 {t('op.tx.bestRate.title')}</div>
+              <div className="summary">
+                <div className="row">
+                  <span className="k">{t('op.tx.bestRate.reserved')}</span>
+                  <span className="v">
+                    1 {rec.currency} = {formatNumber(rec.rate)} KRW
+                  </span>
+                </div>
+                <div className="row">
+                  <span className="k">{t('op.tx.bestRate.applied')}</span>
+                  <span className="v" style={{ color: 'var(--brand)', fontWeight: 700 }}>
+                    1 {rec.currency} = {formatNumber(rec.appliedRate)} KRW
+                  </span>
+                </div>
+                <div className="row total">
+                  <span className="k">{t('op.tx.bestRate.appliedKrw')}</span>
+                  <span className="v">{formatKrw(rec.appliedKrwAmount ?? rec.krwAmount)}</span>
+                </div>
+              </div>
+              <div className="tiny" style={{ marginTop: 8 }}>
+                {rec.appliedRate > rec.rate
+                  ? t('op.tx.bestRate.improved')
+                  : t('op.tx.bestRate.same')}
+              </div>
+            </div>
+          )}
 
           {rec.status === 'BOOKED' ? (
             <>

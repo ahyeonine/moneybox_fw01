@@ -139,23 +139,42 @@ export function ReservationProvider({ children }) {
     )
   }, [])
 
-  // 지점 취소 (운영자) — 노쇼 카운트 제외. cancelReason='BRANCH'
-  const cancelByBranch = useCallback((reservationNo) => {
-    setReservations((prev) =>
-      prev.map((r) =>
-        r.reservationNo === reservationNo && r.status === 'BOOKED'
-          ? { ...r, status: 'CANCELLED', cancelReason: 'BRANCH', processedAt: null }
-          : r
-      )
-    )
-  }, [])
-
-  const completeReservation = useCallback(
+  // 지점 취소 (운영자/CEMS) — 노쇼 카운트 제외. cancelReason='BRANCH'
+  //  · 방문예정확인(CONFIRMED)으로 재고가 잡혀 있던 건은 가용시재를 복구한다.
+  //  · 취소된 예약 레코드를 반환 → 호출측에서 지점취소 안내 이메일 발송에 사용.
+  const cancelByBranch = useCallback(
     (reservationNo) => {
+      const rec = reservations.find(
+        (r) => r.reservationNo === reservationNo && r.status === 'BOOKED'
+      )
+      if (!rec) return null
+      if (rec.reminderStatus === 'CONFIRMED') restoreStock(rec.branchId, rec.currency)
       setReservations((prev) =>
         prev.map((r) =>
           r.reservationNo === reservationNo && r.status === 'BOOKED'
-            ? { ...r, status: 'COMPLETED', idVerified: true, processedAt: `${today}T00:00:00+09:00` }
+            ? { ...r, status: 'CANCELLED', cancelReason: 'BRANCH', processedAt: null }
+            : r
+        )
+      )
+      return rec
+    },
+    [reservations]
+  )
+
+  // 거래완료. extra 로 실제적용환율(appliedRate)·최종원화(appliedKrwAmount)를 함께 기록.
+  //  · 예약환율(rate)/예약원화(krwAmount)는 보존하고, 실제 정산값만 별도 필드로 저장(베스트레이트).
+  const completeReservation = useCallback(
+    (reservationNo, extra = {}) => {
+      setReservations((prev) =>
+        prev.map((r) =>
+          r.reservationNo === reservationNo && r.status === 'BOOKED'
+            ? {
+                ...r,
+                status: 'COMPLETED',
+                idVerified: true,
+                processedAt: `${today}T00:00:00+09:00`,
+                ...extra,
+              }
             : r
         )
       )
