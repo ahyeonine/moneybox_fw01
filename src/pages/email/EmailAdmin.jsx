@@ -4,6 +4,7 @@ import Logo from '../../components/Logo.jsx'
 import DevNote from '../../components/DevNote.jsx'
 import { useEmail, EMAIL_TYPES } from '../../store/EmailContext.jsx'
 import { useReservations } from '../../store/ReservationContext.jsx'
+import StaticBranchMap from '../../components/StaticBranchMap.jsx'
 
 // 이메일 관리 화면 — 템플릿 편집 + 발송 이력(Outbox).
 // 외국인 웹사이트 예약 데이터와 연동해 발송된 이메일을 기록/표시한다.
@@ -137,6 +138,10 @@ export default function EmailAdmin() {
                   </div>
                   <div className="email-subject">{m.subject}</div>
                   <pre className="email-body">{m.body}</pre>
+                  {/* 신청완료·리마인더 메일에는 지점 위치 정적 지도 + 주소 포함 */}
+                  {(m.type === 'applied' || m.type === 'reminder') && m.branchId && (
+                    <StaticBranchMap branchId={m.branchId} />
+                  )}
                   {m.type === 'reminder' && m.status !== 'RESPONDED' && (
                     <div className="email-actions">
                       <button className="btn success" onClick={() => onReminderConfirm(m)}>

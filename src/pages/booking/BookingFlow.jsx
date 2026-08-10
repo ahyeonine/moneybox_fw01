@@ -19,6 +19,7 @@ const DEV_NOTES = {
     '수령일 선택 최대 범위: 리드타임 이후 ~ 2주 이내',
     '기존 외화구매/외화판매 두 개 탭이었으나, 현재는 원화구매만 남음 (외화구매 탭 제거됨)',
     '자세히: 03_예약플로우_화면정의서_해외환전예약서비스.md',
+    '자세히: 02_IA_사이트맵_해외환전예약서비스.md',
   ],
   info: [
     '필수 항목은 예약자명 + 이메일만. 메신저ID, 휴대전화, 생년월일 수집 안 함 (온라인 최소수집 원칙)',
@@ -192,6 +193,7 @@ export default function BookingFlow() {
     sendEmail('applied', rec.email, {
       name: rec.customerName,
       reservationNo: rec.reservationNo,
+      branchId: rec.branchId,
       branch: branch?.name?.ko || rec.branchId,
       pickupDate: rec.pickupDate,
       currency: rec.currency,

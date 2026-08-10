@@ -94,6 +94,7 @@ export function EmailProvider({ children }) {
       sentAt: new Date().toISOString(),
       status: 'SENT', // SENT | RESPONDED
       reservationNo: vars.reservationNo || null,
+      branchId: vars.branchId || null, // 지점 지도/주소 표시용 (신청완료·리마인더 메일)
       response: null, // reminder: 'CONFIRMED' | 'CANCELLED'
     }
     setOutbox((prev) => [rec, ...prev])

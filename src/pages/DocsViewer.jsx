@@ -1,5 +1,6 @@
 import { useSearchParams, Link } from 'react-router-dom'
 import { marked } from 'marked'
+import { screensForDoc } from '../data/docRefs.js'
 
 // 기획문서 뷰어 — docs-plan/ 폴더의 마크다운/머메이드 파일을 목록+렌더링으로 보여준다.
 // 내부 검토용. 개발문서(docs/)와 별개인 기획문서(docs-plan/) 전용.
@@ -50,6 +51,17 @@ export default function DocsViewer() {
         {current ? (
           <>
             <div className="docs-filename">{current.name}</div>
+            {/* 문서 → 메모(화면) 역참조: 이 문서를 참고하는 화면으로 바로 이동 */}
+            {screensForDoc(current.name).length > 0 && (
+              <div className="docs-related">
+                <span className="docs-related-label">이 문서를 참고하는 화면(메모):</span>
+                {screensForDoc(current.name).map((r) => (
+                  <Link key={r.route} className="docs-related-link" to={r.route}>
+                    {r.screen}
+                  </Link>
+                ))}
+              </div>
+            )}
             {current.name.endsWith('.mermaid') ? (
               <pre className="docs-mermaid">{current.content}</pre>
             ) : (

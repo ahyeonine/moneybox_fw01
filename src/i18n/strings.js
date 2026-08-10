@@ -330,7 +330,7 @@ export const STRINGS = {
   'stepB.openUntil': { ko: '영업중 · {time}에 영업 종료', en: 'Open · closes at {time}' },
   'stepB.copy': { ko: '복사하기', en: 'Copy' },
   'stepB.copied': { ko: '복사됨', en: 'Copied' },
-  'stepB.liveRate': { ko: '실시간 환율', en: 'Live rates' },
+  'stepB.liveRate': { ko: '기준환율', en: 'Base rate' },
   'stepB.buyTab': { ko: '외화 살 때', en: 'You buy' },
   'stepB.sellTab': { ko: '외화 팔 때', en: 'You sell' },
   'stepB.allRates': { ko: '전체 환율 보기', en: 'View all rates' },
@@ -358,14 +358,14 @@ export const STRINGS = {
   'stepB.estKrw': { ko: '예상 원화 금액', en: 'Estimated KRW' },
   'stepB.apply': { ko: '신청하기', en: 'Apply' },
   'book.complete': { ko: '예약 완료하기', en: 'Complete reservation' },
-  'stepB.liveRateLabel': { ko: '실시간', en: 'Live' },
+  'stepB.liveRateLabel': { ko: '기준환율', en: 'Base rate' },
   'stepB.liveRateHint': {
     ko: '환율은 2분마다 자동 갱신됩니다. "신청하기" 클릭 시점의 환율로 확정됩니다.',
     en: 'Rates auto-refresh every 2 minutes. Locked when you tap "Apply".',
   },
   'stepB.rateNote': {
-    ko: '표시 환율은 실시간으로 변동하며(2분 주기 자동 갱신), "신청하기" 클릭 시점의 환율로 확정됩니다.',
-    en: 'The displayed rate changes live (auto-refresh every 2 min) and is locked when you tap "Apply".',
+    ko: '표시 환율(기준환율)은 2분 주기로 자동 갱신되며, "신청하기" 클릭 시점의 환율로 확정됩니다.',
+    en: 'The displayed base rate auto-refreshes every 2 min and is locked when you tap "Apply".',
   },
   'common.pickupTime': { ko: '수령 시간', en: 'Pickup time' },
 

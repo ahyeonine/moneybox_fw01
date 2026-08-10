@@ -27,6 +27,7 @@ export default function SimBar() {
       sendEmail('reminder', r.email, {
         name: r.customerName,
         reservationNo: r.reservationNo,
+        branchId: r.branchId,
         branch: branch?.name?.ko || r.branchId,
         pickupDate: r.pickupDate,
         currency: r.currency,
