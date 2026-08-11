@@ -6,10 +6,8 @@ import BookingFlow from './pages/booking/BookingFlow.jsx'
 import LookupPage from './pages/LookupPage.jsx'
 import AboutPage from './pages/AboutPage.jsx'
 import EsimPage from './pages/EsimPage.jsx'
-import PrepaidCardPage from './pages/PrepaidCardPage.jsx'
 import KiosksPage from './pages/KiosksPage.jsx'
 import BranchesPage from './pages/BranchesPage.jsx'
-import ContactPage from './pages/ContactPage.jsx'
 import CemsShell from './pages/operator/CemsShell.jsx'
 import PosShell from './pages/operator/PosShell.jsx'
 import PosHome from './pages/operator/PosHome.jsx'
@@ -34,14 +32,11 @@ export default function App() {
         <Route path="site" element={<CustomerSite />}>
           <Route index element={<Home />} /> {/* 기본 진입 = 랜딩 홈 */}
           <Route path="book" element={<BookingFlow />} /> {/* 지점 수령 예약 (STEP A~) */}
-          <Route path="prepaid" element={<PrepaidCardPage />} /> {/* 카드 */}
-          <Route path="card" element={<Navigate to="/site/prepaid" replace />} /> {/* 별칭 */}
           <Route path="kiosks" element={<KiosksPage />} /> {/* 키오스크 찾기 */}
           <Route path="branches" element={<BranchesPage />} /> {/* 지점 정보 */}
           <Route path="esim" element={<EsimPage />} />
           <Route path="about" element={<AboutPage />} /> {/* 회사 소개 */}
           <Route path="company" element={<Navigate to="/site/about" replace />} /> {/* 별칭 */}
-          <Route path="contact" element={<ContactPage />} /> {/* 문의 */}
           <Route path="lookup" element={<LookupPage />} />
         </Route>
 

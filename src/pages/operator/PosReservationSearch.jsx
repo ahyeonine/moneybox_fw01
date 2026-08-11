@@ -20,6 +20,7 @@ export default function PosReservationSearch() {
   const nav = useNavigate()
   const { today } = useReservations()
 
+  const [tab, setTab] = useState('foreign') // 'domestic'(내국인) | 'foreign'(외국인)
   const [form, setForm] = useState({ name: '', pickupDate: today, no4: '' })
   const set = (patch) => setForm((f) => ({ ...f, ...patch }))
 
@@ -52,6 +53,29 @@ export default function PosReservationSearch() {
         </div>
       </header>
 
+      {/* 내국인 / 외국인 탭 — 내국인은 기존 환전예약 사이트로 안내 */}
+      <div className="visit-toggle pos-resv-tab" role="group" aria-label="예약 구분">
+        <button
+          type="button"
+          className={tab === 'domestic' ? 'active' : ''}
+          onClick={() => setTab('domestic')}
+        >
+          내국인
+        </button>
+        <button
+          type="button"
+          className={tab === 'foreign' ? 'active' : ''}
+          onClick={() => setTab('foreign')}
+        >
+          외국인
+        </button>
+      </div>
+
+      {tab === 'domestic' ? (
+        <div className="pos-domestic notice info" style={{ marginTop: 16 }}>
+          기존 환전예약 사이트
+        </div>
+      ) : (
       <form className="pos-search-form" onSubmit={search}>
         <label className="field">
           <span className="lbl">이름</span>
@@ -89,6 +113,7 @@ export default function PosReservationSearch() {
           검색
         </button>
       </form>
+      )}
     </div>
   )
 }

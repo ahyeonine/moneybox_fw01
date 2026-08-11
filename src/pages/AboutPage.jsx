@@ -12,7 +12,6 @@ export default function AboutPage() {
     { icon: '💱', t: 'about.svc.fx.t', d: 'about.svc.fx.d' },
     { icon: '🏦', t: 'about.svc.branch.t', d: 'about.svc.branch.d' },
     { icon: '🖥️', t: 'about.svc.kiosk.t', d: 'about.svc.kiosk.d' },
-    { icon: '💳', t: 'about.svc.card.t', d: 'about.svc.card.d' },
     { icon: '🧳', t: 'about.svc.travel.t', d: 'about.svc.travel.d' },
   ]
   const features = [
@@ -28,6 +27,9 @@ export default function AboutPage() {
       <p className="muted" style={{ maxWidth: 660 }}>
         {t('about.lead')}
       </p>
+      <div className="notice info" style={{ marginTop: 12 }}>
+        {t('about.same')}
+      </div>
 
       {/* 주요 서비스 */}
       <section className="home-section">

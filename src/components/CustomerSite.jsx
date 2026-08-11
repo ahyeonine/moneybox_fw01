@@ -7,6 +7,8 @@ import Logo from './Logo.jsx'
 
 // 자사 eSIM 웹사이트 (외부, 새 탭)
 const ESIM_URL = 'https://imoneybox.cafe24.com/shop3/'
+// 문의 = 채널톡(외부, 새 탭). TODO: 실제 채널톡 워크스페이스 URL로 교체
+const CONTACT_URL = 'https://channel.io'
 
 // 외국인 웹사이트 (고객용) 헤더 + 네비게이션.
 // 그룹형 네비: 서비스 ▾(eSIM·카드) / 환전(→지점수령예약) / 위치 ▾(지점·키오스크) / 회사 / 문의
@@ -25,13 +27,10 @@ export default function CustomerSite() {
   const NAV = [
     { type: 'link', to: '/site/book', label: t('site.nav.exchange') },
     {
-      type: 'group',
-      key: 'service',
+      type: 'link',
+      href: ESIM_URL,
+      external: true,
       label: t('site.nav.group.service'),
-      items: [
-        { href: ESIM_URL, external: true, label: t('site.nav.esim') },
-        { to: '/site/prepaid', label: t('site.nav.card') },
-      ],
     },
     {
       type: 'group',
@@ -43,7 +42,7 @@ export default function CustomerSite() {
       ],
     },
     { type: 'link', to: '/site/about', label: t('site.nav.company') },
-    { type: 'link', to: '/site/contact', label: t('site.nav.contact') },
+    { type: 'link', href: CONTACT_URL, external: true, label: t('site.nav.contact') },
     { type: 'link', to: '/site/lookup', label: t('site.nav.lookup') },
   ]
 
@@ -79,13 +78,25 @@ export default function CustomerSite() {
           <nav className="site-nav" ref={navRef} aria-label={t('site.nav.menu')}>
             {NAV.map((item) =>
               item.type === 'link' ? (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  className={({ isActive }) => `site-nav-link ${isActive ? 'active' : ''}`}
-                >
-                  {item.label}
-                </NavLink>
+                item.external ? (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="site-nav-link"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    className={({ isActive }) => `site-nav-link ${isActive ? 'active' : ''}`}
+                  >
+                    {item.label}
+                  </NavLink>
+                )
               ) : (
                 <div
                   key={item.key}
@@ -156,13 +167,26 @@ export default function CustomerSite() {
           <nav className="site-nav-mobile" aria-label={t('site.nav.menu')}>
             {NAV.map((item) =>
               item.type === 'link' ? (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  className={({ isActive }) => `snm-link ${isActive ? 'active' : ''}`}
-                >
-                  {item.label}
-                </NavLink>
+                item.external ? (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="snm-link"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    className={({ isActive }) => `snm-link ${isActive ? 'active' : ''}`}
+                  >
+                    {item.label}
+                  </NavLink>
+                )
               ) : (
                 <div key={item.key} className="snm-group">
                   <div className="snm-group-label">{item.label}</div>

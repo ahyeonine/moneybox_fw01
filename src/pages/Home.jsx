@@ -58,14 +58,6 @@ export default function Home() {
             </button>
           </div>
           <div className="hero-card">
-            <div className="hc-icon">💳</div>
-            <div className="hc-t">{t('home.card.prepaid.t')}</div>
-            <div className="hc-d">{t('home.card.prepaid.d')}</div>
-            <button className="btn primary" onClick={() => nav('/site/prepaid')}>
-              {t('home.card.prepaid.cta')}
-            </button>
-          </div>
-          <div className="hero-card">
             <div className="hc-icon">📶</div>
             <div className="hc-t">{t('home.card.esim.t')}</div>
             <div className="hc-d">{t('home.card.esim.d')}</div>
@@ -92,6 +84,7 @@ export default function Home() {
           })}
         </div>
       </section>
+      <div className="rate-same-note">{t('home.rate.same')}</div>
 
       {/* 3. 서비스 소개 */}
       <section className="home-section">
