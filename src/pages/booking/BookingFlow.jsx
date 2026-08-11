@@ -27,7 +27,8 @@ const DEV_NOTES = {
     '자세히: 04_데이터정의서.md',
   ],
   consent: [
-    'STEP 7 정책동의: 노쇼 안내·개인정보 수집·이용 동의 (전체 동의 필수). 노쇼 제재는 안내성',
+    'STEP 7 정책동의: 이용약관·개인정보 수집·이용·개인정보 제3자 제공·노쇼 안내 4종 동의 (전체 동의 필수). 노쇼 제재는 안내성',
+    '수령 시 신분증(여권) 지참 안내 노출 (최종확인·완료·신청완료/전일리마인더 이메일에도 동일 안내)',
     '베스트레이트 보장 안내 배너 노출 (POS 거래완료 정산과 연동)',
     '자세히: 03_예약플로우_화면정의서.md',
   ],
@@ -236,7 +237,7 @@ export default function BookingFlow() {
   const noshowBlocked = isValidEmail(draft.email) && countNoShow(draft.email) >= NOSHOW_LIMIT
   const infoValid =
     isValidName(draft.customerName) && isValidEmail(draft.email) && !noshowBlocked && emailVerified
-  const consentValid = consent.noshow && consent.privacy
+  const consentValid = consent.terms && consent.privacy && consent.thirdparty && consent.noshow
 
   if (soldOut) {
     return (
@@ -872,6 +873,9 @@ function StepReview({ draft, branch, rate, krw }) {
           <span className="v">{formatKrw(krw)}</span>
         </div>
       </div>
+      <div className="notice warn" style={{ marginTop: 12 }}>
+        {t('book.idnotice')}
+      </div>
     </div>
   )
 }
@@ -903,10 +907,10 @@ function ConsentItem({ checked, onChange, titleKey, summaryKey, fullKey }) {
 
 function StepConsent({ consent, setConsent }) {
   const { t } = useI18n()
-  const allChecked = consent.noshow && consent.privacy
+  const allChecked = consent.terms && consent.privacy && consent.thirdparty && consent.noshow
   const toggleAll = () => {
     const next = !allChecked
-    setConsent({ noshow: next, privacy: next })
+    setConsent({ terms: next, privacy: next, thirdparty: next, noshow: next })
   }
   return (
     <div>
@@ -915,6 +919,10 @@ function StepConsent({ consent, setConsent }) {
         <strong>💱 {t('book.step7.bestrate.t')}</strong>
         <div style={{ marginTop: 4 }}>{t('book.step7.bestrate.d')}</div>
       </div>
+      {/* 수령 시 신분증(여권) 지참 안내 */}
+      <div className="notice warn" style={{ marginBottom: 12 }}>
+        {t('book.idnotice')}
+      </div>
       <div className="check-row check-all">
         <input type="checkbox" checked={allChecked} onChange={toggleAll} />
         <div>
@@ -922,11 +930,11 @@ function StepConsent({ consent, setConsent }) {
         </div>
       </div>
       <ConsentItem
-        checked={consent.noshow}
-        onChange={(e) => setConsent((c) => ({ ...c, noshow: e.target.checked }))}
-        titleKey="book.step7.noshow.t"
-        summaryKey="book.step7.noshow.d"
-        fullKey="book.step7.noshow.full"
+        checked={consent.terms}
+        onChange={(e) => setConsent((c) => ({ ...c, terms: e.target.checked }))}
+        titleKey="book.step7.terms.t"
+        summaryKey="book.step7.terms.d"
+        fullKey="book.step7.terms.full"
       />
       <ConsentItem
         checked={consent.privacy}
@@ -934,6 +942,20 @@ function StepConsent({ consent, setConsent }) {
         titleKey="book.step7.privacy.t"
         summaryKey="book.step7.privacy.d"
         fullKey="book.step7.privacy.full"
+      />
+      <ConsentItem
+        checked={consent.thirdparty}
+        onChange={(e) => setConsent((c) => ({ ...c, thirdparty: e.target.checked }))}
+        titleKey="book.step7.thirdparty.t"
+        summaryKey="book.step7.thirdparty.d"
+        fullKey="book.step7.thirdparty.full"
+      />
+      <ConsentItem
+        checked={consent.noshow}
+        onChange={(e) => setConsent((c) => ({ ...c, noshow: e.target.checked }))}
+        titleKey="book.step7.noshow.t"
+        summaryKey="book.step7.noshow.d"
+        fullKey="book.step7.noshow.full"
       />
     </div>
   )
@@ -960,6 +982,9 @@ function StepDone({ rec, onNew }) {
           <span className="k">{t('common.krwAmount')}</span>
           <span className="v">{formatKrw(rec.krwAmount)}</span>
         </div>
+      </div>
+      <div className="notice warn" style={{ marginTop: 12 }}>
+        {t('book.idnotice')}
       </div>
       <div className="btn-row">
         <button className="btn ghost" onClick={onNew}>

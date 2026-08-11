@@ -32,7 +32,12 @@ export function BookingProvider({ children }) {
   const [stage, setStage] = useState('branch')
   const [draft, setDraft] = useState(EMPTY_DRAFT)
   const [soldOut, setSoldOut] = useState(false)
-  const [consent, setConsent] = useState({ noshow: false, privacy: false })
+  const [consent, setConsent] = useState({
+    terms: false,
+    privacy: false,
+    thirdparty: false,
+    noshow: false,
+  })
   const [emailVerified, setEmailVerified] = useState(false)
   const [otp, setOtpState] = useState(EMPTY_OTP) // 이메일 OTP 진행 상태
   const [result, setResult] = useState(null)

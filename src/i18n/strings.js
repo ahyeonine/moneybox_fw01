@@ -140,6 +140,31 @@ export const STRINGS = {
     ko: '[개인정보 수집·이용 동의]\n1. 수집 항목: 예약자명, 이메일\n2. 수집 목적: 예약 확인 및 안내 알림 발송\n3. 보유 기간: 거래 완료 후 1년',
     en: '[Personal data collection & use]\n1. Items: name, email\n2. Purpose: reservation confirmation and notifications\n3. Retention: 1 year after transaction completion',
   },
+  // 이용약관 동의 (필수)
+  'book.step7.terms.t': { ko: '[필수] 이용약관 동의', en: '[Required] Terms of service' },
+  'book.step7.terms.d': {
+    ko: '환전 예약 서비스 이용약관에 동의합니다.',
+    en: 'I agree to the terms of service for the exchange reservation.',
+  },
+  'book.step7.terms.full': {
+    ko: '[이용약관]\n1. 본 서비스는 온라인 무결제 환전 예약과 지점 현장 수령을 제공합니다.\n2. 예약 시 확정된 환율은 취소 시 소멸되며, 재예약 시 재예약 시점의 환율이 적용됩니다.\n3. 수령 시 본인 확인을 위해 신분증(여권)을 지참해야 합니다.\n4. 회사는 천재지변·지점 사정 등 부득이한 경우 예약을 취소할 수 있으며, 이 경우 즉시 안내합니다.',
+    en: '[Terms of service]\n1. This service provides online no-payment exchange reservations with in-branch pickup.\n2. The rate fixed at booking is void on cancellation; a re-reservation uses the rate at that time.\n3. You must bring a valid ID (passport) for identity verification at pickup.\n4. The company may cancel a reservation in unavoidable cases (natural disaster, branch circumstances) and will notify you immediately.',
+  },
+  // 제3자 제공 동의 (필수)
+  'book.step7.thirdparty.t': { ko: '[필수] 개인정보 제3자 제공 동의', en: '[Required] Third-party data sharing' },
+  'book.step7.thirdparty.d': {
+    ko: '예약 수령 지점 운영사에 예약자명·이메일·예약정보를 제공하는 데 동의합니다.',
+    en: 'I agree to share my name, email, and reservation details with the pickup branch operator.',
+  },
+  'book.step7.thirdparty.full': {
+    ko: '[개인정보 제3자 제공 동의]\n1. 제공받는 자: 수령 지점 운영사\n2. 제공 항목: 예약자명, 이메일, 예약정보(통화·금액·수령일)\n3. 제공 목적: 지점 현장 수령·거래 처리\n4. 보유·이용 기간: 거래 완료 후 관련 법령에 따라 보관 후 파기',
+    en: '[Third-party data sharing]\n1. Recipient: the pickup branch operator\n2. Items: name, email, reservation details (currency, amount, pickup date)\n3. Purpose: in-branch pickup and transaction processing\n4. Retention: stored and deleted per applicable law after transaction completion',
+  },
+  // 수령 시 신분증(여권) 지참 안내
+  'book.idnotice': {
+    ko: '🪪 수령 시 본인 확인을 위해 신분증(여권)을 꼭 지참해 주세요.',
+    en: '🪪 Please bring a valid ID (passport) for identity verification at pickup.',
+  },
   'book.step8.title': { ko: '예약이 완료되었습니다', en: 'Reservation complete' },
   'book.step8.sub': {
     ko: '아래 예약번호로 조회·변경·취소할 수 있습니다. 확인 이메일이 발송되었습니다(시뮬레이션).',
