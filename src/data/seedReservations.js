@@ -22,7 +22,6 @@ function make(o) {
     pickupTime: o.pickupTime ?? '10:00', // HH:mm (지점 상세 화면에서 선택)
     createdAt: o.createdAt,
     processedAt: o.processedAt ?? null,
-    idVerified: o.idVerified ?? false,
     // 리마인더 응답: CONFIRMED(방문예정확인) | NO_RESPONSE(무응답) | NONE(발송전)
     reminderStatus: o.reminderStatus ?? 'NONE',
     // 취소 사유: 'AUTO'(노쇼/자동취소) | 'CUSTOMER'(고객취소) | null
@@ -95,7 +94,6 @@ export const SEED_RESERVATIONS = [
     pickupDate: '2026-07-27',
     createdAt: '2026-07-25T10:00:00+09:00',
     processedAt: '2026-07-27T13:30:00+09:00',
-    idVerified: true,
     reminderStatus: 'CONFIRMED',
   }),
   make({
@@ -167,7 +165,6 @@ export const SEED_RESERVATIONS = [
     pickupDate: '2026-07-28',
     createdAt: '2026-07-26T16:20:00+09:00',
     processedAt: '2026-07-28T11:10:00+09:00',
-    idVerified: true,
     reminderStatus: 'CONFIRMED',
   }),
   // ── 재고 경쟁 데모: 같은 지점·통화(B004+USD, 재고 1개)에 방문예정 미확인 예약 2건 ──

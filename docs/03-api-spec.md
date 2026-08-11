@@ -36,7 +36,7 @@
 특정 지점 취급통화 + 한도.
 
 ### `GET /rates?currencies=USD,JPY`
-비회원 기준 현재 환율.
+현재 환율 (회원/비회원 구분 없이 전 고객 동일).
 → 프로토타입: `src/data/rates.js`
 
 ```json
@@ -173,19 +173,14 @@
 거래처리용 상세 조회.
 → 프로토타입: `getByNo()`
 
-### `POST /operator/reservations/{reservationNo}/verify-id`
-현장 신분증 대조 완료 기록 (OCR 결과, 프로토타입은 체크박스 시뮬레이션).
-```json
-200 OK { "idVerified": true }
-```
+> 본인인증·현장 신분증 대조/OCR 절차 없음 — 별도 verify-id 엔드포인트 없이 예약번호 조회 후 바로 거래완료한다.
 
 ### `POST /operator/reservations/{reservationNo}/complete`
-거래완료 처리. `BOOKED` → `COMPLETED`. `idVerified=true` 선행 필요.
+거래완료 처리. `BOOKED` → `COMPLETED`.
 → 프로토타입: `completeReservation()`
 
 ```json
 200 OK { "reservationNo": "...", "status": "COMPLETED", "processedAt": "..." }
-409 Conflict { "code": "ID_NOT_VERIFIED" }
 409 Conflict { "code": "NOT_BOOKED" }
 ```
 

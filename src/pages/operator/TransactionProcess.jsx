@@ -19,7 +19,6 @@ export default function TransactionProcess() {
   const [query, setQuery] = useState(params.get('no') || '')
   const [no, setNo] = useState(null) // 조회된 예약번호
   const [notFound, setNotFound] = useState(false)
-  const [idChecked, setIdChecked] = useState(false)
   const [flash, setFlash] = useState(null)
 
   // 예약조회 결과 리스트에서 행 클릭 → ?no=RSV-... 로 진입 시 자동 조회
@@ -29,7 +28,6 @@ export default function TransactionProcess() {
     const r = getByNo(qno)
     if (r) {
       setNo(r.reservationNo)
-      setIdChecked(r.idVerified)
       setNotFound(false)
     } else {
       setNotFound(true)
@@ -53,7 +51,6 @@ export default function TransactionProcess() {
     if (r) {
       setNo(r.reservationNo)
       setNotFound(false)
-      setIdChecked(r.idVerified)
       setFlash(null)
     } else {
       setNo(null)
@@ -62,10 +59,6 @@ export default function TransactionProcess() {
   }
 
   function complete() {
-    if (!idChecked) {
-      setFlash({ type: 'warn', msg: t('op.tx.needId') })
-      return
-    }
     if (rec.status !== 'BOOKED') {
       setFlash({ type: 'danger', msg: t('op.tx.notBooked') })
       return
@@ -234,17 +227,7 @@ export default function TransactionProcess() {
 
           {rec.status === 'BOOKED' ? (
             <>
-              <label className="check-row" style={{ marginTop: 16 }}>
-                <input
-                  type="checkbox"
-                  checked={idChecked}
-                  onChange={(e) => setIdChecked(e.target.checked)}
-                />
-                <div>
-                  <div className="ct">{t('op.tx.idcheck')}</div>
-                </div>
-              </label>
-              <button className="btn success block" onClick={complete} disabled={!idChecked}>
+              <button className="btn success block" style={{ marginTop: 16 }} onClick={complete}>
                 {t('op.tx.complete')}
               </button>
               <button

@@ -33,7 +33,7 @@ App->>App: 방문예정 확인 후 미방문 시 자동취소 + 예약시재·�
 
 U->>Branch: 지점 방문 · 예약번호 제시
 Branch->>App: 예약 조회
-Branch->>Branch: 신분증 OCR 대조 (명의 불일치여도 진행)
+Note over Branch: 본인인증·신분증 대조/OCR 없음
 Branch->>Branch: POS 진행
 Branch->>App: 거래완료 처리
 

@@ -17,16 +17,15 @@
 | `transactionType` | enum | ✔ | `SELL`(매출·외화준비) \| `BUY`(매입·원화준비) | `SELL` |
 | `branchId` | string (FK→Branch) | ✔ | 수령 지점 | `B001` |
 | `currency` | string(3) | ✔ | ISO 4217 통화코드 | `USD` |
-| `rate` | decimal(18,4) | ✔ | 예약 시점 픽스 환율 (KRW / 1 unit, 비회원 기준) | `1385.0` |
+| `rate` | decimal(18,4) | ✔ | 예약 시점 픽스 환율 (KRW / 1 unit, 전 고객 동일) | `1385.0` |
 | `foreignAmount` | decimal(18,2) | ✔ | 거래 외화 금액 | `500` |
 | `krwAmount` | bigint | ✔ | 원화 환산액 = `round(foreignAmount * rate)` | `692500` |
 | `customerName` | string | ✔ | 예약자명(여권 영문명, 대문자 정규화) | `JOHN SMITH` |
-| `email` | string | ✔ | 예약자 이메일 (형식검증만, 인증 없음) | `john@example.com` |
+| `email` | string | ✔ | 예약자 이메일 (형식검증 + OTP로 수신 가능 여부 확인. 본인인증 아님) | `john@example.com` |
 | `pickupDate` | date (YYYY-MM-DD) | ✔ | 수령 예정일 | `2026-07-31` |
 | `pickupTime` | string (HH:mm) | ✔ | 수령 예정 시간 (지점 상세 화면에서 슬롯 선택) | `10:00` |
 | `createdAt` | datetime | ✔ | 신청 일시 | `2026-07-28T09:12:00+09:00` |
 | `processedAt` | datetime \| null | | 완료 처리 일시 (완료 시 세팅) | `null` |
-| `idVerified` | boolean | ✔ | 지점 현장 신분증 대조 완료 여부 (시뮬레이션) | `false` |
 | `reminderStatus` | enum | ✔ | `NONE`(발송전) \| `CONFIRMED`(방문예정확인) \| `NO_RESPONSE`(무응답) | `CONFIRMED` |
 | `cancelReason` | enum \| null | | 취소 사유: `AUTO`(노쇼/자동취소) \| `CUSTOMER`(고객취소) \| null | `AUTO` |
 
@@ -37,9 +36,9 @@
 > `// TODO` 정책 확정 필요) 이상이면 예약자정보 단계에서 신규예약을 차단한다.
 
 ### 파생/계산 규칙
-- `krwAmount = round(foreignAmount * rate)` — 프로토타입은 매출/매입 동일 공식(스프레드 미반영). `// TODO: 스프레드/우대율 반영`
+- `krwAmount = round(foreignAmount * rate)` — 프로토타입은 매출/매입 동일 공식(스프레드 미반영). `// TODO: 스프레드 반영`
 - `rate` 는 **STEP B "신청하기" 클릭 시점에 픽스**되어 이후 변하지 않음. (최종확인 화면은 확정된 값을 표시만 함)
-- 회원/비회원 우대율은 미구현 — `rate`는 항상 비회원 기준.
+- 회원/비회원 구분 없음 — `rate`는 전 고객 동일하게 적용.
 
 ### 인덱스 제안 (백엔드)
 - `UNIQUE(reservationNo)`
@@ -85,11 +84,10 @@
 |---|---|---|
 | `currency` | string(3) | 통화코드 |
 | `baseRate` | decimal(18,4) | 기준환율 (KRW/unit) |
-| `guestRate` | decimal(18,4) | 비회원 적용환율 (프로토타입이 쓰는 값) |
-| `memberRate` | decimal(18,4) | 회원 우대환율 (미구현) |
+| `appliedRate` | decimal(18,4) | 적용환율 (전 고객 동일 — 프로토타입이 쓰는 값) |
 | `effectiveAt` | datetime | 환율 유효 시각 |
 
-> 예약 생성 시 당시 `guestRate` 스냅샷을 `Reservation.rate` 에 복사(픽스)합니다.
+> 예약 생성 시 당시 `appliedRate` 스냅샷을 `Reservation.rate` 에 복사(픽스)합니다. 회원/비회원 구분 없이 동일 환율을 적용합니다.
 
 ---
 
@@ -156,8 +154,8 @@ NZD, PHP, MYR, IDR, VND, INR. 각 통화는 `CURRENCY_META`(국기·명칭)와 `
 
 | 항목 | 사유 |
 |---|---|
-| User / 회원 테이블 | 로그인 없음 (확정) |
+| User / 회원 테이블 | 회원가입·로그인 없음 (확정) |
 | Payment / PG | 무결제 예약, 현장 결제 |
-| IdDocument 업로드 | 온라인 신분증 업로드 없음 (현장 OCR) |
+| IdDocument / 신분증 대조 | 본인인증·현장 신분증 대조/OCR 없음 (확정) |
 | NoShowPenalty | 노쇼 제재 없음 |
-| 우대율/컷오프 정책 | 프로토타입 범위 밖 (`// TODO`) |
+| 우대율/컷오프 정책 | 회원 우대율 없음(전 고객 동일 환율), 컷오프는 프로토타입 범위 밖 (`// TODO`) |

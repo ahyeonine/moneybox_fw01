@@ -1,4 +1,4 @@
-// 환율(Rate) 목데이터 — 비회원 기준 (회원 우대율 미구현)
+// 환율(Rate) 목데이터 — 회원/비회원 구분 없이 모든 고객 동일 환율 적용.
 // KRW per 1 unit of foreign currency.
 //
 // TODO: 실제 환율 피드/스프레드 정책으로 교체할 것.
@@ -69,7 +69,7 @@ export const POLICY_UNIT_STEPS = {
   MYR: 10, IDR: 10000, VND: 10000, INR: 100,
 }
 
-/** 예약 시점 환율 조회 (비회원 기준) */
+/** 예약 시점 환율 조회 (전 고객 동일 환율) */
 export function getRate(currency) {
   return MOCK_RATES[currency] ?? null
 }

@@ -55,8 +55,8 @@ export const STRINGS = {
   // 홈
   'home.hero.title': { ko: '환율 걱정 없이,\n미리 예약하고 지점에서 받으세요', en: 'Lock your rate now,\npick up cash at a branch' },
   'home.hero.sub': {
-    ko: '온라인 결제 없이 예약만. 방문 시 신분증 확인 후 현장에서 결제·수령합니다.',
-    en: 'No online payment — just reserve. Verify your ID and pay at the branch on pickup.',
+    ko: '온라인 결제 없이 예약만. 지점을 방문해 현장에서 결제·수령합니다.',
+    en: 'No online payment — just reserve. Pay and collect at the branch on pickup.',
   },
   'home.cta.book': { ko: '환전 예약 시작', en: 'Start a reservation' },
   'home.cta.lookup': { ko: '예약 조회 / 변경', en: 'Find / change reservation' },
@@ -65,7 +65,7 @@ export const STRINGS = {
   'home.feature.2.t': { ko: '무결제 예약', en: 'No prepayment' },
   'home.feature.2.d': { ko: '지점에서 전액 현장 결제합니다.', en: 'Pay the full amount in person.' },
   'home.feature.3.t': { ko: '지점 수령', en: 'Branch pickup' },
-  'home.feature.3.d': { ko: '지정 지점에서 신분증 확인 후 수령.', en: 'Pick up after ID check at your branch.' },
+  'home.feature.3.d': { ko: '지정 지점에서 현장 결제 후 수령.', en: 'Pay in person and collect at your branch.' },
 
   // 예약 플로우 스텝 라벨
   'step.1': { ko: '지점 선택', en: 'Branch' },
@@ -229,9 +229,8 @@ export const STRINGS = {
   'reminder.NONE': { ko: '발송전', en: 'Not sent' },
 
   'op.tx.title': { ko: '거래 처리', en: 'Process transaction' },
-  'op.tx.sub': { ko: '예약번호로 조회 후 신분증 대조·거래완료를 처리하세요.', en: 'Look up by number, verify ID, then complete.' },
+  'op.tx.sub': { ko: '예약번호로 조회 후 거래완료를 처리하세요.', en: 'Look up by number, then complete.' },
   'op.tx.lookupPlaceholder': { ko: '예약번호 입력 (예: RSV-20260728-0001)', en: 'Enter reservation no.' },
-  'op.tx.idcheck': { ko: '신분증 대조 완료 (현장 OCR 시뮬레이션)', en: 'ID verified (on-site OCR, simulated)' },
   'op.tx.complete': { ko: '거래완료 처리', en: 'Complete transaction' },
   'op.tx.completed.msg': { ko: '거래가 완료 처리되었습니다.', en: 'Transaction completed.' },
   'op.tx.branchCancel': { ko: '지점 예약 취소', en: 'Cancel (branch)' },
@@ -239,7 +238,6 @@ export const STRINGS = {
     ko: '지점 취소 처리되었습니다. 고객에게 취소 안내 이메일이 발송되었습니다.',
     en: 'Cancelled by branch. A cancellation email was sent to the customer.',
   },
-  'op.tx.needId': { ko: '먼저 신분증 대조를 완료하세요.', en: 'Verify ID first.' },
   'op.tx.notBooked': { ko: '예약 상태가 아니어서 처리할 수 없습니다.', en: 'Not in Booked state — cannot process.' },
   // 베스트레이트 정산(POS 거래처리)
   'op.tx.bestRate.title': { ko: '베스트레이트 정산', en: 'Best-rate settlement' },
@@ -563,8 +561,8 @@ export const STRINGS = {
   'home.svc.tab.esim': { ko: 'eSIM 서비스', en: 'eSIM service' },
   'home.svc.branch.cap': { ko: '온라인으로 예약하고, 지점에서 바로 수령', en: 'Reserve online, pick up at the branch' },
   'home.svc.branch.sub': {
-    ko: '번거로운 절차 없이 폰 안에서 예약 완료, 방문해서 신분증 확인 후 수령하세요.',
-    en: 'Book on your phone with no hassle — verify ID at the branch and collect.',
+    ko: '번거로운 절차 없이 폰 안에서 예약 완료, 방문해서 현장 결제 후 수령하세요.',
+    en: 'Book on your phone with no hassle — pay at the branch and collect.',
   },
   'home.svc.esim.cap': { ko: '여행 전 미리 준비하는 eSIM', en: 'Prepare your eSIM before the trip' },
   'home.svc.esim.sub': {
