@@ -2326,10 +2326,15 @@ th.num {
 }
 
 /* 2. 실시간 환율 티커 */
-.rate-same-note {
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--text-3);
+.same-as-existing {
+  margin-top: 16px;
+  padding: 18px 16px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
 }
 .pos-resv-tab {
   margin-top: 4px;

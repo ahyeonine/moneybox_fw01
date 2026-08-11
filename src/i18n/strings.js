@@ -302,7 +302,10 @@ export const STRINGS = {
     ko: 'MONEY BOX는 한국을 방문하는 외국인 고객을 위한 환전·여행 편의 서비스를 제공합니다. 환전 지점과 24시간 무인 환전기, 여행 편의 서비스를 한곳에서 이용할 수 있어요.',
     en: 'MONEY BOX offers currency exchange and travel conveniences for international visitors to Korea. Branches, 24-hour self-service kiosks, and travel services — all in one place.',
   },
-  'about.same': { ko: '※ 회사 소개 내용은 기존과 동일합니다.', en: '* Company information is the same as the existing site.' },
+  'about.same': {
+    ko: '기존과 동일합니다. (회사소개서·광고문의 등 내용 삭제 → 디자인 참고)',
+    en: 'Identical to the existing site. (Company profile, ad inquiries, etc. omitted — see design)',
+  },
   // 주요 서비스
   'about.svc.h2': { ko: '주요 서비스', en: 'Our services' },
   'about.svc.fx.t': { ko: '외화 환전', en: 'Currency exchange' },
@@ -508,7 +511,10 @@ export const STRINGS = {
   },
   'home.card.esim.cta': { ko: '구매하기', en: 'Buy' },
   'home.rate.label': { ko: '기준환율', en: 'Base rate' },
-  'home.rate.same': { ko: '※ 환율 정보는 기존과 동일합니다.', en: '* Exchange rate information is the same as the existing site.' },
+  'home.rate.same': {
+    ko: '아래 페이지는 기존 페이지와 동일합니다. (공항수령 제외 → 디자인 참고)',
+    en: 'The page below is identical to the existing site. (Airport pickup excluded — see design)',
+  },
 
   'home.svc.title': { ko: '어떤 서비스를 이용할 수 있나요?', en: 'What can you use?' },
   'home.svc.tab.branch': { ko: '지점 수령', en: 'Branch pickup' },
