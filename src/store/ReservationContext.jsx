@@ -63,6 +63,7 @@ export function ReservationProvider({ children }) {
         pickupTime: draft.pickupTime ?? '10:00',
         createdAt: `${today}T00:00:00+09:00`, // 프로토타입: 시각은 기준일 자정(KST)으로 기록
         processedAt: null,
+        idVerified: false,
         reminderStatus: 'NONE',
         cancelReason: null, // CANCELLED 시 'AUTO'(노쇼/자동취소) | 'CUSTOMER'(고객취소)
       }
@@ -184,6 +185,7 @@ export function ReservationProvider({ children }) {
             ? {
                 ...r,
                 status: 'COMPLETED',
+                idVerified: true,
                 processedAt: `${today}T00:00:00+09:00`,
                 ...extra,
               }

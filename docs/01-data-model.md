@@ -26,6 +26,7 @@
 | `pickupTime` | string (HH:mm) | ✔ | 수령 예정 시간 (지점 상세 화면에서 슬롯 선택) | `10:00` |
 | `createdAt` | datetime | ✔ | 신청 일시 | `2026-07-28T09:12:00+09:00` |
 | `processedAt` | datetime \| null | | 완료 처리 일시 (완료 시 세팅) | `null` |
+| `idVerified` | boolean | ✔ | 지점 현장 신분증 대조 완료 여부 (기존 POS 흐름, 시뮬레이션) | `false` |
 | `reminderStatus` | enum | ✔ | `NONE`(발송전) \| `CONFIRMED`(방문예정확인) \| `NO_RESPONSE`(무응답) | `CONFIRMED` |
 | `cancelReason` | enum \| null | | 취소 사유: `AUTO`(노쇼/자동취소) \| `CUSTOMER`(고객취소) \| null | `AUTO` |
 
@@ -156,6 +157,6 @@ NZD, PHP, MYR, IDR, VND, INR. 각 통화는 `CURRENCY_META`(국기·명칭)와 `
 |---|---|
 | User / 회원 테이블 | 회원가입·로그인 없음 (확정) |
 | Payment / PG | 무결제 예약, 현장 결제 |
-| IdDocument / 신분증 대조 | 본인인증·현장 신분증 대조/OCR 없음 (확정) |
+| IdDocument 업로드 | 온라인 신분증 업로드/사전수집 없음 (수령 시 현장 신분증 대조는 기존 POS 흐름) |
 | NoShowPenalty | 노쇼 제재 없음 |
 | 우대율/컷오프 정책 | 회원 우대율 없음(전 고객 동일 환율), 컷오프는 프로토타입 범위 밖 (`// TODO`) |

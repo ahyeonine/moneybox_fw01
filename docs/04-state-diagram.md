@@ -10,7 +10,7 @@
 stateDiagram-v2
     [*] --> BOOKED: 예약 생성 (POST /reservations)\n환율 픽스, 예약번호 발급
 
-    BOOKED --> COMPLETED: 지점 거래완료\n(예약번호 조회 후 complete)
+    BOOKED --> COMPLETED: 지점 거래완료\n(신분증 대조 후 complete)
     BOOKED --> CANCELLED: 고객 취소\n(cancel)
     BOOKED --> CANCELLED: 자동취소\n(수령예정일 경과)
 
@@ -25,7 +25,7 @@ stateDiagram-v2
 
     note right of COMPLETED
       종료 상태 (불변)
-      processedAt 기록
+      processedAt, idVerified=true 기록
     end note
 ```
 
@@ -41,7 +41,7 @@ stateDiagram-v2
 | `∅` | `BOOKED` | 예약 생성 | 지점·통화·금액·날짜 검증 통과, 동의 완료 (재고 미확인) | 예약번호 발급, `rate` 픽스, `createdAt` 기록 |
 | `BOOKED` | `BOOKED` | 예약 변경(PATCH) | 재입력값 재검증 | 필드 갱신 (상태 불변), 필요 시 `rate` 재픽스 |
 | `BOOKED` | `BOOKED` | 방문예정 확인 | 재고 있음(`consumeStock` 성공) | `reminderStatus=CONFIRMED`, **예약시재 반영·가용시재 차감** |
-| `BOOKED` | `COMPLETED` | 거래완료 | 예약번호 조회 (본인인증·신분증 대조 없음) | `status=COMPLETED`, `processedAt` 기록 |
+| `BOOKED` | `COMPLETED` | 거래완료 | `idVerified = true` (지점 신분증 대조, 기존 POS 흐름) | `status=COMPLETED`, `processedAt` 기록 |
 | `BOOKED` | `CANCELLED` | 고객 취소 | (취소 컷오프 정책 미확정, `// TODO`) | `status=CANCELLED` |
 | `BOOKED` | `CANCELLED` | 자동취소 | `pickupDate < 오늘` | `status=CANCELLED` (배치) |
 | `COMPLETED` | — | — | (종료) | 전이 불가 |

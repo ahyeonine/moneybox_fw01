@@ -173,14 +173,19 @@
 거래처리용 상세 조회.
 → 프로토타입: `getByNo()`
 
-> 본인인증·현장 신분증 대조/OCR 절차 없음 — 별도 verify-id 엔드포인트 없이 예약번호 조회 후 바로 거래완료한다.
+### `POST /operator/reservations/{reservationNo}/verify-id`
+현장 신분증 대조 완료 기록 (기존 POS 거래 플로우의 OCR 결과, 프로토타입은 체크박스 시뮬레이션). 예약 서비스가 온라인에서 신분증을 사전 수집하지는 않음.
+```json
+200 OK { "idVerified": true }
+```
 
 ### `POST /operator/reservations/{reservationNo}/complete`
-거래완료 처리. `BOOKED` → `COMPLETED`.
+거래완료 처리. `BOOKED` → `COMPLETED`. `idVerified=true` 선행 필요.
 → 프로토타입: `completeReservation()`
 
 ```json
 200 OK { "reservationNo": "...", "status": "COMPLETED", "processedAt": "..." }
+409 Conflict { "code": "ID_NOT_VERIFIED" }
 409 Conflict { "code": "NOT_BOOKED" }
 ```
 
