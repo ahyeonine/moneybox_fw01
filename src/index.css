@@ -931,6 +931,23 @@ th.num {
 .site-nav-menu a:hover {
   background: var(--surface-2);
 }
+/* 이동 없는 안내 노트(부가서비스·문의): 목적지를 텍스트로만 표시 */
+.site-nav-note {
+  padding: 10px 12px;
+  max-width: 260px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-2);
+  white-space: normal;
+}
+.snm-note {
+  padding: 6px 2px 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-3);
+  line-height: 1.5;
+}
 .site-nav-menu a.active {
   color: var(--brand);
   background: var(--brand-soft);

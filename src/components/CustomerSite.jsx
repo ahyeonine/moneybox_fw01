@@ -5,10 +5,8 @@ import { useBooking } from '../store/BookingContext.jsx'
 import LanguageDropdown from './LanguageDropdown.jsx'
 import Logo from './Logo.jsx'
 
-// 자사 eSIM 웹사이트 (외부, 새 탭)
+// 자사 eSIM 웹사이트 (외부) — 푸터 링크에서 사용
 const ESIM_URL = 'https://imoneybox.cafe24.com/shop3/'
-// 문의 = 채널톡(외부, 새 탭). TODO: 실제 채널톡 워크스페이스 URL로 교체
-const CONTACT_URL = 'https://channel.io'
 
 // 외국인 웹사이트 (고객용) 헤더 + 네비게이션.
 // 그룹형 네비: 서비스 ▾(eSIM·카드) / 환전(→지점수령예약) / 위치 ▾(지점·키오스크) / 회사 / 문의
@@ -23,15 +21,11 @@ export default function CustomerSite() {
     setLastSitePath(location.pathname + location.search)
   }, [location.pathname, location.search, setLastSitePath])
 
-  // 네비 구성 (그룹/단독 링크)
+  // 네비 구성 (단독 링크 / 드롭다운 그룹 / 안내 노트)
+  // 부가서비스·문의는 실제 이동 없이 "어디로 이동하는지"를 텍스트로만 안내(프로토타입).
   const NAV = [
     { type: 'link', to: '/site/book', label: t('site.nav.exchange') },
-    {
-      type: 'link',
-      href: ESIM_URL,
-      external: true,
-      label: t('site.nav.group.service'),
-    },
+    { type: 'note', key: 'service', label: t('site.nav.group.service'), note: t('site.nav.service.note') },
     {
       type: 'group',
       key: 'location',
@@ -42,7 +36,7 @@ export default function CustomerSite() {
       ],
     },
     { type: 'link', to: '/site/about', label: t('site.nav.company') },
-    { type: 'link', href: CONTACT_URL, external: true, label: t('site.nav.contact') },
+    { type: 'note', key: 'contact', label: t('site.nav.contact'), note: t('site.nav.contact.note') },
     { type: 'link', to: '/site/lookup', label: t('site.nav.lookup') },
   ]
 
@@ -97,6 +91,26 @@ export default function CustomerSite() {
                     {item.label}
                   </NavLink>
                 )
+              ) : item.type === 'note' ? (
+                // 부가서비스·문의: 이동 없이 "어디로 이동" 안내 텍스트만 드롭다운으로 표시
+                <div
+                  key={item.key}
+                  className={`site-nav-group ${openGroup === item.key ? 'open' : ''}`}
+                >
+                  <button
+                    type="button"
+                    className="site-nav-link site-nav-trigger"
+                    aria-haspopup="true"
+                    aria-expanded={openGroup === item.key}
+                    onClick={() => setOpenGroup((k) => (k === item.key ? null : item.key))}
+                  >
+                    {item.label}
+                    <span className="nav-caret" aria-hidden="true">▾</span>
+                  </button>
+                  <div className="site-nav-menu" role="menu">
+                    <div className="site-nav-note">{item.note}</div>
+                  </div>
+                </div>
               ) : (
                 <div
                   key={item.key}
@@ -187,6 +201,11 @@ export default function CustomerSite() {
                     {item.label}
                   </NavLink>
                 )
+              ) : item.type === 'note' ? (
+                <div key={item.key} className="snm-group">
+                  <div className="snm-group-label">{item.label}</div>
+                  <div className="snm-note">{item.note}</div>
+                </div>
               ) : (
                 <div key={item.key} className="snm-group">
                   <div className="snm-group-label">{item.label}</div>

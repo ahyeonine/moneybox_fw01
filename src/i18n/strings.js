@@ -378,6 +378,14 @@ export const STRINGS = {
   'site.nav.branches': { ko: '지점', en: 'Branches' },
   'site.nav.company': { ko: '회사', en: 'Company' },
   'site.nav.contact': { ko: '문의', en: 'Contact' },
+  'site.nav.service.note': {
+    ko: '→ eSIM 등 부가서비스 외부 사이트로 이동 (프로토타입: 실제 이동 없음)',
+    en: '→ Goes to the external add-on services site (eSIM). Prototype: no actual navigation.',
+  },
+  'site.nav.contact.note': {
+    ko: '→ 채널톡 상담으로 이동 (프로토타입: 실제 이동 없음)',
+    en: '→ Goes to Channel Talk support. Prototype: no actual navigation.',
+  },
   'site.nav.lookup': { ko: '신청내역조회', en: 'My Reservations' },
   // 그룹형 네비게이션
   'site.nav.group.service': { ko: '부가서비스', en: 'Add-on services' },
