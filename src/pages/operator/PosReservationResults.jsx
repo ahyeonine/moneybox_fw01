@@ -217,10 +217,6 @@ export default function PosReservationResults() {
               <span className="v">{selected.customerName}</span>
             </div>
             <div className="row">
-              <span className="k">이메일</span>
-              <span className="v">{selected.email}</span>
-            </div>
-            <div className="row">
               <span className="k">통화</span>
               <span className="v">
                 {CURRENCY_META[selected.currency]?.flag} {selected.currency}
