@@ -1,6 +1,6 @@
 // 검증 유틸
 
-export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function isValidEmail(v) {
   return EMAIL_RE.test((v || '').trim())
