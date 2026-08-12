@@ -5,7 +5,7 @@ import { createContext, useContext, useState, useCallback } from 'react'
 //   (새로고침 시에는 프로바이더가 재초기화되어 초기 상태로 리셋)
 const BookingContext = createContext(null)
 
-export const EMPTY_DRAFT = {
+const EMPTY_DRAFT = {
   branchId: '',
   transactionType: 'BUY', // 외국인 웹사이트는 원화구매(=매입) 고정
   currency: '',
@@ -18,7 +18,7 @@ export const EMPTY_DRAFT = {
 }
 
 // 이메일 OTP 진행 상태 (메뉴 이동 후에도 유지 — 새로고침/만료 시에만 리셋)
-export const EMPTY_OTP = {
+const EMPTY_OTP = {
   sent: false,
   code: null, // 현재 유효한 6자리 코드 (null = 미발급/무효화)
   input: '',

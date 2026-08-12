@@ -11,7 +11,7 @@ const D = {
   reminder: '06_알림리마인더_템플릿.md',
 }
 
-export const DOC_REFS = [
+const DOC_REFS = [
   { route: '/site', screen: '외국인 웹사이트 · 홈', docs: [D.ia] },
   { route: '/site/book', screen: '외국인 웹사이트 · 신청(STEP A~완료)', docs: [D.flow, D.data, D.ia] },
   { route: '/site/lookup', screen: '외국인 웹사이트 · 예약조회', docs: [D.flow] },

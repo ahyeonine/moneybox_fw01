@@ -5,14 +5,14 @@
 // 영향받지 않도록 UTC 자정으로 파싱해 처리한다(순수 날짜 산술이므로 결과는 KST 달력과 동일).
 // 자동취소(수령기한) 판정은 "KST 자정"을 경계로, 수령예정일이 지난 다음날 KST 00:00부터 성립한다.
 
-export function toISODate(d) {
+function toISODate(d) {
   const y = d.getUTCFullYear()
   const m = String(d.getUTCMonth() + 1).padStart(2, '0')
   const day = String(d.getUTCDate()).padStart(2, '0')
   return `${y}-${m}-${day}`
 }
 
-export function parseISO(s) {
+function parseISO(s) {
   // KST 달력 날짜를 UTC 자정으로 고정 파싱 (로컬 TZ 무관하게 결정적)
   return new Date(s + 'T00:00:00Z')
 }
