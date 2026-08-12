@@ -1,0 +1,319 @@
+import { useState } from 'react'
+import { CURRENCY_ORDER, CURRENCY_META } from '../../data/rates.js'
+import { useSettings } from '../../store/SettingsContext.jsx'
+import { useRates } from '../../store/RatesContext.jsx'
+import { formatNumber } from '../../lib/format.js'
+import DevNote from '../../components/DevNote.jsx'
+
+// 최대금액(하드리밋) 설정 상한: 통화별 9,999 USD 상당액.
+const MAX_USD_CAP = 9999
+
+// 화면 3 (신규) · 설정 → 외국인서비스 한도관리
+// [최소금액][신청 단위][최대금액] 토글로 전환 (기본 최소금액)
+//  - 최소금액: 통화별 최소 환전금액 (전체 지점 공통)
+//  - 최대금액: 건당 최대 환전금액 (전체 지점 공통, 원화 기준 일괄입력 → 통화별 상한 자동계산)
+
+export default function LimitManagement() {
+  const { minAmounts, unitAmounts, maxAmounts, saveMinAmounts, saveUnitAmounts, saveMaxAmounts } =
+    useSettings()
+  const { getRate } = useRates()
+  const [tab, setTab] = useState('min') // 'min' | 'unit' | 'max' (기본 최소금액)
+
+  // 통화 금액을 USD 상당액으로 환산 (KRW 경유). 상한(9,999 USD) 검증에 사용.
+  const usdCapKrw = () => MAX_USD_CAP * (getRate('USD') || 0) // 9,999 USD의 원화 상당액
+  const usdEquiv = (value, currency) => {
+    const usd = getRate('USD')
+    const r = getRate(currency)
+    if (!usd || !r) return 0
+    return (Number(value) * r) / usd
+  }
+
+  /* ── 최소금액 ── */
+  const [minTable, setMinTable] = useState(() => ({ ...minAmounts }))
+  const [minSaved, setMinSaved] = useState(false)
+
+  function saveMins() {
+    const cleaned = {}
+    for (const c of CURRENCY_ORDER) cleaned[c] = Number(minTable[c]) || 0
+    saveMinAmounts(cleaned)
+    setMinSaved(true)
+    setTimeout(() => setMinSaved(false), 1500)
+  }
+
+  /* ── 신청 단위 ── */
+  const [unitTable, setUnitTable] = useState(() => ({ ...unitAmounts }))
+  const [unitSaved, setUnitSaved] = useState(false)
+
+  function saveUnits() {
+    const cleaned = {}
+    for (const c of CURRENCY_ORDER) cleaned[c] = Number(unitTable[c]) || 0
+    saveUnitAmounts(cleaned)
+    setUnitSaved(true)
+    setTimeout(() => setUnitSaved(false), 1500)
+  }
+
+  /* ── 최대금액 (전체 지점 공통) ── */
+  const [maxTable, setMaxTable] = useState(() => ({ ...maxAmounts }))
+  const [bulkKrw, setBulkKrw] = useState('')
+  const [maxSaved, setMaxSaved] = useState(false)
+  const [maxError, setMaxError] = useState('')
+
+  // 원화(KRW) 기준 금액 → 전체 통화 상한 자동계산 (로드환율)
+  function applyBulk() {
+    const krw = Number(bulkKrw)
+    if (!krw) return
+    // 상한: 원화 일괄금액이 9,999 USD 상당액을 넘으면 적용 불가
+    if (krw > usdCapKrw()) {
+      setMaxError(
+        `설정 가능한 최대금액은 9,999 USD 상당액(약 ${formatNumber(Math.floor(usdCapKrw()))}원)까지입니다.`
+      )
+      return
+    }
+    const next = {}
+    for (const c of CURRENCY_ORDER) {
+      const rate = getRate(c)
+      if (!rate) continue
+      // 통화별 상한 = 원화금액 / 해당통화 환율. 자릿수에 맞춰 반올림.
+      next[c] = roundNice(krw / rate)
+    }
+    setMaxTable(next)
+    setMaxError('')
+  }
+
+  function saveMaxes() {
+    // 개별수정 포함 — 각 통화값이 9,999 USD 상당액을 넘으면 저장 불가 (경계 반올림 오차 0.5% 허용)
+    const over = CURRENCY_ORDER.filter((c) => {
+      const v = Number(maxTable[c])
+      return v > 0 && usdEquiv(v, c) > MAX_USD_CAP * 1.005
+    })
+    if (over.length) {
+      setMaxError(
+        `설정 가능한 최대금액은 9,999 USD 상당액까지입니다. 초과 통화: ${over.join(', ')}`
+      )
+      return
+    }
+    const cleaned = {}
+    for (const c of CURRENCY_ORDER) {
+      const v = Number(maxTable[c])
+      if (v) cleaned[c] = v
+    }
+    saveMaxAmounts(cleaned)
+    setMaxError('')
+    setMaxSaved(true)
+    setTimeout(() => setMaxSaved(false), 1500)
+  }
+
+  return (
+    <div>
+      <DevNote
+        items={[
+          '최소금액: 통화별, 전체 지점 공통',
+          '신청 단위: 통화별, 전체 지점 공통. 외국인 웹사이트 신청화면에서만 상위 단위로 올림 적용(CEMS/POS/이메일 미적용)',
+          '건당 최대금액(하드리밋): 지점 구분 없이 전체 공통. 원화(KRW) 기준 1개 입력하면 로드환율로 전체 통화 자동 환산되는 방식',
+          '설정 가능한 최대금액 상한은 통화별 9,999 USD 상당액 — 초과 입력 시 저장/적용 차단 + 에러 표시',
+          '⚠️ 이 최대금액 하드리밋은 애초 정책회의에서 "최대금액 제한 없음"으로 확정됐던 것과 상충하는 부분이라 정책 재확인이 필요한 상태',
+          '자세히: 05_어드민기능정의서.md',
+        ]}
+      />
+      <h1 className="cems-h1">외국인서비스 한도관리</h1>
+
+      {/* 최소금액 / 신청 단위 / 최대금액 토글 */}
+      <div className="cems-panel">
+        <div className="visit-toggle limit-tab">
+          <button className={tab === 'min' ? 'active' : ''} onClick={() => setTab('min')}>
+            최소금액
+          </button>
+          <button className={tab === 'unit' ? 'active' : ''} onClick={() => setTab('unit')}>
+            신청 단위
+          </button>
+          <button className={tab === 'max' ? 'active' : ''} onClick={() => setTab('max')}>
+            최대금액
+          </button>
+        </div>
+      </div>
+
+      {/* 최소금액 */}
+      {tab === 'min' && (
+        <div className="cems-panel">
+          <div className="panel-head">
+            <h2 className="cems-h2">통화별 최소 환전금액 <span className="tiny">(전체 지점 공통)</span></h2>
+            <div>
+              {minSaved && <span className="saved-flash">저장됨</span>}
+              <button className="cems-btn primary" onClick={saveMins}>
+                전체 저장
+              </button>
+            </div>
+          </div>
+          <div className="table-wrap">
+            <table className="cems-table limit-table">
+              <thead>
+                <tr>
+                  <th>통화</th>
+                  <th className="num">최소금액</th>
+                </tr>
+              </thead>
+              <tbody>
+                {CURRENCY_ORDER.map((c) => (
+                  <tr key={c}>
+                    <td>
+                      {CURRENCY_META[c]?.flag} {c} · {CURRENCY_META[c]?.label.ko}
+                    </td>
+                    <td className="num">
+                      <input
+                        type="number"
+                        value={minTable[c] ?? ''}
+                        onChange={(e) => setMinTable((t) => ({ ...t, [c]: e.target.value }))}
+                        className="cell-input"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="tiny" style={{ marginTop: 8 }}>
+            ※ 최대금액은 "최대금액" 탭에서 관리합니다. (건당 최대금액, 전체 지점 공통)
+          </div>
+        </div>
+      )}
+
+      {/* 신청 단위 */}
+      {tab === 'unit' && (
+        <div className="cems-panel">
+          <div className="panel-head">
+            <h2 className="cems-h2">
+              통화별 신청 단위 <span className="tiny">(전체 지점 공통)</span>
+            </h2>
+            <div>
+              {unitSaved && <span className="saved-flash">저장됨</span>}
+              <button className="cems-btn primary" onClick={saveUnits}>
+                전체 저장
+              </button>
+            </div>
+          </div>
+          <div className="table-wrap">
+            <table className="cems-table limit-table">
+              <thead>
+                <tr>
+                  <th>통화</th>
+                  <th className="num">신청 단위</th>
+                </tr>
+              </thead>
+              <tbody>
+                {CURRENCY_ORDER.map((c) => (
+                  <tr key={c}>
+                    <td>
+                      {CURRENCY_META[c]?.flag} {c} · {CURRENCY_META[c]?.label.ko}
+                    </td>
+                    <td className="num">
+                      <input
+                        type="number"
+                        value={unitTable[c] ?? ''}
+                        onChange={(e) => setUnitTable((t) => ({ ...t, [c]: e.target.value }))}
+                        className="cell-input"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="tiny" style={{ marginTop: 8 }}>
+            ※ 신청 단위는 <b>외국인 웹사이트 신청화면에서만</b> 적용됩니다. 신청 금액이 단위와 맞지
+            않으면 가장 가까운 상위 단위로 자동 올림됩니다. (CEMS·POS·이메일은 미적용) 값을 비우거나
+            0으로 두면 해당 통화는 단위 올림 없이 동작합니다.
+          </div>
+        </div>
+      )}
+
+      {/* 최대금액 */}
+      {tab === 'max' && (
+        <div className="cems-panel">
+          <div className="panel-head">
+            <h2 className="cems-h2">건당 최대금액 <span className="tiny">(전체 지점 공통 · 환율 리스크 상한)</span></h2>
+            <div>
+              {maxSaved && <span className="saved-flash">저장됨</span>}
+              <button className="cems-btn primary" onClick={saveMaxes}>
+                전체 저장
+              </button>
+            </div>
+          </div>
+
+          <div className="limit-controls">
+            <label>
+              <span>최대 환전 가능 금액(원화 기준)</span>
+              <div className="range">
+                <input
+                  type="number"
+                  value={bulkKrw}
+                  onChange={(e) => setBulkKrw(e.target.value)}
+                  placeholder="예: 5000000"
+                />
+                <span className="unit">원</span>
+                <button className="cems-btn" onClick={applyBulk} disabled={!bulkKrw}>
+                  전체 통화에 일괄 적용
+                </button>
+              </div>
+            </label>
+          </div>
+
+          {maxError && (
+            <div className="notice danger" style={{ margin: '4px 0 12px' }}>
+              {maxError}
+            </div>
+          )}
+          <div className="tiny" style={{ marginBottom: 12 }}>
+            ※ 설정 가능한 최대금액 상한: 통화별 <b>9,999 USD 상당액</b>
+            (약 {formatNumber(Math.floor(usdCapKrw()))}원). 초과 시 저장·적용이 차단됩니다.
+          </div>
+
+          <div className="table-wrap">
+            <table className="cems-table limit-table">
+              <thead>
+                <tr>
+                  <th>통화</th>
+                  <th className="num">자동계산된 최대금액</th>
+                  <th className="num">개별수정</th>
+                </tr>
+              </thead>
+              <tbody>
+                {CURRENCY_ORDER.map((c) => (
+                  <tr key={c}>
+                    <td>
+                      {CURRENCY_META[c]?.flag} {c}
+                    </td>
+                    <td className="num auto-cell">
+                      {maxTable[c] != null && maxTable[c] !== '' ? formatNumber(maxTable[c]) : '-'}
+                    </td>
+                    <td className="num">
+                      <input
+                        type="number"
+                        value={maxTable[c] ?? ''}
+                        onChange={(e) => setMaxTable((t) => ({ ...t, [c]: e.target.value }))}
+                        className="cell-input"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="tiny" style={{ marginTop: 8 }}>
+            ※ 원화 금액을 입력·적용하면 로드환율로 통화별 상한이 자동계산되며, 이후 개별 통화만 따로 수정할
+            수 있습니다. 이 상한은 전체 지점에 공통으로 적용됩니다. 저장/적용은 화면 상태에만 반영되며
+            새로고침 시 초기화됩니다.
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// 금액 자릿수에 맞춰 보기 좋게 반올림
+function roundNice(n) {
+  if (n >= 1000000) return Math.round(n / 10000) * 10000
+  if (n >= 100000) return Math.round(n / 1000) * 1000
+  if (n >= 1000) return Math.round(n / 100) * 100
+  if (n >= 100) return Math.round(n / 10) * 10
+  return Math.round(n)
+}

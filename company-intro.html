@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>회사 소개 — MONEY BOX</title>
+<style>
+  /* ============ TOKENS ============ */
+  :root {
+    --ground: #F4F3FA;
+    --surface: #FFFFFF;
+    --surface-2: #FAF9FE;
+    --ink: #17161F;
+    --muted: #56545F;
+    --faint: #8A8894;
+    --border: #E7E5F0;
+    --border-strong: #D5D2E4;
+
+    --prepaid: #4F46E5;       /* indigo — Prepaid / Payments wallet */
+    --prepaid-ink: #3E37B0;   /* AA text on light */
+    --prepaid-soft: #EEEDFB;
+
+    --transit: #0D9488;       /* teal — Transit wallet */
+    --transit-ink: #0C6D63;   /* AA text on light */
+    --transit-soft: #E1F4F0;
+
+    --shadow: 0 1px 2px rgba(23,22,31,.04), 0 12px 32px -12px rgba(23,22,31,.18);
+    --shadow-card: 0 24px 60px -22px rgba(23,22,31,.55);
+
+    --maxw: 68rem;
+    --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "SF Mono", ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0F0F16;
+      --surface: #1A1922;
+      --surface-2: #22212C;
+      --ink: #F3F2F8;
+      --muted: #ABA9B6;
+      --faint: #7C7A88;
+      --border: #2B2937;
+      --border-strong: #3A3848;
+
+      --prepaid: #8B84FF;
+      --prepaid-ink: #A9A4FF;
+      --prepaid-soft: rgba(139,132,255,.14);
+
+      --transit: #3AD0BF;
+      --transit-ink: #58D9C9;
+      --transit-soft: rgba(58,208,191,.14);
+
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.6);
+      --shadow-card: 0 24px 60px -22px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0F0F16;
+    --surface: #1A1922;
+    --surface-2: #22212C;
+    --ink: #F3F2F8;
+    --muted: #ABA9B6;
+    --faint: #7C7A88;
+    --border: #2B2937;
+    --border-strong: #3A3848;
+    --prepaid: #8B84FF;
+    --prepaid-ink: #A9A4FF;
+    --prepaid-soft: rgba(139,132,255,.14);
+    --transit: #3AD0BF;
+    --transit-ink: #58D9C9;
+    --transit-soft: rgba(58,208,191,.14);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.6);
+    --shadow-card: 0 24px 60px -22px rgba(0,0,0,.8);
+  }
+
+  /* ============ RESET ============ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -.02em; }
+  p { margin: 0; }
+  a { color: inherit; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  :focus-visible { outline: 2px solid var(--prepaid); outline-offset: 3px; border-radius: 4px; }
+
+  /* ============ LAYOUT ============ */
+  .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: 1.25rem; }
+  main { display: block; }
+  section { padding-block: clamp(3rem, 7vw, 5.5rem); }
+  section + section { border-top: 1px solid var(--border); }
+
+  .eyebrow {
+    font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--faint); margin: 0 0 1rem;
+  }
+  .section-head { max-width: 46rem; margin-bottom: 2.5rem; }
+  .section-head h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 800; line-height: 1.1; }
+  .section-head p { margin-top: 1rem; color: var(--muted); font-size: 1.05rem; }
+
+  /* ============ HERO ============ */
+  .hero { padding-top: clamp(3rem, 8vw, 6rem); }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 800; line-height: 1.05; letter-spacing: -.035em; max-width: 20ch;
+  }
+  .hero h1 .wallets { color: var(--prepaid-ink); }
+  .hero .lede { margin-top: 1.5rem; font-size: 1.12rem; color: var(--muted); max-width: 44rem; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--font-display); font-size: 1rem; font-weight: 600;
+    padding: .85rem 1.4rem; border-radius: 999px; border: 1.5px solid transparent;
+    cursor: pointer; text-decoration: none; transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    white-space: nowrap;
+  }
+  .btn svg { width: 1.05em; height: 1.05em; }
+  .btn.primary { background: var(--ink); color: var(--surface); }
+  .btn.secondary { background: transparent; color: var(--ink); border-color: var(--border-strong); }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.secondary:hover { border-color: var(--ink); }
+
+  /* ============ TABLES (회사 정보) ============ */
+  .table-shell { border: 1px solid var(--border); border-radius: 1rem; overflow: hidden; background: var(--surface); box-shadow: var(--shadow); max-width: 46rem; }
+  table.rtable { width: 100%; border-collapse: collapse; }
+  .rtable caption { text-align: left; padding: 0; }
+  .rtable th, .rtable td { text-align: left; padding: 1rem 1.15rem; vertical-align: middle; }
+  .rtable tbody tr + tr td { border-top: 1px solid var(--border); }
+  .rtable td.key { font-weight: 600; width: 34%; }
+  .rtable .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .rtable .tbd { color: var(--faint); font-style: italic; }
+
+  /* ============ CALLOUT ============ */
+  .callout {
+    margin-top: 1.75rem; display: flex; gap: 1rem; align-items: flex-start;
+    background: var(--transit-soft); border: 1px solid color-mix(in srgb, var(--transit) 30%, transparent);
+    border-radius: 1rem; padding: 1.25rem 1.4rem; color: var(--ink);
+  }
+  .callout .ci { color: var(--transit-ink); flex: none; margin-top: .1rem; }
+  .callout .ci svg { width: 1.4rem; height: 1.4rem; }
+  .callout p { color: var(--muted); }
+  .callout strong { color: var(--ink); }
+
+  /* ============ CARD GRIDS ============ */
+  .cards { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 46rem) { .cards.c2 { grid-template-columns: 1fr 1fr; } .cards.c3 { grid-template-columns: repeat(3, 1fr); } }
+  .icard {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 1.15rem;
+    padding: 1.6rem; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: .8rem;
+  }
+  .icard-ico { width: 2.75rem; height: 2.75rem; border-radius: .8rem; display: grid; place-items: center; background: var(--prepaid-soft); color: var(--prepaid-ink); }
+  .icard-ico.t { background: var(--transit-soft); color: var(--transit-ink); }
+  .icard-ico svg { width: 1.5rem; height: 1.5rem; }
+  .icard h3 { font-size: 1.12rem; font-weight: 700; }
+  .icard p { color: var(--muted); font-size: .98rem; }
+  .icard .btn { align-self: flex-start; margin-top: .35rem; }
+
+  .badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; }
+  .badge {
+    font-size: .85rem; font-weight: 600; color: var(--muted);
+    background: var(--surface-2); border: 1px solid var(--border);
+    padding: .4rem .8rem; border-radius: 999px;
+  }
+  .lead-copy { color: var(--muted); font-size: 1.05rem; max-width: 46rem; margin-bottom: 2rem; }
+
+  /* ============ FOOTER ============ */
+  footer { border-top: 1px solid var(--border); background: var(--surface); }
+  .foot-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; padding-block: 3rem; }
+  @media (min-width: 46rem) { .foot-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
+  .foot-brand .fb-name { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; }
+  .foot-brand p { margin-top: .75rem; color: var(--muted); font-size: .95rem; max-width: 22rem; }
+  .foot-col h4 { font-size: .74rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin: 0 0 .9rem; }
+  .foot-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+  .foot-col a { color: var(--muted); text-decoration: none; font-size: .96rem; }
+  .foot-col a:hover { color: var(--ink); }
+  .legal { border-top: 1px solid var(--border); padding-block: 1.5rem; color: var(--faint); font-size: .85rem; line-height: 1.7; }
+
+  /* ============ MOBILE: TABLE -> STACKED ============ */
+  @media (max-width: 40rem) {
+    .table-shell { border: none; background: transparent; box-shadow: none; border-radius: 0; overflow: visible; }
+    .rtable, .rtable tbody, .rtable tr, .rtable td { display: block; width: 100%; }
+    .rtable tr {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 1rem;
+      box-shadow: var(--shadow); padding: .4rem 1rem .6rem; margin-bottom: .85rem;
+    }
+    .rtable tbody tr + tr td { border-top: none; }
+    .rtable td { padding: .35rem 0; }
+    .rtable td.key { width: auto; color: var(--faint); font-size: .82rem; padding-top: .55rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <!-- ============ 1. HERO ============ -->
+  <section class="hero" aria-labelledby="hero-h1">
+    <div class="wrap">
+      <p class="eyebrow">회사 소개</p>
+      <h1 id="hero-h1">외국인의 한국 여행을 돕는<br /><span class="wallets">MONEY BOX</span></h1>
+      <p class="lede">MONEY BOX는 한국을 방문하는 외국인 고객을 위한 환전·카드·여행 편의 서비스를 제공합니다. 환전 지점과 24시간 무인 환전기, 올인원 선불카드, 여행용 eSIM까지 — 한국에서 필요한 금융과 편의를 한곳에서 이용할 수 있어요.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#contact">문의하기</a>
+        <a class="btn secondary" href="prepaid-card-landing.html">카드 안내 보기</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. SERVICES ============ -->
+  <section aria-labelledby="svc-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">우리가 하는 일</p>
+        <h2 id="svc-h2">MONEY BOX가 제공하는 서비스</h2>
+        <p>환전부터 카드, 여행 편의까지 — 서로 연결된 서비스로 외국인이 한국을 더 편하게 여행하도록 돕습니다.</p>
+      </div>
+      <div class="cards c3">
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg></div>
+          <h3>외화 환전</h3>
+          <p>주요 통화를 합리적인 환율로 환전합니다.</p>
+        </div>
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-4.5h15L21 9M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9zM9 20v-6h6v6"/></svg></div>
+          <h3>환전 지점</h3>
+          <p>전국 주요 지점에서 직원의 안내를 받아 환전하고 카드를 받을 수 있어요.</p>
+        </div>
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div>
+          <h3>무인 환전기</h3>
+          <p>24시간 운영되는 무인기에서 언제든 환전하고 카드를 발급받을 수 있어요.</p>
+        </div>
+        <div class="icard">
+          <div class="icard-ico t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></div>
+          <h3>외국인 대상 선불카드</h3>
+          <p>이름과 가입 없이 쓰는 올인원 선불카드로 결제와 교통을 한 장에 담습니다.</p>
+        </div>
+        <div class="icard">
+          <div class="icard-ico t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg></div>
+          <h3>여행객을 위한 금융·편의 서비스</h3>
+          <p>여행용 eSIM 등 한국 여행에 필요한 편의 서비스를 함께 제공합니다.</p>
+        </div>
+      </div>
+      <div class="callout">
+        <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
+        <p><strong>서비스는 하나로 이어져 있어요.</strong> 환전한 금액을 그대로 카드에 담고, 지점이나 무인기에서 받아, 여행 내내 결제와 교통에 사용할 수 있습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. FEATURES ============ -->
+  <section aria-labelledby="feat-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">특징</p>
+        <h2 id="feat-h2">MONEY BOX의 특징</h2>
+      </div>
+      <div class="cards c3">
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5M21 20a5.5 5.5 0 0 0-3.6-5.2"/></svg></div>
+          <h3>외국인 고객 중심 서비스</h3>
+          <p>여권 영문명과 이메일 기반의 간편한 절차로 외국인 고객에 맞췄어요.</p>
+        </div>
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg></div>
+          <h3>다국어 지원</h3>
+          <p>화면과 안내를 한국어·영어·일본어·중국어(간체·번체)로 제공합니다.</p>
+        </div>
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></svg></div>
+          <h3>환전과 카드를 한 곳에서</h3>
+          <p>환전과 선불카드 발급·충전을 한 번의 방문으로 끝낼 수 있어요.</p>
+        </div>
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+          <h3>지점과 무인기 운영</h3>
+          <p>직원이 응대하는 지점과 24시간 무인기를 함께 운영합니다.</p>
+        </div>
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.1 5.4L19.5 10l-5.4 1.6L12 17l-2.1-5.4L4.5 10l5.4-1.6L12 3z"/></svg></div>
+          <h3>여행 중 필요한 서비스를 편리하게</h3>
+          <p>관광 동선 곳곳에서 필요한 순간에 바로 이용할 수 있어요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. NETWORK ============ -->
+  <section aria-labelledby="net-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">운영 네트워크</p>
+        <h2 id="net-h2">어디에서 만나나요</h2>
+        <p>MONEY BOX는 관광객이 자주 다니는 동선을 따라 지점과 무인기를 운영합니다.</p>
+      </div>
+      <div class="cards c2">
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-4.5h15L21 9M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9zM9 20v-6h6v6"/></svg></div>
+          <h3>환전 지점</h3>
+          <p>직원이 응대하는 오프라인 지점에서 환전하고 카드를 받아 갈 수 있어요.</p>
+          <a class="btn secondary" href="prepaid-card-landing.html#where">지점 안내 보기</a>
+        </div>
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div>
+          <h3>무인 환전기</h3>
+          <p>24시간 운영되는 무인기에서 발급과 충전을 스스로 진행할 수 있어요.</p>
+          <a class="btn secondary" href="prepaid-card-landing.html#where">무인기 안내 보기</a>
+        </div>
+      </div>
+      <div class="callout">
+        <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+        <p><strong>주요 관광 동선에 있어요.</strong> 공항, 호텔, 역 등 여행객이 자주 지나는 곳에 지점과 무인기를 두어, 이동 중에도 편리하게 이용할 수 있습니다.</p>
+      </div>
+      <div class="badges" aria-label="주요 운영 지역">
+        <span class="badge">수도권</span>
+        <span class="badge">영남권</span>
+        <span class="badge">호남권</span>
+        <span class="badge">제주권</span>
+        <span class="badge">공항 · 호텔 · 주요 역</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. COMPANY INFO ============ -->
+  <section aria-labelledby="info-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">회사 정보</p>
+        <h2 id="info-h2">회사 정보</h2>
+      </div>
+      <div class="table-shell">
+        <table class="rtable">
+          <caption class="sr-only">MONEY BOX 회사 기본 정보</caption>
+          <tbody>
+            <tr><td class="key">회사명</td><td>MONEY BOX Co., Ltd.</td></tr>
+            <tr><td class="key">대표자</td><td>Lee Jung-mu</td></tr>
+            <tr><td class="key">사업자등록번호</td><td class="num">736-81-01053</td></tr>
+            <tr><td class="key">본사 주소</td><td>서울특별시 용산구 한강대로 393 동산빌딩 5층</td></tr>
+            <tr><td class="key">대표 연락처</td><td class="tbd">[TBD]</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. CONTACT & PARTNERSHIP ============ -->
+  <section id="contact" aria-labelledby="contact-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">문의</p>
+        <h2 id="contact-h2">문의 및 제휴</h2>
+      </div>
+      <div class="cards c2">
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H8l-4 4V5z"/></svg></div>
+          <h3>서비스 문의</h3>
+          <p>이용 중 궁금한 점이나 도움이 필요하시면 문의해 주세요.</p>
+          <a class="btn primary" href="#">문의하기</a>
+        </div>
+        <div class="icard">
+          <div class="icard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 11V7a4 4 0 0 1 8 0v4M6 11h12l1 9H5l1-9z"/></svg></div>
+          <h3>제휴 문의</h3>
+          <p>지점 입점, 제휴, 투자와 관련한 제안을 기다립니다.</p>
+          <a class="btn secondary" href="#">제휴 문의하기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <div class="fb-name">MONEY BOX GLOBAL</div>
+      <p>한국을 찾는 외국인을 위한 환전, 올인원 카드, 여행용 eSIM 서비스. 전국에 지점과 24시간 무인기를 운영합니다.</p>
+    </div>
+    <div class="foot-col">
+      <h4>서비스</h4>
+      <ul>
+        <li><a href="#">환전</a></li>
+        <li><a href="prepaid-card-landing.html">올인원 카드</a></li>
+        <li><a href="#">여행용 eSIM</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>이용처</h4>
+      <ul>
+        <li><a href="prepaid-card-landing.html#where">지점</a></li>
+        <li><a href="prepaid-card-landing.html#where">무인기</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>회사</h4>
+      <ul>
+        <li><a href="company-intro.html">회사 소개</a></li>
+        <li><a href="#contact">문의</a></li>
+        <li><a href="#contact">제휴 및 투자</a></li>
+        <li><a href="#">약관 및 정책</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap legal">
+    MONEY BOX Co., Ltd. · 대표 Lee Jung-mu · 사업자등록번호 736-81-01053 · 서울특별시 용산구 한강대로 393 동산빌딩 5층
+  </div>
+</footer>
+
+</body>
+</html>
