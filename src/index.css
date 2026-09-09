@@ -21,6 +21,10 @@
   --accent: #f97316;
   --accent-dark: #ea6a0a;
   --accent-soft: #fdeddd;
+  /* 여행/외국인 고객용 포인트 — 따뜻한 코럴(WOWPASS·Karrot 등 여행 서비스 톤). 고객 사이트(.site)에만 적용 */
+  --travel: #ff5a3c;
+  --travel-dark: #e8431f;
+  --travel-soft: #fff1ec;
   --success: #128a5e;
   --success-soft: #d9f2e7;
   --warn: #b26a00;
@@ -2300,11 +2304,11 @@ th.num {
 /* 1. 히어로 */
 .hero-hd {
   position: relative;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #0f766e 0%, #1d6fd0 60%, #2563eb 100%);
-  padding: 44px 24px 32px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #ff5a3c 0%, #ff7a45 55%, #ffa24c 100%);
+  padding: 52px 24px 34px;
   color: #fff;
-  box-shadow: var(--shadow);
+  box-shadow: 0 18px 40px rgba(255, 90, 60, 0.28);
   overflow: hidden;
 }
 /* 따뜻한 분위기용 은은한 광원 (장식) */
@@ -3449,3 +3453,47 @@ textarea.field-input {
   font: inherit; color: var(--text); background: var(--surface);
 }
 textarea.field-input:focus { outline: none; border-color: var(--brand); }
+
+/* ============================================================
+   외국인 고객 사이트(.site): 여행앱 톤 — 따뜻한 코럴 포인트
+   (WOWPASS·Karrot 등 외국인 방문객이 많이 쓰는 서비스 참고)
+   ※ CEMS/POS 등 관리자 화면은 기존 블루 유지
+   ============================================================ */
+.site .btn.primary {
+  background: var(--travel);
+  color: #fff;
+}
+.site .btn.primary:hover {
+  background: var(--travel-dark);
+}
+.site .btn {
+  border-radius: 12px;
+}
+/* 히어로 카드: 더 둥글게 + 여행앱풍 알약형 CTA */
+.hero-card {
+  border-radius: 20px;
+}
+.hero-card .btn {
+  border-radius: 999px;
+  padding: 11px 22px;
+}
+/* 헤더 네비 활성/언어 pill: 따뜻한 포인트 */
+.site .site-nav-link.active {
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+}
+.site .lang-dd:hover,
+.site .lang-dd:focus-within {
+  border-color: var(--travel);
+  background: var(--travel-soft);
+}
+/* 기준환율 라벨 칩 */
+.rate-ticker .rt-label {
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+}
+/* 예약 플로우 스텝퍼 활성 표시도 코럴로 통일 (고객 사이트) */
+.site .stepper .st.active .num {
+  background: var(--travel);
+  border-color: var(--travel);
+}
