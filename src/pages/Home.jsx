@@ -34,6 +34,21 @@ export default function Home() {
           </div>
           <h1>{t('home.hero.title')}</h1>
           <p>{t('home.hero.sub')}</p>
+          {/* 신뢰 배지 — 외국인 방문객에게 안심 신호 (실제 회사 지표) */}
+          <div className="hero-trust">
+            <div className="ht-item">
+              <span className="ht-num">⭐ 4.97</span>
+              <span className="ht-label">{t('home.trust.rating')}</span>
+            </div>
+            <div className="ht-item">
+              <span className="ht-num">1.7M+</span>
+              <span className="ht-label">{t('home.trust.visitors')}</span>
+            </div>
+            <div className="ht-item">
+              <span className="ht-num">40+</span>
+              <span className="ht-label">{t('home.trust.branches')}</span>
+            </div>
+          </div>
         </div>
         <div className="hero-cards">
           <div className="hero-card">
