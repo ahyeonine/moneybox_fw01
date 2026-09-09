@@ -27,8 +27,28 @@ export default function Home() {
       {/* 1. 히어로 */}
       <section className="hero-hd">
         <div className="hero-hd-copy">
+          {/* 외국인 친화: 다국어 지원을 한눈에 보여주는 배지 */}
+          <div className="hero-eyebrow">
+            <span className="he-globe" aria-hidden="true">🌏</span>
+            <span className="he-langs">English · 中文 · 日本語 · 한국어</span>
+          </div>
           <h1>{t('home.hero.title')}</h1>
           <p>{t('home.hero.sub')}</p>
+          {/* 신뢰 배지 — 외국인 방문객에게 안심 신호 (실제 회사 지표) */}
+          <div className="hero-trust">
+            <div className="ht-item">
+              <span className="ht-num">⭐ 4.97</span>
+              <span className="ht-label">{t('home.trust.rating')}</span>
+            </div>
+            <div className="ht-item">
+              <span className="ht-num">1.7M+</span>
+              <span className="ht-label">{t('home.trust.visitors')}</span>
+            </div>
+            <div className="ht-item">
+              <span className="ht-num">40+</span>
+              <span className="ht-label">{t('home.trust.branches')}</span>
+            </div>
+          </div>
         </div>
         <div className="hero-cards">
           <div className="hero-card">

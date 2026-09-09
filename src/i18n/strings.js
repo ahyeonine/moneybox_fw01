@@ -340,6 +340,9 @@ export const STRINGS = {
     ko: '환전부터 eSIM까지, 머니박스로 간편하게 시작하세요.',
     en: 'From FX to eSIM — start simply with MoneyBox.',
   },
+  'home.trust.rating': { ko: 'Google 평점 · 15,000+ 리뷰', en: 'Google rating · 15,000+ reviews' },
+  'home.trust.visitors': { ko: '연간 방문객', en: 'Visitors / year' },
+  'home.trust.branches': { ko: '전국 지점', en: 'Branches nationwide' },
   'home.card.branch.t': { ko: '지점에서 수령하기', en: 'Pick up at a branch' },
   'home.card.branch.d': {
     ko: '원하는 금액을 예약 시점 환율로 미리 예약하고, 지점에서 편하게 수령하세요.',
