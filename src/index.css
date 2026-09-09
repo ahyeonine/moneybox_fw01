@@ -2304,35 +2304,52 @@ th.num {
 /* 1. 히어로 */
 .hero-hd {
   position: relative;
-  border-radius: 28px;
-  background: linear-gradient(140deg, #0b2fb0 0%, #1f6bff 52%, #38bdf8 100%);
-  padding: 68px 24px 40px;
+  /* 풀블리드(화면 끝까지) — XE풍 딥 네이비 랜딩 */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-top: -20px; /* .content 상단 패딩 상쇄 → 헤더 바로 아래 밀착 */
+  border-radius: 0;
+  background: linear-gradient(165deg, #081a52 0%, #0f2f8a 55%, #14439f 100%);
+  padding: 84px 24px 104px;
   color: #fff;
-  box-shadow: 0 20px 44px rgba(31, 107, 255, 0.32);
   overflow: hidden;
 }
-/* 강렬한 분위기용 광원 2개 (장식) */
+/* 히어로 단일 CTA — 네이비 위 화이트 알약 버튼 (XE풍) */
+.hero-cta {
+  margin-top: 28px;
+  background: #fff;
+  color: var(--travel-dark);
+  border-radius: 999px;
+  padding: 15px 36px;
+  font-size: 17px;
+  font-weight: 800;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+}
+.hero-cta:hover {
+  background: #eef3ff;
+  filter: none;
+}
+/* 딥 네이비 위 은은한 하이라이트 (장식) */
 .hero-hd::before {
   content: '';
   position: absolute;
-  top: -90px;
-  right: -60px;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(120, 200, 255, 0.35), transparent 70%);
+  top: -120px;
+  right: 8%;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(90, 150, 255, 0.35), transparent 68%);
   pointer-events: none;
   z-index: 0;
 }
-.hero-hd::after {
-  content: '';
+/* 하단 웨이브: 히어로 → 본문(밝은 배경) 전환 */
+.hero-wave {
   position: absolute;
-  bottom: -110px;
-  left: -70px;
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle, rgba(11, 47, 176, 0.5), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 72px;
+  display: block;
+  z-index: 2;
 }
 .hero-hd-copy {
   position: relative;

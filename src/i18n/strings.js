@@ -337,9 +337,10 @@ export const STRINGS = {
   // ── 랜딩 홈 (외국인 웹사이트 첫 화면). 공항수령 없음 ──
   'home.hero.title': { ko: '가장 빠른 환전의 시작\n머니박스', en: 'The fastest way to exchange\nMoneyBox' },
   'home.hero.sub': {
-    ko: '환전부터 eSIM까지, 머니박스로 간편하게 시작하세요.',
-    en: 'From FX to eSIM — start simply with MoneyBox.',
+    ko: '한국을 방문하는 외국인을 위한 가장 쉬운 환전 서비스.',
+    en: 'The easiest currency exchange for visitors to Korea.',
   },
+  'home.hero.cta': { ko: '환전 예약하기', en: 'Reserve your exchange' },
   'home.trust.rating': { ko: 'Google 평점 · 15,000+ 리뷰', en: 'Google rating · 15,000+ reviews' },
   'home.trust.visitors': { ko: '연간 방문객', en: 'Visitors / year' },
   'home.trust.branches': { ko: '전국 지점', en: 'Branches nationwide' },

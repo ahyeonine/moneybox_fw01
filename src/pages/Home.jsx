@@ -49,25 +49,14 @@ export default function Home() {
               <span className="ht-label">{t('home.trust.branches')}</span>
             </div>
           </div>
+          <button className="btn hero-cta" onClick={() => nav('/site/book')}>
+            {t('home.hero.cta')}
+          </button>
         </div>
-        <div className="hero-cards">
-          <div className="hero-card">
-            <div className="hc-icon">🏦</div>
-            <div className="hc-t">{t('home.card.branch.t')}</div>
-            <div className="hc-d">{t('home.card.branch.d')}</div>
-            <button className="btn primary" onClick={() => nav('/site/book')}>
-              {t('home.card.branch.cta')}
-            </button>
-          </div>
-          <div className="hero-card">
-            <div className="hc-icon">📶</div>
-            <div className="hc-t">{t('home.card.esim.t')}</div>
-            <div className="hc-d">{t('home.card.esim.d')}</div>
-            <button className="btn primary" onClick={() => nav('/site/esim')}>
-              {t('home.card.esim.cta')}
-            </button>
-          </div>
-        </div>
+        {/* 하단 웨이브 곡선 — 히어로에서 본문으로 부드럽게 전환 (XE풍) */}
+        <svg className="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0,48 C320,96 560,8 760,28 C1000,52 1220,96 1440,44 L1440,80 L0,80 Z" fill="var(--bg)" />
+        </svg>
       </section>
 
       {/* 2. 기준환율 티커 (기준환율=dr.base 노출) */}
