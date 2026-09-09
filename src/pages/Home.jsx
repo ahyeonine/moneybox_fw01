@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { CURRENCY_ORDER, CURRENCY_META } from '../data/rates.js'
@@ -10,10 +11,44 @@ import DevNote from '../components/DevNote.jsx'
 // 별도 구현 없이 안내 문구만 표시한다(공항수령 제외 → 디자인 참고).
 const RATE_TICKER = CURRENCY_ORDER.slice(0, 8)
 
+// 환전 금액 시나리오별 "머니박스 대비 덜 받는 금액"(원) — 예시 수치(실제 아님).
+// 주요 인바운드 통화(USD·JPY) 기준으로 외국인이 체감할 수 있게 실제 금액으로 표현.
+const COMPARE_SCENARIOS = [
+  {
+    key: 'usd',
+    flag: '🇺🇸',
+    amount: '$1,000',
+    // bar = 상대적으로 받는 비율(예시), less = 머니박스보다 덜 받는 금액(원)
+    rows: {
+      bank: { bar: 80, less: 28000 },
+      kiosk: { bar: 62, less: 55000 },
+      airport: { bar: 38, less: 124000 },
+    },
+  },
+  {
+    key: 'jpy',
+    flag: '🇯🇵',
+    amount: '¥100,000',
+    rows: {
+      bank: { bar: 80, less: 18000 },
+      kiosk: { bar: 62, less: 37000 },
+      airport: { bar: 38, less: 83000 },
+    },
+  },
+]
+
 export default function Home() {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const { getDisplayRates } = useRates() // 실시간 환율(2분 주기 자동 변동)
   const nav = useNavigate()
+  const [scenarioKey, setScenarioKey] = useState('usd')
+  const scenario = COMPARE_SCENARIOS.find((s) => s.key === scenarioKey) || COMPARE_SCENARIOS[0]
+
+  // 머니박스보다 덜 받는 금액 문구 (언어별)
+  const lessLabel = (won) =>
+    lang === 'en'
+      ? `≈ ₩${formatNumber(won)} ${t('home.cmp.less')}`
+      : `약 ${formatNumber(won)}원 ${t('home.cmp.less')}`
 
   return (
     <div className="home">
@@ -56,20 +91,54 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 카드 비주얼 (WOWPASS의 떠있는 카드 자리 — 블루 그라데이션) */}
-          <div className="wp-hero-visual" aria-hidden="true">
-            <div className="wp-card">
-              <div className="wp-card-head">
-                <span className="wp-card-brand">
-                  MONEY<span>BOX</span>
-                </span>
-                <span className="wp-card-chip">💳</span>
+          {/* 환율 비교 비주얼 — 공항/무인기/은행 대비 머니박스가 실제로 얼마나 더 주는지(원) 강조 (예시 수치) */}
+          <div className="wp-hero-visual">
+            <div className="wp-compare">
+              <div className="wp-compare-head">
+                <span className="wpc-title">{t('home.cmp.title')}</span>
+                <span className="wpc-sub">{t('home.cmp.sub')}</span>
               </div>
-              <div className="wp-card-benefit">
-                <div className="wp-card-bt">{t('home.card2.t')}</div>
-                <div className="wp-card-bd">{t('home.card2.d')}</div>
+
+              {/* 환전 금액 시나리오 토글 ($1,000 / ¥100,000) */}
+              <div className="wpc-toggle" role="tablist" aria-label="amount">
+                {COMPARE_SCENARIOS.map((s) => (
+                  <button
+                    key={s.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={s.key === scenarioKey}
+                    className={`wpc-toggle-btn${s.key === scenarioKey ? ' is-on' : ''}`}
+                    onClick={() => setScenarioKey(s.key)}
+                  >
+                    <span className="wpc-toggle-flag" aria-hidden="true">{s.flag}</span>
+                    {s.amount}
+                  </button>
+                ))}
               </div>
-              <div className="wp-card-langs">🌏 EN · 中文 · 日本語 · 한국어</div>
+
+              <ul className="wpc-rows">
+                <li className="wpc-row is-best">
+                  <div className="wpc-row-top">
+                    <span className="wpc-name">{t('home.cmp.mb')}</span>
+                    <span className="wpc-tag">{t('home.cmp.best')}</span>
+                  </div>
+                  <span className="wpc-bar-wrap">
+                    <span className="wpc-bar" style={{ width: '100%' }} />
+                  </span>
+                </li>
+                {['bank', 'kiosk', 'airport'].map((key) => (
+                  <li className="wpc-row" key={key}>
+                    <div className="wpc-row-top">
+                      <span className="wpc-name">{t(`home.cmp.${key}`)}</span>
+                      <span className="wpc-tag wpc-neg">{lessLabel(scenario.rows[key].less)}</span>
+                    </div>
+                    <span className="wpc-bar-wrap">
+                      <span className="wpc-bar" style={{ width: `${scenario.rows[key].bar}%` }} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <div className="wpc-note">{t('home.cmp.note')}</div>
             </div>
           </div>
         </div>

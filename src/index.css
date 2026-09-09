@@ -3661,6 +3661,134 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   border-top: 1px solid rgba(255, 255, 255, 0.25);
   padding-top: 12px;
 }
+
+/* 환율 비교 카드 (머니박스 vs 은행/무인기/공항 — 예시 수치, 실제 금액 표기) */
+.wp-compare {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border: 1px solid #e4ebf7;
+  border-radius: 22px;
+  padding: 26px 24px 20px;
+  box-shadow: 0 26px 52px rgba(15, 47, 138, 0.16);
+}
+.wp-compare-head {
+  margin-bottom: 16px;
+}
+.wpc-title {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.wpc-sub {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-3);
+  line-height: 1.45;
+}
+/* 금액 시나리오 토글 */
+.wpc-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 20px;
+  background: #eef2fb;
+  border-radius: 999px;
+}
+.wpc-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.wpc-toggle-flag {
+  font-size: 15px;
+}
+.wpc-toggle-btn.is-on {
+  background: #fff;
+  color: var(--travel-dark);
+  box-shadow: 0 2px 6px rgba(15, 47, 138, 0.12);
+}
+.wpc-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.wpc-row-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.wpc-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.wpc-bar-wrap {
+  display: block;
+  height: 12px;
+  border-radius: 999px;
+  background: #eef2fb;
+  overflow: hidden;
+}
+.wpc-bar {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #cdd9ef;
+  transition: width 0.3s ease;
+}
+.wpc-tag {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.wpc-neg {
+  color: #8a97ab;
+}
+.wpc-row.is-best .wpc-name {
+  color: var(--travel-dark);
+  font-weight: 900;
+  font-size: 14px;
+}
+.wpc-row.is-best .wpc-bar {
+  background: linear-gradient(90deg, #1f6bff 0%, #38bdf8 100%);
+}
+.wpc-row.is-best .wpc-tag {
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: 12px;
+}
+.wpc-note {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed #e2e8f5;
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+
 @media (max-width: 860px) {
   .wp-hero {
     padding: 44px 20px;
@@ -3689,5 +3817,10 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   .wp-card {
     max-width: 320px;
     margin: 0 auto;
+  }
+  .wp-compare {
+    max-width: 420px;
+    margin: 0 auto;
+    text-align: left;
   }
 }
