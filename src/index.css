@@ -1043,30 +1043,61 @@ th.num {
   }
 }
 .lang-dd {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border-strong);
   border-radius: 999px;
-  padding: 4px 10px 4px 12px;
+  padding: 6px 12px;
   background: var(--surface);
   flex: 0 0 auto;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--text);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.lang-dd:hover,
+.lang-dd:focus-within {
+  border-color: var(--brand);
+  background: var(--brand-soft);
 }
 .lang-dd .globe {
-  font-size: 14px;
+  font-size: 15px;
 }
+.lang-dd .lang-cur {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.lang-dd .lang-flag {
+  font-size: 15px;
+}
+.lang-dd .lang-caret {
+  font-size: 10px;
+  color: var(--text-3);
+}
+/* 상호작용용 native select — 투명하게 pill 전체를 덮는다 */
 .lang-dd select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
   border: 0;
-  background: transparent;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text);
-  padding: 2px 4px;
-  width: auto;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 .lang-dd select:focus {
   outline: none;
-  box-shadow: none;
+}
+@media (max-width: 560px) {
+  /* 모바일에서는 이름 숨기고 국기만 (공간 절약, 여전히 명확) */
+  .lang-dd .lang-name {
+    display: none;
+  }
 }
 .site .content,
 .admin .content {
@@ -2268,6 +2299,7 @@ th.num {
 
 /* 1. 히어로 */
 .hero-hd {
+  position: relative;
   border-radius: 18px;
   background: linear-gradient(135deg, #0f766e 0%, #1d6fd0 60%, #2563eb 100%);
   padding: 44px 24px 32px;
@@ -2275,10 +2307,43 @@ th.num {
   box-shadow: var(--shadow);
   overflow: hidden;
 }
+/* 따뜻한 분위기용 은은한 광원 (장식) */
+.hero-hd::before {
+  content: '';
+  position: absolute;
+  top: -70px;
+  right: -50px;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
 .hero-hd-copy {
+  position: relative;
+  z-index: 1;
   text-align: center;
   max-width: 640px;
   margin: 0 auto;
+}
+/* 외국인 친화: 다국어 지원 배지 */
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin-bottom: 14px;
+  backdrop-filter: blur(4px);
+}
+.hero-eyebrow .he-globe {
+  font-size: 14px;
 }
 .hero-hd-copy h1 {
   color: #fff;
@@ -2295,6 +2360,8 @@ th.num {
   margin: 0;
 }
 .hero-cards {
+  position: relative;
+  z-index: 1;
   display: grid;
   /* 3열을 기본으로 하되 min(100%, …)로 좁아지면 자동 줄바꿈 — 어떤 폭에서도 넘치거나 잘리지 않음 */
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));

@@ -27,6 +27,11 @@ export default function Home() {
       {/* 1. 히어로 */}
       <section className="hero-hd">
         <div className="hero-hd-copy">
+          {/* 외국인 친화: 다국어 지원을 한눈에 보여주는 배지 */}
+          <div className="hero-eyebrow">
+            <span className="he-globe" aria-hidden="true">🌏</span>
+            <span className="he-langs">English · 中文 · 日本語 · 한국어</span>
+          </div>
           <h1>{t('home.hero.title')}</h1>
           <p>{t('home.hero.sub')}</p>
         </div>
