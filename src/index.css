@@ -21,10 +21,10 @@
   --accent: #f97316;
   --accent-dark: #ea6a0a;
   --accent-soft: #fdeddd;
-  /* 여행/외국인 고객용 포인트 — 따뜻한 코럴(WOWPASS·Karrot 등 여행 서비스 톤). 고객 사이트(.site)에만 적용 */
-  --travel: #ff5a3c;
-  --travel-dark: #e8431f;
-  --travel-soft: #fff1ec;
+  /* 외국인 고객용 포인트 — 강렬한 일렉트릭 블루. 고객 사이트(.site)에만 적용 */
+  --travel: #1f6bff;
+  --travel-dark: #1552e0;
+  --travel-soft: #e8f0ff;
   --success: #128a5e;
   --success-soft: #d9f2e7;
   --warn: #b26a00;
@@ -2304,22 +2304,33 @@ th.num {
 /* 1. 히어로 */
 .hero-hd {
   position: relative;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #ff5a3c 0%, #ff7a45 55%, #ffa24c 100%);
-  padding: 52px 24px 34px;
+  border-radius: 28px;
+  background: linear-gradient(140deg, #0b2fb0 0%, #1f6bff 52%, #38bdf8 100%);
+  padding: 68px 24px 40px;
   color: #fff;
-  box-shadow: 0 18px 40px rgba(255, 90, 60, 0.28);
+  box-shadow: 0 20px 44px rgba(31, 107, 255, 0.32);
   overflow: hidden;
 }
-/* 따뜻한 분위기용 은은한 광원 (장식) */
+/* 강렬한 분위기용 광원 2개 (장식) */
 .hero-hd::before {
   content: '';
   position: absolute;
-  top: -70px;
-  right: -50px;
-  width: 240px;
-  height: 240px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 70%);
+  top: -90px;
+  right: -60px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(120, 200, 255, 0.35), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-hd::after {
+  content: '';
+  position: absolute;
+  bottom: -110px;
+  left: -70px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(11, 47, 176, 0.5), transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -2351,13 +2362,13 @@ th.num {
 }
 .hero-hd-copy h1 {
   color: #fff;
-  font-size: 38px;
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1.14;
+  letter-spacing: -0.03em;
   white-space: pre-line;
-  margin: 0 0 12px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  margin: 0 0 14px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.22);
 }
 .hero-hd-copy p {
   color: #eaf1ff;
@@ -2442,8 +2453,11 @@ th.num {
   font-size: 14px;
 }
 @media (max-width: 560px) {
+  .hero-hd {
+    padding: 48px 20px 32px;
+  }
   .hero-hd-copy h1 {
-    font-size: 29px;
+    font-size: 34px;
   }
   .hero-trust .ht-item {
     min-width: 84px;
