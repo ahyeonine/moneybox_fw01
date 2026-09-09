@@ -24,39 +24,55 @@ export default function Home() {
         ]}
       />
 
-      {/* 1. 히어로 */}
-      <section className="hero-hd">
-        <div className="hero-hd-copy">
-          {/* 외국인 친화: 다국어 지원을 한눈에 보여주는 배지 */}
-          <div className="hero-eyebrow">
-            <span className="he-globe" aria-hidden="true">🌏</span>
-            <span className="he-langs">English · 中文 · 日本語 · 한국어</span>
+      {/* 1. 히어로 (WOWPASS풍 — 깨끗한 화이트 + 큰 타이포 + 카드 비주얼, 블루 포인트) */}
+      <section className="wp-hero">
+        <div className="wp-hero-grid">
+          <div className="wp-hero-copy">
+            <div className="hero-eyebrow">
+              <span className="he-globe" aria-hidden="true">🌏</span>
+              <span className="he-langs">English · 中文 · 日本語 · 한국어</span>
+            </div>
+            <h1 className="wp-title">{t('home.hero.title')}</h1>
+            <p className="wp-sub">{t('home.hero.sub')}</p>
+            <div className="wp-cta-row">
+              <button className="btn wp-cta" onClick={() => nav('/site/book')}>
+                {t('home.hero.cta')}
+              </button>
+            </div>
+            {/* 신뢰 배지 — 외국인 방문객에게 안심 신호 (실제 회사 지표) */}
+            <div className="hero-trust">
+              <div className="ht-item">
+                <span className="ht-num">⭐ 4.97</span>
+                <span className="ht-label">{t('home.trust.rating')}</span>
+              </div>
+              <div className="ht-item">
+                <span className="ht-num">1.7M+</span>
+                <span className="ht-label">{t('home.trust.visitors')}</span>
+              </div>
+              <div className="ht-item">
+                <span className="ht-num">40+</span>
+                <span className="ht-label">{t('home.trust.branches')}</span>
+              </div>
+            </div>
           </div>
-          <h1>{t('home.hero.title')}</h1>
-          <p>{t('home.hero.sub')}</p>
-          {/* 신뢰 배지 — 외국인 방문객에게 안심 신호 (실제 회사 지표) */}
-          <div className="hero-trust">
-            <div className="ht-item">
-              <span className="ht-num">⭐ 4.97</span>
-              <span className="ht-label">{t('home.trust.rating')}</span>
-            </div>
-            <div className="ht-item">
-              <span className="ht-num">1.7M+</span>
-              <span className="ht-label">{t('home.trust.visitors')}</span>
-            </div>
-            <div className="ht-item">
-              <span className="ht-num">40+</span>
-              <span className="ht-label">{t('home.trust.branches')}</span>
+
+          {/* 카드 비주얼 (WOWPASS의 떠있는 카드 자리 — 블루 그라데이션) */}
+          <div className="wp-hero-visual" aria-hidden="true">
+            <div className="wp-card">
+              <div className="wp-card-head">
+                <span className="wp-card-brand">
+                  MONEY<span>BOX</span>
+                </span>
+                <span className="wp-card-chip">💳</span>
+              </div>
+              <div className="wp-card-benefit">
+                <div className="wp-card-bt">{t('home.card2.t')}</div>
+                <div className="wp-card-bd">{t('home.card2.d')}</div>
+              </div>
+              <div className="wp-card-langs">🌏 EN · 中文 · 日本語 · 한국어</div>
             </div>
           </div>
-          <button className="btn hero-cta" onClick={() => nav('/site/book')}>
-            {t('home.hero.cta')}
-          </button>
         </div>
-        {/* 하단 웨이브 곡선 — 히어로에서 본문으로 부드럽게 전환 (XE풍) */}
-        <svg className="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0,48 C320,96 560,8 760,28 C1000,52 1220,96 1440,44 L1440,80 L0,80 Z" fill="var(--bg)" />
-        </svg>
       </section>
 
       {/* 2. 기준환율 티커 (기준환율=dr.base 노출) */}

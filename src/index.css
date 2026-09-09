@@ -3528,3 +3528,166 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   background: var(--travel);
   border-color: var(--travel);
 }
+
+/* ============================================================
+   WOWPASS풍 화이트 히어로 (블루 포인트) — 고객 사이트 홈
+   깨끗한 화이트/라이트 배경 + 큰 타이포 + 떠있는 블루 카드 비주얼
+   ============================================================ */
+.wp-hero {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-top: -20px; /* .content 상단 패딩 상쇄 → 헤더 바로 아래 */
+  background: linear-gradient(180deg, #f5f8ff 0%, #e9f0ff 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 60px 24px;
+  overflow: hidden;
+}
+.wp-hero-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 44px;
+  align-items: center;
+}
+.wp-hero-copy {
+  text-align: left;
+}
+.wp-title {
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  white-space: pre-line;
+  margin: 12px 0 12px;
+}
+.wp-sub {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin: 0 0 22px;
+  max-width: 460px;
+}
+.wp-cta-row {
+  margin-bottom: 24px;
+}
+.wp-cta {
+  background: var(--travel);
+  color: #fff;
+  border-radius: 999px;
+  padding: 16px 40px;
+  font-size: 17px;
+  font-weight: 800;
+  box-shadow: 0 12px 26px rgba(31, 107, 255, 0.28);
+}
+.wp-cta:hover {
+  background: var(--travel-dark);
+  filter: none;
+}
+/* 화이트 배경용 배지/신뢰 재스타일 */
+.wp-hero .hero-eyebrow {
+  background: #fff;
+  border-color: #d6e2ff;
+  color: var(--travel-dark);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: none;
+  margin-bottom: 4px;
+}
+.wp-hero .hero-trust {
+  justify-content: flex-start;
+}
+.wp-hero .hero-trust .ht-item {
+  background: #fff;
+  border-color: #dbe4f5;
+  backdrop-filter: none;
+}
+.wp-hero .hero-trust .ht-num {
+  color: var(--text);
+}
+.wp-hero .hero-trust .ht-label {
+  color: var(--text-3);
+}
+/* 카드 비주얼 (블루 그라데이션, 살짝 기울임) */
+.wp-hero-visual {
+  display: flex;
+  justify-content: center;
+}
+.wp-card {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 22px;
+  background: linear-gradient(140deg, #0b2fb0 0%, #1f6bff 60%, #38bdf8 100%);
+  color: #fff;
+  padding: 24px;
+  box-shadow: 0 26px 52px rgba(15, 47, 138, 0.34);
+  transform: rotate(-3deg);
+}
+.wp-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wp-card-brand {
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+.wp-card-brand span {
+  color: #bcd4ff;
+}
+.wp-card-chip {
+  font-size: 22px;
+}
+.wp-card-benefit {
+  margin: 40px 0 22px;
+}
+.wp-card-bt {
+  font-size: 22px;
+  font-weight: 800;
+}
+.wp-card-bd {
+  font-size: 13px;
+  color: #dbe6ff;
+  font-weight: 600;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.wp-card-langs {
+  font-size: 12px;
+  font-weight: 700;
+  color: #eaf1ff;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  padding-top: 12px;
+}
+@media (max-width: 860px) {
+  .wp-hero {
+    padding: 44px 20px;
+  }
+  .wp-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .wp-hero-copy {
+    text-align: center;
+  }
+  .wp-hero .hero-eyebrow,
+  .wp-hero .hero-trust {
+    justify-content: center;
+  }
+  .wp-hero .hero-eyebrow {
+    display: inline-flex;
+  }
+  .wp-title {
+    font-size: 34px;
+  }
+  .wp-sub {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .wp-card {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+}
