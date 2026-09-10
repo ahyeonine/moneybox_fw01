@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { useRates } from '../store/RatesContext.jsx'
 import { CURRENCY_META, CURRENCY_ORDER } from '../data/rates.js'
 import { BRANCHES } from '../data/branches.js'
-import { formatNumber, formatKrw } from '../lib/format.js'
+import { formatKrw } from '../lib/format.js'
 import LanguageDropdown from '../components/LanguageDropdown.jsx'
 
 // 외국인 사이트 2안 (WOWPASS 참고) — CEMS/POS처럼 분리된 별도 surface.
@@ -44,13 +45,18 @@ const ESIM_URL = 'https://imoneybox.cafe24.com/shop3/'
 export default function Site2() {
   const { t, lang } = useI18n()
   const { getDisplayRates } = useRates()
+  const nav = useNavigate()
 
-  const [step, setStep] = useState('amount') // amount | location | branch | done
+  const [step, setStep] = useState('amount') // amount | location | branch
   const [currency, setCurrency] = useState('USD')
   const [amount, setAmount] = useState('')
   const [query, setQuery] = useState('')
   const [loc, setLoc] = useState(null)
-  const [branch, setBranch] = useState(null)
+
+  // "이 지점으로 예약" → 실제 예약 플로우(/site/book)로 지점·통화·금액 전달
+  function reserveAt(branchId) {
+    nav(`/site/book?branch=${branchId}&currency=${currency}&amount=${amount}`)
+  }
 
   const rate = getDisplayRates(currency)?.base || 0
   const krw = amount ? Math.round(Number(amount) * rate) : 0
@@ -78,15 +84,7 @@ export default function Site2() {
     { key: 'location', label: t('s2.step.location') },
     { key: 'branch', label: t('s2.step.branch') },
   ]
-  const stepIdx = Math.min(2, ['amount', 'location', 'branch'].indexOf(step === 'done' ? 'branch' : step))
-
-  function restart() {
-    setStep('amount')
-    setAmount('')
-    setQuery('')
-    setLoc(null)
-    setBranch(null)
-  }
+  const stepIdx = ['amount', 'location', 'branch'].indexOf(step)
 
   return (
     <div className="s2">
@@ -194,7 +192,6 @@ export default function Site2() {
                   className={`s2-loc-item${loc?.id === l.id ? ' on' : ''}`}
                   onClick={() => {
                     setLoc(l)
-                    setBranch(null)
                     setStep('branch')
                   }}
                 >
@@ -238,10 +235,7 @@ export default function Site2() {
                     </span>
                     <button
                       className="btn s2-primary s2-branch-pick"
-                      onClick={() => {
-                        setBranch(b)
-                        setStep('done')
-                      }}
+                      onClick={() => reserveAt(b.id)}
                     >
                       {t('s2.br.pick')}
                     </button>
@@ -255,24 +249,6 @@ export default function Site2() {
           </section>
         )}
 
-        {/* 완료 (데모) */}
-        {step === 'done' && (
-          <section className="s2-card s2-done">
-            <div className="s2-done-ic" aria-hidden="true">🎉</div>
-            <h2 className="s2-card-t">{t('s2.done.t')}</h2>
-            {branch && (
-              <div className="s2-done-summary">
-                <div>{CURRENCY_META[currency]?.flag} {amount} {currency} · ≈ {formatKrw(krw)}</div>
-                <div>🏦 {branch.name[lang] || branch.name.ko}</div>
-                <div>{loc && `📍 ${loc.name[lang] || loc.name.ko}`}</div>
-              </div>
-            )}
-            <p className="s2-card-sub">{t('s2.done.d')}</p>
-            <button className="btn s2-ghost block" onClick={restart}>
-              {t('s2.done.again')}
-            </button>
-          </section>
-        )}
       </main>
 
       {/* 다크 푸터 (OrangeSquare 참고) */}
