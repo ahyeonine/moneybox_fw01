@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useI18n } from '../../i18n/I18nContext.jsx'
-import { useReservations, NOSHOW_LIMIT } from '../../store/ReservationContext.jsx'
+import { useReservations } from '../../store/ReservationContext.jsx'
 import { useSettings } from '../../store/SettingsContext.jsx'
 import { useRates } from '../../store/RatesContext.jsx'
 import { useEmail } from '../../store/EmailContext.jsx'
@@ -14,10 +14,9 @@ import DevNote from '../../components/DevNote.jsx'
 // 화면(스테이지)별 개발 참고 설명. (지점선택/최종확인 스테이지는 노트 없음)
 const DEV_NOTES = {
   apply: [
-    '통화별 최소금액 / 건당 최대금액(하드리밋, 전체 지점 공통) 적용됨 — 초과입력 시 자동보정(단위 올림 → 최대초과시 최대로 → 최소미만시 최소로)',
-    '이메일당 1,000 USD 상당액 이하로만 신청 가능 (검증 로직 미구현 — 정책 메모)',
+    '한도(07_정책 §4): 최소=USD 100 상당액(통화별 환산 기본값, 지점이 CEMS에서 조정) / 건당 최대=지점 설정(상한 USD 9,999 상당액). 초과입력 시 자동보정(단위 올림 → 최대초과시 최대로 → 최소미만시 최소로)',
     '"신청하기" 버튼 클릭 시점에 환율이 픽스됨',
-    '수령일 선택 최대 범위: 리드타임 이후 ~ 2주 이내',
+    '수령일 선택 범위: 예약일 당일 ~ 2주(14일) 이내 (리드타임 제한 없음)',
     '자세히: 03_플로우.mermaid',
     '자세히: 01_IA.md',
   ],
@@ -314,10 +313,10 @@ export default function BookingFlow() {
     !!draft.pickupTime &&
     draft.pickupDate >= (range?.minDate || '') &&
     draft.pickupDate <= (range?.maxDate || '9999-12-31')
-  // 노쇼(자동취소) 누적 N회 이상 이메일은 신규예약 차단
-  const noshowBlocked = isValidEmail(draft.email) && countNoShow(draft.email) >= NOSHOW_LIMIT
+  // 정책(07_정책 §7): 노쇼로 인한 신규예약 차단 없음 — 안내성 노출만.
+  const noshowNotice = isValidEmail(draft.email) && countNoShow(draft.email) > 0
   const infoValid =
-    isValidName(draft.customerName) && isValidEmail(draft.email) && !noshowBlocked && emailVerified
+    isValidName(draft.customerName) && isValidEmail(draft.email) && emailVerified
   const consentValid = consent.terms && consent.privacy && consent.thirdparty && consent.noshow
 
   if (soldOut) {
@@ -485,7 +484,7 @@ export default function BookingFlow() {
           <StepInfo
             draft={draft}
             set={set}
-            noshowBlocked={noshowBlocked}
+            noshowNotice={noshowNotice}
             emailVerified={emailVerified}
             setEmailVerified={setEmailVerified}
           />
@@ -497,7 +496,7 @@ export default function BookingFlow() {
               {t('common.next')}
             </button>
           </div>
-          {isValidName(draft.customerName) && isValidEmail(draft.email) && !noshowBlocked && !emailVerified && (
+          {isValidName(draft.customerName) && isValidEmail(draft.email) && !emailVerified && (
             <div className="tiny" style={{ marginTop: 8, color: 'var(--warn)' }}>
               {t('book.otp.needVerify')}
             </div>
@@ -869,15 +868,15 @@ function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canAp
 }
 
 /* ================= STEP 5: 예약자 정보 (+ 이메일 OTP 인증) ================= */
-function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }) {
+function StepInfo({ draft, set, noshowNotice, emailVerified, setEmailVerified }) {
   const { t } = useI18n()
   const { sendEmail } = useEmail()
   // OTP 진행 상태는 BookingContext에 보관 → 메뉴 이동 후 복귀해도 유지
   const { otp, setOtp, resetOtp } = useBooking()
   const nameOk = draft.customerName === '' || isValidName(draft.customerName)
   const emailOk = draft.email === '' || isValidEmail(draft.email)
-  // 노쇼 차단은 인증보다 먼저 판정. 차단 대상이면 OTP 절차 자체를 열지 않는다.
-  const canStartOtp = isValidEmail(draft.email) && !noshowBlocked
+  // 노쇼 이력이 있어도 예약은 막지 않는다(정책: 차단 없음). 이메일 형식만 통과하면 OTP 진행.
+  const canStartOtp = isValidEmail(draft.email)
 
   const [now, setNow] = useState(() => Date.now()) // 카운트다운용 로컬 클록(렌더 전용)
 
@@ -978,10 +977,14 @@ function StepInfo({ draft, set, noshowBlocked, emailVerified, setEmailVerified }
           placeholder="you@example.com"
         />
         {!emailOk && <div className="err-text">{t('err.email')}</div>}
-        {emailOk && noshowBlocked && <div className="err-text">{t('err.noshowBlocked')}</div>}
+        {emailOk && noshowNotice && (
+          <div className="tiny" style={{ marginTop: 6, color: 'var(--warn)' }}>
+            {t('notice.noshow')}
+          </div>
+        )}
       </label>
 
-      {/* 이메일 OTP 인증 — 노쇼 차단 대상이 아니고 이메일 형식 통과 시에만 노출 */}
+      {/* 이메일 OTP 인증 — 이메일 형식 통과 시 노출 (노쇼 이력과 무관하게 예약 가능) */}
       {canStartOtp && !emailVerified && (
         <div className="otp-box">
           {!otp.sent ? (

@@ -122,9 +122,9 @@ export const STRINGS = {
     en: 'Stock is sold out for this branch/currency/date. Please try different options.',
   },
   'err.soldout.restart': { ko: '처음부터 다시', en: 'Start over' },
-  'err.noshowBlocked': {
-    ko: '반복된 노쇼로 인해 서비스 이용이 제한되었습니다',
-    en: 'Your access is restricted due to repeated no-shows',
+  'notice.noshow': {
+    ko: '이전 미방문(노쇼) 이력이 있어요. 방문이 어려우면 예약을 취소해 주세요. (이용 제한은 없습니다)',
+    en: 'You have a previous no-show. If you can’t make it, please cancel your booking. (No restriction applies.)',
   },
 
   // 예약조회
