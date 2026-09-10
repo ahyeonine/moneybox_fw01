@@ -6,6 +6,7 @@ import { CURRENCY_META, CURRENCY_ORDER } from '../data/rates.js'
 import { BRANCHES } from '../data/branches.js'
 import { formatKrw } from '../lib/format.js'
 import LanguageDropdown from '../components/LanguageDropdown.jsx'
+import AboutPage from './AboutPage.jsx'
 
 // 외국인 사이트 2안 (WOWPASS 참고) — 별도 surface.
 // 플로우: ① 금액 입력 → ② 지점 선택 (실제 지도 검색 + 내 위치로 찾기 + 추천).
@@ -119,6 +120,7 @@ export default function Site2() {
   const { getDisplayRates } = useRates()
   const nav = useNavigate()
 
+  const [view, setView] = useState('flow') // flow | about
   const [step, setStep] = useState('amount') // amount | branch
   const [currency, setCurrency] = useState('USD')
   const [amount, setAmount] = useState('')
@@ -211,20 +213,31 @@ export default function Site2() {
     <div className="s2">
       <header className="s2-header">
         <div className="s2-header-inner">
-          <div className="s2-logo">
+          <button type="button" className="s2-logo" onClick={() => setView('flow')}>
             MONEY<span>BOX</span>
             <span className="s2-logo-tag">v2</span>
-          </div>
+          </button>
           <nav className="s2-nav">
             <span className="s2-nav-langs">🌏 EN · 中文 · 日本語 · 한국어</span>
           </nav>
           <div className="s2-header-right">
+            <button
+              type="button"
+              className={`s2-about-link${view === 'about' ? ' on' : ''}`}
+              onClick={() => setView('about')}
+            >
+              {t('about.title')}
+            </button>
             <LanguageDropdown />
           </div>
         </div>
       </header>
 
-      <main className="s2-main">
+      <main className={`s2-main${view === 'about' ? ' s2-main-wide' : ''}`}>
+        {view === 'about' ? (
+          <AboutPage />
+        ) : (
+        <>
         <section className="s2-hero">
           <div className="s2-hero-eyebrow">🛡️ {t('home.hero.grt.t')}</div>
           <h1 className="s2-hero-t">{t('s2.hero.t')}</h1>
@@ -396,6 +409,8 @@ export default function Site2() {
               {t('s2.back')}
             </button>
           </section>
+        )}
+        </>
         )}
       </main>
 
