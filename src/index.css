@@ -4186,28 +4186,24 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 .wp-title-cycle {
   white-space: normal;
 }
-.wp-pre {
+.wp-l1,
+.wp-l2,
+.wp-brand-line {
   display: block;
 }
-.wp-cycle-line {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.08em; /* 디센더 잘림 방지 */
+.wp-brand-line {
+  color: var(--travel-dark);
 }
-.wp-cycle-roll {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.28em;
+/* 순환 단어(가까운/간편한/신속한) — 파란색 강조 + 넘길 때 롤업 */
+.wp-cycle-word {
+  display: inline-block;
   color: var(--travel);
-  animation: wpCycleRoll 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-.wp-cycle-flag {
-  font-size: 0.82em;
+  animation: wpCycleRoll 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes wpCycleRoll {
   0% {
     opacity: 0;
-    transform: translateY(100%);
+    transform: translateY(0.5em);
   }
   100% {
     opacity: 1;
@@ -4215,7 +4211,7 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wp-cycle-roll {
+  .wp-cycle-word {
     animation: none;
   }
 }
