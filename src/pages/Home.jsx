@@ -11,6 +11,16 @@ import DevNote from '../components/DevNote.jsx'
 // 하단 섹션은 외국인 대상 서비스(WOWPASS·Creatrip 등)를 참고한 임시 콘텐츠.
 const RATE_TICKER = CURRENCY_ORDER.slice(0, 8)
 
+// 히어로 순환 타이포 — 국가/통화가 카드 넘기듯 바뀜 (당근 about 히어로 느낌)
+const HERO_CYCLE = [
+  { key: 'usd', flag: '🇺🇸' },
+  { key: 'jpy', flag: '🇯🇵' },
+  { key: 'cny', flag: '🇨🇳' },
+  { key: 'eur', flag: '🇪🇺' },
+  { key: 'twd', flag: '🇹🇼' },
+  { key: 'hkd', flag: '🇭🇰' },
+]
+
 // 인기 지점 칩 (홈 하단) — 클릭 시 지점 페이지로 이동
 const POPULAR_LOCS = [
   { key: 'myeongdong', emoji: '🛍️' },
@@ -92,6 +102,14 @@ export default function Home() {
     return () => clearTimeout(id)
   }, [scenarioIdx])
 
+  // 히어로 타이틀 순환(국가/통화) — 2초 간격
+  const [cycleIdx, setCycleIdx] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => setCycleIdx((i) => (i + 1) % HERO_CYCLE.length), 2000)
+    return () => clearInterval(id)
+  }, [])
+  const cyc = HERO_CYCLE[cycleIdx]
+
   // 머니박스보다 덜 받는 금액 문구 (언어별)
   const lessLabel = (won) =>
     lang === 'en'
@@ -115,7 +133,15 @@ export default function Home() {
               <span className="he-globe" aria-hidden="true">🌏</span>
               <span className="he-langs">English · 中文 · 日本語 · 한국어</span>
             </div>
-            <h1 className="wp-title">{t('home.hero.title')}</h1>
+            <h1 className="wp-title wp-title-cycle">
+              <span className="wp-pre">{t('home.hero.pre')}</span>
+              <span className="wp-cycle-line">
+                <span className="wp-cycle-roll" key={cycleIdx}>
+                  <span className="wp-cycle-flag" aria-hidden="true">{cyc.flag}</span>
+                  <span className="wp-cycle-word">{t(`home.cyc.${cyc.key}`)}</span>
+                </span>
+              </span>
+            </h1>
             <p className="wp-sub">{t('home.hero.sub')}</p>
             <div className="wp-cta-row">
               <button className="btn wp-cta" onClick={() => nav('/site/book')}>
