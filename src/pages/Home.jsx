@@ -64,6 +64,16 @@ const COMPARE_SCENARIOS = [
     },
   },
   {
+    key: 'eur',
+    flag: '🇪🇺',
+    amount: '€1,000',
+    rows: {
+      bank: { bar: 80, less: 30000 },
+      kiosk: { bar: 62, less: 60000 },
+      airport: { bar: 38, less: 135000 },
+    },
+  },
+  {
     key: 'twd',
     flag: '🇹🇼',
     amount: 'NT$10,000',
@@ -177,21 +187,10 @@ export default function Home() {
                 </span>
               </div>
 
-              {/* 환전 금액 시나리오 토글 (2초 자동 순환 + 클릭 선택) */}
-              <div className="wpc-toggle" role="tablist" aria-label="amount">
-                {COMPARE_SCENARIOS.map((s, i) => (
-                  <button
-                    key={s.key}
-                    type="button"
-                    role="tab"
-                    aria-selected={i === scenarioIdx}
-                    className={`wpc-toggle-btn${i === scenarioIdx ? ' is-on' : ''}`}
-                    onClick={() => setScenarioIdx(i)}
-                  >
-                    <span className="wpc-toggle-flag" aria-hidden="true">{s.flag}</span>
-                    {s.amount}
-                  </button>
-                ))}
+              {/* 현재 통화만 한 개씩 표시 (한 번에 모든 통화 X → 넘기듯 전환) */}
+              <div className="wpc-current" key={`cur-${scenarioIdx}`}>
+                <span className="wpc-current-flag" aria-hidden="true">{scenario.flag}</span>
+                <span className="wpc-current-amt">{scenario.amount}</span>
               </div>
 
               {/* 카드 스테이지 — 통화가 바뀔 때마다 카드가 넘어가듯 슬라이드(key=scenarioIdx) */}
@@ -223,10 +222,18 @@ export default function Home() {
                 </ul>
               </div>
 
-              {/* 도트 인디케이터 (현재 통화 위치) */}
-              <div className="wpc-dots" aria-hidden="true">
+              {/* 도트 인디케이터 (현재 통화 위치 · 클릭 시 이동) */}
+              <div className="wpc-dots" role="tablist" aria-label="currency">
                 {COMPARE_SCENARIOS.map((s, i) => (
-                  <span key={s.key} className={`wpc-dot${i === scenarioIdx ? ' on' : ''}`} />
+                  <button
+                    key={s.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === scenarioIdx}
+                    aria-label={s.amount}
+                    className={`wpc-dot${i === scenarioIdx ? ' on' : ''}`}
+                    onClick={() => setScenarioIdx(i)}
+                  />
                 ))}
               </div>
 
