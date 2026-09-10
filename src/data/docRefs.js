@@ -4,6 +4,7 @@
 //  - 한 화면에 여러 문서를 연결할 수 있다(docs 배열).
 // 기획문서는 IA·구조도·플로우·API·데이터모델·상태도로 슬림화됨.
 const D = {
+  overview: '00_서비스개요.md',
   ia: '01_IA.md',
   flow: '03_플로우.mermaid',
   api: '04_API.md',
@@ -13,10 +14,10 @@ const D = {
 }
 
 const DOC_REFS = [
-  { route: '/site', screen: '외국인 웹사이트 V1 · 홈', docs: [D.ia] },
+  { route: '/site', screen: '외국인 웹사이트 V1 · 홈', docs: [D.overview, D.ia] },
   { route: '/site/book', screen: '외국인 웹사이트 V1 · 신청(STEP A~완료)', docs: [D.flow, D.data, D.policy] },
   { route: '/site/lookup', screen: '외국인 웹사이트 V1 · 예약조회', docs: [D.flow, D.state, D.policy] },
-  { route: '/site2', screen: '외국인 사이트 2안 · 금액→지점선택', docs: [D.ia, D.flow] },
+  { route: '/site2', screen: '외국인 사이트 2안 · 금액→지점선택', docs: [D.overview, D.ia, D.flow] },
   { route: '/cems/reservations', screen: 'CEMS · 외국인 환전예약관리', docs: [D.ia, D.data] },
   { route: '/cems/settings/rates', screen: 'CEMS · 환율관리', docs: [D.ia, D.policy] },
   { route: '/cems/settings/limits', screen: 'CEMS · 한도관리', docs: [D.data, D.policy] },
