@@ -42,7 +42,7 @@ export default function KiosksPage() {
       <DevNote
         items={[
           '무인 환전기(키오스크) 찾기 페이지. 검색 + 지역칩 + 리스트 + 지도. "가까운 키오스크 찾기"는 위치 정보(Geolocation)로 최단거리 자동 정렬/선택.',
-          '자세히: 02_사이트맵.md',
+          '자세히: 01_IA.md',
         ]}
       />
     </div>

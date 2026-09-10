@@ -1,0 +1,31 @@
+graph TD
+  Root["/ RootLayout · 상단 데모 탭"]
+  Root --> V1["/site · 외국인 웹사이트 V1"]
+  Root --> V2["/site2 · 외국인 사이트 2안"]
+  Root --> CEMS["/cems · CEMS 어드민"]
+  Root --> POS["/pos · POS"]
+  Root --> Email["/email · 이메일"]
+  Root --> Docs["/docs · 기획문서"]
+
+  V1 --> V1H["/site 홈"]
+  V1 --> V1B["/site/book 예약 STEP A~완료"]
+  V1 --> V1L["/site/lookup 예약조회"]
+  V1 --> V1Br["/site/branches 지점"]
+  V1 --> V1K["/site/kiosks 무인환전기"]
+  V1 --> V1A["/site/about 회사소개"]
+
+  V2 --> V2F["금액 입력 → 지점 선택(검색·내위치·추천)"]
+
+  CEMS --> C1["/cems/reservations 외국인 환전예약관리"]
+  CEMS --> C2["/cems/hq 본사 예약관리"]
+  CEMS --> C3["/cems/settings/rates 환율관리"]
+  CEMS --> C4["/cems/settings/limits 한도관리"]
+
+  POS --> P2["/pos/reservation 예약검색/결과"]
+  POS --> P3["/pos/transaction 거래처리·베스트레이트 정산"]
+
+  V2 -. "예약(지점·통화·금액 전달)" .-> V1B
+  C3 -. "외국인 웹사이트 매입환율 실시간 연동" .-> V1B
+  C4 -. "통화별 최소·지점별 최대 한도" .-> V1B
+  V1B -. "예약 생성" .-> C1
+  C1 -. "거래 이관" .-> P3

@@ -29,7 +29,7 @@ export default function AboutPage() {
       <DevNote
         items={[
           '회사 소개 — 당근 about 페이지풍으로 구성한 임시 콘텐츠(스토리텔링·큰 숫자). 회사소개서 상세는 추후 반영',
-          '자세히: 02_사이트맵.md',
+          '자세히: 01_IA.md',
         ]}
       />
 
