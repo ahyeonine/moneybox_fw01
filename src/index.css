@@ -4346,6 +4346,23 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: var(--text-3);
   line-height: 1.45;
 }
+/* 신뢰 칩 (실시간 환율 · 베스트레이트 보장) */
+.wpc-trust-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--travel-soft);
+  color: var(--travel-dark);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.wpc-lock {
+  font-size: 12px;
+}
 /* 금액 시나리오 토글 (통화 여러 개 → 줄바꿈 허용) */
 .wpc-toggle {
   display: flex;
@@ -4378,6 +4395,20 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: var(--travel-dark);
   box-shadow: 0 2px 6px rgba(15, 47, 138, 0.12);
   border-radius: 12px;
+}
+/* 카드 스테이지 — 통화 바뀔 때 카드가 넘어가듯 슬라이드 (key 변경 → 리마운트) */
+.wpc-stage {
+  animation: wpcSlide 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes wpcSlide {
+  0% {
+    opacity: 0;
+    transform: translateX(26px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 .wpc-rows {
   list-style: none;
@@ -4412,7 +4443,17 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   height: 100%;
   border-radius: 999px;
   background: #cdd9ef;
-  transition: width 0.3s ease;
+  /* 카드가 넘어올 때 막대가 왼쪽에서 채워지는 느낌 */
+  transform-origin: left center;
+  animation: wpcBarGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes wpcBarGrow {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
 }
 .wpc-tag {
   font-size: 13px;
@@ -4422,22 +4463,10 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 }
 .wpc-neg {
   color: #8a97ab;
-  display: inline-block;
-  /* 통화가 바뀔 때 금액이 카드 넘기듯 갱신 (key 변경 → 리마운트) */
-  animation: wpcFlip 0.5s ease both;
-}
-@keyframes wpcFlip {
-  0% {
-    opacity: 0;
-    transform: translateY(-8px) rotateX(45deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) rotateX(0);
-  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wpc-neg {
+  .wpc-stage,
+  .wpc-bar {
     animation: none;
   }
 }
@@ -4456,10 +4485,62 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   padding: 3px 11px;
   font-size: 12px;
 }
-.wpc-note {
-  margin-top: 18px;
+/* 머니박스 행의 체크 표시 (신뢰) */
+.wpc-check {
+  display: inline-grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  margin-right: 6px;
+  border-radius: 999px;
+  background: var(--travel);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  vertical-align: middle;
+}
+/* 현재 통화 위치 도트 */
+.wpc-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+.wpc-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #d3ddef;
+  transition: width 0.25s, background 0.25s;
+}
+.wpc-dot.on {
+  width: 18px;
+  background: var(--travel);
+}
+/* 하단 신뢰 푸터 */
+.wpc-foot {
+  margin-top: 16px;
   padding-top: 14px;
   border-top: 1px dashed #e2e8f5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.wpc-foot-trust {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.wpc-foot-trust strong {
+  font-weight: 900;
+  color: var(--text);
+}
+.wpc-star {
+  margin-right: 2px;
+}
+.wpc-note {
   font-size: 11px;
   color: var(--text-3);
   font-weight: 600;
