@@ -10,7 +10,7 @@ export default function PosHome() {
   return (
     <div className="pos-home">
       <DevNote
-        items={['자세히: 00_개발메모.md']}
+        items={['자세히: 01_IA.md']}
       />
       <div className="pos-top">
         <Logo to="/pos" className="logo pos-logo" />
