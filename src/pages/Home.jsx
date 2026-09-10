@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { CURRENCY_ORDER, CURRENCY_META } from '../data/rates.js'
@@ -10,10 +11,64 @@ import DevNote from '../components/DevNote.jsx'
 // 별도 구현 없이 안내 문구만 표시한다(공항수령 제외 → 디자인 참고).
 const RATE_TICKER = CURRENCY_ORDER.slice(0, 8)
 
+// 환전 금액 시나리오별 "머니박스 대비 덜 받는 금액"(원) — 예시 수치(실제 아님).
+// 주요 인바운드 통화(USD·JPY) 기준으로 외국인이 체감할 수 있게 실제 금액으로 표현.
+const COMPARE_SCENARIOS = [
+  {
+    key: 'usd',
+    flag: '🇺🇸',
+    amount: '$1,000',
+    // bar = 상대적으로 받는 비율(예시), less = 머니박스보다 덜 받는 금액(원)
+    rows: {
+      bank: { bar: 80, less: 28000 },
+      kiosk: { bar: 62, less: 55000 },
+      airport: { bar: 38, less: 124000 },
+    },
+  },
+  {
+    key: 'jpy',
+    flag: '🇯🇵',
+    amount: '¥100,000',
+    rows: {
+      bank: { bar: 80, less: 18000 },
+      kiosk: { bar: 62, less: 37000 },
+      airport: { bar: 38, less: 83000 },
+    },
+  },
+  {
+    key: 'twd',
+    flag: '🇹🇼',
+    amount: 'NT$10,000',
+    rows: {
+      bank: { bar: 80, less: 9000 },
+      kiosk: { bar: 62, less: 17000 },
+      airport: { bar: 38, less: 39000 },
+    },
+  },
+  {
+    key: 'hkd',
+    flag: '🇭🇰',
+    amount: 'HK$5,000',
+    rows: {
+      bank: { bar: 80, less: 18000 },
+      kiosk: { bar: 62, less: 35000 },
+      airport: { bar: 38, less: 79000 },
+    },
+  },
+]
+
 export default function Home() {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const { getDisplayRates } = useRates() // 실시간 환율(2분 주기 자동 변동)
   const nav = useNavigate()
+  const [scenarioKey, setScenarioKey] = useState('usd')
+  const scenario = COMPARE_SCENARIOS.find((s) => s.key === scenarioKey) || COMPARE_SCENARIOS[0]
+
+  // 머니박스보다 덜 받는 금액 문구 (언어별)
+  const lessLabel = (won) =>
+    lang === 'en'
+      ? `≈ ₩${formatNumber(won)} ${t('home.cmp.less')}`
+      : `약 ${formatNumber(won)}원 ${t('home.cmp.less')}`
 
   return (
     <div className="home">
@@ -24,48 +79,87 @@ export default function Home() {
         ]}
       />
 
-      {/* 1. 히어로 */}
-      <section className="hero-hd">
-        <div className="hero-hd-copy">
-          {/* 외국인 친화: 다국어 지원을 한눈에 보여주는 배지 */}
-          <div className="hero-eyebrow">
-            <span className="he-globe" aria-hidden="true">🌏</span>
-            <span className="he-langs">English · 中文 · 日本語 · 한국어</span>
-          </div>
-          <h1>{t('home.hero.title')}</h1>
-          <p>{t('home.hero.sub')}</p>
-          {/* 신뢰 배지 — 외국인 방문객에게 안심 신호 (실제 회사 지표) */}
-          <div className="hero-trust">
-            <div className="ht-item">
-              <span className="ht-num">⭐ 4.97</span>
-              <span className="ht-label">{t('home.trust.rating')}</span>
+      {/* 1. 히어로 (WOWPASS풍 — 깨끗한 화이트 + 큰 타이포 + 카드 비주얼, 블루 포인트) */}
+      <section className="wp-hero">
+        <div className="wp-hero-grid">
+          <div className="wp-hero-copy">
+            <div className="hero-eyebrow">
+              <span className="he-globe" aria-hidden="true">🌏</span>
+              <span className="he-langs">English · 中文 · 日本語 · 한국어</span>
             </div>
-            <div className="ht-item">
-              <span className="ht-num">1.7M+</span>
-              <span className="ht-label">{t('home.trust.visitors')}</span>
+            <h1 className="wp-title">{t('home.hero.title')}</h1>
+            <p className="wp-sub">{t('home.hero.sub')}</p>
+            <div className="wp-cta-row">
+              <button className="btn wp-cta" onClick={() => nav('/site/book')}>
+                {t('home.hero.cta')}
+              </button>
             </div>
-            <div className="ht-item">
-              <span className="ht-num">40+</span>
-              <span className="ht-label">{t('home.trust.branches')}</span>
+            {/* 신뢰 배지 — 외국인 방문객에게 안심 신호 (실제 회사 지표) */}
+            <div className="hero-trust">
+              <div className="ht-item">
+                <span className="ht-num">⭐ 4.97</span>
+                <span className="ht-label">{t('home.trust.rating')}</span>
+              </div>
+              <div className="ht-item">
+                <span className="ht-num">1.7M+</span>
+                <span className="ht-label">{t('home.trust.visitors')}</span>
+              </div>
+              <div className="ht-item">
+                <span className="ht-num">40+</span>
+                <span className="ht-label">{t('home.trust.branches')}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="hero-cards">
-          <div className="hero-card">
-            <div className="hc-icon">🏦</div>
-            <div className="hc-t">{t('home.card.branch.t')}</div>
-            <div className="hc-d">{t('home.card.branch.d')}</div>
-            <button className="btn primary" onClick={() => nav('/site/book')}>
-              {t('home.card.branch.cta')}
-            </button>
-          </div>
-          <div className="hero-card">
-            <div className="hc-icon">📶</div>
-            <div className="hc-t">{t('home.card.esim.t')}</div>
-            <div className="hc-d">{t('home.card.esim.d')}</div>
-            <button className="btn primary" onClick={() => nav('/site/esim')}>
-              {t('home.card.esim.cta')}
-            </button>
+
+          {/* 환율 비교 비주얼 — 공항/무인기/은행 대비 머니박스가 실제로 얼마나 더 주는지(원) 강조 (예시 수치) */}
+          <div className="wp-hero-visual">
+            <div className="wp-compare">
+              <div className="wp-compare-head">
+                <span className="wpc-title">{t('home.cmp.title')}</span>
+                <span className="wpc-sub">{t('home.cmp.sub')}</span>
+              </div>
+
+              {/* 환전 금액 시나리오 토글 ($1,000 / ¥100,000) */}
+              <div className="wpc-toggle" role="tablist" aria-label="amount">
+                {COMPARE_SCENARIOS.map((s) => (
+                  <button
+                    key={s.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={s.key === scenarioKey}
+                    className={`wpc-toggle-btn${s.key === scenarioKey ? ' is-on' : ''}`}
+                    onClick={() => setScenarioKey(s.key)}
+                  >
+                    <span className="wpc-toggle-flag" aria-hidden="true">{s.flag}</span>
+                    {s.amount}
+                  </button>
+                ))}
+              </div>
+
+              <ul className="wpc-rows">
+                <li className="wpc-row is-best">
+                  <div className="wpc-row-top">
+                    <span className="wpc-name">{t('home.cmp.mb')}</span>
+                    <span className="wpc-tag">{t('home.cmp.best')}</span>
+                  </div>
+                  <span className="wpc-bar-wrap">
+                    <span className="wpc-bar" style={{ width: '100%' }} />
+                  </span>
+                </li>
+                {['bank', 'kiosk', 'airport'].map((key) => (
+                  <li className="wpc-row" key={key}>
+                    <div className="wpc-row-top">
+                      <span className="wpc-name">{t(`home.cmp.${key}`)}</span>
+                      <span className="wpc-tag wpc-neg">{lessLabel(scenario.rows[key].less)}</span>
+                    </div>
+                    <span className="wpc-bar-wrap">
+                      <span className="wpc-bar" style={{ width: `${scenario.rows[key].bar}%` }} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <div className="wpc-note">{t('home.cmp.note')}</div>
+            </div>
           </div>
         </div>
       </section>

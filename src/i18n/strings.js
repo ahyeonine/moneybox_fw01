@@ -337,8 +337,29 @@ export const STRINGS = {
   // ── 랜딩 홈 (외국인 웹사이트 첫 화면). 공항수령 없음 ──
   'home.hero.title': { ko: '가장 빠른 환전의 시작\n머니박스', en: 'The fastest way to exchange\nMoneyBox' },
   'home.hero.sub': {
-    ko: '환전부터 eSIM까지, 머니박스로 간편하게 시작하세요.',
-    en: 'From FX to eSIM — start simply with MoneyBox.',
+    ko: '한국을 방문하는 외국인을 위한 가장 쉬운 환전 서비스.',
+    en: 'The easiest currency exchange for visitors to Korea.',
+  },
+  'home.hero.cta': { ko: '환전 예약하기', en: 'Reserve your exchange' },
+  'home.card2.t': { ko: '베스트레이트 보장', en: 'Best-rate guarantee' },
+  'home.card2.d': {
+    ko: '예약 시점 환율 고정 · 방문일에 더 좋아지면 그날 환율 적용',
+    en: 'Rate locked at booking — get the better rate if it improves by your visit',
+  },
+  'home.cmp.title': { ko: '이만큼 더 받아요', en: 'Get more won for your money' },
+  'home.cmp.sub': {
+    ko: '같은 금액을 바꿔도 머니박스가 더 많이 드려요',
+    en: 'Same amount exchanged — MoneyBox pays out more',
+  },
+  'home.cmp.mb': { ko: '머니박스', en: 'MoneyBox' },
+  'home.cmp.best': { ko: '가장 많이 받아요', en: 'You get the most' },
+  'home.cmp.bank': { ko: '은행', en: 'Bank' },
+  'home.cmp.kiosk': { ko: '무인 환전기', en: 'Kiosk' },
+  'home.cmp.airport': { ko: '공항', en: 'Airport' },
+  'home.cmp.less': { ko: '적게 받아요', en: 'less' },
+  'home.cmp.note': {
+    ko: '※ 예시입니다 (실제 환율·수치 아님)',
+    en: '* Example only (not actual rates)',
   },
   'home.trust.rating': { ko: 'Google 평점 · 15,000+ 리뷰', en: 'Google rating · 15,000+ reviews' },
   'home.trust.visitors': { ko: '연간 방문객', en: 'Visitors / year' },

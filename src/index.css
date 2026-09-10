@@ -2304,35 +2304,52 @@ th.num {
 /* 1. 히어로 */
 .hero-hd {
   position: relative;
-  border-radius: 28px;
-  background: linear-gradient(140deg, #0b2fb0 0%, #1f6bff 52%, #38bdf8 100%);
-  padding: 68px 24px 40px;
+  /* 풀블리드(화면 끝까지) — XE풍 딥 네이비 랜딩 */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-top: -20px; /* .content 상단 패딩 상쇄 → 헤더 바로 아래 밀착 */
+  border-radius: 0;
+  background: linear-gradient(165deg, #081a52 0%, #0f2f8a 55%, #14439f 100%);
+  padding: 84px 24px 104px;
   color: #fff;
-  box-shadow: 0 20px 44px rgba(31, 107, 255, 0.32);
   overflow: hidden;
 }
-/* 강렬한 분위기용 광원 2개 (장식) */
+/* 히어로 단일 CTA — 네이비 위 화이트 알약 버튼 (XE풍) */
+.hero-cta {
+  margin-top: 28px;
+  background: #fff;
+  color: var(--travel-dark);
+  border-radius: 999px;
+  padding: 15px 36px;
+  font-size: 17px;
+  font-weight: 800;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+}
+.hero-cta:hover {
+  background: #eef3ff;
+  filter: none;
+}
+/* 딥 네이비 위 은은한 하이라이트 (장식) */
 .hero-hd::before {
   content: '';
   position: absolute;
-  top: -90px;
-  right: -60px;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(120, 200, 255, 0.35), transparent 70%);
+  top: -120px;
+  right: 8%;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(90, 150, 255, 0.35), transparent 68%);
   pointer-events: none;
   z-index: 0;
 }
-.hero-hd::after {
-  content: '';
+/* 하단 웨이브: 히어로 → 본문(밝은 배경) 전환 */
+.hero-wave {
   position: absolute;
-  bottom: -110px;
-  left: -70px;
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle, rgba(11, 47, 176, 0.5), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 72px;
+  display: block;
+  z-index: 2;
 }
 .hero-hd-copy {
   position: relative;
@@ -3510,4 +3527,302 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 .site .stepper .st.active .num {
   background: var(--travel);
   border-color: var(--travel);
+}
+
+/* ============================================================
+   WOWPASS풍 화이트 히어로 (블루 포인트) — 고객 사이트 홈
+   깨끗한 화이트/라이트 배경 + 큰 타이포 + 떠있는 블루 카드 비주얼
+   ============================================================ */
+.wp-hero {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-top: -20px; /* .content 상단 패딩 상쇄 → 헤더 바로 아래 */
+  background: linear-gradient(180deg, #f5f8ff 0%, #e9f0ff 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 60px 24px;
+  overflow: hidden;
+}
+.wp-hero-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 44px;
+  align-items: center;
+}
+.wp-hero-copy {
+  text-align: left;
+}
+.wp-title {
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  white-space: pre-line;
+  margin: 12px 0 12px;
+}
+.wp-sub {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin: 0 0 22px;
+  max-width: 460px;
+}
+.wp-cta-row {
+  margin-bottom: 24px;
+}
+.wp-cta {
+  background: var(--travel);
+  color: #fff;
+  border-radius: 999px;
+  padding: 16px 40px;
+  font-size: 17px;
+  font-weight: 800;
+  box-shadow: 0 12px 26px rgba(31, 107, 255, 0.28);
+}
+.wp-cta:hover {
+  background: var(--travel-dark);
+  filter: none;
+}
+/* 화이트 배경용 배지/신뢰 재스타일 */
+.wp-hero .hero-eyebrow {
+  background: #fff;
+  border-color: #d6e2ff;
+  color: var(--travel-dark);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: none;
+  margin-bottom: 4px;
+}
+.wp-hero .hero-trust {
+  justify-content: flex-start;
+}
+.wp-hero .hero-trust .ht-item {
+  background: #fff;
+  border-color: #dbe4f5;
+  backdrop-filter: none;
+}
+.wp-hero .hero-trust .ht-num {
+  color: var(--text);
+}
+.wp-hero .hero-trust .ht-label {
+  color: var(--text-3);
+}
+/* 카드 비주얼 (블루 그라데이션, 살짝 기울임) */
+.wp-hero-visual {
+  display: flex;
+  justify-content: center;
+}
+.wp-card {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 22px;
+  background: linear-gradient(140deg, #0b2fb0 0%, #1f6bff 60%, #38bdf8 100%);
+  color: #fff;
+  padding: 24px;
+  box-shadow: 0 26px 52px rgba(15, 47, 138, 0.34);
+  transform: rotate(-3deg);
+}
+.wp-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wp-card-brand {
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+.wp-card-brand span {
+  color: #bcd4ff;
+}
+.wp-card-chip {
+  font-size: 22px;
+}
+.wp-card-benefit {
+  margin: 40px 0 22px;
+}
+.wp-card-bt {
+  font-size: 22px;
+  font-weight: 800;
+}
+.wp-card-bd {
+  font-size: 13px;
+  color: #dbe6ff;
+  font-weight: 600;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.wp-card-langs {
+  font-size: 12px;
+  font-weight: 700;
+  color: #eaf1ff;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  padding-top: 12px;
+}
+
+/* 환율 비교 카드 (머니박스 vs 은행/무인기/공항 — 예시 수치, 실제 금액 표기) */
+.wp-compare {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border: 1px solid #e4ebf7;
+  border-radius: 22px;
+  padding: 26px 24px 20px;
+  box-shadow: 0 26px 52px rgba(15, 47, 138, 0.16);
+}
+.wp-compare-head {
+  margin-bottom: 16px;
+}
+.wpc-title {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.wpc-sub {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-3);
+  line-height: 1.45;
+}
+/* 금액 시나리오 토글 (통화 여러 개 → 줄바꿈 허용) */
+.wpc-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 20px;
+  background: #eef2fb;
+  border-radius: 18px;
+}
+.wpc-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 7px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.wpc-toggle-flag {
+  font-size: 15px;
+}
+.wpc-toggle-btn.is-on {
+  background: #fff;
+  color: var(--travel-dark);
+  box-shadow: 0 2px 6px rgba(15, 47, 138, 0.12);
+  border-radius: 12px;
+}
+.wpc-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.wpc-row-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.wpc-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.wpc-bar-wrap {
+  display: block;
+  height: 12px;
+  border-radius: 999px;
+  background: #eef2fb;
+  overflow: hidden;
+}
+.wpc-bar {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #cdd9ef;
+  transition: width 0.3s ease;
+}
+.wpc-tag {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.wpc-neg {
+  color: #8a97ab;
+}
+.wpc-row.is-best .wpc-name {
+  color: var(--travel-dark);
+  font-weight: 900;
+  font-size: 14px;
+}
+.wpc-row.is-best .wpc-bar {
+  background: linear-gradient(90deg, #1f6bff 0%, #38bdf8 100%);
+}
+.wpc-row.is-best .wpc-tag {
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: 12px;
+}
+.wpc-note {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed #e2e8f5;
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+
+@media (max-width: 860px) {
+  .wp-hero {
+    padding: 44px 20px;
+  }
+  .wp-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .wp-hero-copy {
+    text-align: center;
+  }
+  .wp-hero .hero-eyebrow,
+  .wp-hero .hero-trust {
+    justify-content: center;
+  }
+  .wp-hero .hero-eyebrow {
+    display: inline-flex;
+  }
+  .wp-title {
+    font-size: 34px;
+  }
+  .wp-sub {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .wp-card {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .wp-compare {
+    max-width: 420px;
+    margin: 0 auto;
+    text-align: left;
+  }
 }
