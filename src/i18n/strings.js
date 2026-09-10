@@ -336,17 +336,16 @@ export const STRINGS = {
   },
   // ── 랜딩 홈 (외국인 웹사이트 첫 화면). 공항수령 없음 ──
   'home.hero.title': { ko: '가장 빠른 환전의 시작\n머니박스', en: 'The fastest way to exchange\nMoneyBox' },
-  // 히어로 순환 타이포 (국가/통화가 카드 넘기듯 바뀜)
-  'home.hero.pre': { ko: '가장 좋은 환율로', en: 'The best rate for' },
-  'home.cyc.usd': { ko: '미국 달러', en: 'US Dollars' },
-  'home.cyc.jpy': { ko: '일본 엔', en: 'Japanese Yen' },
-  'home.cyc.cny': { ko: '중국 위안', en: 'Chinese Yuan' },
-  'home.cyc.eur': { ko: '유로', en: 'Euros' },
-  'home.cyc.twd': { ko: '대만 달러', en: 'Taiwan Dollars' },
-  'home.cyc.hkd': { ko: '홍콩 달러', en: 'Hong Kong Dollars' },
+  // 히어로 순환 타이포 (서비스 가치가 카드 넘기듯 바뀜 → "가장 [가까운/간편한/신속한] 환전의 시작, 머니박스")
+  'home.hero.pre': { ko: '가장', en: 'The' },
+  'home.hero.mid': { ko: '환전의 시작', en: 'way to exchange, with' },
+  'home.hero.brand': { ko: '머니박스', en: 'MoneyBox' },
+  'home.cyc.near': { ko: '가까운', en: 'nearest' },
+  'home.cyc.easy': { ko: '간편한', en: 'easiest' },
+  'home.cyc.fast': { ko: '신속한', en: 'fastest' },
   'home.hero.sub': {
-    ko: '한국을 방문하는 외국인을 위한 가장 쉬운 환전 서비스.',
-    en: 'The easiest currency exchange for visitors to Korea.',
+    ko: '온라인으로 예약하고, 가까운 지점에서 현금으로. 베스트레이트 보장.',
+    en: 'Reserve online, pick up cash near you — best rate guaranteed.',
   },
   'home.hero.cta': { ko: '환전 예약하기', en: 'Reserve your exchange' },
   'home.card2.t': { ko: '베스트레이트 보장', en: 'Best-rate guarantee' },
