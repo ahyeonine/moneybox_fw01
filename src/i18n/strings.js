@@ -537,6 +537,7 @@ export const STRINGS = {
     en: '* Temporary page — prototype content modeled on services for visitors to Korea',
   },
   // 회사 소개 — 당근 about 페이지풍(큰 서술형 문장·스토리텔링)
+  'about.hero.eyebrow': { ko: '머니박스 이야기', en: 'The MoneyBox story' },
   'about.hero.t': {
     ko: '한국에서의 환전,\n기분 좋게.',
     en: 'Exchanging money in Korea,\nmade to feel good.',
