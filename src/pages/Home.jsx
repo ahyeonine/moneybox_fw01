@@ -35,6 +35,26 @@ const COMPARE_SCENARIOS = [
       airport: { bar: 38, less: 83000 },
     },
   },
+  {
+    key: 'twd',
+    flag: '🇹🇼',
+    amount: 'NT$10,000',
+    rows: {
+      bank: { bar: 80, less: 9000 },
+      kiosk: { bar: 62, less: 17000 },
+      airport: { bar: 38, less: 39000 },
+    },
+  },
+  {
+    key: 'hkd',
+    flag: '🇭🇰',
+    amount: 'HK$5,000',
+    rows: {
+      bank: { bar: 80, less: 18000 },
+      kiosk: { bar: 62, less: 35000 },
+      airport: { bar: 38, less: 79000 },
+    },
+  },
 ]
 
 export default function Home() {

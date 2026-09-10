@@ -3690,14 +3690,15 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: var(--text-3);
   line-height: 1.45;
 }
-/* 금액 시나리오 토글 */
+/* 금액 시나리오 토글 (통화 여러 개 → 줄바꿈 허용) */
 .wpc-toggle {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
   gap: 4px;
   padding: 4px;
   margin-bottom: 20px;
   background: #eef2fb;
-  border-radius: 999px;
+  border-radius: 18px;
 }
 .wpc-toggle-btn {
   display: inline-flex;
@@ -3708,8 +3709,8 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: var(--text-3);
   font-size: 13px;
   font-weight: 800;
-  padding: 7px 16px;
-  border-radius: 999px;
+  padding: 7px 14px;
+  border-radius: 14px;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
@@ -3720,6 +3721,7 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   background: #fff;
   color: var(--travel-dark);
   box-shadow: 0 2px 6px rgba(15, 47, 138, 0.12);
+  border-radius: 12px;
 }
 .wpc-rows {
   list-style: none;
