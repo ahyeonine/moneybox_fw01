@@ -4,7 +4,7 @@ import { marked } from 'marked'
 import { screensForDoc } from '../data/docRefs.js'
 
 // 기획문서 뷰어 — docs-plan/ 폴더의 마크다운/머메이드 파일을 목록+렌더링으로 보여준다.
-// 내부 검토용. 개발문서(docs/)와 별개인 기획문서(docs-plan/) 전용.
+// 내부 검토용. 기획문서(docs-plan/) 전용 — IA·구조도·플로우·API·데이터모델·상태도·정책.
 // Vite raw import로 빌드 시점에 문서 내용을 번들에 포함한다.
 const RAW = import.meta.glob('../../docs-plan/*.{md,mermaid}', {
   query: '?raw',

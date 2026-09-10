@@ -10,8 +10,8 @@ const MAX_USD_CAP = 9999
 
 // 화면 3 (신규) · 설정 → 외국인서비스 한도관리
 // [최소금액][신청 단위][최대금액] 토글로 전환 (기본 최소금액)
-//  - 최소금액: 통화별 최소 환전금액 (전체 지점 공통)
-//  - 최대금액: 건당 최대 환전금액 (전체 지점 공통, 원화 기준 일괄입력 → 통화별 상한 자동계산)
+//  - 최소금액: 통화별 최소 환전금액 (지점 설정 — CEMS 로그인 지점 기준)
+//  - 최대금액: 건당 최대 환전금액 (지점 설정, 원화 기준 일괄입력 → 통화별 상한 자동계산)
 
 export default function LimitManagement() {
   const { minAmounts, unitAmounts, maxAmounts, saveMinAmounts, saveUnitAmounts, saveMaxAmounts } =
@@ -52,7 +52,7 @@ export default function LimitManagement() {
     setTimeout(() => setUnitSaved(false), 1500)
   }
 
-  /* ── 최대금액 (전체 지점 공통) ── */
+  /* ── 최대금액 (지점 설정) ── */
   const [maxTable, setMaxTable] = useState(() => ({ ...maxAmounts }))
   const [bulkKrw, setBulkKrw] = useState('')
   const [maxSaved, setMaxSaved] = useState(false)
@@ -107,9 +107,9 @@ export default function LimitManagement() {
     <div>
       <DevNote
         items={[
-          '최소금액(07_정책 §4): 기본 USD 100 상당액을 통화별로 환산한 값. 지점이 통화별로 조정 가능(프로토타입은 전체 지점 공통으로 단순화)',
+          '최소금액(07_정책 §4): 기본 USD 100 상당액을 통화별로 환산한 값. 각 지점이 자기 CEMS에서 통화별로 조정(프로토타입은 로그인 지점 1곳을 대표)',
           '신청 단위: 통화별 설정. 외국인 웹사이트 신청화면에서만 상위 단위로 올림 적용(CEMS/POS/이메일 미적용)',
-          '건당 최대금액: 지점이 통화별로 설정(프로토타입은 전체 공통). 원화(KRW) 기준 1개 입력하면 로드환율로 전체 통화 자동 환산',
+          '건당 최대금액: 각 지점이 자기 CEMS에서 통화별로 설정. 원화(KRW) 기준 1개 입력하면 로드환율로 전체 통화 자동 환산',
           '설정 가능한 최대금액 상한 = 통화별 9,999 USD 상당액(정책 확정). 초과 입력 시 저장/적용 차단 + 에러 표시',
           '자세히: 01_IA.md',
         ]}
@@ -135,7 +135,7 @@ export default function LimitManagement() {
       {tab === 'min' && (
         <div className="cems-panel">
           <div className="panel-head">
-            <h2 className="cems-h2">통화별 최소 환전금액 <span className="tiny">(전체 지점 공통)</span></h2>
+            <h2 className="cems-h2">통화별 최소 환전금액 <span className="tiny">(지점 설정)</span></h2>
             <div>
               {minSaved && <span className="saved-flash">저장됨</span>}
               <button className="cems-btn primary" onClick={saveMins}>
@@ -171,7 +171,7 @@ export default function LimitManagement() {
             </table>
           </div>
           <div className="tiny" style={{ marginTop: 8 }}>
-            ※ 최대금액은 "최대금액" 탭에서 관리합니다. (건당 최대금액, 전체 지점 공통)
+            ※ 최대금액은 "최대금액" 탭에서 관리합니다. (건당 최대금액, 지점 설정)
           </div>
         </div>
       )}
@@ -181,7 +181,7 @@ export default function LimitManagement() {
         <div className="cems-panel">
           <div className="panel-head">
             <h2 className="cems-h2">
-              통화별 신청 단위 <span className="tiny">(전체 지점 공통)</span>
+              통화별 신청 단위 <span className="tiny">(지점 설정)</span>
             </h2>
             <div>
               {unitSaved && <span className="saved-flash">저장됨</span>}
@@ -229,7 +229,7 @@ export default function LimitManagement() {
       {tab === 'max' && (
         <div className="cems-panel">
           <div className="panel-head">
-            <h2 className="cems-h2">건당 최대금액 <span className="tiny">(전체 지점 공통 · 환율 리스크 상한)</span></h2>
+            <h2 className="cems-h2">건당 최대금액 <span className="tiny">(지점 설정 · 환율 리스크 상한)</span></h2>
             <div>
               {maxSaved && <span className="saved-flash">저장됨</span>}
               <button className="cems-btn primary" onClick={saveMaxes}>
