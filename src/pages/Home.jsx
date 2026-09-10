@@ -124,7 +124,7 @@ export default function Home() {
       <DevNote
         items={[
           '히어로+기준환율 아래 랜딩 섹션(이용방법·혜택·인기지점·FAQ·CTA)은 외국인 대상 서비스 참고로 구성한 임시 콘텐츠',
-          '자세히: 02_사이트맵.md',
+          '자세히: 01_IA.md',
         ]}
       />
 

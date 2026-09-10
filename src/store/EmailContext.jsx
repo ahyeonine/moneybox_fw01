@@ -7,7 +7,7 @@ const EmailContext = createContext(null)
 // 지점(직원) 취소 시 고정 사유 문구 — 지점 취소 안내 메일의 {{branchReason}} 치환값
 export const BRANCH_CANCEL_REASON = '지점 사정으로 인해 예약이 취소되었습니다.'
 
-// 이메일 종류 메타 (표시 순서/라벨) — 06_알림리마인더_템플릿.md 기준 6종
+// 이메일 종류 메타 (표시 순서/라벨) — 00_개발메모.md 기준 6종
 // (수령 당일 무응답 리마인더는 제거됨: 전일 리마인더 무응답 → 수령기한 경과 시 자동취소 안내로 처리)
 export const EMAIL_TYPES = [
   { key: 'auth', label: '인증번호 발송' },
@@ -19,7 +19,7 @@ export const EMAIL_TYPES = [
 ]
 
 // 기본 템플릿 (관리자 수정 가능). 본문의 {{token}} 은 발송 시 치환된다.
-// (문안은 docs-plan/06_알림리마인더_템플릿.md 와 동일 정책)
+// (문안은 docs-plan/00_개발메모.md 와 동일 정책)
 function seedTemplates() {
   return {
     auth: {
