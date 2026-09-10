@@ -147,11 +147,29 @@ export default function Home() {
               <span className="wp-brand-line">{t('home.hero.brand')}</span>
             </h1>
             <p className="wp-sub">{t('home.hero.sub')}</p>
+
+            {/* 빠른 안내 배지 — 외국인이 바로 이해: 여권만 · 결제없음 · 1분 */}
+            <div className="hero-quickfacts">
+              <span className="hqf"><span aria-hidden="true">🪪</span> {t('home.hero.qf1')}</span>
+              <span className="hqf"><span aria-hidden="true">💳</span> {t('home.hero.qf2')}</span>
+              <span className="hqf"><span aria-hidden="true">⏱️</span> {t('home.hero.qf3')}</span>
+            </div>
+
             <div className="wp-cta-row">
               <button className="btn wp-cta" onClick={() => nav('/site/book')}>
                 {t('home.hero.cta')}
               </button>
             </div>
+
+            {/* 손해 없는 환전 — 베스트레이트 보장 (첫 화면 신뢰 신호) */}
+            <div className="hero-guarantee">
+              <span className="hg-icon" aria-hidden="true">🛡️</span>
+              <div className="hg-text">
+                <div className="hg-t">{t('home.hero.grt.t')}</div>
+                <div className="hg-d">{t('home.hero.grt.d')}</div>
+              </div>
+            </div>
+
             {/* 신뢰 배지 — 외국인 방문객에게 안심 신호 (실제 회사 지표) */}
             <div className="hero-trust">
               <div className="ht-item">
