@@ -4962,6 +4962,10 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
 }
 .s2-logo span {
   color: var(--travel);
@@ -4984,6 +4988,27 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 }
 .s2-header-right {
   margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+/* 회사 소개 링크 (언어 옆) */
+.s2-about-link {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-2);
+  padding: 8px 4px;
+  white-space: nowrap;
+}
+.s2-about-link:hover {
+  color: var(--travel-dark);
+}
+.s2-about-link.on {
+  color: var(--travel-dark);
+  border-bottom: 2px solid var(--travel);
 }
 .s2-main {
   flex: 1;
@@ -4991,6 +5016,9 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   width: 100%;
   margin: 0 auto;
   padding: 28px 20px 60px;
+}
+.s2-main.s2-main-wide {
+  max-width: 880px;
 }
 /* 히어로 */
 .s2-hero {
