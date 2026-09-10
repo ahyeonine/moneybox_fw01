@@ -4499,23 +4499,67 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   font-weight: 900;
   vertical-align: middle;
 }
-/* 현재 통화 위치 도트 */
+/* 현재 통화 칩 (한 개씩만 표시 · 넘길 때 플립) */
+.wpc-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--travel-soft);
+  color: var(--travel-dark);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  animation: wpcCurFlip 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.wpc-current-flag {
+  font-size: 18px;
+}
+@keyframes wpcCurFlip {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) rotateX(50deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+/* 현재 통화 위치 도트 (클릭 시 이동) */
 .wpc-dots {
   display: flex;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   margin-top: 16px;
 }
 .wpc-dot {
+  border: 0;
+  background: transparent;
+  padding: 6px 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.wpc-dot::before {
+  content: '';
   width: 6px;
   height: 6px;
   border-radius: 999px;
   background: #d3ddef;
   transition: width 0.25s, background 0.25s;
 }
-.wpc-dot.on {
+.wpc-dot.on::before {
   width: 18px;
   background: var(--travel);
+}
+@media (prefers-reduced-motion: reduce) {
+  .wpc-current {
+    animation: none;
+  }
 }
 /* 하단 신뢰 푸터 */
 .wpc-foot {
