@@ -5179,6 +5179,73 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   border-radius: 14px;
   font-size: 15px;
 }
+/* "저희가 찾아드릴게요!" 내 위치 버튼 */
+.s2-geo-btn {
+  margin-top: 10px;
+  background: var(--travel-soft);
+  color: var(--travel-dark);
+  border: 1px solid #cfe0ff;
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-weight: 800;
+  font-size: 14px;
+}
+.s2-geo-btn:hover {
+  background: #dbe8ff;
+}
+.s2-geo-err {
+  margin-top: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--danger);
+}
+/* 인기 위치 칩 */
+.s2-pop-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.s2-pop-chip {
+  border: 1px solid #dbe4f5;
+  background: #fff;
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.s2-pop-chip:hover {
+  border-color: var(--travel);
+  background: var(--travel-soft);
+  color: var(--travel-dark);
+}
+/* 지도 + 추천 */
+.s2-reco {
+  margin-top: 18px;
+}
+.s2-map {
+  height: 260px;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #dbe4f5;
+  background: #eaeef5;
+  margin-top: 12px;
+  z-index: 0;
+}
+.s2-map-attr {
+  margin-top: 6px;
+  font-size: 10.5px;
+  color: var(--text-3);
+  text-align: right;
+}
+.s2-reco-title {
+  margin-top: 16px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}
 .s2-search:focus {
   outline: none;
   border-color: var(--travel);
