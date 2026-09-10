@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { CURRENCY_ORDER, CURRENCY_META } from '../data/rates.js'
@@ -61,8 +61,18 @@ export default function Home() {
   const { t, lang } = useI18n()
   const { getDisplayRates } = useRates() // 실시간 환율(2분 주기 자동 변동)
   const nav = useNavigate()
-  const [scenarioKey, setScenarioKey] = useState('usd')
-  const scenario = COMPARE_SCENARIOS.find((s) => s.key === scenarioKey) || COMPARE_SCENARIOS[0]
+  // 통화 시나리오를 카드 넘기듯 자동 회전(캐러셀). 클릭 시 해당 통화로 이동 후 다시 자동 진행.
+  const [scenarioIdx, setScenarioIdx] = useState(0)
+  const scenario = COMPARE_SCENARIOS[scenarioIdx]
+
+  useEffect(() => {
+    // 현재 카드가 바뀔 때마다 다음 카드 예약 → 자동/수동 모두 일정한 간격 유지
+    const id = setTimeout(
+      () => setScenarioIdx((i) => (i + 1) % COMPARE_SCENARIOS.length),
+      2600
+    )
+    return () => clearTimeout(id)
+  }, [scenarioIdx])
 
   // 머니박스보다 덜 받는 금액 문구 (언어별)
   const lessLabel = (won) =>
@@ -119,16 +129,16 @@ export default function Home() {
                 <span className="wpc-sub">{t('home.cmp.sub')}</span>
               </div>
 
-              {/* 환전 금액 시나리오 토글 ($1,000 / ¥100,000) */}
+              {/* 환전 금액 시나리오 토글 (자동 회전 + 클릭 선택) */}
               <div className="wpc-toggle" role="tablist" aria-label="amount">
-                {COMPARE_SCENARIOS.map((s) => (
+                {COMPARE_SCENARIOS.map((s, i) => (
                   <button
                     key={s.key}
                     type="button"
                     role="tab"
-                    aria-selected={s.key === scenarioKey}
-                    className={`wpc-toggle-btn${s.key === scenarioKey ? ' is-on' : ''}`}
-                    onClick={() => setScenarioKey(s.key)}
+                    aria-selected={i === scenarioIdx}
+                    className={`wpc-toggle-btn${i === scenarioIdx ? ' is-on' : ''}`}
+                    onClick={() => setScenarioIdx(i)}
                   >
                     <span className="wpc-toggle-flag" aria-hidden="true">{s.flag}</span>
                     {s.amount}
@@ -150,7 +160,10 @@ export default function Home() {
                   <li className="wpc-row" key={key}>
                     <div className="wpc-row-top">
                       <span className="wpc-name">{t(`home.cmp.${key}`)}</span>
-                      <span className="wpc-tag wpc-neg">{lessLabel(scenario.rows[key].less)}</span>
+                      {/* key에 scenarioIdx를 넣어 통화가 바뀔 때마다 금액이 카드 넘기듯 갱신 */}
+                      <span className="wpc-tag wpc-neg" key={scenarioIdx}>
+                        {lessLabel(scenario.rows[key].less)}
+                      </span>
                     </div>
                     <span className="wpc-bar-wrap">
                       <span className="wpc-bar" style={{ width: `${scenario.rows[key].bar}%` }} />

@@ -3766,6 +3766,24 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 }
 .wpc-neg {
   color: #8a97ab;
+  display: inline-block;
+  /* 통화가 바뀔 때 금액이 카드 넘기듯 갱신 (key 변경 → 리마운트) */
+  animation: wpcFlip 0.5s ease both;
+}
+@keyframes wpcFlip {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) rotateX(45deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wpc-neg {
+    animation: none;
+  }
 }
 .wpc-row.is-best .wpc-name {
   color: var(--travel-dark);
