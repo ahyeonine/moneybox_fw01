@@ -1,31 +1,50 @@
 graph TD
-  Root["/ RootLayout · 상단 데모 탭"]
-  Root --> V1["/site · 외국인 웹사이트 V1"]
-  Root --> V2["/site2 · 외국인 사이트 2안"]
-  Root --> CEMS["/cems · CEMS 어드민"]
-  Root --> POS["/pos · POS"]
-  Root --> Email["/email · 이메일"]
-  Root --> Docs["/docs · 기획문서"]
+  Root["/ · 상단 데모 탭 (RootLayout)"]
 
-  V1 --> V1H["/site 홈"]
-  V1 --> V1B["/site/book 예약 STEP A~완료"]
-  V1 --> V1L["/site/lookup 예약조회"]
-  V1 --> V1Br["/site/branches 지점"]
-  V1 --> V1K["/site/kiosks 무인환전기"]
-  V1 --> V1A["/site/about 회사소개"]
+  subgraph CUST["고객 서비스 (인바운드)"]
+    subgraph SV1["외국인 웹사이트 V1 · /site"]
+      V1H["홈 /site"]
+      V1B["예약 /site/book<br/>지점→신청→정보→확인→동의→완료"]
+      V1L["예약조회 /site/lookup"]
+      V1Br["지점 /site/branches"]
+      V1K["무인환전기 /site/kiosks"]
+      V1A["회사소개 /site/about"]
+    end
+    subgraph SV2["외국인 사이트 2안 V2 · /site2"]
+      V2F["금액 입력 → 지점 선택<br/>(검색·내위치·거리순 추천 지도)"]
+    end
+  end
 
-  V2 --> V2F["금액 입력 → 지점 선택(검색·내위치·추천)"]
+  subgraph OPS["운영 · 지점"]
+    subgraph SCEMS["CEMS 지점 어드민 · /cems"]
+      C1["외국인 환전예약관리 /cems/reservations"]
+      C2["본사 예약관리 /cems/hq"]
+      C3["환율관리 /cems/settings/rates"]
+      C4["한도관리 /cems/settings/limits"]
+    end
+    subgraph SPOS["POS · /pos"]
+      P2["예약검색/결과 /pos/reservation"]
+      P3["거래처리 /pos/transaction<br/>신분증 대조·베스트레이트 정산"]
+    end
+  end
 
-  CEMS --> C1["/cems/reservations 외국인 환전예약관리"]
-  CEMS --> C2["/cems/hq 본사 예약관리"]
-  CEMS --> C3["/cems/settings/rates 환율관리"]
-  CEMS --> C4["/cems/settings/limits 한도관리"]
+  subgraph INT["내부"]
+    Email["이메일 /email"]
+    Docs["기획문서 /docs"]
+  end
 
-  POS --> P2["/pos/reservation 예약검색/결과"]
-  POS --> P3["/pos/transaction 거래처리·베스트레이트 정산"]
+  Root --> SV1
+  Root --> SV2
+  Root --> SCEMS
+  Root --> SPOS
+  Root --> Email
+  Root --> Docs
 
-  V2 -. "예약(지점·통화·금액 전달)" .-> V1B
-  C3 -. "외국인 웹사이트 매입환율 실시간 연동" .-> V1B
-  C4 -. "통화별 최소·지점별 최대 한도" .-> V1B
+  %% 시스템 간 연동 (점선)
+  V2F -. "예약(지점·통화·금액 전달)" .-> V1B
+  C3 -. "외국인 매입환율 실시간 반영" .-> V1B
+  C4 -. "통화별 최소·단위·최대 한도" .-> V1B
   V1B -. "예약 생성" .-> C1
-  C1 -. "거래 이관" .-> P3
+  V1B -. "확인·리마인더·OTP 발송" .-> Email
+  C1 -. "거래 이관" .-> P2
+  P3 -. "거래완료 → 상태 갱신" .-> C1
