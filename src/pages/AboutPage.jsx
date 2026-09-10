@@ -35,18 +35,13 @@ export default function AboutPage() {
 
       {/* 큰 서술형 히어로 */}
       <section className="ak-hero">
+        <div className="ak-hero-eyebrow">{t('about.hero.eyebrow')}</div>
         <h1 className="ak-hero-t">{t('about.hero.t')}</h1>
         <p className="ak-hero-d">{t('about.hero.d')}</p>
       </section>
 
-      {/* 스토리 */}
-      <section className="ak-story">
-        <div className="ak-eyebrow">{t('about.story.t')}</div>
-        <p className="ak-story-d">{t('about.story.d')}</p>
-      </section>
-
-      {/* 숫자로 보는 머니박스 (큰 숫자) */}
-      <section className="ak-stats-sec">
+      {/* 숫자로 보는 머니박스 (큰 숫자 · 틴트 밴드) */}
+      <section className="ak-stats-band">
         <div className="ak-eyebrow center">{t('about.statlead')}</div>
         <div className="ak-stats">
           {STATS.map((s) => (
@@ -56,6 +51,18 @@ export default function AboutPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* 스토리 */}
+      <section className="ak-story">
+        <div className="ak-eyebrow">{t('about.story.t')}</div>
+        <p className="ak-story-d">{t('about.story.d')}</p>
+      </section>
+
+      {/* 미션 밴드 (블루) */}
+      <section className="ak-mission">
+        <div className="ak-mission-eyebrow">{t('about.mission.t')}</div>
+        <p className="ak-mission-d">{t('about.mission.d')}</p>
       </section>
 
       {/* 우리가 지키는 것 (가치 3) */}

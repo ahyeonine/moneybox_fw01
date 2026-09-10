@@ -3185,23 +3185,67 @@ th.num {
   text-align: center;
 }
 .ak-hero {
-  padding: 26px 0 8px;
+  padding: 30px 0 8px;
+}
+.ak-hero-eyebrow {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+  padding: 7px 14px;
+  border-radius: 999px;
+  margin-bottom: 18px;
 }
 .ak-hero-t {
-  font-size: 44px;
+  font-size: 50px;
   font-weight: 900;
-  line-height: 1.14;
-  letter-spacing: -0.03em;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
   color: var(--text);
   white-space: pre-line;
   margin: 0;
 }
 .ak-hero-d {
-  margin: 20px 0 0;
+  margin: 22px 0 0;
   font-size: 18px;
   line-height: 1.7;
   color: var(--text-2);
   max-width: 640px;
+}
+/* 숫자 밴드 (틴트) */
+.ak-stats-band {
+  margin-top: 40px;
+  padding: 34px 26px;
+  border-radius: 24px;
+  background: var(--travel-soft);
+}
+/* 미션 밴드 (블루 풀컬러) */
+.ak-mission {
+  margin-top: 56px;
+  padding: 44px 34px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--travel-dark) 0%, var(--travel) 55%, #38bdf8 100%);
+  color: #fff;
+  text-align: center;
+}
+.ak-mission-eyebrow {
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #d6e4ff;
+}
+.ak-mission-d {
+  margin: 14px auto 0;
+  max-width: 640px;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: #fff;
 }
 .ak-story {
   margin-top: 56px;
@@ -3229,7 +3273,8 @@ th.num {
   text-align: center;
   padding: 24px 10px;
   border-radius: 18px;
-  background: var(--travel-soft);
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(15, 47, 138, 0.06);
 }
 .ak-stat-num {
   font-size: 34px;

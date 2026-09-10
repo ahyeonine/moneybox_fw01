@@ -26,15 +26,6 @@ export default function CustomerSite() {
   const NAV = [
     { type: 'link', to: '/site/book', label: t('site.nav.exchange') },
     { type: 'note', key: 'service', label: t('site.nav.group.service'), note: t('site.nav.service.note') },
-    {
-      type: 'group',
-      key: 'location',
-      label: t('site.nav.group.location'),
-      items: [
-        { to: '/site/branches', label: t('site.nav.branches') },
-        { to: '/site/kiosks', label: t('site.nav.kiosk') },
-      ],
-    },
     { type: 'link', to: '/site/about', label: t('site.nav.company') },
     { type: 'note', key: 'contact', label: t('site.nav.contact'), note: t('site.nav.contact.note') },
     { type: 'link', to: '/site/lookup', label: t('site.nav.lookup') },
