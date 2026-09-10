@@ -598,14 +598,33 @@ export const STRINGS = {
   'signup.note': { ko: '※ 프로토타입 — 실제 가입 없이 시뮬레이션됩니다', en: '* Prototype — simulated, no real account created' },
 
   // ── 외국인 사이트 2안 (WOWPASS 참고 · 금액→위치검색→지점추천 플로우) ──
-  's2.hero.t': { ko: '어디서 받을지, 우리가 찾아드려요', en: 'Tell us where you’ll be — we’ll find your branch' },
+  's2.hero.t': { ko: '몇 번의 탭으로 끝나는 환전 예약', en: 'Reserve your exchange in a few taps' },
   's2.hero.d': {
-    ko: '먼저 얼마를 바꿀지 정하고, 묵을 호텔이나 방문 예정인 역을 알려주세요. 가장 가까운 지점을 추천해드려요.',
-    en: 'Choose how much to exchange, tell us your hotel or the station you’ll visit, and we’ll recommend the nearest branch.',
+    ko: '먼저 얼마를 바꿀지 정하고, 가까운 지점을 찾아 예약하세요.',
+    en: 'Choose your amount, then find a nearby branch to reserve.',
   },
   's2.step.amount': { ko: '금액', en: 'Amount' },
   's2.step.location': { ko: '위치', en: 'Location' },
-  's2.step.branch': { ko: '지점 추천', en: 'Branch' },
+  's2.step.branch': { ko: '지점 선택', en: 'Branch' },
+  // 지점 선택 단계 (검색 + 찾아드릴게요)
+  's2.br2.title': { ko: '지점을 선택하세요', en: 'Choose your branch' },
+  's2.br2.sub': {
+    ko: '묵을 호텔이나 역을 검색하면 가까운 지점을 찾아드려요.',
+    en: 'Search your hotel or station and we’ll find the nearest branch.',
+  },
+  's2.search.placeholder': { ko: '호텔·역·주소 검색', en: 'Search hotel, station, address' },
+  's2.search.searching': { ko: '검색 중…', en: 'Searching…' },
+  's2.geo.btn': { ko: '📍 내 위치로 가까운 지점 찾기', en: '📍 Find nearest to my location' },
+  's2.geo.locating': { ko: '위치 확인 중…', en: 'Locating…' },
+  's2.geo.error': {
+    ko: '위치를 가져오지 못했어요. 검색을 이용해 주세요.',
+    en: 'Couldn’t get your location. Please use search.',
+  },
+  's2.geo.here': { ko: '내 위치', en: 'My location' },
+  's2.popular': { ko: '인기 위치', en: 'Popular places' },
+  's2.all.title': { ko: '전체 지점에서 선택', en: 'Or pick any branch' },
+  's2.reco.title': { ko: '가까운 지점을 찾았어요', en: 'Nearest branches for you' },
+  's2.mapattr': { ko: '지도 · © OpenStreetMap', en: 'Map · © OpenStreetMap' },
   's2.amount.title': { ko: '얼마를 바꾸시나요?', en: 'How much would you like to exchange?' },
   's2.amount.cur': { ko: '통화 선택', en: 'Choose currency' },
   's2.amount.amt': { ko: '금액', en: 'Amount' },
