@@ -228,6 +228,7 @@ export const STRINGS = {
 
   // ── 최상위 3개 탭 ──
   'top.site': { ko: '외국인 웹사이트', en: 'Customer Website' },
+  'top.site2': { ko: '외국인 사이트 2안', en: 'Site v2' },
   'top.cems': { ko: 'CEMS (어드민)', en: 'CEMS (Admin)' },
   'top.pos': { ko: 'POS', en: 'POS' },
   'top.hint': {
@@ -595,6 +596,57 @@ export const STRINGS = {
   },
   'signup.done.cta': { ko: '예약 계속하기', en: 'Continue booking' },
   'signup.note': { ko: '※ 프로토타입 — 실제 가입 없이 시뮬레이션됩니다', en: '* Prototype — simulated, no real account created' },
+
+  // ── 외국인 사이트 2안 (WOWPASS 참고 · 금액→위치검색→지점추천 플로우) ──
+  's2.hero.t': { ko: '어디서 받을지, 우리가 찾아드려요', en: 'Tell us where you’ll be — we’ll find your branch' },
+  's2.hero.d': {
+    ko: '먼저 얼마를 바꿀지 정하고, 묵을 호텔이나 방문 예정인 역을 알려주세요. 가장 가까운 지점을 추천해드려요.',
+    en: 'Choose how much to exchange, tell us your hotel or the station you’ll visit, and we’ll recommend the nearest branch.',
+  },
+  's2.step.amount': { ko: '금액', en: 'Amount' },
+  's2.step.location': { ko: '위치', en: 'Location' },
+  's2.step.branch': { ko: '지점 추천', en: 'Branch' },
+  's2.amount.title': { ko: '얼마를 바꾸시나요?', en: 'How much would you like to exchange?' },
+  's2.amount.cur': { ko: '통화 선택', en: 'Choose currency' },
+  's2.amount.amt': { ko: '금액', en: 'Amount' },
+  's2.amount.krw': { ko: '예상 수령액', en: 'You receive about' },
+  's2.next': { ko: '다음', en: 'Next' },
+  's2.back': { ko: '이전', en: 'Back' },
+  's2.loc.title': { ko: '어디에 머무시나요?', en: 'Where will you be?' },
+  's2.loc.sub': {
+    ko: '묵을 호텔이나 방문 예정인 역·장소를 검색하세요.',
+    en: 'Search your hotel, or a station / place you’ll visit.',
+  },
+  's2.loc.placeholder': { ko: '예: 명동역, 롯데호텔, 해운대…', en: 'e.g. Myeongdong Station, Lotte Hotel, Haeundae…' },
+  's2.loc.picked': { ko: '선택한 위치', en: 'Selected location' },
+  's2.loc.none': { ko: '검색 결과가 없어요. 다른 키워드로 검색해보세요.', en: 'No matches. Try another keyword.' },
+  's2.br.title': { ko: '추천 지점', en: 'Recommended branches' },
+  's2.br.sub': {
+    ko: '선택하신 위치에서 가까운 순으로, 해당 통화를 취급하는 지점이에요.',
+    en: 'Branches that handle your currency, nearest to your location first.',
+  },
+  's2.br.none': {
+    ko: '해당 통화를 취급하는 지점을 찾지 못했어요. 통화를 바꿔보세요.',
+    en: 'No branch handles this currency. Try another currency.',
+  },
+  's2.br.pick': { ko: '이 지점으로 예약', en: 'Reserve at this branch' },
+  's2.br.away': { ko: '떨어짐', en: 'away' },
+  's2.br.best': { ko: '가장 가까움', en: 'Nearest' },
+  's2.done.t': { ko: '지점이 선택됐어요!', en: 'Branch selected!' },
+  's2.done.d': {
+    ko: '실제 서비스에서는 여기서 수령일·예약자 정보를 입력해 예약을 완료합니다. (프로토타입 데모)',
+    en: 'In the real service you’d pick a date and details here to finish booking. (Prototype demo)',
+  },
+  's2.done.again': { ko: '처음부터 다시', en: 'Start over' },
+  's2.note': { ko: '※ 2안 프로토타입 — 예시 데이터', en: '* Site v2 prototype — example data' },
+  // 2안 다크 푸터 (OrangeSquare 참고)
+  's2.foot.cs': { ko: '서비스 문의', en: 'Customer support' },
+  's2.foot.partner': { ko: '협력 문의', en: 'Partnerships' },
+  's2.foot.tel': { ko: '전화', en: 'Phone' },
+  's2.foot.addr': {
+    ko: '대한민국 서울특별시 용산구 한강대로 393 동산빌딩 5층 (프로토타입)',
+    en: '5F Dongsan Bldg, 393 Hangang-daero, Yongsan-gu, Seoul, Korea (prototype)',
+  },
 
   // 푸터
   'footer.company': { ko: '(주) 머니박스', en: 'MoneyBox Inc.' },

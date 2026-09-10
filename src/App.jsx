@@ -8,6 +8,7 @@ import AboutPage from './pages/AboutPage.jsx'
 import EsimPage from './pages/EsimPage.jsx'
 import KiosksPage from './pages/KiosksPage.jsx'
 import BranchesPage from './pages/BranchesPage.jsx'
+import Site2 from './pages/Site2.jsx'
 import CemsShell from './pages/operator/CemsShell.jsx'
 import PosShell from './pages/operator/PosShell.jsx'
 import PosHome from './pages/operator/PosHome.jsx'
@@ -39,6 +40,9 @@ export default function App() {
           <Route path="company" element={<Navigate to="/site/about" replace />} /> {/* 별칭 */}
           <Route path="lookup" element={<LookupPage />} />
         </Route>
+
+        {/* 탭 1-2 · 외국인 사이트 2안 (WOWPASS 참고 · 금액→위치→지점추천) */}
+        <Route path="site2" element={<Site2 />} />
 
         {/* 탭 2 · CEMS (어드민) */}
         <Route path="cems" element={<CemsShell />}>

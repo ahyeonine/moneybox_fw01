@@ -11,21 +11,21 @@ export default function TopTabs() {
   // 외국인 웹사이트 탭은 마지막으로 머문 /site 하위 경로로 이동(첫 화면을 거치지 않음)
   const tabs = [
     { base: '/site', to: lastSitePath || '/site', label: t('top.site') },
+    { base: '/site2', to: '/site2', label: t('top.site2') },
     { base: '/cems', to: '/cems', label: t('top.cems') },
     { base: '/pos', to: '/pos', label: t('top.pos') },
   ]
   return (
     <div className="toptabs">
       <div className="toptabs-inner">
-        {tabs.map((tab) => (
-          <Link
-            key={tab.base}
-            to={tab.to}
-            className={pathname.startsWith(tab.base) ? 'active' : ''}
-          >
-            {tab.label}
-          </Link>
-        ))}
+        {tabs.map((tab) => {
+          const active = pathname === tab.base || pathname.startsWith(tab.base + '/')
+          return (
+            <Link key={tab.base} to={tab.to} className={active ? 'active' : ''}>
+              {tab.label}
+            </Link>
+          )
+        })}
         <NavLink to="/email" className={({ isActive }) => `toptabs-docs ${isActive ? 'active' : ''}`}>
           ✉️ 이메일
         </NavLink>
