@@ -2,6 +2,7 @@ stateDiagram-v2
     [*] --> BOOKED: 예약 생성 (POST /reservations) · 환율 픽스 · 예약번호 발급
     BOOKED --> COMPLETED: 지점 거래완료 (신분증 대조 후 complete)
     BOOKED --> CANCELLED: 고객 취소 (cancel)
+    BOOKED --> CANCELLED: 리마인더 '방문 안 함' 응답
     BOOKED --> CANCELLED: 자동취소 (수령예정일 경과)
     COMPLETED --> [*]
     CANCELLED --> [*]
