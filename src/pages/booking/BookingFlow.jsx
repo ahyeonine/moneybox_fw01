@@ -214,7 +214,8 @@ export default function BookingFlow() {
     setStage('apply')
   }
 
-  // 지점 정보 페이지("환전 예약하기")에서 ?branch=<id> 로 진입 시 해당 지점 선택 후 신청 단계로 바로 이동.
+  // 딥링크 진입: ?branch=<id> (지점 정보 페이지) / ?branch&currency&amount (2안에서 넘어옴)
+  // → 지점·통화·금액을 미리 채우고 신청(apply) 단계로 바로 이동.
   const [searchParams, setSearchParams] = useSearchParams()
   const branchParamHandled = useRef(false)
   useEffect(() => {
@@ -222,9 +223,25 @@ export default function BookingFlow() {
     const bid = searchParams.get('branch')
     if (bid && getBranch(bid)) {
       branchParamHandled.current = true
-      selectBranch(bid)
+      const curs = branchCurrencies(bid)
+      const curParam = searchParams.get('currency')
+      const chosenCur = curParam && curs.includes(curParam) ? curParam : curs[0] || ''
+      const amtParam = searchParams.get('amount')
+      const chosenAmt = amtParam && /^\d+$/.test(amtParam) ? amtParam : ''
+      setDraft((d) => ({
+        ...d,
+        branchId: bid,
+        currency: chosenCur,
+        transactionType: 'BUY',
+        amount: chosenAmt,
+        pickupDate: '',
+        pickupTime: '',
+      }))
+      setStage('apply')
       const next = new URLSearchParams(searchParams)
       next.delete('branch')
+      next.delete('currency')
+      next.delete('amount')
       setSearchParams(next, { replace: true })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
