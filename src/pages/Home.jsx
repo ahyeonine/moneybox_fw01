@@ -7,9 +7,27 @@ import { formatNumber } from '../lib/format.js'
 import DevNote from '../components/DevNote.jsx'
 
 // 외국인 웹사이트 랜딩 홈 (프로토타입).
-// 히어로 + 실시간 기준환율 티커까지만 노출하고, 그 아래는 기존 사이트와 동일하므로
-// 별도 구현 없이 안내 문구만 표시한다(공항수령 제외 → 디자인 참고).
+// 히어로 + 실시간 기준환율 티커 + 외국인 대상 랜딩 섹션(이용방법·혜택·인기지점·FAQ·CTA).
+// 하단 섹션은 외국인 대상 서비스(WOWPASS·Creatrip 등)를 참고한 임시 콘텐츠.
 const RATE_TICKER = CURRENCY_ORDER.slice(0, 8)
+
+// 인기 지점 칩 (홈 하단) — 클릭 시 지점 페이지로 이동
+const POPULAR_LOCS = [
+  { key: 'myeongdong', emoji: '🛍️' },
+  { key: 'hongdae', emoji: '🎨' },
+  { key: 'gangnam', emoji: '🏙️' },
+  { key: 'airport', emoji: '✈️' },
+]
+
+// 이용 방법 3단계 / 혜택 4종 / FAQ 4종 (i18n 키만 나열)
+const HOW_STEPS = ['s1', 's2', 's3']
+const WHY_ITEMS = [
+  { k: '1', emoji: '🏆' },
+  { k: '2', emoji: '🔒' },
+  { k: '3', emoji: '🪪' },
+  { k: '4', emoji: '🌏' },
+]
+const FAQ_ITEMS = ['q1', 'q2', 'q3', 'q4']
 
 // 환전 금액 시나리오별 "머니박스 대비 덜 받는 금액"(원) — 예시 수치(실제 아님).
 // 주요 인바운드 통화(USD·JPY) 기준으로 외국인이 체감할 수 있게 실제 금액으로 표현.
@@ -69,7 +87,7 @@ export default function Home() {
     // 현재 카드가 바뀔 때마다 다음 카드 예약 → 자동/수동 모두 일정한 간격 유지
     const id = setTimeout(
       () => setScenarioIdx((i) => (i + 1) % COMPARE_SCENARIOS.length),
-      2600
+      2000
     )
     return () => clearTimeout(id)
   }, [scenarioIdx])
@@ -84,7 +102,7 @@ export default function Home() {
     <div className="home">
       <DevNote
         items={[
-          '환율 아래 영역은 기존 사이트와 동일 — 프로토타입에서는 안내 문구로 대체(공항수령 제외, 디자인 참고)',
+          '히어로+기준환율 아래 랜딩 섹션(이용방법·혜택·인기지점·FAQ·CTA)은 외국인 대상 서비스 참고로 구성한 임시 콘텐츠',
           '자세히: 02_사이트맵.md',
         ]}
       />
@@ -194,8 +212,88 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 환율 아래 영역: 기존 페이지와 동일 → 안내 문구로 대체 */}
-      <div className="same-as-existing">{t('home.rate.same')}</div>
+      {/* 3. 이용 방법 (3단계) */}
+      <section className="home-sec how-sec">
+        <div className="home-sec-head">
+          <h2 className="home-sec-title">{t('home.how.title')}</h2>
+          <p className="home-sec-sub">{t('home.how.sub')}</p>
+        </div>
+        <div className="how-steps">
+          {HOW_STEPS.map((s, i) => (
+            <div className="how-step" key={s}>
+              <div className="how-step-num">{i + 1}</div>
+              <div className="how-step-t">{t(`home.how.${s}t`)}</div>
+              <div className="how-step-d">{t(`home.how.${s}d`)}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. 왜 머니박스 (혜택 4) */}
+      <section className="home-sec why-sec">
+        <div className="home-sec-head">
+          <h2 className="home-sec-title">{t('home.why.title')}</h2>
+        </div>
+        <div className="why-grid">
+          {WHY_ITEMS.map((it) => (
+            <div className="why-item" key={it.k}>
+              <div className="why-emoji" aria-hidden="true">{it.emoji}</div>
+              <div className="why-t">{t(`home.why.${it.k}t`)}</div>
+              <div className="why-d">{t(`home.why.${it.k}d`)}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 5. 인기 지점 */}
+      <section className="home-sec loc-sec">
+        <div className="home-sec-head">
+          <h2 className="home-sec-title">{t('home.loc.title')}</h2>
+          <p className="home-sec-sub">{t('home.loc.sub')}</p>
+        </div>
+        <div className="loc-chips">
+          {POPULAR_LOCS.map((l) => (
+            <button
+              key={l.key}
+              type="button"
+              className="loc-chip"
+              onClick={() => nav('/site/branches')}
+            >
+              <span className="loc-emoji" aria-hidden="true">{l.emoji}</span>
+              {t(`home.loc.${l.key}`)}
+            </button>
+          ))}
+        </div>
+        <button className="btn ghost loc-all" onClick={() => nav('/site/branches')}>
+          {t('home.loc.cta')} →
+        </button>
+      </section>
+
+      {/* 6. FAQ */}
+      <section className="home-sec faq-sec">
+        <div className="home-sec-head">
+          <h2 className="home-sec-title">{t('home.faq.title')}</h2>
+        </div>
+        <div className="faq-list">
+          {FAQ_ITEMS.map((q, i) => (
+            <details className="faq-item" key={q} open={i === 0}>
+              <summary className="faq-q">{t(`home.faq.${q}`)}</summary>
+              <div className="faq-a">{t(`home.faq.a${i + 1}`)}</div>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* 7. 하단 CTA 밴드 */}
+      <section className="home-cta">
+        <div className="home-cta-inner">
+          <h2 className="home-cta-title">{t('home.cta.title')}</h2>
+          <p className="home-cta-sub">{t('home.cta.sub')}</p>
+          <button className="btn home-cta-btn" onClick={() => nav('/site/book')}>
+            {t('home.cta.btn')}
+          </button>
+        </div>
+      </section>
     </div>
   )
 }

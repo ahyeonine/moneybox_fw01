@@ -382,6 +382,131 @@ export const STRINGS = {
     en: 'The page below is identical to the existing site. (Airport pickup excluded — see design)',
   },
 
+  // 홈 하단 랜딩 섹션 (외국인 대상 — 임시 콘텐츠)
+  // How it works (3단계)
+  'home.how.title': { ko: '이용 방법', en: 'How it works' },
+  'home.how.sub': {
+    ko: '온라인으로 예약하고, 지점에서 현금으로 받으세요. 결제는 수령할 때만.',
+    en: 'Reserve online, pick up cash at a branch. You only pay in person.',
+  },
+  'home.how.s1t': { ko: '온라인 예약', en: 'Reserve online' },
+  'home.how.s1d': {
+    ko: '통화·금액·수령일을 고르고 예약하세요. 결제·회원가입 없이 1분이면 끝나요.',
+    en: 'Pick currency, amount, and date. No payment, no sign-up — done in a minute.',
+  },
+  'home.how.s2t': { ko: '지점 방문', en: 'Visit a branch' },
+  'home.how.s2d': {
+    ko: '여권만 가지고 예약한 지점을 방문하세요. 명동·홍대·강남·공항 등 40+ 지점.',
+    en: 'Bring your passport to the branch you chose. 40+ spots incl. Myeongdong, Hongdae, Gangnam, airports.',
+  },
+  'home.how.s3t': { ko: '현장 수령', en: 'Pick up cash' },
+  'home.how.s3d': {
+    ko: '예약 시 확정된 환율로 현금을 받아요. 방문일에 환율이 더 좋아지면 그날 환율 적용.',
+    en: 'Get cash at the rate locked when you booked — or the better rate if it improves by your visit.',
+  },
+  // Why MoneyBox (혜택 4)
+  'home.why.title': { ko: '왜 머니박스인가요?', en: 'Why MoneyBox?' },
+  'home.why.1t': { ko: '베스트레이트 보장', en: 'Best-rate guarantee' },
+  'home.why.1d': {
+    ko: '은행·공항·무인 환전기보다 유리한 환율. 방문일에 더 좋아지면 그날 환율로 드려요.',
+    en: 'Better than banks, airports, and kiosks. If it improves by your visit, you get that rate.',
+  },
+  'home.why.2t': { ko: '온라인 결제 없음', en: 'No online payment' },
+  'home.why.2d': {
+    ko: '카드 정보를 넣지 않아요. 예약만 하고, 수령할 때 현금으로 결제해요.',
+    en: 'No card details needed. Just reserve, then pay in cash when you pick up.',
+  },
+  'home.why.3t': { ko: '여권만, 1분', en: 'Passport only, 1 min' },
+  'home.why.3d': {
+    ko: '복잡한 가입 없이 여권만 있으면 돼요. 예약·수령 모두 빠르게.',
+    en: 'No complicated sign-up — just your passport. Fast to book, fast to collect.',
+  },
+  'home.why.4t': { ko: '전국 40+ 지점·다국어', en: '40+ branches · multilingual' },
+  'home.why.4d': {
+    ko: '주요 관광지와 공항 곳곳에 있어요. 영어·중국어·일본어 응대.',
+    en: 'Across major tourist areas and airports. English, Chinese, and Japanese support.',
+  },
+  // Popular locations
+  'home.loc.title': { ko: '인기 지점', en: 'Popular locations' },
+  'home.loc.sub': {
+    ko: '가까운 지점을 찾아 바로 예약하세요.',
+    en: 'Find a branch near you and reserve in seconds.',
+  },
+  'home.loc.myeongdong': { ko: '명동', en: 'Myeongdong' },
+  'home.loc.hongdae': { ko: '홍대', en: 'Hongdae' },
+  'home.loc.gangnam': { ko: '강남', en: 'Gangnam' },
+  'home.loc.airport': { ko: '인천공항', en: 'Incheon Airport' },
+  'home.loc.cta': { ko: '전체 지점 보기', en: 'See all branches' },
+  // FAQ
+  'home.faq.title': { ko: '자주 묻는 질문', en: 'FAQ' },
+  'home.faq.q1': { ko: '온라인으로 결제해야 하나요?', en: 'Do I need to pay online?' },
+  'home.faq.a1': {
+    ko: '아니요. 결제 없이 예약만 하고, 지점에서 받을 때 현금으로 결제해요.',
+    en: 'No. You reserve with no payment and pay in cash when you pick up at the branch.',
+  },
+  'home.faq.q2': { ko: '무엇을 가져가야 하나요?', en: 'What should I bring?' },
+  'home.faq.a2': {
+    ko: '여권만 지참하시면 됩니다. 본인 확인용으로 사용돼요.',
+    en: 'Just your passport — used for identity verification at pickup.',
+  },
+  'home.faq.q3': { ko: '어떤 통화를 바꿀 수 있나요?', en: 'Which currencies can I exchange?' },
+  'home.faq.a3': {
+    ko: 'USD·JPY·CNY·EUR·TWD·HKD 등 주요 통화를 지원해요. 위의 실시간 기준환율에서 확인하세요.',
+    en: 'USD, JPY, CNY, EUR, TWD, HKD and more — check the live base rates above.',
+  },
+  'home.faq.q4': { ko: '예약을 취소할 수 있나요?', en: 'Can I cancel?' },
+  'home.faq.a4': {
+    ko: '네, 수령일 전이라면 "예약 조회"에서 언제든 취소할 수 있어요.',
+    en: 'Yes — anytime before your pickup date, from "My Reservation".',
+  },
+  // 하단 CTA 밴드
+  'home.cta.title': { ko: '가장 좋은 환율로 준비하세요', en: 'Get ready at the best rate' },
+  'home.cta.sub': {
+    ko: '1분이면 환전 예약 완료. 결제는 지점에서 현금으로.',
+    en: 'Reserve your exchange in a minute. Pay in cash at the branch.',
+  },
+  'home.cta.btn': { ko: '환전 예약하기', en: 'Reserve your exchange' },
+
+  // 회사 소개 (외국인 대상 — 임시 콘텐츠)
+  'about.lead': {
+    ko: '머니박스는 한국을 방문하는 외국인을 위한 국내 최대 환전 플랫폼입니다. 전국 유인지점과 24시간 무인환전기로, 더 쉽고 더 유리한 외환거래 경험을 제공합니다.',
+    en: 'MoneyBox is Korea’s largest currency-exchange platform for international visitors — with staffed branches nationwide and 24-hour self-service machines for an easier, more rewarding exchange.',
+  },
+  'about.mission.t': { ko: '우리의 미션', en: 'Our mission' },
+  'about.mission.d': {
+    ko: '기분 좋은 외환거래 경험의 시작. 환전을 넘어 외국인의 금융 문제를 해결하는 파트너가 되겠습니다.',
+    en: 'The start of a pleasant foreign-exchange experience — and, beyond exchange, a partner that solves visitors’ financial needs in Korea.',
+  },
+  'about.stats.tx': { ko: '누적 환전액', en: 'Exchanged to date' },
+  'about.stats.visitors': { ko: '연간 방문객', en: 'Visitors / year' },
+  'about.stats.rating': { ko: 'Google 평점', en: 'Google rating' },
+  'about.stats.branches': { ko: '전국 지점', en: 'Branches nationwide' },
+  'about.do.title': { ko: '우리가 하는 일', en: 'What we do' },
+  'about.do.1t': { ko: '지점 환전 예약', en: 'Branch exchange' },
+  'about.do.1d': {
+    ko: '온라인으로 예약하고 지점에서 현금으로 받는 무결제 환전 예약 서비스.',
+    en: 'Reserve online with no payment and pick up cash in person at a branch.',
+  },
+  'about.do.2t': { ko: '머니24h 무인환전기', en: 'MONEY24h self-service' },
+  'about.do.2d': {
+    ko: '24시간 무인 환전과 교통카드 충전·택스리펀드까지 한 곳에서.',
+    en: '24-hour self-service exchange, transit-card top-up, and tax refund in one place.',
+  },
+  'about.do.3t': { ko: '여행 부가서비스', en: 'Travel add-ons' },
+  'about.do.3d': {
+    ko: 'eSIM·선불 교통카드 등 한국 여행에 필요한 부가서비스를 함께 제공.',
+    en: 'eSIM, prepaid transit cards, and other essentials for your trip to Korea.',
+  },
+  'about.contact.title': { ko: '문의', en: 'Contact' },
+  'about.contact.d': {
+    ko: '제휴·광고·기타 문의는 아래로 연락 주세요. (프로토타입 더미 정보)',
+    en: 'For partnerships, advertising, or other inquiries, reach us below. (Prototype placeholder info.)',
+  },
+  'about.note': {
+    ko: '※ 임시 페이지입니다 — 외국인 대상 서비스 참고로 구성한 프로토타입 콘텐츠',
+    en: '* Temporary page — prototype content modeled on services for visitors to Korea',
+  },
+
   // 푸터
   'footer.company': { ko: '(주) 머니박스', en: 'MoneyBox Inc.' },
   'footer.addr': { ko: '서울특별시 ○○구 ○○로 000 (프로토타입 더미 주소)', en: 'Seoul, Korea (placeholder address)' },
