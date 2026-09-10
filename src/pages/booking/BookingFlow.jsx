@@ -95,6 +95,14 @@ export default function BookingFlow() {
   const [showSignup, setShowSignup] = useState(false)
   const [signupDone, setSignupDone] = useState(false)
   const [couponClaimed, setCouponClaimed] = useState(false)
+  // 회원가입 폼(이름 + 이메일 + 이메일 인증번호) 상태
+  const [suName, setSuName] = useState('')
+  const [suEmail, setSuEmail] = useState('')
+  const [suCode, setSuCode] = useState('') // 발송된 인증번호(데모)
+  const [suSent, setSuSent] = useState(false)
+  const [suInput, setSuInput] = useState('')
+  const [suVerified, setSuVerified] = useState(false)
+  const [suErr, setSuErr] = useState('')
   useEffect(() => {
     try {
       if (sessionStorage.getItem('mbox.coupon.claimed')) setCouponClaimed(true)
@@ -102,7 +110,30 @@ export default function BookingFlow() {
       /* ignore */
     }
   }, [])
+  // 인증번호 발송(데모: 실제 발송 없이 코드 생성 후 화면에 표시)
+  function sendSignupCode() {
+    if (!isValidEmail(suEmail)) {
+      setSuErr(t('err.email'))
+      return
+    }
+    const code = String(Math.floor(100000 + Math.random() * 900000))
+    setSuCode(code)
+    setSuSent(true)
+    setSuInput('')
+    setSuVerified(false)
+    setSuErr('')
+  }
+  function verifySignupCode() {
+    if (suCode && suInput === suCode) {
+      setSuVerified(true)
+      setSuErr('')
+    } else {
+      setSuErr(t('book.otp.wrong'))
+    }
+  }
+  const signupValid = suName.trim().length > 0 && suVerified
   function claimCoupon() {
+    if (!signupValid) return
     setSignupDone(true)
     setCouponClaimed(true)
     try {
@@ -114,6 +145,14 @@ export default function BookingFlow() {
   function closeSignup() {
     setShowSignup(false)
     setSignupDone(false)
+    // 폼 초기화
+    setSuName('')
+    setSuEmail('')
+    setSuCode('')
+    setSuSent(false)
+    setSuInput('')
+    setSuVerified(false)
+    setSuErr('')
   }
 
   const branch = getBranch(draft.branchId)
@@ -324,13 +363,76 @@ export default function BookingFlow() {
                 <span className="signup-badge">🎟️ {t('signup.badge')}</span>
                 <h3 className="signup-title">{t('signup.title')}</h3>
                 <p className="signup-d">{t('signup.d')}</p>
+
+                {/* 이름 */}
+                <label className="signup-label">{t('signup.name')}</label>
                 <input
                   className="signup-input"
-                  type="email"
-                  placeholder={t('common.email')}
-                  aria-label={t('common.email')}
+                  type="text"
+                  value={suName}
+                  onChange={(e) => setSuName(e.target.value)}
+                  placeholder={t('signup.name')}
+                  aria-label={t('signup.name')}
                 />
-                <button className="btn primary block signup-submit" onClick={claimCoupon}>
+
+                {/* 이메일 + 인증번호 발송 */}
+                <label className="signup-label">{t('common.email')}</label>
+                <div className="signup-emailrow">
+                  <input
+                    className="signup-input"
+                    type="email"
+                    value={suEmail}
+                    onChange={(e) => {
+                      setSuEmail(e.target.value)
+                      setSuVerified(false)
+                      setSuSent(false)
+                    }}
+                    placeholder={t('common.email')}
+                    aria-label={t('common.email')}
+                    disabled={suVerified}
+                  />
+                  {!suVerified && (
+                    <button className="btn signup-code-btn" onClick={sendSignupCode}>
+                      {suSent ? t('book.otp.resend') : t('book.otp.send')}
+                    </button>
+                  )}
+                </div>
+                <div className="signup-hint">{t('signup.emailhint')}</div>
+
+                {/* 인증번호 입력 (발송 후) */}
+                {suSent && !suVerified && (
+                  <>
+                    <div className="signup-demo">
+                      {t('book.otp.demoPrefix')} <strong>{suCode}</strong>
+                    </div>
+                    <div className="signup-emailrow">
+                      <input
+                        className="signup-input"
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={6}
+                        value={suInput}
+                        onChange={(e) => setSuInput(e.target.value.replace(/\D/g, ''))}
+                        placeholder={t('book.otp.placeholder')}
+                        aria-label={t('book.otp.placeholder')}
+                      />
+                      <button className="btn signup-code-btn" onClick={verifySignupCode}>
+                        {t('book.otp.verify')}
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {suVerified && (
+                  <div className="signup-verified">✅ {t('book.otp.verified')}</div>
+                )}
+                {suErr && <div className="signup-err">{suErr}</div>}
+
+                <button
+                  className="btn primary block signup-submit"
+                  onClick={claimCoupon}
+                  disabled={!signupValid}
+                >
                   {t('signup.submit')}
                 </button>
                 <button className="btn ghost block" onClick={closeSignup}>

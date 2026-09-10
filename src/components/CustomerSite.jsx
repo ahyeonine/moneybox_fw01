@@ -244,37 +244,55 @@ export default function CustomerSite() {
 
       <footer className="site-footer">
         <div className="site-footer-inner">
+          {/* 브랜드 + 태그라인 */}
           <div className="sf-brand">
             <div className="sf-logo">
               MONEY<span>BOX</span>
             </div>
-            <div className="sf-company">{t('footer.company')}</div>
-            <div className="sf-addr">{t('footer.addr')}</div>
-            <div className="sf-addr">{t('footer.tel')}</div>
-            <div className="sf-addr">{t('footer.email')}</div>
+            <div className="sf-tagline">{t('footer.tagline')}</div>
+            <div className="sf-langs">🌏 English · 中文 · 日本語 · 한국어</div>
           </div>
-          <div className="sf-cols">
+
+          {/* 그룹형 링크 (당근 about 페이지풍) */}
+          <div className="sf-groups">
             <div className="sf-col">
-              <div className="sf-col-h">{t('footer.col.service')}</div>
-              <NavLink to="/site/book">{t('site.nav.branch')}</NavLink>
-              <a href={ESIM_URL} target="_blank" rel="noreferrer noopener">
-                {t('site.nav.esim')}
-              </a>
-              <NavLink to="/site/lookup">{t('nav.lookup')}</NavLink>
+              <div className="sf-col-h">{t('footer.g.company')}</div>
+              <NavLink to="/site/about">{t('footer.l.about')}</NavLink>
+              <NavLink to="/site/branches">{t('footer.l.branches')}</NavLink>
+              <NavLink to="/site/kiosks">{t('footer.l.kiosk')}</NavLink>
             </div>
             <div className="sf-col">
-              <div className="sf-col-h">{t('footer.col.company')}</div>
-              <NavLink to="/site/about">{t('site.nav.about')}</NavLink>
-              <a href="#" onClick={(e) => e.preventDefault()}>
-                {t('footer.terms')}
+              <div className="sf-col-h">{t('footer.g.service')}</div>
+              <NavLink to="/site/book">{t('footer.l.book')}</NavLink>
+              <NavLink to="/site/lookup">{t('footer.l.lookup')}</NavLink>
+              <a href={ESIM_URL} target="_blank" rel="noreferrer noopener">
+                {t('footer.l.esim')} ↗
               </a>
-              <a href="#" onClick={(e) => e.preventDefault()}>
-                {t('footer.privacy')}
-              </a>
+            </div>
+            <div className="sf-col">
+              <div className="sf-col-h">{t('footer.g.info')}</div>
+              <NavLink to="/site">{t('footer.l.guide')}</NavLink>
+              <NavLink to="/site">{t('footer.l.faq')}</NavLink>
+              <NavLink to="/site">{t('footer.l.rates')}</NavLink>
+            </div>
+            <div className="sf-col">
+              <div className="sf-col-h">{t('footer.g.support')}</div>
+              <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.l.help')}</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.l.contact')}</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.terms')}</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.privacy')}</a>
             </div>
           </div>
         </div>
-        <div className="site-footer-copy">© 2026 MONEYBOX Corp. · Prototype (dummy data)</div>
+
+        {/* 법인 정보 */}
+        <div className="site-footer-legal">
+          <div className="sf-legal-name">{t('footer.company')}</div>
+          <div className="sf-legal-row">
+            {t('footer.addr')} · {t('footer.tel')} · {t('footer.email')}
+          </div>
+          <div className="site-footer-copy">© 2026 MONEYBOX Corp. · Prototype (dummy data)</div>
+        </div>
       </footer>
     </div>
   )
