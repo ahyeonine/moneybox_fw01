@@ -577,6 +577,11 @@ export const STRINGS = {
   // 회원가입 모달 (쿠폰 받기)
   'signup.badge': { ko: '환율 최저가 보장 쿠폰', en: 'Best-rate guarantee coupon' },
   'signup.title': { ko: '회원가입하고 쿠폰 받기', en: 'Sign up and claim your coupon' },
+  'signup.name': { ko: '이름', en: 'Name' },
+  'signup.emailhint': {
+    ko: '수신 가능한 이메일인지 인증번호로 확인해요.',
+    en: 'We verify your email is reachable with a code.',
+  },
   'signup.d': {
     ko: '가입하면 베스트레이트 보장 쿠폰이 적용돼요. 예약만 하실 거면 가입 없이 그대로 진행하셔도 됩니다.',
     en: 'Signing up applies the best-rate guarantee coupon. Just booking? You can continue without signing up.',
@@ -600,4 +605,24 @@ export const STRINGS = {
   'footer.col.company': { ko: '회사', en: 'Company' },
   'footer.terms': { ko: '이용약관', en: 'Terms' },
   'footer.privacy': { ko: '개인정보처리방침', en: 'Privacy' },
+  // 그룹형 푸터 (당근 about 페이지풍) — 그룹 헤더 + 링크
+  'footer.tagline': {
+    ko: '한국을 방문하는 외국인을 위한 가장 쉬운 환전.',
+    en: 'The easiest currency exchange for visitors to Korea.',
+  },
+  'footer.g.company': { ko: '머니박스', en: 'MoneyBox' },
+  'footer.g.service': { ko: '서비스', en: 'Services' },
+  'footer.g.info': { ko: '정보', en: 'Info' },
+  'footer.g.support': { ko: '지원', en: 'Support' },
+  'footer.l.about': { ko: '회사 소개', en: 'About us' },
+  'footer.l.branches': { ko: '지점 안내', en: 'Branches' },
+  'footer.l.kiosk': { ko: '무인환전기 (머니24h)', en: 'Self-service (MONEY24h)' },
+  'footer.l.book': { ko: '환전 예약', en: 'Reserve exchange' },
+  'footer.l.lookup': { ko: '예약 조회', en: 'My reservation' },
+  'footer.l.esim': { ko: 'eSIM', en: 'eSIM' },
+  'footer.l.guide': { ko: '이용 가이드', en: 'How it works' },
+  'footer.l.faq': { ko: '자주 묻는 질문', en: 'FAQ' },
+  'footer.l.rates': { ko: '환율 안내', en: 'Exchange rates' },
+  'footer.l.help': { ko: '도움말 센터', en: 'Help center' },
+  'footer.l.contact': { ko: '문의하기', en: 'Contact us' },
 }

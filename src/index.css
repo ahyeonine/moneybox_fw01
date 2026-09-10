@@ -3030,6 +3030,14 @@ th.num {
   line-height: 1.6;
   color: var(--text-3);
 }
+.signup-label {
+  display: block;
+  text-align: left;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--text-2);
+  margin: 4px 0 6px;
+}
 .signup-input {
   width: 100%;
   padding: 13px 14px;
@@ -3042,6 +3050,70 @@ th.num {
   outline: none;
   border-color: var(--travel);
   box-shadow: 0 0 0 3px var(--travel-soft);
+}
+.signup-input:disabled {
+  background: var(--surface-2, #f4f6fb);
+  color: var(--text-3);
+}
+.signup-emailrow {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.signup-emailrow .signup-input {
+  flex: 1;
+  min-width: 0;
+}
+.signup-code-btn {
+  flex-shrink: 0;
+  background: var(--travel-soft);
+  color: var(--travel-dark);
+  font-weight: 800;
+  font-size: 13px;
+  padding: 13px 14px;
+  border-radius: 12px;
+  border: none;
+  white-space: nowrap;
+}
+.signup-code-btn:hover {
+  background: #dbe8ff;
+}
+.signup-hint {
+  text-align: left;
+  font-size: 11.5px;
+  color: var(--text-3);
+  margin: -4px 0 10px;
+}
+.signup-demo {
+  text-align: left;
+  font-size: 12.5px;
+  color: var(--text-2);
+  background: var(--warn-soft);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+}
+.signup-demo strong {
+  letter-spacing: 0.12em;
+  color: var(--text);
+}
+.signup-verified {
+  text-align: left;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--success);
+  margin-bottom: 10px;
+}
+.signup-err {
+  text-align: left;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--danger);
+  margin-bottom: 10px;
+}
+.signup-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 .signup-submit {
   margin-bottom: 8px;
@@ -3598,45 +3670,50 @@ th.num {
 .site-footer-inner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 30px 16px 18px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 28px;
-  justify-content: space-between;
+  padding: 44px 20px 30px;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 2.2fr;
+  gap: 40px;
+  align-items: start;
 }
 .sf-logo {
   font-weight: 900;
-  font-size: 18px;
+  font-size: 20px;
   color: var(--text);
 }
 .sf-logo span {
-  color: var(--brand);
+  color: var(--travel);
 }
-.sf-company {
-  font-weight: 700;
-  margin-top: 8px;
-  font-size: 13px;
-  color: var(--text-2);
-}
-.sf-addr {
-  font-size: 12px;
+.sf-tagline {
+  margin-top: 12px;
+  font-size: 13.5px;
+  line-height: 1.55;
   color: var(--text-3);
-  margin-top: 2px;
+  font-weight: 600;
+  max-width: 260px;
 }
-.sf-cols {
-  display: flex;
-  gap: 48px;
+.sf-langs {
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-3);
+}
+/* 4열 그룹 */
+.sf-groups {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
 }
 .sf-col {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 .sf-col-h {
   font-size: 13px;
   font-weight: 800;
   color: var(--text);
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 .sf-col a {
   font-size: 13px;
@@ -3644,15 +3721,39 @@ th.num {
   font-weight: 600;
 }
 .sf-col a:hover {
-  color: var(--brand);
+  color: var(--travel);
 }
-.site-footer-copy {
+/* 법인 정보 */
+.site-footer-legal {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 14px 16px 24px;
+  padding: 18px 20px 28px;
   border-top: 1px solid var(--border);
+}
+.sf-legal-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.sf-legal-row {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.site-footer-copy {
+  margin-top: 8px;
   color: var(--text-3);
   font-size: 12px;
+}
+@media (max-width: 760px) {
+  .site-footer-inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .sf-groups {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
 }
 
 
