@@ -348,6 +348,15 @@ export const STRINGS = {
     en: 'Reserve online, pick up cash near you — best rate guaranteed.',
   },
   'home.hero.cta': { ko: '환전 예약하기', en: 'Reserve your exchange' },
+  // 히어로 신뢰/손해없음 (베스트레이트 보장 배지 + 빠른 안내 배지)
+  'home.hero.grt.t': { ko: '손해 없는 환전, 베스트레이트 보장', en: 'No-loss exchange, best-rate guaranteed' },
+  'home.hero.grt.d': {
+    ko: '예약보다 환율이 나빠지지 않아요. 방문일에 더 좋아지면 그날의 더 좋은 환율로 드려요.',
+    en: 'Never worse than the rate you booked — and if it improves by your visit, you get the better one.',
+  },
+  'home.hero.qf1': { ko: '여권만', en: 'Passport only' },
+  'home.hero.qf2': { ko: '결제 없음', en: 'No payment' },
+  'home.hero.qf3': { ko: '1분 예약', en: '1-min booking' },
   'home.card2.t': { ko: '베스트레이트 보장', en: 'Best-rate guarantee' },
   'home.card2.d': {
     ko: '예약 시점 환율 고정 · 방문일에 더 좋아지면 그날 환율 적용',
@@ -553,20 +562,34 @@ export const STRINGS = {
     en: 'One-minute booking, no payment or sign-up. Pick up at 40+ spots incl. Myeongdong, Hongdae, Gangnam, airports.',
   },
 
-  // 쿠폰 팝업 (예약 진입 시) — 베스트레이트 보장
-  'coupon.badge': { ko: '웰컴 혜택', en: 'Welcome perk' },
-  'coupon.title': { ko: '환율 최저가 보장', en: 'Best-rate guarantee' },
+  // 신청 페이지 내 환율보장 쿠폰(배너) — 누르면 회원가입 (예약 자체는 가입 불필요)
+  'coupon.title': { ko: '환율 최저가 보장 쿠폰', en: 'Best-rate guarantee coupon' },
   'coupon.body': {
-    ko: '지금 예약해도 손해 없어요. 방문하시는 날 환율이 더 좋아지면, 그날의 더 좋은 환율로 드려요.',
-    en: 'No risk in booking now. If the rate improves by the day you visit, you get that better rate.',
+    ko: '회원가입하면 예약보다 나빠지지 않는 환율을 보장해드려요. 방문일에 더 좋아지면 그날 환율로.',
+    en: 'Sign up and we guarantee a rate never worse than when you booked — the better one if it improves by your visit.',
   },
-  'coupon.sub': {
-    ko: '언제 오시든, 예약 시점보다 불리하지 않아요.',
-    en: 'Whenever you come, never worse than the rate at booking.',
+  'coupon.cta': { ko: '회원가입하고 받기', en: 'Sign up to claim' },
+  'coupon.claimed': { ko: '쿠폰 적용됨 · 환율 최저가 보장', en: 'Coupon applied · best-rate guaranteed' },
+  'coupon.optional': {
+    ko: '신청에는 회원가입이 필요 없어요',
+    en: 'Sign-up is not required to book',
   },
-  'coupon.foot': { ko: 'MoneyBox Best-Rate Guarantee', en: 'MoneyBox Best-Rate Guarantee' },
-  'coupon.cta': { ko: '환전 예약 시작하기', en: 'Start reserving' },
-  'coupon.note': { ko: '※ 프로토타입 안내 (예시)', en: '* Prototype notice (example)' },
+  // 회원가입 모달 (쿠폰 받기)
+  'signup.badge': { ko: '환율 최저가 보장 쿠폰', en: 'Best-rate guarantee coupon' },
+  'signup.title': { ko: '회원가입하고 쿠폰 받기', en: 'Sign up and claim your coupon' },
+  'signup.d': {
+    ko: '가입하면 베스트레이트 보장 쿠폰이 적용돼요. 예약만 하실 거면 가입 없이 그대로 진행하셔도 됩니다.',
+    en: 'Signing up applies the best-rate guarantee coupon. Just booking? You can continue without signing up.',
+  },
+  'signup.submit': { ko: '회원가입하고 쿠폰 받기', en: 'Sign up & claim' },
+  'signup.skip': { ko: '가입 없이 예약 계속', en: 'Continue without signing up' },
+  'signup.done.t': { ko: '가입 완료! 쿠폰이 적용됐어요', en: 'Signed up! Your coupon is applied' },
+  'signup.done.d': {
+    ko: '이제 예약을 이어서 진행하세요. 베스트레이트 보장이 함께 적용됩니다.',
+    en: 'Continue your booking — the best-rate guarantee now applies.',
+  },
+  'signup.done.cta': { ko: '예약 계속하기', en: 'Continue booking' },
+  'signup.note': { ko: '※ 프로토타입 — 실제 가입 없이 시뮬레이션됩니다', en: '* Prototype — simulated, no real account created' },
 
   // 푸터
   'footer.company': { ko: '(주) 머니박스', en: 'MoneyBox Inc.' },

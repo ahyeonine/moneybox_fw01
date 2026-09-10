@@ -2934,6 +2934,131 @@ th.num {
   font-weight: 600;
 }
 
+/* ── 신청 페이지 내 환율보장 쿠폰 배너 → 회원가입 ─────────────── */
+.bc-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  margin: 14px 0 6px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px dashed var(--travel);
+  background: linear-gradient(120deg, var(--travel-soft) 0%, #f4f8ff 100%);
+  cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+.bc-banner:hover {
+  box-shadow: 0 8px 20px rgba(31, 107, 255, 0.16);
+  transform: translateY(-1px);
+}
+.bc-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+.bc-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+.bc-t {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--travel-dark);
+}
+.bc-d {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+.bc-cta {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--travel);
+  padding: 9px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.bc-banner.is-claimed {
+  cursor: default;
+  border-style: solid;
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+.bc-claimed-text {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--success);
+}
+
+/* 회원가입 모달 (쿠폰 받기) — coupon-overlay 백드롭 재사용 */
+.signup-modal {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 26px 22px;
+  box-shadow: 0 30px 70px rgba(10, 22, 55, 0.4);
+  text-align: center;
+  animation: couponPop 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.signup-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.signup-title {
+  margin: 14px 0 0;
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.signup-d {
+  margin: 10px 0 18px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+.signup-input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+.signup-input:focus {
+  outline: none;
+  border-color: var(--travel);
+  box-shadow: 0 0 0 3px var(--travel-soft);
+}
+.signup-submit {
+  margin-bottom: 8px;
+}
+.signup-note {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+.signup-done {
+  text-align: center;
+}
+.signup-done-ic {
+  font-size: 40px;
+}
+
 /* ── 회사 소개 (당근 about 페이지풍) ──────────────────────── */
 .about-k {
   max-width: 860px;
@@ -4222,8 +4347,54 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   margin: 0 0 22px;
   max-width: 460px;
 }
+/* 빠른 안내 배지 (여권만 · 결제없음 · 1분) */
+.hero-quickfacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 22px;
+}
+.hqf {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #dbe4f5;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-2);
+}
 .wp-cta-row {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+}
+/* 손해 없는 환전 — 베스트레이트 보장 콜아웃 */
+.hero-guarantee {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  border-radius: 16px;
+  background: var(--travel-soft);
+  border: 1px solid #cfe0ff;
+}
+.hg-icon {
+  font-size: 22px;
+  line-height: 1.2;
+}
+.hg-t {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--travel-dark);
+}
+.hg-d {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  line-height: 1.55;
 }
 .wp-cta {
   background: var(--travel);

@@ -91,22 +91,29 @@ export default function BookingFlow() {
     resetBooking,
   } = useBooking()
 
-  // 예약(신청) 진입 시 "베스트레이트 보장" 쿠폰을 1회(세션 기준) 노출
-  const [showCoupon, setShowCoupon] = useState(false)
+  // 신청 페이지 내 환율보장 쿠폰 → 누르면 회원가입(선택). 예약 자체는 가입 불필요.
+  const [showSignup, setShowSignup] = useState(false)
+  const [signupDone, setSignupDone] = useState(false)
+  const [couponClaimed, setCouponClaimed] = useState(false)
   useEffect(() => {
     try {
-      if (!sessionStorage.getItem('mbox.coupon.seen')) setShowCoupon(true)
+      if (sessionStorage.getItem('mbox.coupon.claimed')) setCouponClaimed(true)
     } catch (e) {
       /* ignore */
     }
   }, [])
-  function dismissCoupon() {
-    setShowCoupon(false)
+  function claimCoupon() {
+    setSignupDone(true)
+    setCouponClaimed(true)
     try {
-      sessionStorage.setItem('mbox.coupon.seen', '1')
+      sessionStorage.setItem('mbox.coupon.claimed', '1')
     } catch (e) {
       /* ignore */
     }
+  }
+  function closeSignup() {
+    setShowSignup(false)
+    setSignupDone(false)
   }
 
   const branch = getBranch(draft.branchId)
@@ -273,35 +280,68 @@ export default function BookingFlow() {
 
   return (
     <div>
-      {/* 베스트레이트 보장 쿠폰 (예약 진입 시 1회 노출) */}
-      {showCoupon && (
-        <div className="coupon-overlay" onClick={dismissCoupon}>
+      <DevNote items={DEV_NOTES[stage]} />
+      <Stepper steps={stepLabels} current={stageIndex} />
+
+      {/* 신청 페이지 내 환율보장 쿠폰 (신청 단계에서 노출) → 누르면 회원가입(선택) */}
+      {(stage === 'branch' || stage === 'apply') &&
+        (couponClaimed ? (
+          <div className="bc-banner is-claimed">
+            <span className="bc-icon" aria-hidden="true">✅</span>
+            <span className="bc-claimed-text">{t('coupon.claimed')}</span>
+          </div>
+        ) : (
+          <button className="bc-banner" onClick={() => setShowSignup(true)}>
+            <span className="bc-icon" aria-hidden="true">🎟️</span>
+            <span className="bc-text">
+              <span className="bc-t">{t('coupon.title')}</span>
+              <span className="bc-d">{t('coupon.body')}</span>
+            </span>
+            <span className="bc-cta">{t('coupon.cta')} →</span>
+          </button>
+        ))}
+
+      {/* 회원가입 모달 (쿠폰 받기) — 예약 자체는 가입 불필요 */}
+      {showSignup && (
+        <div className="coupon-overlay" onClick={closeSignup}>
           <div
-            className="mb-coupon"
+            className="signup-modal"
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mb-coupon-top">
-              <span className="mb-coupon-badge">🎟️ {t('coupon.badge')}</span>
-              <div className="mb-coupon-title">{t('coupon.title')}</div>
-              <p className="mb-coupon-body">{t('coupon.body')}</p>
-              <p className="mb-coupon-sub">{t('coupon.sub')}</p>
-            </div>
-            <div className="mb-coupon-perf" aria-hidden="true" />
-            <div className="mb-coupon-bottom">
-              <span className="mb-coupon-foot">{t('coupon.foot')}</span>
-              <button className="btn mb-coupon-cta" onClick={dismissCoupon}>
-                {t('coupon.cta')}
-              </button>
-              <div className="mb-coupon-note">{t('coupon.note')}</div>
-            </div>
+            {signupDone ? (
+              <div className="signup-done">
+                <div className="signup-done-ic" aria-hidden="true">🎉</div>
+                <h3 className="signup-title">{t('signup.done.t')}</h3>
+                <p className="signup-d">{t('signup.done.d')}</p>
+                <button className="btn primary block" onClick={closeSignup}>
+                  {t('signup.done.cta')}
+                </button>
+              </div>
+            ) : (
+              <>
+                <span className="signup-badge">🎟️ {t('signup.badge')}</span>
+                <h3 className="signup-title">{t('signup.title')}</h3>
+                <p className="signup-d">{t('signup.d')}</p>
+                <input
+                  className="signup-input"
+                  type="email"
+                  placeholder={t('common.email')}
+                  aria-label={t('common.email')}
+                />
+                <button className="btn primary block signup-submit" onClick={claimCoupon}>
+                  {t('signup.submit')}
+                </button>
+                <button className="btn ghost block" onClick={closeSignup}>
+                  {t('signup.skip')}
+                </button>
+                <div className="signup-note">{t('signup.note')}</div>
+              </>
+            )}
           </div>
         </div>
       )}
-
-      <DevNote items={DEV_NOTES[stage]} />
-      <Stepper steps={stepLabels} current={stageIndex} />
 
       {stage === 'branch' && <StepBranch selectedId={draft.branchId} onSelect={selectBranch} />}
 
