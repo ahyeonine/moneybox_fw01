@@ -4893,3 +4893,511 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
     text-align: left;
   }
 }
+
+/* ══ 외국인 사이트 2안 (WOWPASS 참고 · 다크 푸터 OrangeSquare 참고) ══ */
+.s2 {
+  min-height: 100%;
+  background: #f6f8fc;
+  display: flex;
+  flex-direction: column;
+}
+/* 헤더 */
+.s2-header {
+  background: #fff;
+  border-bottom: 1px solid #e6ebf4;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.s2-header-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.s2-logo {
+  font-weight: 900;
+  font-size: 20px;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.s2-logo span {
+  color: var(--travel);
+}
+.s2-logo-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff !important;
+  background: var(--travel);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+.s2-nav {
+  flex: 1;
+}
+.s2-nav-langs {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-3);
+}
+.s2-header-right {
+  margin-left: auto;
+}
+.s2-main {
+  flex: 1;
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+/* 히어로 */
+.s2-hero {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.s2-hero-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.s2-hero-t {
+  margin: 14px 0 0;
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  line-height: 1.25;
+}
+.s2-hero-d {
+  margin: 10px auto 0;
+  max-width: 460px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+/* 스텝 */
+.s2-steps {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.s2-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #e6ebf4;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-3);
+}
+.s2-step.on {
+  border-color: var(--travel);
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+}
+.s2-step.done {
+  color: var(--success);
+}
+.s2-step-num {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #eef2fb;
+  font-size: 11px;
+  font-weight: 900;
+}
+.s2-step.on .s2-step-num {
+  background: var(--travel);
+  color: #fff;
+}
+.s2-step.done .s2-step-num {
+  background: var(--success);
+  color: #fff;
+}
+/* 카드 */
+.s2-card {
+  background: #fff;
+  border: 1px solid #e6ebf4;
+  border-radius: 20px;
+  padding: 26px 24px;
+  box-shadow: 0 18px 44px rgba(15, 47, 138, 0.08);
+}
+.s2-card-t {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.s2-card-sub {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--text-3);
+  line-height: 1.55;
+}
+.s2-field-label {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--text-2);
+  margin: 20px 0 10px;
+}
+/* 통화 칩 */
+.s2-cur-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.s2-cur-chip {
+  border: 1px solid #dbe4f5;
+  background: #fff;
+  border-radius: 999px;
+  padding: 9px 15px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.s2-cur-chip.on {
+  border-color: var(--travel);
+  background: var(--travel);
+  color: #fff;
+}
+/* 금액 입력 */
+.s2-amount-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #dbe4f5;
+  border-radius: 14px;
+  padding: 4px 16px;
+}
+.s2-amount-row:focus-within {
+  border-color: var(--travel);
+  box-shadow: 0 0 0 3px var(--travel-soft);
+}
+.s2-amount-flag {
+  font-size: 22px;
+}
+.s2-amount-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 26px;
+  font-weight: 800;
+  padding: 12px 0;
+  min-width: 0;
+  color: var(--text);
+}
+.s2-amount-cur {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-3);
+}
+.s2-krw {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--travel-soft);
+}
+.s2-krw-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.s2-krw-val {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--travel-dark);
+}
+/* 버튼 */
+.s2-primary {
+  background: var(--travel);
+  color: #fff;
+  font-weight: 800;
+  border: none;
+  border-radius: 12px;
+  padding: 15px 18px;
+  font-size: 15px;
+}
+.s2-primary:hover {
+  background: var(--travel-dark);
+}
+.s2-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.s2-ghost {
+  background: #fff;
+  color: var(--text-2);
+  border: 1px solid #dbe4f5;
+  border-radius: 12px;
+  padding: 13px 18px;
+  font-weight: 800;
+  font-size: 14px;
+}
+.block {
+  width: 100%;
+  display: block;
+}
+.s2-card .s2-primary.block {
+  margin-top: 22px;
+}
+.s2-card .s2-ghost.block {
+  margin-top: 12px;
+}
+.s2-note {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+/* 위치 검색 */
+.s2-search {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 1px solid #dbe4f5;
+  border-radius: 14px;
+  font-size: 15px;
+}
+.s2-search:focus {
+  outline: none;
+  border-color: var(--travel);
+  box-shadow: 0 0 0 3px var(--travel-soft);
+}
+.s2-loc-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.s2-loc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid #e6ebf4;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.12s;
+}
+.s2-loc-item:hover,
+.s2-loc-item.on {
+  border-color: var(--travel);
+  background: var(--travel-soft);
+}
+.s2-loc-kind {
+  font-size: 20px;
+}
+.s2-loc-name {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.s2-loc-go {
+  color: var(--travel);
+  font-weight: 900;
+}
+.s2-empty {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-3);
+  font-size: 14px;
+  font-weight: 600;
+}
+/* 지점 추천 */
+.s2-picked {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f1f5fd;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.s2-picked-cur {
+  color: var(--text-3);
+  font-weight: 600;
+}
+.s2-branch-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.s2-branch {
+  border: 1px solid #e6ebf4;
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.s2-branch.best {
+  border-color: var(--travel);
+  box-shadow: 0 8px 22px rgba(31, 107, 255, 0.12);
+}
+.s2-branch-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.s2-branch-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+}
+.s2-branch-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.s2-branch-addr {
+  margin-top: 5px;
+  font-size: 13px;
+  color: var(--text-3);
+}
+.s2-branch-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.s2-branch-km {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-2);
+}
+.s2-branch-pick {
+  padding: 10px 16px;
+  font-size: 13px;
+}
+/* 완료 */
+.s2-done {
+  text-align: center;
+}
+.s2-done-ic {
+  font-size: 44px;
+}
+.s2-done-summary {
+  margin: 14px auto;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f1f5fd;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+/* 다크 푸터 (OrangeSquare 참고) */
+.s2-footer {
+  background: #2b2f36;
+  color: #cfd4dc;
+  margin-top: auto;
+}
+.s2-footer-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 44px 24px 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.s2-footer-logo {
+  font-weight: 900;
+  font-size: 20px;
+  color: #fff;
+}
+.s2-footer-logo span {
+  color: #6ea8ff;
+}
+.s2-footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 22px;
+}
+.s2-footer-links a {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #cfd4dc;
+}
+.s2-footer-links a:hover {
+  color: #fff;
+}
+.s2-footer-right {
+  text-align: right;
+}
+.s2-footer-contact {
+  font-size: 13px;
+  color: #aeb4bf;
+  margin-bottom: 8px;
+}
+.s2-footer-addr {
+  font-size: 12.5px;
+  font-style: italic;
+  color: #8b909b;
+  margin: 12px 0 18px;
+  line-height: 1.5;
+}
+.s2-footer-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: flex-end;
+}
+.s2-social-ic {
+  font-size: 18px;
+  opacity: 0.85;
+  cursor: pointer;
+}
+.s2-footer-copy {
+  border-top: 1px solid #3a3f47;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px 24px 28px;
+  font-size: 12px;
+  color: #8b909b;
+}
+@media (max-width: 640px) {
+  .s2-footer-inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .s2-footer-right {
+    text-align: left;
+  }
+  .s2-footer-social {
+    justify-content: flex-start;
+  }
+  .s2-nav {
+    display: none;
+  }
+}
