@@ -9,9 +9,8 @@ const ReservationContext = createContext(null)
 // 프로토타입 기준일(오늘, KST 달력 날짜). 실제 스케줄러 대신 시뮬레이션으로 흘려보낸다.
 const INITIAL_TODAY = '2026-07-30'
 
-// 노쇼(자동취소) 누적 차단 임계값.
-// TODO: 실제 임계값 정책 확정 필요 (현재 N=2 는 프로토타입 임시값)
-export const NOSHOW_LIMIT = 2
+// 노쇼(자동취소) 정책: 신규예약 차단 없음(07_정책 §7) — 안내성으로만 운영.
+// countNoShow는 통계·안내용 카운트로만 사용하며, 예약 생성을 막지 않는다.
 
 function clone(arr) {
   return arr.map((r) => ({ ...r }))
@@ -124,7 +123,7 @@ export function ReservationProvider({ children }) {
     [reservations]
   )
 
-  // 노쇼(자동취소) 누적 횟수 — 이메일 기준. 신규예약 차단 판정에 사용.
+  // 노쇼(자동취소) 누적 횟수 — 이메일 기준. 통계·안내용(신규예약 차단에는 미사용).
   const countNoShow = useCallback(
     (email) => {
       const em = (email || '').trim().toLowerCase()

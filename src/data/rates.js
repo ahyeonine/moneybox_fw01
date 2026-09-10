@@ -52,22 +52,26 @@ export const CURRENCY_ORDER = [
   'AUD', 'CAD', 'CHF', 'NZD', 'PHP', 'MYR', 'IDR', 'VND', 'INR',
 ]
 
-// 통화별 최소 환전금액 정책 기본값 (전체 지점 공통, 어드민 화면 시드)
-// TODO: 실제 정책 수치로 교체
-export const POLICY_MIN_AMOUNTS = {
-  USD: 100, JPY: 10000, EUR: 100, CNY: 500, GBP: 100, HKD: 500, THB: 1000,
-  TWD: 1000, SGD: 100, AUD: 100, CAD: 100, CHF: 100, NZD: 100, PHP: 2000,
-  MYR: 200, IDR: 500000, VND: 500000, INR: 3000,
-}
-
 // 통화별 신청 단위(입력 단위) 정책 기본값 (전체 지점 공통, 어드민 화면 시드)
 // 외국인 웹사이트 신청화면에서만 이 단위로 올림(ceil) 처리한다. (CEMS/POS/이메일 미적용)
-// TODO: 실제 정책 수치로 교체
 export const POLICY_UNIT_STEPS = {
   USD: 10, JPY: 1000, EUR: 5, CNY: 50, GBP: 5, HKD: 50, THB: 100,
   TWD: 100, SGD: 10, AUD: 10, CAD: 10, CHF: 10, NZD: 10, PHP: 100,
   MYR: 10, IDR: 10000, VND: 10000, INR: 100,
 }
+
+// 통화별 최소 환전금액 정책 기본값 (전체 지점 공통, 어드민 화면 시드).
+// 정책(07_정책 §4): 최소 = 미화 USD 100 상당액을 통화별로 환산 → 신청단위로 올림.
+// 지점이 CEMS 한도관리에서 통화별로 조정 가능(이 값은 기본 시드).
+const MIN_USD_EQUIV = 100 // 미화 100달러 기준
+const ceilToUnit = (n, step) => (step > 0 ? Math.ceil(n / step) * step : Math.ceil(n))
+export const POLICY_MIN_AMOUNTS = Object.fromEntries(
+  CURRENCY_ORDER.map((c) => {
+    if (c === 'USD') return [c, MIN_USD_EQUIV]
+    const krwFloor = MIN_USD_EQUIV * MOCK_RATES.USD // USD 100 상당 원화
+    return [c, ceilToUnit(krwFloor / MOCK_RATES[c], POLICY_UNIT_STEPS[c])]
+  })
+)
 
 /** 예약 시점 환율 조회 (전 고객 동일 환율) */
 export function getRate(currency) {
