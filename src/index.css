@@ -2486,6 +2486,44 @@ th.num {
 }
 
 /* 2. 실시간 환율 티커 */
+/* 원화 살 때(외화→원화) 전용 칩 */
+.buykrw-chip {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--travel-soft);
+  color: var(--travel-dark);
+  font-size: 12px;
+  font-weight: 800;
+}
+/* 베스트레이트 보장 강조 (신청 화면) */
+.apply-grt {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 14px;
+  padding: 13px 14px;
+  border-radius: 12px;
+  background: linear-gradient(120deg, var(--travel-soft) 0%, #eaf1ff 100%);
+  border: 1px solid #cfe0ff;
+}
+.apply-grt-ic {
+  font-size: 20px;
+  line-height: 1.2;
+}
+.apply-grt-t {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--travel-dark);
+}
+.apply-grt-d {
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  line-height: 1.5;
+}
 .same-as-existing {
   margin-top: 16px;
   padding: 18px 16px;

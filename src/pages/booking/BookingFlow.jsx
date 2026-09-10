@@ -608,7 +608,6 @@ function StepApply({ branch, draft, set, limit, amountCheck, rate, krw, range, o
 function BranchDetailLeft({ branch }) {
   const { t, lang } = useI18n()
   const { getDisplayRates, getBankCompare } = useRates()
-  const [rateTab, setRateTab] = useState('buy') // buy(외화 살 때) | sell(외화 팔 때)
   const [showAll, setShowAll] = useState(false)
   const [copied, setCopied] = useState(false)
   const currencies = branchCurrencies(branch.id)
@@ -657,14 +656,8 @@ function BranchDetailLeft({ branch }) {
         <h2 style={{ fontSize: 16 }}>
           {branch.name[lang]} {t('stepB.liveRate')}
         </h2>
-        <div className="tabs" style={{ marginBottom: 12 }}>
-          <button className={rateTab === 'buy' ? 'active' : ''} onClick={() => setRateTab('buy')}>
-            {t('stepB.buyTab')}
-          </button>
-          <button className={rateTab === 'sell' ? 'active' : ''} onClick={() => setRateTab('sell')}>
-            {t('stepB.sellTab')}
-          </button>
-        </div>
+        {/* 머니박스는 원화 살 때(외화→원화)만 지원 → 방향 토글 없이 기준환율만 노출 */}
+        <div className="buykrw-chip">{t('stepB.buyKrwOnly')}</div>
         <div className="rate-cards">
           {currencies.slice(0, 4).map((c) => {
             const dr = getDisplayRates(c)
@@ -673,7 +666,7 @@ function BranchDetailLeft({ branch }) {
                 <div className="rc-cur">
                   {CURRENCY_META[c]?.flag} {c}
                 </div>
-                <div className="rc-rate">{formatNumber(rateTab === 'buy' ? dr.buy : dr.sell)}</div>
+                <div className="rc-rate">{formatNumber(dr.base)}</div>
               </div>
             )
           })}
@@ -705,12 +698,12 @@ function BranchDetailLeft({ branch }) {
       {showAll && (
         <Modal onClose={() => setShowAll(false)}>
           <h2>{t('stepB.allRatesTitle')}</h2>
+          <div className="buykrw-chip" style={{ marginBottom: 10 }}>{t('stepB.buyKrwOnly')}</div>
           <table style={{ minWidth: 'auto', width: '100%' }}>
             <thead>
               <tr>
                 <th>{t('common.currency')}</th>
-                <th className="num">{t('stepB.buyTab')}</th>
-                <th className="num">{t('stepB.sellTab')}</th>
+                <th className="num">{t('stepB.liveRate')}</th>
               </tr>
             </thead>
             <tbody>
@@ -721,8 +714,7 @@ function BranchDetailLeft({ branch }) {
                     <td>
                       {CURRENCY_META[c]?.flag} {c}
                     </td>
-                    <td className="num">{formatNumber(dr.buy)}</td>
-                    <td className="num">{formatNumber(dr.sell)}</td>
+                    <td className="num">{formatNumber(dr.base)}</td>
                   </tr>
                 )
               })}
@@ -854,6 +846,15 @@ function ApplyCard({ branch, draft, set, limit, rate, krw, range, onApply, canAp
           <span className="live-rate-badge" title={t('stepB.liveRateHint')}>
             ● {t('stepB.liveRateLabel')} · {updatedLabel}
           </span>
+        </div>
+
+        {/* 베스트레이트 보장 강조 — 신청 직전 안심 신호 */}
+        <div className="apply-grt">
+          <span className="apply-grt-ic" aria-hidden="true">🛡️</span>
+          <div className="apply-grt-text">
+            <div className="apply-grt-t">{t('stepB.grtBadge')}</div>
+            <div className="apply-grt-d">{t('stepB.grtDesc')}</div>
+          </div>
         </div>
 
         <button className="btn primary block" style={{ marginTop: 10 }} onClick={onApply} disabled={!canApply}>

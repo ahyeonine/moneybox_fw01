@@ -306,6 +306,14 @@ export const STRINGS = {
   'stepB.liveRate': { ko: '기준환율', en: 'Base rate' },
   'stepB.buyTab': { ko: '외화 살 때', en: 'You buy' },
   'stepB.sellTab': { ko: '외화 팔 때', en: 'You sell' },
+  // 원화 구매(외화→원화) 전용 안내 — 머니박스는 원화 살 때만 지원
+  'stepB.buyKrwOnly': { ko: '원화 살 때 (외화 → 원화)', en: 'Buying KRW (foreign → KRW)' },
+  // 베스트레이트 보장 강조 (신청 화면)
+  'stepB.grtBadge': { ko: '환율 최저가 보장', en: 'Best-rate guarantee' },
+  'stepB.grtDesc': {
+    ko: '방문일에 환율이 더 좋아지면 그날의 더 좋은 환율로 드려요. 예약보다 불리하지 않아요.',
+    en: 'If the rate improves by your visit, you get the better one — never worse than at booking.',
+  },
   'stepB.allRates': { ko: '전체 환율 보기', en: 'View all rates' },
   'stepB.allRatesTitle': { ko: '전체 환율', en: 'All rates' },
   'stepB.bankCompare': { ko: '은행 환율 비교', en: 'Bank rate comparison' },
