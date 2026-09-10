@@ -2,13 +2,17 @@ import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import DevNote from '../components/DevNote.jsx'
 
-// 회사 소개 페이지 (프로토타입 · 임시 콘텐츠).
-// 외국인 대상 서비스를 참고해 미션·지표·서비스·문의를 구성한다.
+// 회사 소개 (프로토타입 · 임시) — 당근 about 페이지풍(큰 서술형 문장·스토리텔링·큰 숫자).
 const STATS = [
   { key: 'tx', value: '₩5.2T+' },
   { key: 'visitors', value: '1.7M+' },
-  { key: 'rating', value: '⭐ 4.97' },
+  { key: 'rating', value: '4.97' },
   { key: 'branches', value: '40+' },
+]
+const VALUES = [
+  { k: 'v1', emoji: '🤝' },
+  { k: 'v2', emoji: '🛡️' },
+  { k: 'v3', emoji: '⚡' },
 ]
 const DO_ITEMS = [
   { k: '1', emoji: '🏦' },
@@ -21,47 +25,64 @@ export default function AboutPage() {
   const nav = useNavigate()
 
   return (
-    <div className="about">
+    <div className="about about-k">
       <DevNote
         items={[
-          '회사 소개 — 외국인 대상 서비스 참고로 구성한 임시 콘텐츠(회사소개서·광고문의 등 상세는 추후 반영)',
+          '회사 소개 — 당근 about 페이지풍으로 구성한 임시 콘텐츠(스토리텔링·큰 숫자). 회사소개서 상세는 추후 반영',
           '자세히: 02_사이트맵.md',
         ]}
       />
 
-      {/* 인트로 */}
-      <section className="about-hero">
-        <h1 className="about-title">{t('about.title')}</h1>
-        <p className="about-lead">{t('about.lead')}</p>
+      {/* 큰 서술형 히어로 */}
+      <section className="ak-hero">
+        <h1 className="ak-hero-t">{t('about.hero.t')}</h1>
+        <p className="ak-hero-d">{t('about.hero.d')}</p>
       </section>
 
-      {/* 지표 */}
-      <section className="about-stats">
-        {STATS.map((s) => (
-          <div className="about-stat" key={s.key}>
-            <div className="about-stat-num">{s.value}</div>
-            <div className="about-stat-label">{t(`about.stats.${s.key}`)}</div>
-          </div>
-        ))}
+      {/* 스토리 */}
+      <section className="ak-story">
+        <div className="ak-eyebrow">{t('about.story.t')}</div>
+        <p className="ak-story-d">{t('about.story.d')}</p>
       </section>
 
-      {/* 미션 */}
-      <section className="about-mission">
-        <div className="about-mission-t">{t('about.mission.t')}</div>
-        <p className="about-mission-d">{t('about.mission.d')}</p>
+      {/* 숫자로 보는 머니박스 (큰 숫자) */}
+      <section className="ak-stats-sec">
+        <div className="ak-eyebrow center">{t('about.statlead')}</div>
+        <div className="ak-stats">
+          {STATS.map((s) => (
+            <div className="ak-stat" key={s.key}>
+              <div className="ak-stat-num">{s.value}</div>
+              <div className="ak-stat-label">{t(`about.stats.${s.key}`)}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 우리가 지키는 것 (가치 3) */}
+      <section className="ak-values-sec">
+        <h2 className="ak-h2">{t('about.values.title')}</h2>
+        <div className="ak-values">
+          {VALUES.map((v) => (
+            <div className="ak-value" key={v.k}>
+              <div className="ak-value-emoji" aria-hidden="true">{v.emoji}</div>
+              <div className="ak-value-t">{t(`about.${v.k}.t`)}</div>
+              <div className="ak-value-d">{t(`about.${v.k}.d`)}</div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* 우리가 하는 일 */}
-      <section className="home-sec">
-        <div className="home-sec-head">
-          <h2 className="home-sec-title">{t('about.do.title')}</h2>
-        </div>
-        <div className="why-grid about-do">
+      <section className="ak-do-sec">
+        <h2 className="ak-h2">{t('about.do.title')}</h2>
+        <div className="ak-do">
           {DO_ITEMS.map((it) => (
-            <div className="why-item" key={it.k}>
-              <div className="why-emoji" aria-hidden="true">{it.emoji}</div>
-              <div className="why-t">{t(`about.do.${it.k}t`)}</div>
-              <div className="why-d">{t(`about.do.${it.k}d`)}</div>
+            <div className="ak-do-item" key={it.k}>
+              <div className="ak-do-emoji" aria-hidden="true">{it.emoji}</div>
+              <div className="ak-do-text">
+                <div className="ak-do-t">{t(`about.do.${it.k}t`)}</div>
+                <div className="ak-do-d">{t(`about.do.${it.k}d`)}</div>
+              </div>
             </div>
           ))}
         </div>

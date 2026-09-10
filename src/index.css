@@ -2806,6 +2806,300 @@ th.num {
   font-weight: 600;
 }
 
+/* ── 베스트레이트 보장 쿠폰 팝업 (예약 진입) ───────────────── */
+.coupon-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(10, 22, 55, 0.5);
+  backdrop-filter: blur(2px);
+  animation: couponFade 0.2s ease both;
+}
+@keyframes couponFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.mb-coupon {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(10, 22, 55, 0.45);
+  animation: couponPop 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes couponPop {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.mb-coupon-top {
+  background: linear-gradient(140deg, var(--travel-dark) 0%, var(--travel) 55%, #38bdf8 100%);
+  color: #fff;
+  padding: 30px 26px 28px;
+  text-align: center;
+}
+.mb-coupon-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.mb-coupon-title {
+  margin-top: 14px;
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.mb-coupon-body {
+  margin: 14px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #eaf1ff;
+}
+.mb-coupon-sub {
+  margin: 12px 0 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+}
+/* 티켓 절취선 (좌우 노치 + 점선) */
+.mb-coupon-perf {
+  position: relative;
+  height: 0;
+  border-top: 2px dashed #c9d6ef;
+  background: #fff;
+}
+.mb-coupon-perf::before,
+.mb-coupon-perf::after {
+  content: '';
+  position: absolute;
+  top: -13px;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: rgba(10, 22, 55, 0.5);
+}
+.mb-coupon-perf::before {
+  left: -13px;
+}
+.mb-coupon-perf::after {
+  right: -13px;
+}
+.mb-coupon-bottom {
+  background: #fff;
+  padding: 22px 26px 24px;
+  text-align: center;
+}
+.mb-coupon-foot {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--travel-dark);
+  text-transform: uppercase;
+}
+.mb-coupon-cta {
+  margin-top: 14px;
+  width: 100%;
+  background: var(--travel);
+  color: #fff;
+  font-weight: 800;
+  padding: 15px 18px;
+  border-radius: 12px;
+  border: none;
+  font-size: 15px;
+}
+.mb-coupon-cta:hover {
+  background: var(--travel-dark);
+}
+.mb-coupon-note {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+
+/* ── 회사 소개 (당근 about 페이지풍) ──────────────────────── */
+.about-k {
+  max-width: 860px;
+  margin: 0 auto;
+}
+.ak-eyebrow {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--travel);
+}
+.ak-eyebrow.center {
+  text-align: center;
+}
+.ak-hero {
+  padding: 26px 0 8px;
+}
+.ak-hero-t {
+  font-size: 44px;
+  font-weight: 900;
+  line-height: 1.14;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  white-space: pre-line;
+  margin: 0;
+}
+.ak-hero-d {
+  margin: 20px 0 0;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--text-2);
+  max-width: 640px;
+}
+.ak-story {
+  margin-top: 56px;
+}
+.ak-story-d {
+  margin: 14px 0 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  max-width: 720px;
+}
+/* 큰 숫자 */
+.ak-stats-sec {
+  margin-top: 64px;
+}
+.ak-stats {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.ak-stat {
+  text-align: center;
+  padding: 24px 10px;
+  border-radius: 18px;
+  background: var(--travel-soft);
+}
+.ak-stat-num {
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--travel-dark);
+  line-height: 1;
+}
+.ak-stat-label {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-3);
+}
+.ak-h2 {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0 0 22px;
+}
+.ak-values-sec {
+  margin-top: 66px;
+}
+.ak-values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.ak-value {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 26px 22px;
+}
+.ak-value-emoji {
+  font-size: 30px;
+}
+.ak-value-t {
+  margin-top: 12px;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text);
+}
+.ak-value-d {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+.ak-do-sec {
+  margin-top: 66px;
+}
+.ak-do {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ak-do-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px;
+}
+.ak-do-emoji {
+  font-size: 28px;
+  line-height: 1.2;
+}
+.ak-do-t {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text);
+}
+.ak-do-d {
+  margin-top: 5px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+.about-k .about-contact,
+.about-k .home-cta {
+  margin-top: 56px;
+}
+
+@media (max-width: 720px) {
+  .ak-hero-t {
+    font-size: 32px;
+  }
+  .ak-story-d {
+    font-size: 19px;
+  }
+  .ak-h2 {
+    font-size: 24px;
+  }
+  .ak-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ak-values {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 720px) {
   .how-steps {
     grid-template-columns: 1fr;
@@ -3887,6 +4181,43 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: var(--text);
   white-space: pre-line;
   margin: 12px 0 12px;
+}
+/* 히어로 순환 타이포 (국가/통화가 카드 넘기듯 바뀜) */
+.wp-title-cycle {
+  white-space: normal;
+}
+.wp-pre {
+  display: block;
+}
+.wp-cycle-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em; /* 디센더 잘림 방지 */
+}
+.wp-cycle-roll {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28em;
+  color: var(--travel);
+  animation: wpCycleRoll 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.wp-cycle-flag {
+  font-size: 0.82em;
+}
+@keyframes wpCycleRoll {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wp-cycle-roll {
+    animation: none;
+  }
 }
 .wp-sub {
   font-size: 17px;

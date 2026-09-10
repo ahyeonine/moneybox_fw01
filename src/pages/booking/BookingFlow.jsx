@@ -91,6 +91,24 @@ export default function BookingFlow() {
     resetBooking,
   } = useBooking()
 
+  // 예약(신청) 진입 시 "베스트레이트 보장" 쿠폰을 1회(세션 기준) 노출
+  const [showCoupon, setShowCoupon] = useState(false)
+  useEffect(() => {
+    try {
+      if (!sessionStorage.getItem('mbox.coupon.seen')) setShowCoupon(true)
+    } catch (e) {
+      /* ignore */
+    }
+  }, [])
+  function dismissCoupon() {
+    setShowCoupon(false)
+    try {
+      sessionStorage.setItem('mbox.coupon.seen', '1')
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
   const branch = getBranch(draft.branchId)
   // 한도 조합: 최소=통화별 공통(minAmounts), 최대=통화별 공통(maxAmounts), 단위=지점 정적값(unitStep).
   // 관리자가 CEMS 한도관리에서 값을 바꾸면 공유 상태를 통해 즉시 이 검증에 반영된다.
@@ -255,6 +273,33 @@ export default function BookingFlow() {
 
   return (
     <div>
+      {/* 베스트레이트 보장 쿠폰 (예약 진입 시 1회 노출) */}
+      {showCoupon && (
+        <div className="coupon-overlay" onClick={dismissCoupon}>
+          <div
+            className="mb-coupon"
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mb-coupon-top">
+              <span className="mb-coupon-badge">🎟️ {t('coupon.badge')}</span>
+              <div className="mb-coupon-title">{t('coupon.title')}</div>
+              <p className="mb-coupon-body">{t('coupon.body')}</p>
+              <p className="mb-coupon-sub">{t('coupon.sub')}</p>
+            </div>
+            <div className="mb-coupon-perf" aria-hidden="true" />
+            <div className="mb-coupon-bottom">
+              <span className="mb-coupon-foot">{t('coupon.foot')}</span>
+              <button className="btn mb-coupon-cta" onClick={dismissCoupon}>
+                {t('coupon.cta')}
+              </button>
+              <div className="mb-coupon-note">{t('coupon.note')}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <DevNote items={DEV_NOTES[stage]} />
       <Stepper steps={stepLabels} current={stageIndex} />
 

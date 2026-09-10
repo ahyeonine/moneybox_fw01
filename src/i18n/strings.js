@@ -336,6 +336,14 @@ export const STRINGS = {
   },
   // ── 랜딩 홈 (외국인 웹사이트 첫 화면). 공항수령 없음 ──
   'home.hero.title': { ko: '가장 빠른 환전의 시작\n머니박스', en: 'The fastest way to exchange\nMoneyBox' },
+  // 히어로 순환 타이포 (국가/통화가 카드 넘기듯 바뀜)
+  'home.hero.pre': { ko: '가장 좋은 환율로', en: 'The best rate for' },
+  'home.cyc.usd': { ko: '미국 달러', en: 'US Dollars' },
+  'home.cyc.jpy': { ko: '일본 엔', en: 'Japanese Yen' },
+  'home.cyc.cny': { ko: '중국 위안', en: 'Chinese Yuan' },
+  'home.cyc.eur': { ko: '유로', en: 'Euros' },
+  'home.cyc.twd': { ko: '대만 달러', en: 'Taiwan Dollars' },
+  'home.cyc.hkd': { ko: '홍콩 달러', en: 'Hong Kong Dollars' },
   'home.hero.sub': {
     ko: '한국을 방문하는 외국인을 위한 가장 쉬운 환전 서비스.',
     en: 'The easiest currency exchange for visitors to Korea.',
@@ -506,6 +514,55 @@ export const STRINGS = {
     ko: '※ 임시 페이지입니다 — 외국인 대상 서비스 참고로 구성한 프로토타입 콘텐츠',
     en: '* Temporary page — prototype content modeled on services for visitors to Korea',
   },
+  // 회사 소개 — 당근 about 페이지풍(큰 서술형 문장·스토리텔링)
+  'about.hero.t': {
+    ko: '한국에서의 환전,\n기분 좋게.',
+    en: 'Exchanging money in Korea,\nmade to feel good.',
+  },
+  'about.hero.d': {
+    ko: '낯선 나라에서의 첫 걸음이 환전이라면, 그 경험이 즐거워야 한다고 믿어요. 머니박스는 한국을 찾는 모두에게 더 쉽고, 더 유리하고, 더 안심되는 환전을 만듭니다.',
+    en: 'If your first step in a new country is exchanging money, we believe that moment should feel good. MoneyBox makes it easier, more rewarding, and more reassuring for everyone visiting Korea.',
+  },
+  'about.story.t': { ko: '왜 시작했나요?', en: 'Why we started' },
+  'about.story.d': {
+    ko: '공항과 은행의 환율은 복잡하고 불리했어요. 우리는 “환전을 넘어 외국인의 금융 문제를 해결하자”는 마음으로, 온라인 예약과 전국 지점·무인환전기를 잇는 새로운 방식을 만들었습니다.',
+    en: 'Airport and bank rates were confusing and unfavorable. With the belief of “going beyond exchange to solve visitors’ financial needs,” we built a new way — online reservations connected to branches and self-service machines nationwide.',
+  },
+  'about.statlead': {
+    ko: '숫자로 보는 머니박스',
+    en: 'MoneyBox in numbers',
+  },
+  'about.values.title': { ko: '우리가 지키는 것', en: 'What we stand for' },
+  'about.v1.t': { ko: '환대', en: 'Hospitality' },
+  'about.v1.d': {
+    ko: '모국어로 편하게. 영어·중국어·일본어로 응대하고, 처음 오신 분도 헤매지 않게 안내해요.',
+    en: 'Comfort in your language. We serve in English, Chinese, and Japanese, guiding first-timers every step.',
+  },
+  'about.v2.t': { ko: '신뢰', en: 'Trust' },
+  'about.v2.d': {
+    ko: '예약 시 확정된 환율을 지키고, 방문일에 더 좋아지면 그날 환율로. Google 평점 4.97로 증명해요.',
+    en: 'We honor the rate locked at booking — and give you the better one if it improves. Proven by a 4.97 Google rating.',
+  },
+  'about.v3.t': { ko: '편의', en: 'Convenience' },
+  'about.v3.d': {
+    ko: '결제·회원가입 없이 1분 예약. 명동·홍대·강남·공항 등 전국 40+ 곳에서 받아요.',
+    en: 'One-minute booking, no payment or sign-up. Pick up at 40+ spots incl. Myeongdong, Hongdae, Gangnam, airports.',
+  },
+
+  // 쿠폰 팝업 (예약 진입 시) — 베스트레이트 보장
+  'coupon.badge': { ko: '웰컴 혜택', en: 'Welcome perk' },
+  'coupon.title': { ko: '환율 최저가 보장', en: 'Best-rate guarantee' },
+  'coupon.body': {
+    ko: '지금 예약해도 손해 없어요. 방문하시는 날 환율이 더 좋아지면, 그날의 더 좋은 환율로 드려요.',
+    en: 'No risk in booking now. If the rate improves by the day you visit, you get that better rate.',
+  },
+  'coupon.sub': {
+    ko: '언제 오시든, 예약 시점보다 불리하지 않아요.',
+    en: 'Whenever you come, never worse than the rate at booking.',
+  },
+  'coupon.foot': { ko: 'MoneyBox Best-Rate Guarantee', en: 'MoneyBox Best-Rate Guarantee' },
+  'coupon.cta': { ko: '환전 예약 시작하기', en: 'Start reserving' },
+  'coupon.note': { ko: '※ 프로토타입 안내 (예시)', en: '* Prototype notice (example)' },
 
   // 푸터
   'footer.company': { ko: '(주) 머니박스', en: 'MoneyBox Inc.' },
