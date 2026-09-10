@@ -365,6 +365,11 @@ export const STRINGS = {
   'home.cmp.kiosk': { ko: '무인 환전기', en: 'Kiosk' },
   'home.cmp.airport': { ko: '공항', en: 'Airport' },
   'home.cmp.less': { ko: '적게 받아요', en: 'less' },
+  'home.cmp.trust': {
+    ko: '실시간 환율 기준 · 베스트레이트 보장',
+    en: 'Live rates · Best-rate guaranteed',
+  },
+  'home.cmp.trust2': { ko: '연 170만+ 방문', en: '1.7M+ travelers / year' },
   'home.cmp.note': {
     ko: '※ 예시입니다 (실제 환율·수치 아님)',
     en: '* Example only (not actual rates)',

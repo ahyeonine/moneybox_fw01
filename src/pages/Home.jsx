@@ -171,9 +171,13 @@ export default function Home() {
               <div className="wp-compare-head">
                 <span className="wpc-title">{t('home.cmp.title')}</span>
                 <span className="wpc-sub">{t('home.cmp.sub')}</span>
+                <span className="wpc-trust-chip">
+                  <span className="wpc-lock" aria-hidden="true">🔒</span>
+                  {t('home.cmp.trust')}
+                </span>
               </div>
 
-              {/* 환전 금액 시나리오 토글 (자동 회전 + 클릭 선택) */}
+              {/* 환전 금액 시나리오 토글 (2초 자동 순환 + 클릭 선택) */}
               <div className="wpc-toggle" role="tablist" aria-label="amount">
                 {COMPARE_SCENARIOS.map((s, i) => (
                   <button
@@ -190,32 +194,49 @@ export default function Home() {
                 ))}
               </div>
 
-              <ul className="wpc-rows">
-                <li className="wpc-row is-best">
-                  <div className="wpc-row-top">
-                    <span className="wpc-name">{t('home.cmp.mb')}</span>
-                    <span className="wpc-tag">{t('home.cmp.best')}</span>
-                  </div>
-                  <span className="wpc-bar-wrap">
-                    <span className="wpc-bar" style={{ width: '100%' }} />
-                  </span>
-                </li>
-                {['bank', 'kiosk', 'airport'].map((key) => (
-                  <li className="wpc-row" key={key}>
+              {/* 카드 스테이지 — 통화가 바뀔 때마다 카드가 넘어가듯 슬라이드(key=scenarioIdx) */}
+              <div className="wpc-stage" key={scenarioIdx}>
+                <ul className="wpc-rows">
+                  <li className="wpc-row is-best">
                     <div className="wpc-row-top">
-                      <span className="wpc-name">{t(`home.cmp.${key}`)}</span>
-                      {/* key에 scenarioIdx를 넣어 통화가 바뀔 때마다 금액이 카드 넘기듯 갱신 */}
-                      <span className="wpc-tag wpc-neg" key={scenarioIdx}>
-                        {lessLabel(scenario.rows[key].less)}
+                      <span className="wpc-name">
+                        <span className="wpc-check" aria-hidden="true">✓</span>
+                        {t('home.cmp.mb')}
                       </span>
+                      <span className="wpc-tag">{t('home.cmp.best')}</span>
                     </div>
                     <span className="wpc-bar-wrap">
-                      <span className="wpc-bar" style={{ width: `${scenario.rows[key].bar}%` }} />
+                      <span className="wpc-bar" style={{ width: '100%' }} />
                     </span>
                   </li>
+                  {['bank', 'kiosk', 'airport'].map((key) => (
+                    <li className="wpc-row" key={key}>
+                      <div className="wpc-row-top">
+                        <span className="wpc-name">{t(`home.cmp.${key}`)}</span>
+                        <span className="wpc-tag wpc-neg">{lessLabel(scenario.rows[key].less)}</span>
+                      </div>
+                      <span className="wpc-bar-wrap">
+                        <span className="wpc-bar" style={{ width: `${scenario.rows[key].bar}%` }} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 도트 인디케이터 (현재 통화 위치) */}
+              <div className="wpc-dots" aria-hidden="true">
+                {COMPARE_SCENARIOS.map((s, i) => (
+                  <span key={s.key} className={`wpc-dot${i === scenarioIdx ? ' on' : ''}`} />
                 ))}
-              </ul>
-              <div className="wpc-note">{t('home.cmp.note')}</div>
+              </div>
+
+              <div className="wpc-foot">
+                <span className="wpc-foot-trust">
+                  <span className="wpc-star" aria-hidden="true">⭐</span>
+                  <strong>4.97</strong> · {t('home.cmp.trust2')}
+                </span>
+                <span className="wpc-note">{t('home.cmp.note')}</span>
+              </div>
             </div>
           </div>
         </div>
