@@ -603,7 +603,15 @@ export const STRINGS = {
     ko: '이제 예약을 이어서 진행하세요. 베스트레이트 보장이 함께 적용됩니다.',
     en: 'Continue your booking — the best-rate guarantee now applies.',
   },
+  'signup.done.skip': {
+    ko: '회원 정보가 저장되어, 다음부터 예약자 정보(이름·이메일) 입력 단계를 건너뜁니다.',
+    en: 'Your member details are saved — the applicant info step (name & email) is now skipped.',
+  },
   'signup.done.cta': { ko: '예약 계속하기', en: 'Continue booking' },
+  'book.member.note': {
+    ko: '회원 정보로 예약 중 — 예약자 정보 입력을 건너뜁니다.',
+    en: 'Booking as a member — the applicant info step is skipped.',
+  },
   'signup.note': { ko: '※ 프로토타입 — 실제 가입 없이 시뮬레이션됩니다', en: '* Prototype — simulated, no real account created' },
 
   // ── 외국인 사이트 2안 (WOWPASS 참고 · 금액→위치검색→지점추천 플로우) ──

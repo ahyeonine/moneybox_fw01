@@ -41,6 +41,9 @@ export function BookingProvider({ children }) {
   const [emailVerified, setEmailVerified] = useState(false)
   const [otp, setOtpState] = useState(EMPTY_OTP) // 이메일 OTP 진행 상태
   const [result, setResult] = useState(null)
+  // 회원가입(쿠폰)으로 확보한 회원 정보. null = 비회원.
+  // 회원이면 이름·이메일(+인증)을 이미 보유 → 예약 중 "예약자 정보" 단계를 생략한다.
+  const [member, setMember] = useState(null)
   // 마지막으로 머문 외국인 웹사이트(/site/*) 경로 — 탭 복귀 시 첫 화면을 거치지 않고 바로 이동
   const [lastSitePath, setLastSitePath] = useState('/site')
 
@@ -76,6 +79,8 @@ export function BookingProvider({ children }) {
     resetOtp,
     result,
     setResult,
+    member,
+    setMember,
     resetBooking,
     lastSitePath,
     setLastSitePath,

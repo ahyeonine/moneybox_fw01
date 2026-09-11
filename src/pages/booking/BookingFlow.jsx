@@ -87,6 +87,8 @@ export default function BookingFlow() {
     setEmailVerified,
     result,
     setResult,
+    member,
+    setMember,
     resetBooking,
   } = useBooking()
 
@@ -135,12 +137,26 @@ export default function BookingFlow() {
     if (!signupValid) return
     setSignupDone(true)
     setCouponClaimed(true)
+    // 회원가입 완료 → 회원으로 등록. 이름·이메일은 인증까지 끝났으므로
+    // 예약 중 "예약자 정보" 입력 단계를 생략한다.
+    setMember({ name: suName.trim(), email: suEmail.trim() })
     try {
       sessionStorage.setItem('mbox.coupon.claimed', '1')
     } catch (e) {
       /* ignore */
     }
   }
+
+  // 회원이면 예약자 정보(이름·이메일)를 자동 채우고 이메일 인증 완료로 표시 →
+  // 신규 예약을 시작해도(초기화 후에도) 정보 단계를 다시 거치지 않는다.
+  useEffect(() => {
+    if (!member) return
+    if (draft.customerName !== member.name || draft.email !== member.email) {
+      set({ customerName: member.name, email: member.email })
+    }
+    if (!emailVerified) setEmailVerified(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [member, draft.customerName, draft.email, emailVerified])
   function closeSignup() {
     setShowSignup(false)
     setSignupDone(false)
@@ -188,15 +204,18 @@ export default function BookingFlow() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draft.currency, availableCurrencies])
 
-  const stepLabels = [
-    t('wz.branch'),
-    t('wz.apply'),
-    t('wz.info'),
-    t('wz.review'),
-    t('wz.consent'),
-    t('wz.done'),
-  ]
-  const stageIndex = STAGES.indexOf(stage) + 1 // 1-based for Stepper
+  // 회원은 "예약자 정보" 단계를 생략 → 위저드 단계/스텝바에서도 제외한다.
+  const flowStages = member ? STAGES.filter((s) => s !== 'info') : STAGES
+  const STAGE_LABEL = {
+    branch: t('wz.branch'),
+    apply: t('wz.apply'),
+    info: t('wz.info'),
+    review: t('wz.review'),
+    consent: t('wz.consent'),
+    done: t('wz.done'),
+  }
+  const stepLabels = flowStages.map((s) => STAGE_LABEL[s])
+  const stageIndex = flowStages.indexOf(stage) + 1 // 1-based for Stepper
 
   // STEP A: 지점 선택 → 신청 화면으로. 통화/구분/금액/일시 초기화
   function selectBranch(branchId) {
@@ -257,7 +276,8 @@ export default function BookingFlow() {
     }
     // "신청하기" 클릭 시점에 환율을 픽스한다. 이후 화면(최종확인 등)은 이 값을 표시만 함.
     set({ rate })
-    setStage('info')
+    // 회원은 이름·이메일(+인증)을 이미 보유 → 예약자 정보 단계 생략하고 최종확인으로.
+    setStage(member ? 'review' : 'info')
   }
 
   function goReview() {
@@ -370,6 +390,7 @@ export default function BookingFlow() {
                 <div className="signup-done-ic" aria-hidden="true">🎉</div>
                 <h3 className="signup-title">{t('signup.done.t')}</h3>
                 <p className="signup-d">{t('signup.done.d')}</p>
+                <p className="signup-d" style={{ fontWeight: 600 }}>{t('signup.done.skip')}</p>
                 <button className="btn primary block" onClick={closeSignup}>
                   {t('signup.done.cta')}
                 </button>
@@ -506,9 +527,14 @@ export default function BookingFlow() {
 
       {stage === 'review' && (
         <div className="card">
+          {member && (
+            <div className="notice" style={{ marginBottom: 12 }}>
+              🎟️ {t('book.member.note')}
+            </div>
+          )}
           <StepReview draft={draft} branch={branch} rate={rate} krw={krw} />
           <div className="btn-row">
-            <button className="btn ghost" onClick={() => setStage('info')}>
+            <button className="btn ghost" onClick={() => setStage(member ? 'apply' : 'info')}>
               {t('common.prev')}
             </button>
             <button className="btn primary" onClick={goConsent}>
