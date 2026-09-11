@@ -12,7 +12,8 @@ function initialLang() {
   } catch (e) {
     /* ignore */
   }
-  return 'ko'
+  // 외국인 대상 서비스 → 기본 언어는 영어. (저장된 선택이 있으면 그 값을 우선)
+  return 'en'
 }
 
 export function I18nProvider({ children }) {
@@ -32,7 +33,7 @@ export function I18nProvider({ children }) {
     (key) => {
       const entry = STRINGS[key]
       if (!entry) return key
-      return entry[lang] ?? entry.ko ?? key
+      return entry[lang] ?? entry.en ?? entry.ko ?? key
     },
     [lang]
   )
