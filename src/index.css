@@ -5579,3 +5579,270 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
     display: none;
   }
 }
+
+/* ── 2안 첫화면(랜딩) ── */
+.s2-main.s2-main-home {
+  max-width: 960px;
+}
+.s2-nav-book {
+  padding: 9px 16px;
+  font-size: 14px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+/* 히어로: 카피 + 환율 위젯 */
+.s2-lp-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+  align-items: center;
+  background: linear-gradient(135deg, var(--travel-dark) 0%, var(--travel) 55%, #38bdf8 100%);
+  border-radius: 22px;
+  padding: 36px;
+  color: #fff;
+  margin-bottom: 34px;
+}
+.s2-lp-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.s2-lp-title {
+  margin: 14px 0 0;
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  white-space: pre-line;
+}
+.s2-lp-desc {
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 460px;
+}
+.s2-lp-cta-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+.s2-lp-cta-row .s2-primary {
+  background: #fff;
+  color: var(--travel-dark);
+}
+.s2-lp-cta-row .s2-primary:hover {
+  background: #eaf1ff;
+}
+.s2-lp-ghost {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  padding: 13px 18px;
+  font-weight: 800;
+  font-size: 14px;
+}
+.s2-lp-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.s2-lp-trust {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+}
+/* 히어로 환율 위젯 */
+.s2-lp-widget {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 18px 40px rgba(12, 40, 100, 0.28);
+  color: var(--text);
+}
+.s2-lp-widget-t {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-2);
+  margin-bottom: 12px;
+}
+.s2-lp-widget .s2-primary.block {
+  margin-top: 16px;
+}
+/* 섹션 */
+.s2-lp-sec {
+  margin: 0 0 34px;
+}
+.s2-lp-sec-t {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 0 0 16px;
+  text-align: center;
+}
+/* 가치 3종 */
+.s2-lp-vals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.s2-lp-val {
+  background: #fff;
+  border: 1px solid #e6ebf4;
+  border-radius: 14px;
+  padding: 20px 18px;
+  text-align: center;
+}
+.s2-lp-val-ic {
+  font-size: 26px;
+}
+.s2-lp-val-t {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}
+.s2-lp-val-d {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+/* 3단계 */
+.s2-lp-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.s2-lp-step {
+  background: var(--travel-soft);
+  border-radius: 14px;
+  padding: 20px 18px;
+  text-align: center;
+}
+.s2-lp-step-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--travel);
+  color: #fff;
+  font-weight: 900;
+  font-size: 16px;
+}
+.s2-lp-step-t {
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}
+.s2-lp-step-d {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+/* 오늘의 환율 */
+.s2-lp-rates {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.s2-lp-rate {
+  background: #fff;
+  border: 1px solid #e6ebf4;
+  border-radius: 12px;
+  padding: 14px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.s2-lp-rate:hover {
+  border-color: var(--travel);
+  box-shadow: 0 0 0 3px var(--travel-soft);
+}
+.s2-lp-rate-cur {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+}
+.s2-lp-rate-val {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--travel-dark);
+}
+.s2-lp-rate-unit {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+/* 최종 CTA 밴드 */
+.s2-lp-band {
+  text-align: center;
+  background: linear-gradient(135deg, #0f2350 0%, var(--travel-dark) 100%);
+  border-radius: 20px;
+  padding: 36px 24px;
+  color: #fff;
+}
+.s2-lp-band-t {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+.s2-lp-band-d {
+  margin-top: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.88);
+}
+.s2-lp-band-btn {
+  margin-top: 18px;
+  background: #fff;
+  color: var(--travel-dark);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 26px;
+  font-weight: 800;
+  font-size: 15px;
+}
+.s2-lp-band-btn:hover {
+  background: #eaf1ff;
+}
+@media (max-width: 760px) {
+  .s2-lp-hero {
+    grid-template-columns: 1fr;
+    padding: 26px 20px;
+  }
+  .s2-lp-title {
+    font-size: 27px;
+  }
+  .s2-lp-vals,
+  .s2-lp-steps {
+    grid-template-columns: 1fr;
+  }
+  .s2-lp-rates {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 460px) {
+  .s2-nav-book {
+    display: none;
+  }
+}

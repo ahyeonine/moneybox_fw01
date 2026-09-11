@@ -684,6 +684,55 @@ export const STRINGS = {
     en: '5F Dongsan Bldg, 393 Hangang-daero, Yongsan-gu, Seoul, Korea (prototype)',
   },
 
+  // ── 2안 첫화면(랜딩) ──
+  's2.nav.book': { ko: '환전 예약', en: 'Reserve' },
+  's2.home.hero.eyebrow': { ko: '🛡️ 베스트레이트 보장 · 여권만', en: '🛡️ Best-rate guarantee · passport only' },
+  's2.home.hero.t': {
+    ko: '한국에서 가장 간편한\n환전의 시작',
+    en: 'The easiest way to\nexchange money in Korea',
+  },
+  's2.home.hero.d': {
+    ko: '온라인으로 예약하고, 가까운 지점에서 여권만 보여주고 받아가세요. 결제는 현장에서, 환율은 예약 시점에 고정 — 손해 없는 환전.',
+    en: 'Reserve online, then just show your passport at a nearby branch to pick up. Pay on site, rate locked at reservation — no-loss exchange.',
+  },
+  's2.home.hero.cta': { ko: '환전 예약 시작', en: 'Start your reservation' },
+  's2.home.hero.how': { ko: '이용 방법 보기', en: 'See how it works' },
+  's2.home.widget.t': { ko: '환율 확인하고 시작', en: 'Check the rate & start' },
+  's2.home.widget.cta': { ko: '이 금액으로 지점 찾기', en: 'Find a branch for this amount' },
+  's2.home.trust.rate': { ko: '예약 시점 환율 고정', en: 'Rate locked at reservation' },
+  's2.home.trust.pay': { ko: '온라인 결제 없음', en: 'No online payment' },
+  's2.home.trust.branch': { ko: '전국 40+ 지점·공항', en: '40+ branches · airports' },
+  's2.home.val.title': { ko: '왜 머니박스인가요?', en: 'Why MoneyBox?' },
+  's2.home.val1.t': { ko: '베스트레이트 보장', en: 'Best-rate guarantee' },
+  's2.home.val1.d': {
+    ko: '방문일에 환율이 더 좋아지면 그날의 더 좋은 환율로 드려요. 예약보다 불리해지지 않습니다.',
+    en: 'If the rate improves by your visit, you get that better rate. Never worse than when you booked.',
+  },
+  's2.home.val2.t': { ko: '여권만, 결제는 현장에서', en: 'Passport only, pay on site' },
+  's2.home.val2.d': {
+    ko: '온라인 결제·본인인증 없이 예약하고, 지점에서 여권 확인 후 현금으로 결제합니다.',
+    en: 'Book with no online payment or ID upload; show your passport and pay in cash at the branch.',
+  },
+  's2.home.val3.t': { ko: '가까운 지점에서 바로', en: 'Right at a nearby branch' },
+  's2.home.val3.d': {
+    ko: '머무는 호텔·역을 검색하거나 현재 위치로 가장 가까운 지점을 찾아드려요.',
+    en: 'Search your hotel or station, or let us find the nearest branch to where you are.',
+  },
+  's2.home.how.title': { ko: '3단계면 충분해요', en: 'Just 3 steps' },
+  's2.home.how.s1t': { ko: '금액 입력', en: 'Enter amount' },
+  's2.home.how.s1d': { ko: '통화와 금액을 넣으면 받을 원화를 바로 보여드려요.', en: 'Pick a currency and amount to see your won instantly.' },
+  's2.home.how.s2t': { ko: '지점 선택', en: 'Choose a branch' },
+  's2.home.how.s2d': { ko: '검색하거나 가까운 지점을 추천받아 선택하세요.', en: 'Search or get the nearest branch recommended.' },
+  's2.home.how.s3t': { ko: '방문 수령', en: 'Pick up' },
+  's2.home.how.s3d': { ko: '지점에서 여권 확인 후 현금으로 받아가세요.', en: 'Show your passport and collect your cash.' },
+  's2.home.rates.title': { ko: '오늘의 환율', en: "Today's rates" },
+  's2.home.rates.unit': { ko: '원 (1단위)', en: 'KRW (per unit)' },
+  's2.home.final.t': { ko: '지금 바로 예약해 보세요', en: 'Reserve in under a minute' },
+  's2.home.final.d': {
+    ko: '회원가입 없이 이름·이메일만으로 예약할 수 있어요.',
+    en: 'No sign-up needed — just your name and email.',
+  },
+
   // 푸터
   'footer.company': { ko: '(주) 머니박스', en: 'MoneyBox Inc.' },
   'footer.addr': { ko: '서울특별시 ○○구 ○○로 000 (프로토타입 더미 주소)', en: 'Seoul, Korea (placeholder address)' },
