@@ -120,8 +120,9 @@ export default function Site2() {
   const { getDisplayRates } = useRates()
   const nav = useNavigate()
 
-  const [view, setView] = useState('flow') // flow | about
+  const [view, setView] = useState('home') // home | flow | about
   const [step, setStep] = useState('amount') // amount | branch
+  const howRef = useRef(null)
   const [currency, setCurrency] = useState('USD')
   const [amount, setAmount] = useState('')
 
@@ -209,11 +210,23 @@ export default function Site2() {
     nav(`/site/book?branch=${branchId}&currency=${currency}&amount=${amount}`)
   }
 
+  // 첫화면(랜딩) → 플로우 진입. 금액이 있으면 지점선택 단계로 바로, 없으면 금액 단계로.
+  function enterFlow(toBranch = false) {
+    setStep(toBranch && Number(amount) > 0 ? 'branch' : 'amount')
+    setView('flow')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // 오늘의 환율 미리보기용 통화 (취급 통화 중 대표 6종)
+  const RATE_PREVIEW = ['USD', 'JPY', 'EUR', 'CNY', 'TWD', 'HKD'].filter((c) =>
+    SUPPORTED_CURRENCIES.includes(c)
+  )
+
   return (
     <div className="s2">
       <header className="s2-header">
         <div className="s2-header-inner">
-          <button type="button" className="s2-logo" onClick={() => setView('flow')}>
+          <button type="button" className="s2-logo" onClick={() => setView('home')}>
             MONEY<span>BOX</span>
             <span className="s2-logo-tag">v2</span>
           </button>
@@ -228,14 +241,153 @@ export default function Site2() {
             >
               {t('about.title')}
             </button>
+            <button type="button" className="btn s2-primary s2-nav-book" onClick={() => enterFlow(false)}>
+              {t('s2.nav.book')}
+            </button>
             <LanguageDropdown />
           </div>
         </div>
       </header>
 
-      <main className={`s2-main${view === 'about' ? ' s2-main-wide' : ''}`}>
+      <main
+        className={`s2-main${view === 'about' ? ' s2-main-wide' : ''}${
+          view === 'home' ? ' s2-main-home' : ''
+        }`}
+      >
         {view === 'about' ? (
           <AboutPage />
+        ) : view === 'home' ? (
+          <>
+            {/* 랜딩 히어로 + 환율 위젯 */}
+            <section className="s2-lp-hero">
+              <div className="s2-lp-hero-copy">
+                <span className="s2-lp-eyebrow">{t('s2.home.hero.eyebrow')}</span>
+                <h1 className="s2-lp-title">{t('s2.home.hero.t')}</h1>
+                <p className="s2-lp-desc">{t('s2.home.hero.d')}</p>
+                <div className="s2-lp-cta-row">
+                  <button className="btn s2-primary" onClick={() => enterFlow(false)}>
+                    {t('s2.home.hero.cta')}
+                  </button>
+                  <button
+                    className="btn s2-lp-ghost"
+                    onClick={() => howRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                  >
+                    {t('s2.home.hero.how')}
+                  </button>
+                </div>
+                <ul className="s2-lp-trust">
+                  <li>✓ {t('s2.home.trust.rate')}</li>
+                  <li>✓ {t('s2.home.trust.pay')}</li>
+                  <li>✓ {t('s2.home.trust.branch')}</li>
+                </ul>
+              </div>
+
+              {/* 환율 위젯 (금액 입력 → 지점 찾기) */}
+              <div className="s2-lp-widget">
+                <div className="s2-lp-widget-t">{t('s2.home.widget.t')}</div>
+                <div className="s2-cur-chips">
+                  {RATE_PREVIEW.map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      className={`s2-cur-chip${c === currency ? ' on' : ''}`}
+                      onClick={() => setCurrency(c)}
+                    >
+                      <span aria-hidden="true">{CURRENCY_META[c]?.flag}</span> {c}
+                    </button>
+                  ))}
+                </div>
+                <div className="s2-amount-row">
+                  <span className="s2-amount-flag" aria-hidden="true">{CURRENCY_META[currency]?.flag}</span>
+                  <input
+                    className="s2-amount-input"
+                    type="text"
+                    inputMode="numeric"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))}
+                    placeholder="0"
+                  />
+                  <span className="s2-amount-cur">{currency}</span>
+                </div>
+                <div className="s2-krw">
+                  <span className="s2-krw-label">{t('s2.amount.krw')}</span>
+                  <span className="s2-krw-val">≈ {krw ? formatKrw(krw) : '₩0'}</span>
+                </div>
+                <button className="btn s2-primary block" onClick={() => enterFlow(true)}>
+                  {t('s2.home.widget.cta')} →
+                </button>
+              </div>
+            </section>
+
+            {/* 가치 3종 */}
+            <section className="s2-lp-sec">
+              <h2 className="s2-lp-sec-t">{t('s2.home.val.title')}</h2>
+              <div className="s2-lp-vals">
+                {[
+                  { ic: '🛡️', t: 's2.home.val1.t', d: 's2.home.val1.d' },
+                  { ic: '🛂', t: 's2.home.val2.t', d: 's2.home.val2.d' },
+                  { ic: '📍', t: 's2.home.val3.t', d: 's2.home.val3.d' },
+                ].map((v) => (
+                  <div key={v.t} className="s2-lp-val">
+                    <span className="s2-lp-val-ic" aria-hidden="true">{v.ic}</span>
+                    <div className="s2-lp-val-t">{t(v.t)}</div>
+                    <div className="s2-lp-val-d">{t(v.d)}</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 이용 방법 3단계 */}
+            <section className="s2-lp-sec" ref={howRef}>
+              <h2 className="s2-lp-sec-t">{t('s2.home.how.title')}</h2>
+              <div className="s2-lp-steps">
+                {[
+                  { n: 1, t: 's2.home.how.s1t', d: 's2.home.how.s1d' },
+                  { n: 2, t: 's2.home.how.s2t', d: 's2.home.how.s2d' },
+                  { n: 3, t: 's2.home.how.s3t', d: 's2.home.how.s3d' },
+                ].map((s) => (
+                  <div key={s.n} className="s2-lp-step">
+                    <span className="s2-lp-step-n">{s.n}</span>
+                    <div className="s2-lp-step-t">{t(s.t)}</div>
+                    <div className="s2-lp-step-d">{t(s.d)}</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 오늘의 환율 */}
+            <section className="s2-lp-sec">
+              <h2 className="s2-lp-sec-t">{t('s2.home.rates.title')}</h2>
+              <div className="s2-lp-rates">
+                {RATE_PREVIEW.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    className="s2-lp-rate"
+                    onClick={() => {
+                      setCurrency(c)
+                      enterFlow(false)
+                    }}
+                  >
+                    <span className="s2-lp-rate-cur">
+                      <span aria-hidden="true">{CURRENCY_META[c]?.flag}</span> {c}
+                    </span>
+                    <span className="s2-lp-rate-val">{formatKrw(Math.round(getDisplayRates(c)?.base || 0))}</span>
+                    <span className="s2-lp-rate-unit">{t('s2.home.rates.unit')}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            {/* 최종 CTA */}
+            <section className="s2-lp-band">
+              <div className="s2-lp-band-t">{t('s2.home.final.t')}</div>
+              <div className="s2-lp-band-d">{t('s2.home.final.d')}</div>
+              <button className="btn s2-lp-band-btn" onClick={() => enterFlow(false)}>
+                {t('s2.home.hero.cta')} →
+              </button>
+            </section>
+          </>
         ) : (
         <>
         <section className="s2-hero">
