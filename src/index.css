@@ -5618,6 +5618,7 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   line-height: 1.2;
   letter-spacing: -0.02em;
   white-space: pre-line;
+  color: #fff;
 }
 .s2-lp-desc {
   margin: 14px 0 0;
