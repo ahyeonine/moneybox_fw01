@@ -18,12 +18,22 @@ const COUPON_BONUS = WEB_COUPON_BONUS
 // 은행·키오스크·공항이 머니박스보다 "덜 주는" 비율(예시 수치, V1 비교 카드와 동일 톤).
 // 원화 환산액 대신 "평균 몇 % 더 많이 받는지"를 노출하기 위한 산출용.
 const CHANNEL_LESS = { bank: 0.021, kiosk: 0.041, airport: 0.093 }
-// 각 채널 대비 머니박스가 더 주는 비율 = p/(1-p), 세 채널 평균 (소수 1자리 %)
+// 각 채널 대비 머니박스가 더 주는 비율 = p/(1-p)
+const CHANNEL_MORE_PCT = Object.fromEntries(
+  Object.entries(CHANNEL_LESS).map(([k, p]) => [k, Math.round((p / (1 - p)) * 1000) / 10])
+)
+// 세 채널 평균 (소수 1자리 %)
 const AVG_MORE_PCT = (() => {
-  const mores = Object.values(CHANNEL_LESS).map((p) => p / (1 - p))
+  const mores = Object.values(CHANNEL_MORE_PCT)
   const avg = mores.reduce((a, b) => a + b, 0) / mores.length
-  return Math.round(avg * 1000) / 10
+  return Math.round(avg * 10) / 10
 })()
+// 비교 막대: 각 채널이 머니박스(100%) 대비 받는 비율(%)
+const CHANNEL_BARS = [
+  { key: 'bank', emoji: '🏦' },
+  { key: 'kiosk', emoji: '🏧' },
+  { key: 'airport', emoji: '✈️' },
+].map((c) => ({ ...c, more: CHANNEL_MORE_PCT[c.key], rel: Math.round((1 - CHANNEL_LESS[c.key]) * 100) }))
 
 // 외국인 사이트 2안 (WOWPASS 참고) — 별도 surface.
 // 플로우: ① 금액 입력 → ② 지점 선택 (실제 지도 검색 + 내 위치로 찾기 + 추천).
@@ -423,6 +433,35 @@ export default function Site2() {
                   {t('s2.home.widget.cta')} →
                 </button>
               </div>
+            </section>
+
+            {/* 환율 비교 강조 — 은행·키오스크·공항보다 얼마나 더 받는지 */}
+            <section className="s2-lp-cmp-sec">
+              <h2 className="s2-lp-cmp-h">{t('s2.home.cmp.title')}</h2>
+              <p className="s2-lp-cmp-sub">
+                {t('s2.home.cmp.sub').replace('{pct}', AVG_MORE_PCT)}
+              </p>
+              <div className="s2-lp-cmp-card">
+                <div className="s2-lp-cmp-row mb">
+                  <span className="s2-lp-cmp-name">🏆 {t('s2.home.cmp.mb')}</span>
+                  <div className="s2-lp-cmp-bar">
+                    <span className="s2-lp-cmp-fill mb" style={{ width: '100%' }} />
+                  </div>
+                  <span className="s2-lp-cmp-tag">{t('s2.home.cmp.mbtag')}</span>
+                </div>
+                {CHANNEL_BARS.map((c) => (
+                  <div key={c.key} className="s2-lp-cmp-row">
+                    <span className="s2-lp-cmp-name">{c.emoji} {t(`s2.home.cmp.${c.key}`)}</span>
+                    <div className="s2-lp-cmp-bar">
+                      <span className="s2-lp-cmp-fill" style={{ width: `${c.rel}%` }} />
+                    </div>
+                    <span className="s2-lp-cmp-more">
+                      +{c.more}% {t('s2.home.cmp.more')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="s2-lp-cmp-note">{t('s2.home.cmp.note')}</div>
             </section>
 
             {/* 가치 3종 */}
