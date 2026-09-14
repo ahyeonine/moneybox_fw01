@@ -27,7 +27,7 @@ function editDistance(a = '', b = '') {
 
 export const POS_RESV_NOTES = [
   '환전예약 = 국내예약(기본) / 해외예약 토글. 국내예약은 기존 POS 화면(플레이스홀더)',
-  '해외예약: 신분증 스캔 → 스캔된 이름·생년월일과 일치(공통값)하거나 유사(오입력 의심)한 예약을 조회',
+  '해외예약: "신분증을 스캔해주세요" 안내 → 스캔(데모 1건) → 이름·생년월일이 일치(공통값)하거나 유사(오입력 의심)한 예약을 조회',
   '유사 매칭: 생년월일이 같고 이름 편집거리 ≤ 2 (여권 스캔 오인식/카운터 오입력 대비)',
   '거래진행은 기존 거래처리 화면으로 연결(프로토타입은 플레이스홀더)',
   '자세히: 01_IA.md',
@@ -39,19 +39,25 @@ export default function PosReservationSearch() {
   const { reservations } = useReservations()
 
   const [tab, setTab] = useState('domestic') // 'domestic'(국내) | 'foreign'(해외)
+  const [scanning, setScanning] = useState(false) // 인식 중 애니메이션
   const [scanned, setScanned] = useState(null) // { name, birthDate }
 
-  // 신분증 스캔 데모용 신원 목록 (이름+생년월일 중복 제거)
-  const demoIds = []
-  {
-    const seen = new Set()
-    for (const r of reservations) {
-      if (!r.birthDate) continue
-      const k = `${r.customerName}|${r.birthDate}`
-      if (seen.has(k)) continue
-      seen.add(k)
-      demoIds.push({ name: r.customerName, birthDate: r.birthDate })
-    }
+  // 데모 신분증 1개 — 일치/유사 매칭을 모두 보여줄 수 있는 신원으로 고정.
+  // (일치 예약 다수 + 생년월일 동일한 오타 이름 'JON SMITH' 예약이 유사로 잡힘)
+  const DEMO_ID = { name: 'JOHN SMITH', birthDate: '1986-04-12' }
+
+  // 스캔 시뮬레이션: 잠깐 인식 중 → 신분증 정보 인식 완료
+  function runScan() {
+    setScanning(true)
+    setTimeout(() => {
+      setScanning(false)
+      setScanned(DEMO_ID)
+    }, 1400)
+  }
+
+  function resetScan() {
+    setScanned(null)
+    setScanning(false)
   }
 
   // 스캔 결과와 대조: 정확 일치(이름+생년월일) / 유사(오입력 의심: 생년월일 동일 + 이름 오타)
@@ -117,27 +123,39 @@ export default function PosReservationSearch() {
             </p>
             {!scanned ? (
               <>
-                <div className="tiny scan-demo-label">데모: 스캔할 신분증 선택</div>
-                <div className="scan-demo-list">
-                  {demoIds.map((id) => (
-                    <button
-                      key={`${id.name}|${id.birthDate}`}
-                      type="button"
-                      className="scan-demo-btn"
-                      onClick={() => setScanned(id)}
-                    >
-                      📷 {id.name} · {id.birthDate}
-                    </button>
-                  ))}
+                <div className={`scan-frame${scanning ? ' scanning' : ''}`}>
+                  <div className="scan-frame-corner tl" />
+                  <div className="scan-frame-corner tr" />
+                  <div className="scan-frame-corner bl" />
+                  <div className="scan-frame-corner br" />
+                  {scanning && <div className="scan-line" />}
+                  <div className="scan-frame-body">
+                    <div className="scan-frame-icon">{scanning ? '🔎' : '🪪'}</div>
+                    <div className="scan-frame-text">
+                      {scanning ? '신분증 인식 중…' : '신분증을 스캔해주세요'}
+                    </div>
+                    <div className="scan-frame-sub">
+                      {scanning ? '잠시만 기다려주세요' : '여권 또는 신분증을 스캐너 위에 올려주세요'}
+                    </div>
+                  </div>
                 </div>
+                <button
+                  type="button"
+                  className="btn primary scan-go-btn"
+                  onClick={runScan}
+                  disabled={scanning}
+                >
+                  {scanning ? '인식 중…' : '📷 신분증 스캔'}
+                </button>
+                <div className="tiny scan-demo-note">데모: 버튼을 누르면 샘플 신분증으로 스캔됩니다</div>
               </>
             ) : (
               <>
                 <div className="scan-result">
                   <span>
-                    🪪 <b>{scanned.name}</b> · {scanned.birthDate}
+                    ✅ 인식 완료 · 🪪 <b>{scanned.name}</b> · {scanned.birthDate}
                   </span>
-                  <button type="button" className="btn ghost sm" onClick={() => setScanned(null)}>
+                  <button type="button" className="btn ghost sm" onClick={resetScan}>
                     다시 스캔
                   </button>
                 </div>
