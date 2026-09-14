@@ -122,7 +122,7 @@ export default function LookupPage() {
           {t('common.search')}
         </button>
         <div className="tiny" style={{ marginTop: 10 }}>
-          demo: JOHN SMITH / john@example.com (같은 이메일 3건) · AKIRA SATO / akira@example.com
+          {t('lookup.demohint')}
         </div>
       </form>
 

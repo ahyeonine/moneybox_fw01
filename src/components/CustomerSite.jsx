@@ -282,7 +282,7 @@ export default function CustomerSite() {
           <div className="sf-legal-row">
             {t('footer.addr')} · {t('footer.tel')} · {t('footer.email')}
           </div>
-          <div className="site-footer-copy">© 2026 MONEYBOX Corp. · Prototype (dummy data)</div>
+          <div className="site-footer-copy">{t('footer.copy')}</div>
         </div>
       </footer>
     </div>

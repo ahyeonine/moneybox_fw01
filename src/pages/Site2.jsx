@@ -845,7 +845,7 @@ export default function Site2() {
             </div>
           </div>
         </div>
-        <div className="s2-footer-copy">© 2026 MONEYBOX Corp. · Site v2 prototype (dummy data)</div>
+        <div className="s2-footer-copy">{t('s2.foot.copy')}</div>
       </footer>
     </div>
   )
