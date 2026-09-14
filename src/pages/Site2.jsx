@@ -410,9 +410,6 @@ export default function Site2() {
                 <h1 className="s2-lp-title">{t('s2.home.hero.t')}</h1>
                 <p className="s2-lp-desc">{t('s2.home.hero.d')}</p>
                 <div className="s2-lp-cta-row">
-                  <button className="btn s2-primary" onClick={() => enterFlow(false)}>
-                    {t('s2.home.hero.cta')}
-                  </button>
                   <button
                     className="btn s2-lp-ghost"
                     onClick={() => howRef.current?.scrollIntoView({ behavior: 'smooth' })}
