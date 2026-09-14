@@ -21,7 +21,7 @@ function clone(arr) {
 function seedStock() {
   const s = {}
   for (const b of BRANCHES) {
-    for (const cur of Object.keys(b.currencyLimits)) {
+    for (const cur of b.currencies) {
       s[`${b.id}:${cur}`] = 50 // 충분한 기본 재고 (목데이터)
     }
   }

@@ -112,8 +112,7 @@ export const STRINGS = {
 
   // 에러
   'err.amount.EMPTY': { ko: '금액을 입력하세요.', en: 'Please enter an amount.' },
-  'err.amount.BELOW_MIN': { ko: '최소 금액 미만입니다.', en: 'Below the minimum amount.' },
-  'err.amount.ABOVE_MAX': { ko: '최대 한도를 초과했습니다.', en: 'Exceeds the maximum limit.' },
+  'err.amount.required': { ko: '금액을 입력하세요.', en: 'Please enter an amount.' },
   'err.email': { ko: '이메일 형식이 올바르지 않습니다.', en: 'Invalid email format.' },
   'err.name': { ko: '영문 이름을 정확히 입력하세요.', en: 'Enter a valid English name.' },
   'err.soldout.t': { ko: '예약이 불가합니다', en: 'Not available' },
@@ -736,6 +735,7 @@ export const STRINGS = {
     ko: '같은 금액을 바꿔도 머니박스에서 평균 약 {pct}% 더 많은 원화를 받아요.',
     en: 'For the same amount, you get about {pct}% more won on average with MoneyBox.',
   },
+  's2.home.cmp.mini': { ko: '이만큼 더 받아요', en: 'You get this much more' },
   's2.home.cmp.mb': { ko: '머니박스', en: 'MoneyBox' },
   's2.home.cmp.mbtag': { ko: '가장 많이 받아요', en: 'You get the most' },
   's2.home.cmp.bank': { ko: '은행', en: 'Bank' },

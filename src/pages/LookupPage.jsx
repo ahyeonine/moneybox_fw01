@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { useReservations } from '../store/ReservationContext.jsx'
-import { getBranch, branchCurrencies, currencyLimit, BRANCHES } from '../data/branches.js'
+import { getBranch, branchCurrencies, BRANCHES } from '../data/branches.js'
 import { CURRENCY_META, toKrw } from '../data/rates.js'
 import { useRates } from '../store/RatesContext.jsx'
 import { useEmail } from '../store/EmailContext.jsx'
-import { validateAmount } from '../lib/validation.js'
 import { pickupRange } from '../lib/date.js'
 import { formatKrw, formatForeign, formatDate, formatNumber } from '../lib/format.js'
 import { StatusBadge } from '../components/Badges.jsx'
@@ -311,16 +310,15 @@ function ChangeForm({ rec, today, onSave, onCancel }) {
   const currencies = branchCurrencies(branchId)
   // 지점 변경 시 통화가 취급목록에 없으면 첫 통화로 보정
   const effectiveCurrency = currencies.includes(currency) ? currency : currencies[0]
-  const limit = currencyLimit(branchId, effectiveCurrency)
-  const amountCheck = validateAmount(amount, limit)
+  const amountValid = Number(amount) > 0
   const branch = getBranch(branchId)
   const range = pickupRange(today, branch.leadTimeDays, 14)
   const rate = getRate(effectiveCurrency)
-  const krw = amountCheck.ok ? toKrw(Number(amount), rate) : 0
+  const krw = amountValid ? toKrw(Number(amount), rate) : 0
 
   // 재고 재확인(목데이터): 항상 가능하다고 간주. TODO: 실제 재고 API
   const dateOk = pickupDate >= range.minDate && pickupDate <= range.maxDate
-  const canSave = amountCheck.ok && dateOk && effectiveCurrency
+  const canSave = amountValid && dateOk && effectiveCurrency
 
   function save() {
     onSave({
@@ -364,12 +362,7 @@ function ChangeForm({ rec, today, onSave, onCancel }) {
           {t('common.foreignAmount')} ({effectiveCurrency})
         </span>
         <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
-        {limit && (
-          <div className="tiny" style={{ marginTop: 6 }}>
-            {t('book.step3.limit')}: {formatNumber(limit.min)} ~ {formatNumber(limit.max)} {effectiveCurrency}
-          </div>
-        )}
-        {!amountCheck.ok && <div className="err-text">{t(`err.amount.${amountCheck.code}`)}</div>}
+        {!amountValid && <div className="err-text">{t('err.amount.required')}</div>}
       </label>
 
       <label className="field">
@@ -383,7 +376,7 @@ function ChangeForm({ rec, today, onSave, onCancel }) {
         />
       </label>
 
-      {amountCheck.ok && (
+      {amountValid && (
         <div className="notice info">
           {t('common.krwAmount')}: <strong>{formatKrw(krw)}</strong> · 1 {effectiveCurrency} ={' '}
           {formatNumber(rate)} KRW

@@ -46,32 +46,13 @@ export const CURRENCY_META = {
   INR: { flag: '🇮🇳', label: { ko: '인도 루피', en: 'Indian Rupee' } },
 }
 
-// 전체 통화 표시 순서 (18종). 어드민 한도관리·환율관리 화면에서 사용.
+// 전체 통화 표시 순서 (18종). 환율관리 화면에서 사용.
 export const CURRENCY_ORDER = [
   'USD', 'JPY', 'EUR', 'CNY', 'GBP', 'HKD', 'THB', 'TWD', 'SGD',
   'AUD', 'CAD', 'CHF', 'NZD', 'PHP', 'MYR', 'IDR', 'VND', 'INR',
 ]
 
-// 통화별 신청 단위(입력 단위) 기본 시드값 (지점 어드민 CEMS에서 통화별로 조정)
-// 외국인 웹사이트 신청화면에서만 이 단위로 올림(ceil) 처리한다. (CEMS/POS/이메일 미적용)
-export const POLICY_UNIT_STEPS = {
-  USD: 10, JPY: 1000, EUR: 5, CNY: 50, GBP: 5, HKD: 50, THB: 100,
-  TWD: 100, SGD: 10, AUD: 10, CAD: 10, CHF: 10, NZD: 10, PHP: 100,
-  MYR: 10, IDR: 10000, VND: 10000, INR: 100,
-}
-
-// 통화별 최소 환전금액 기본 시드값 (지점 어드민 CEMS 초기값).
-// 정책(07_정책 §4): 최소 = 미화 USD 100 상당액을 통화별로 환산 → 신청단위로 올림.
-// 지점이 CEMS 한도관리에서 통화별로 조정(이 값은 기본 시드).
-const MIN_USD_EQUIV = 100 // 미화 100달러 기준
-const ceilToUnit = (n, step) => (step > 0 ? Math.ceil(n / step) * step : Math.ceil(n))
-export const POLICY_MIN_AMOUNTS = Object.fromEntries(
-  CURRENCY_ORDER.map((c) => {
-    if (c === 'USD') return [c, MIN_USD_EQUIV]
-    const krwFloor = MIN_USD_EQUIV * MOCK_RATES.USD // USD 100 상당 원화
-    return [c, ceilToUnit(krwFloor / MOCK_RATES[c], POLICY_UNIT_STEPS[c])]
-  })
-)
+// (최소·최대·신청단위 한도 정책 제거됨 — 금액 제한 없음)
 
 // 외국인 웹사이트 쿠폰(회원가입 지급) 우대율 — 수령일 전광판 환율보다 더 얹어주는 비율.
 export const WEB_COUPON_BONUS = 0.008 // +0.8% (데모)
