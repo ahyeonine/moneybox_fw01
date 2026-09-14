@@ -1,12 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { useRates } from '../store/RatesContext.jsx'
+import { useReservations } from '../store/ReservationContext.jsx'
 import { CURRENCY_META, CURRENCY_ORDER } from '../data/rates.js'
-import { BRANCHES } from '../data/branches.js'
+import { BRANCHES, getBranch } from '../data/branches.js'
 import { formatKrw } from '../lib/format.js'
+import { isValidName, isValidEmail } from '../lib/validation.js'
+import { pickupRange } from '../lib/date.js'
 import LanguageDropdown from '../components/LanguageDropdown.jsx'
 import AboutPage from './AboutPage.jsx'
+
+// V2는 환율을 예약 시점에 고정하지 않는다(수령일 전광판 환율 적용).
+// 회원가입 쿠폰 보유 시 전광판 환율보다 우대(더 많은 원화)를 적용한다.
+const COUPON_BONUS = 0.008 // 전광판 대비 +0.8% 우대(데모 값)
 
 // 외국인 사이트 2안 (WOWPASS 참고) — 별도 surface.
 // 플로우: ① 금액 입력 → ② 지점 선택 (실제 지도 검색 + 내 위치로 찾기 + 추천).
@@ -118,10 +124,10 @@ function Site2Map({ center, points }) {
 export default function Site2() {
   const { t, lang } = useI18n()
   const { getDisplayRates } = useRates()
-  const nav = useNavigate()
+  const { today, createReservation } = useReservations()
 
   const [view, setView] = useState('home') // home | flow | about
-  const [step, setStep] = useState('amount') // amount | branch
+  const [step, setStep] = useState('amount') // amount | branch | info | done
   const howRef = useRef(null)
   const [currency, setCurrency] = useState('USD')
   const [amount, setAmount] = useState('')
@@ -133,8 +139,27 @@ export default function Site2() {
   const [geoStatus, setGeoStatus] = useState('') // '' | 'locating' | 'error'
   const [loc, setLoc] = useState(null) // { name, lat, lng }
 
-  const rate = getDisplayRates(currency)?.base || 0
-  const krw = amount ? Math.round(Number(amount) * rate) : 0
+  // 예약자 정보 + 수령일 (환율 고정 없음)
+  const [pickedBranch, setPickedBranch] = useState('')
+  const [custName, setCustName] = useState('')
+  const [custEmail, setCustEmail] = useState('')
+  const [pickupDate, setPickupDate] = useState('')
+  const [result, setResult] = useState(null)
+
+  // 쿠폰(회원가입 지급) — 보유 시 전광판보다 우대. couponMember != null = 쿠폰 보유
+  const [couponMember, setCouponMember] = useState(null)
+  const [showSignup, setShowSignup] = useState(false)
+  const [suName, setSuName] = useState('')
+  const [suEmail, setSuEmail] = useState('')
+  const [suErr, setSuErr] = useState('')
+
+  const couponOn = !!couponMember
+  const board = getDisplayRates(currency)?.base || 0 // 전광판(오늘) 환율
+  const effRate = couponOn ? board * (1 + COUPON_BONUS) : board // 예상용(실제는 수령일 적용)
+  const krw = amount ? Math.round(Number(amount) * effRate) : 0
+
+  const range = pickupRange(today, 0, 14) // 리드타임 0, 최대 2주
+  const pickBranchObj = pickedBranch ? getBranch(pickedBranch) : null
 
   // 실제 지오코딩 검색 (OpenStreetMap Nominatim, 키 불필요) — 디바운스
   useEffect(() => {
@@ -204,10 +229,72 @@ export default function Site2() {
     [branches, lang]
   )
 
-  const stepIdx = ['amount', 'branch'].indexOf(step)
+  const stepIdx = ['amount', 'branch', 'info'].indexOf(step)
 
+  // 지점 선택 → 예약자 정보 단계로 (V2 자체 플로우, V1으로 이동하지 않음)
   function reserveAt(branchId) {
-    nav(`/site/book?branch=${branchId}&currency=${currency}&amount=${amount}`)
+    setPickedBranch(branchId)
+    // 쿠폰 회원이면 이름·이메일 자동 채움
+    if (couponMember) {
+      setCustName((v) => v || couponMember.name)
+      setCustEmail((v) => v || couponMember.email)
+    }
+    setStep('info')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // 회원가입(쿠폰 지급) — 이름·이메일. 지급 즉시 전광판보다 우대 쿠폰 보유.
+  function claimCoupon() {
+    if (!isValidName(suName) || !isValidEmail(suEmail)) {
+      setSuErr(t('s2v.signup.err'))
+      return
+    }
+    setCouponMember({ name: suName.trim(), email: suEmail.trim() })
+    setCustName((v) => v || suName.trim())
+    setCustEmail((v) => v || suEmail.trim())
+    setShowSignup(false)
+    setSuErr('')
+  }
+
+  const infoValid =
+    isValidName(custName) &&
+    isValidEmail(custEmail) &&
+    !!pickupDate &&
+    pickupDate >= range.minDate &&
+    pickupDate <= range.maxDate
+
+  // 예약 생성 — 환율 미고정(rate=null, rateMode='BOARD'). 쿠폰 여부 기록.
+  function submitV2() {
+    if (!infoValid || !pickedBranch) return
+    const rec = createReservation({
+      transactionType: 'BUY',
+      branchId: pickedBranch,
+      currency,
+      rate: null, // 환율 고정 없음 → 수령일 전광판 환율 적용
+      rateMode: 'BOARD',
+      coupon: couponOn,
+      foreignAmount: Number(amount),
+      krwAmount: null,
+      customerName: custName.trim().toUpperCase(),
+      email: custEmail.trim(),
+      pickupDate,
+      pickupTime: '10:00',
+    })
+    setResult(rec)
+    setStep('done')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  function restartV2() {
+    setResult(null)
+    setPickedBranch('')
+    setCustName(couponMember?.name || '')
+    setCustEmail(couponMember?.email || '')
+    setPickupDate('')
+    setAmount('')
+    setStep('amount')
+    setView('flow')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   // 첫화면(랜딩) → 플로우 진입. 금액이 있으면 지점선택 단계로 바로, 없으면 금액 단계로.
@@ -400,6 +487,7 @@ export default function Site2() {
           {[
             { key: 'amount', label: t('s2.step.amount') },
             { key: 'branch', label: t('s2.step.branch') },
+            { key: 'info', label: t('s2v.step.info') },
           ].map((s, i) => (
             <div
               key={s.key}
@@ -443,9 +531,25 @@ export default function Site2() {
               <span className="s2-amount-cur">{currency}</span>
             </div>
             <div className="s2-krw">
-              <span className="s2-krw-label">{t('s2.amount.krw')}</span>
+              <span className="s2-krw-label">
+                {t('s2.amount.krw')}
+                {couponOn && <span className="s2v-krw-badge">{t('s2v.coupon.badge')}</span>}
+              </span>
               <span className="s2-krw-val">≈ {krw ? formatKrw(krw) : '₩0'}</span>
             </div>
+            <div className="s2v-rate-note">
+              {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}
+            </div>
+
+            {/* 쿠폰(회원가입) 배너 — 전광판보다 좋은 환율 */}
+            {couponOn ? (
+              <div className="s2v-coupon on">🎟️ {t('s2v.coupon.applied')}</div>
+            ) : (
+              <button type="button" className="s2v-coupon" onClick={() => setShowSignup(true)}>
+                <span className="s2v-coupon-t">🎟️ {t('s2v.coupon.cta.t')}</span>
+                <span className="s2v-coupon-d">{t('s2v.coupon.cta.d')}</span>
+              </button>
+            )}
 
             <button
               className="btn s2-primary block"
@@ -562,9 +666,146 @@ export default function Site2() {
             </button>
           </section>
         )}
+
+        {/* STEP 3 · 예약자 정보 + 수령일 (환율 고정 없음) */}
+        {step === 'info' && (
+          <section className="s2-card">
+            <h2 className="s2-card-t">{t('s2v.info.title')}</h2>
+
+            {/* 예약 요약 */}
+            <div className="s2v-summary">
+              <div className="s2v-sum-row">
+                <span>{t('s2v.sum.branch')}</span>
+                <b>{pickBranchObj ? pickBranchObj.name[lang] || pickBranchObj.name.ko : '-'}</b>
+              </div>
+              <div className="s2v-sum-row">
+                <span>{t('s2v.sum.amount')}</span>
+                <b>{CURRENCY_META[currency]?.flag} {formatKrw(Number(amount)).replace('₩', '')} {currency}</b>
+              </div>
+              <div className="s2v-sum-row">
+                <span>{t('s2v.sum.rate')}</span>
+                <b className={couponOn ? 's2v-rate-good' : ''}>
+                  {couponOn ? t('s2v.sum.rate.coupon') : t('s2v.sum.rate.board')}
+                </b>
+              </div>
+            </div>
+
+            {!couponOn && (
+              <button type="button" className="s2v-coupon" onClick={() => setShowSignup(true)}>
+                <span className="s2v-coupon-t">🎟️ {t('s2v.coupon.cta.t')}</span>
+                <span className="s2v-coupon-d">{t('s2v.coupon.cta.d')}</span>
+              </button>
+            )}
+
+            <div className="s2-field-label">{t('common.name')}</div>
+            <input
+              className="s2-search"
+              type="text"
+              value={custName}
+              onChange={(e) => setCustName(e.target.value)}
+              placeholder="HONG GILDONG"
+            />
+            <div className="s2v-hint">{t('s2v.info.namehint')}</div>
+
+            <div className="s2-field-label">{t('common.email')}</div>
+            <input
+              className="s2-search"
+              type="email"
+              value={custEmail}
+              onChange={(e) => setCustEmail(e.target.value)}
+              placeholder="you@example.com"
+            />
+
+            <div className="s2-field-label">{t('s2v.info.pickup')}</div>
+            <input
+              className="s2-search"
+              type="date"
+              value={pickupDate}
+              min={range.minDate}
+              max={range.maxDate}
+              onChange={(e) => setPickupDate(e.target.value)}
+            />
+            <div className="s2v-hint">{t('s2v.info.pickuphint')}</div>
+
+            <button className="btn s2-primary block" disabled={!infoValid} onClick={submitV2}>
+              {t('s2v.info.submit')}
+            </button>
+            <button className="btn s2-ghost block" onClick={() => setStep('branch')}>
+              {t('s2.back')}
+            </button>
+          </section>
+        )}
+
+        {/* STEP 4 · 완료 */}
+        {step === 'done' && result && (
+          <section className="s2-card s2v-done">
+            <div className="s2v-done-ic" aria-hidden="true">🎉</div>
+            <h2 className="s2-card-t">{t('s2v.done.title')}</h2>
+            <div className="s2v-resno">{result.reservationNo}</div>
+            <div className="s2v-summary">
+              <div className="s2v-sum-row">
+                <span>{t('s2v.sum.branch')}</span>
+                <b>{pickBranchObj ? pickBranchObj.name[lang] || pickBranchObj.name.ko : '-'}</b>
+              </div>
+              <div className="s2v-sum-row">
+                <span>{t('s2v.sum.amount')}</span>
+                <b>{CURRENCY_META[currency]?.flag} {formatKrw(Number(amount)).replace('₩', '')} {currency}</b>
+              </div>
+              <div className="s2v-sum-row">
+                <span>{t('s2v.sum.pickup')}</span>
+                <b>{result.pickupDate}</b>
+              </div>
+              <div className="s2v-sum-row">
+                <span>{t('s2v.sum.rate')}</span>
+                <b className={couponOn ? 's2v-rate-good' : ''}>
+                  {couponOn ? t('s2v.sum.rate.coupon') : t('s2v.sum.rate.board')}
+                </b>
+              </div>
+            </div>
+            <div className="s2v-done-note">{t('s2v.done.note')}</div>
+            <button className="btn s2-ghost block" onClick={restartV2}>
+              {t('s2v.done.again')}
+            </button>
+          </section>
+        )}
         </>
         )}
       </main>
+
+      {/* 회원가입(쿠폰) 모달 — 가입 시 전광판보다 우대 쿠폰 지급 */}
+      {showSignup && (
+        <div className="coupon-overlay" onClick={() => setShowSignup(false)}>
+          <div className="signup-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+            <span className="signup-badge">🎟️ {t('s2v.signup.badge')}</span>
+            <h3 className="signup-title">{t('s2v.signup.title')}</h3>
+            <p className="signup-d">{t('s2v.signup.d')}</p>
+            <label className="signup-label">{t('common.name')}</label>
+            <input
+              className="signup-input"
+              type="text"
+              value={suName}
+              onChange={(e) => setSuName(e.target.value)}
+              placeholder="HONG GILDONG"
+            />
+            <label className="signup-label">{t('common.email')}</label>
+            <input
+              className="signup-input"
+              type="email"
+              value={suEmail}
+              onChange={(e) => setSuEmail(e.target.value)}
+              placeholder="you@example.com"
+            />
+            {suErr && <div className="err-text">{suErr}</div>}
+            <button className="btn primary block" onClick={claimCoupon}>
+              {t('s2v.signup.cta')}
+            </button>
+            <button className="signup-skip" onClick={() => setShowSignup(false)}>
+              {t('s2v.signup.skip')}
+            </button>
+            <div className="signup-note">{t('signup.note')}</div>
+          </div>
+        </div>
+      )}
 
       {/* 다크 푸터 (OrangeSquare 참고) */}
       <footer className="s2-footer">
