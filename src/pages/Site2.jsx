@@ -3,7 +3,7 @@ import { useI18n } from '../i18n/I18nContext.jsx'
 import { useRates } from '../store/RatesContext.jsx'
 import { useReservations } from '../store/ReservationContext.jsx'
 import { CURRENCY_META, CURRENCY_ORDER, WEB_COUPON_BONUS } from '../data/rates.js'
-import { BRANCHES, getBranch } from '../data/branches.js'
+import { BRANCHES, getBranch, branchCurrencies, regionList } from '../data/branches.js'
 import { formatKrw } from '../lib/format.js'
 import { isValidName, isValidEmail } from '../lib/validation.js'
 import { pickupRange } from '../lib/date.js'
@@ -180,8 +180,9 @@ export default function Site2() {
   const { today, createReservation } = useReservations()
 
   const [view, setView] = useState('home') // home | flow | about
-  const [step, setStep] = useState('amount') // amount | branch | info | done
+  const [step, setStep] = useState('region') // region | branch | amount | info | done
   const howRef = useRef(null)
+  const [region, setRegion] = useState('') // 선택 지역(ko)
   const [currency, setCurrency] = useState('USD')
   const [amount, setAmount] = useState('')
 
@@ -268,26 +269,43 @@ export default function Site2() {
     )
   }
 
-  // 선택 통화를 취급하는 지점 (위치 있으면 가까운 순, 없으면 전체)
+  // 지역(선택 시) 기준 지점. 위치 있으면 가까운 순, 없으면 등장 순.
   const branches = useMemo(() => {
-    const supported = BRANCHES.filter((b) =>
-      b.currencies.includes(currency)
-    )
-    if (!loc) return supported.map((b) => ({ b, km: null }))
-    return supported.map((b) => ({ b, km: distanceKm(loc, b) })).sort((x, y) => x.km - y.km)
-  }, [loc, currency])
+    let list = BRANCHES
+    if (region) list = list.filter((b) => b.region.ko === region)
+    if (!loc) return list.map((b) => ({ b, km: null }))
+    return list.map((b) => ({ b, km: distanceKm(loc, b) })).sort((x, y) => x.km - y.km)
+  }, [loc, region])
 
   const mapPoints = useMemo(
     () => branches.map(({ b }) => ({ lat: b.lat, lng: b.lng, label: b.name[lang] || b.name.ko })),
     [branches, lang]
   )
 
-  const stepIdx = ['amount', 'branch', 'info'].indexOf(step)
+  const REGIONS = regionList()
+  const stepIdx = ['region', 'branch', 'amount', 'info'].indexOf(step)
 
-  // 지점 선택 → 예약자 정보 단계로 (V2 자체 플로우, V1으로 이동하지 않음)
+  // 지역 선택 → 지점 선택 단계로
+  function selectRegion(regionKo) {
+    setRegion(regionKo)
+    setLoc(null)
+    setQuery('')
+    setStep('branch')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // 지점 선택 → 금액 입력 단계로. 선택 지점의 취급통화로 통화 보정.
   function reserveAt(branchId) {
     setPickedBranch(branchId)
-    // 쿠폰 회원이면 이름·이메일 자동 채움
+    const curs = branchCurrencies(branchId)
+    if (!curs.includes(currency)) setCurrency(curs[0] || 'USD')
+    setStep('amount')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // 금액 입력 완료 → 예약자 정보 단계로
+  function goInfo() {
+    if (!(Number(amount) > 0)) return
     if (couponMember) {
       setCustName((v) => v || couponMember.name)
       setCustEmail((v) => v || couponMember.email)
@@ -341,18 +359,27 @@ export default function Site2() {
   function restartV2() {
     setResult(null)
     setPickedBranch('')
+    setRegion('')
+    setLoc(null)
     setCustName(couponMember?.name || '')
     setCustEmail(couponMember?.email || '')
     setPickupDate('')
     setAmount('')
-    setStep('amount')
+    setStep('region')
     setView('flow')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // 첫화면(랜딩) → 플로우 진입. 금액이 있으면 지점선택 단계로 바로, 없으면 금액 단계로.
-  function enterFlow(toBranch = false) {
-    setStep(toBranch && Number(amount) > 0 ? 'branch' : 'amount')
+  // 첫화면(랜딩) → 플로우 진입. 지역을 주면 지점선택부터, 없으면 지역선택부터.
+  function enterFlow(regionKo) {
+    if (regionKo) {
+      setRegion(regionKo)
+      setLoc(null)
+      setQuery('')
+      setStep('branch')
+    } else {
+      setStep('region')
+    }
     setView('flow')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -426,33 +453,22 @@ export default function Site2() {
 
               {/* 환율 위젯 (금액 입력 → 지점 찾기) */}
               <div className="s2-lp-widget">
-                <div className="s2-lp-widget-t">{t('s2.home.widget.t')}</div>
-                <div className="s2-cur-chips">
-                  {RATE_PREVIEW.map((c) => (
+                <div className="s2-lp-widget-t">{t('s2v.region.title')}</div>
+                <div className="s2-region-chips">
+                  {REGIONS.map((r) => (
                     <button
-                      key={c}
+                      key={r.ko}
                       type="button"
-                      className={`s2-cur-chip${c === currency ? ' on' : ''}`}
-                      onClick={() => setCurrency(c)}
+                      className="s2-region-chip"
+                      onClick={() => enterFlow(r.ko)}
                     >
-                      <span aria-hidden="true">{CURRENCY_META[c]?.flag}</span> {c}
+                      <span className="s2-region-emoji" aria-hidden="true">📍</span>
+                      <span className="s2-region-name">{r[lang] || r.ko}</span>
                     </button>
                   ))}
                 </div>
-                <div className="s2-amount-row">
-                  <span className="s2-amount-flag" aria-hidden="true">{CURRENCY_META[currency]?.flag}</span>
-                  <input
-                    className="s2-amount-input"
-                    type="text"
-                    inputMode="numeric"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))}
-                    placeholder="0"
-                  />
-                  <span className="s2-amount-cur">{currency}</span>
-                </div>
                 <CompareMini t={t} amount={amount} board={board} />
-                <button className="btn s2-primary block" onClick={() => enterFlow(true)}>
+                <button className="btn s2-primary block" onClick={() => enterFlow()}>
                   {t('s2.nav.book')} →
                 </button>
               </div>
@@ -566,9 +582,9 @@ export default function Site2() {
 
         <div className="s2-steps">
           {[
-            { key: 'amount', label: t('s2.step.amount') },
+            { key: 'region', label: t('s2v.step.region') },
             { key: 'branch', label: t('s2.step.branch') },
-            { key: 'info', label: t('s2v.step.info') },
+            { key: 'amount', label: t('s2.step.amount') },
           ].map((s, i) => (
             <div
               key={s.key}
@@ -580,65 +596,34 @@ export default function Site2() {
           ))}
         </div>
 
-        {/* STEP 1 · 금액 */}
-        {step === 'amount' && (
+        {/* STEP 1 · 지역 선택 */}
+        {step === 'region' && (
           <section className="s2-card">
-            <h2 className="s2-card-t">{t('s2.amount.title')}</h2>
-            <div className="s2-field-label">{t('s2.amount.cur')}</div>
-            <div className="s2-cur-chips">
-              {SUPPORTED_CURRENCIES.map((c) => (
+            <h2 className="s2-card-t">{t('s2v.region.title')}</h2>
+            <p className="s2-card-sub">{t('s2v.region.sub')}</p>
+            <div className="s2-region-chips">
+              {REGIONS.map((r) => (
                 <button
-                  key={c}
+                  key={r.ko}
                   type="button"
-                  className={`s2-cur-chip${c === currency ? ' on' : ''}`}
-                  onClick={() => setCurrency(c)}
+                  className="s2-region-chip"
+                  onClick={() => selectRegion(r.ko)}
                 >
-                  <span aria-hidden="true">{CURRENCY_META[c]?.flag}</span> {c}
+                  <span className="s2-region-emoji" aria-hidden="true">📍</span>
+                  <span className="s2-region-name">{r[lang] || r.ko}</span>
                 </button>
               ))}
             </div>
-
-            <div className="s2-field-label">{t('s2.amount.amt')}</div>
-            <div className="s2-amount-row">
-              <span className="s2-amount-flag" aria-hidden="true">{CURRENCY_META[currency]?.flag}</span>
-              <input
-                className="s2-amount-input"
-                type="text"
-                inputMode="numeric"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))}
-                placeholder="0"
-              />
-              <span className="s2-amount-cur">{currency}</span>
-            </div>
-            <CompareMini t={t} amount={amount} board={board} />
-            {couponOn && (
-              <div className="s2v-more" style={{ marginTop: 10 }}>
-                <span className="s2v-more-ic" aria-hidden="true">🎟️</span>
-                <span className="s2v-more-txt">{t('s2v.coupon.applied')}</span>
-              </div>
-            )}
-            <div className="s2v-rate-note">
-              {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}
-            </div>
-
-            {/* 쿠폰(회원가입) 배너 — 전광판보다 좋은 환율 */}
-            {couponOn ? (
-              <div className="s2v-coupon on">🎟️ {t('s2v.coupon.applied')}</div>
-            ) : (
-              <button type="button" className="s2v-coupon" onClick={() => setShowSignup(true)}>
-                <span className="s2v-coupon-t">🎟️ {t('s2v.coupon.cta.t')}</span>
-                <span className="s2v-coupon-d">{t('s2v.coupon.cta.d')}</span>
-              </button>
-            )}
-
             <button
-              className="btn s2-primary block"
-              disabled={!amount || Number(amount) <= 0}
-              onClick={() => setStep('branch')}
+              className="btn s2-geo-btn block"
+              onClick={() => {
+                findNearMe()
+                setStep('branch')
+              }}
             >
-              {t('s2.next')}
+              {geoStatus === 'locating' ? t('s2.geo.locating') : t('s2.geo.btn')}
             </button>
+            {geoStatus === 'error' && <div className="s2-geo-err">{t('s2.geo.error')}</div>}
             <div className="s2-note">{t('s2.note')}</div>
           </section>
         )}
@@ -707,9 +692,6 @@ export default function Site2() {
               <div className="s2-reco">
                 <div className="s2-picked">
                   <span aria-hidden="true">📍</span> {loc.name}
-                  <span className="s2-picked-cur">
-                    · {CURRENCY_META[currency]?.flag} {amount} {currency}
-                  </span>
                 </div>
                 <Site2Map center={{ lat: loc.lat, lng: loc.lng, label: loc.name }} points={mapPoints} />
                 <div className="s2-map-attr">{t('s2.mapattr')}</div>
@@ -742,13 +724,81 @@ export default function Site2() {
               ))}
             </div>
 
-            <button className="btn s2-ghost block" onClick={() => setStep('amount')}>
+            <button className="btn s2-ghost block" onClick={() => setStep('region')}>
               {t('s2.back')}
             </button>
           </section>
         )}
 
-        {/* STEP 3 · 예약자 정보 + 수령일 (환율 고정 없음) */}
+        {/* STEP 3 · 금액 입력 */}
+        {step === 'amount' && (
+          <section className="s2-card">
+            <h2 className="s2-card-t">{t('s2.amount.title')}</h2>
+
+            {/* 선택 지점 요약 */}
+            <div className="s2v-summary">
+              <div className="s2v-sum-row">
+                <span>{t('s2v.sum.branch')}</span>
+                <b>{pickBranchObj ? pickBranchObj.name[lang] || pickBranchObj.name.ko : '-'}</b>
+              </div>
+            </div>
+
+            <div className="s2-field-label">{t('s2.amount.cur')}</div>
+            <div className="s2-cur-chips">
+              {branchCurrencies(pickedBranch).map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  className={`s2-cur-chip${c === currency ? ' on' : ''}`}
+                  onClick={() => setCurrency(c)}
+                >
+                  <span aria-hidden="true">{CURRENCY_META[c]?.flag}</span> {c}
+                </button>
+              ))}
+            </div>
+
+            <div className="s2-field-label">{t('s2.amount.amt')}</div>
+            <div className="s2-amount-row">
+              <span className="s2-amount-flag" aria-hidden="true">{CURRENCY_META[currency]?.flag}</span>
+              <input
+                className="s2-amount-input"
+                type="text"
+                inputMode="numeric"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))}
+                placeholder="0"
+              />
+              <span className="s2-amount-cur">{currency}</span>
+            </div>
+            <CompareMini t={t} amount={amount} board={board} />
+            <div className="s2v-rate-note">
+              {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}
+            </div>
+
+            {/* 쿠폰(회원가입) 배너 — 전광판보다 좋은 환율 */}
+            {couponOn ? (
+              <div className="s2v-coupon on">🎟️ {t('s2v.coupon.applied')}</div>
+            ) : (
+              <button type="button" className="s2v-coupon" onClick={() => setShowSignup(true)}>
+                <span className="s2v-coupon-t">🎟️ {t('s2v.coupon.cta.t')}</span>
+                <span className="s2v-coupon-d">{t('s2v.coupon.cta.d')}</span>
+              </button>
+            )}
+
+            <button
+              className="btn s2-primary block"
+              disabled={!amount || Number(amount) <= 0}
+              onClick={goInfo}
+            >
+              {t('s2.next')}
+            </button>
+            <button className="btn s2-ghost block" onClick={() => setStep('branch')}>
+              {t('s2.back')}
+            </button>
+          </section>
+        )}
+
+        {/* STEP 4 · 예약자 정보 + 수령일 (환율 고정 없음) */}
         {step === 'info' && (
           <section className="s2-card">
             <h2 className="s2-card-t">{t('s2v.info.title')}</h2>
@@ -811,7 +861,7 @@ export default function Site2() {
             <button className="btn s2-primary block" disabled={!infoValid} onClick={submitV2}>
               {t('s2v.info.submit')}
             </button>
-            <button className="btn s2-ghost block" onClick={() => setStep('branch')}>
+            <button className="btn s2-ghost block" onClick={() => setStep('amount')}>
               {t('s2.back')}
             </button>
           </section>
