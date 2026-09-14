@@ -728,6 +728,24 @@ export const STRINGS = {
   's2.home.trust.rate': { ko: '은행보다 좋은 환율', en: 'Better than bank rates' },
   's2.home.trust.pay': { ko: '온라인 결제 없음', en: 'No online payment' },
   's2.home.trust.branch': { ko: '전국 40+ 지점·공항', en: '40+ branches · airports' },
+  's2.home.cmp.title': {
+    ko: '키오스크·공항·은행보다 환율이 이만큼 좋아요',
+    en: 'Our rate beats kiosks, airports & banks — by this much',
+  },
+  's2.home.cmp.sub': {
+    ko: '같은 금액을 바꿔도 머니박스에서 평균 약 {pct}% 더 많은 원화를 받아요.',
+    en: 'For the same amount, you get about {pct}% more won on average with MoneyBox.',
+  },
+  's2.home.cmp.mb': { ko: '머니박스', en: 'MoneyBox' },
+  's2.home.cmp.mbtag': { ko: '가장 많이 받아요', en: 'You get the most' },
+  's2.home.cmp.bank': { ko: '은행', en: 'Bank' },
+  's2.home.cmp.kiosk': { ko: '무인 키오스크', en: 'Kiosk' },
+  's2.home.cmp.airport': { ko: '공항', en: 'Airport' },
+  's2.home.cmp.more': { ko: '더 받아요', en: 'more' },
+  's2.home.cmp.note': {
+    ko: '※ 예시 비교 수치 — 실제 차이는 통화·시점·지점에 따라 달라집니다.',
+    en: '* Illustrative figures — actual difference varies by currency, time and branch.',
+  },
   's2.home.val.title': { ko: '왜 머니박스인가요?', en: 'Why MoneyBox?' },
   's2.home.val1.t': { ko: '은행보다 좋은 환율', en: 'Better than bank rates' },
   's2.home.val1.d': {
