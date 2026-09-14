@@ -726,7 +726,7 @@ export const STRINGS = {
   // ── 2안 첫화면(랜딩) ──
   's2.nav.book': { ko: '환전 예약', en: 'Reserve' },
   's2.nav.lookup': { ko: '예약조회', en: 'My reservation' },
-  's2.home.hero.eyebrow': { ko: '🛡️ 은행보다 좋은 환율 · 여권만', en: '🛡️ Better than bank rates · passport only' },
+  's2.home.hero.eyebrow': { ko: '은행보다 좋은 환율 · 여권만', en: 'Better than bank rates · passport only' },
   's2.home.hero.t': {
     ko: '한국에서 가장 간편한\n환전의 시작',
     en: 'The easiest way to\nexchange money in Korea',
