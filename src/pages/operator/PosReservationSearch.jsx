@@ -1,41 +1,74 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useReservations } from '../../store/ReservationContext.jsx'
+import { CURRENCY_META } from '../../data/rates.js'
+import { formatDate, formatNumber } from '../../lib/format.js'
+import { StatusBadge } from '../../components/Badges.jsx'
 import DevNote from '../../components/DevNote.jsx'
 
-// POS 환전예약 검색/결과 공통 개발 참고 설명
+// 두 문자열 편집거리(간단 Levenshtein) — 이름 오입력(오타) 유사 매칭용.
+function editDistance(a = '', b = '') {
+  a = a.toUpperCase()
+  b = b.toUpperCase()
+  const m = a.length
+  const n = b.length
+  const dp = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)])
+  for (let j = 0; j <= n; j++) dp[0][j] = j
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] =
+        a[i - 1] === b[j - 1]
+          ? dp[i - 1][j - 1]
+          : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1])
+    }
+  }
+  return dp[m][n]
+}
+
 export const POS_RESV_NOTES = [
-  '결과 화면 기본값: 날짜="오늘" + 응답상태="방문확인만 보기". 두 조건은 서로 독립(오늘+전체보기, 전체날짜+방문확인만 조합 가능)',
-  '날짜 필터: "오늘"=수령예정일 당일만, "전체"=날짜 제한 없음',
-  '응답 토글: "방문확인만 보기"=방문예정확인(CONFIRMED)만, "전체보기"=무응답·발송전 포함. 취소 건은 항상 제외',
-  '무응답이어도 수령기한(수령예정일 당일) 전까지는 자동취소하지 않음, 그 이후 자동취소',
-  '예약번호 끝 4자리 검색: 예약번호(RSV-YYYYMMDD-0001)의 끝자리(0001)만으로 단독 검색. 다른 필드·날짜·응답 토글과 무관하게 매칭(카운터에서 고객이 끝자리만 불러줄 때). 끝 4자리가 겹치면 여러 건이 리스트로 노출됨',
+  '환전예약 = 국내예약(기본) / 해외예약 토글. 국내예약은 기존 POS 화면(플레이스홀더)',
+  '해외예약: 신분증 스캔 → 스캔된 이름·생년월일과 일치(공통값)하거나 유사(오입력 의심)한 예약을 조회',
+  '유사 매칭: 생년월일이 같고 이름 편집거리 ≤ 2 (여권 스캔 오인식/카운터 오입력 대비)',
+  '거래진행은 기존 거래처리 화면으로 연결(프로토타입은 플레이스홀더)',
   '자세히: 01_IA.md',
 ]
 
-// 화면 A · POS 환전예약 검색 폼 (최초 진입)
-// 좌상단: 아이콘 + "환전예약" / 우상단: "홈" 버튼(이전 없음)
-// 폼: 이름 / 수령일(기본 오늘) / 예약번호 끝 4자리 / 검색 → 결과 리스트(화면 B)로 이동
+// 화면 A · POS 환전예약 → 국내/해외 · 해외는 신분증 스캔으로 예약 조회
 export default function PosReservationSearch() {
   const nav = useNavigate()
-  const { today } = useReservations()
+  const { reservations } = useReservations()
 
-  const [tab, setTab] = useState('foreign') // 'domestic'(내국인) | 'foreign'(외국인)
-  const [form, setForm] = useState({ name: '', pickupDate: today, no4: '' })
-  const set = (patch) => setForm((f) => ({ ...f, ...patch }))
+  const [tab, setTab] = useState('domestic') // 'domestic'(국내) | 'foreign'(해외)
+  const [scanned, setScanned] = useState(null) // { name, birthDate }
 
-  function search(e) {
-    e?.preventDefault()
-    const q = new URLSearchParams()
-    const digits = form.no4.replace(/\D/g, '')
-    if (digits) {
-      // 예약번호 끝자리 단독 검색 — 다른 조건은 무시
-      q.set('no4', digits)
-    } else {
-      if (form.name.trim()) q.set('name', form.name.trim())
-      if (form.pickupDate) q.set('date', form.pickupDate)
+  // 신분증 스캔 데모용 신원 목록 (이름+생년월일 중복 제거)
+  const demoIds = []
+  {
+    const seen = new Set()
+    for (const r of reservations) {
+      if (!r.birthDate) continue
+      const k = `${r.customerName}|${r.birthDate}`
+      if (seen.has(k)) continue
+      seen.add(k)
+      demoIds.push({ name: r.customerName, birthDate: r.birthDate })
     }
-    nav(`/pos/reservation/results?${q.toString()}`)
+  }
+
+  // 스캔 결과와 대조: 정확 일치(이름+생년월일) / 유사(오입력 의심: 생년월일 동일 + 이름 오타)
+  const exactMatches = scanned
+    ? reservations.filter((r) => r.customerName === scanned.name && r.birthDate === scanned.birthDate)
+    : []
+  const similarMatches = scanned
+    ? reservations.filter(
+        (r) =>
+          r.birthDate === scanned.birthDate &&
+          r.customerName !== scanned.name &&
+          editDistance(r.customerName, scanned.name) <= 2
+      )
+    : []
+
+  function proceed() {
+    nav('/pos/reservation/flow')
   }
 
   return (
@@ -53,66 +86,113 @@ export default function PosReservationSearch() {
         </div>
       </header>
 
-      {/* 내국인 / 외국인 탭 — 내국인은 기존 환전예약 사이트로 안내 */}
+      {/* 국내예약(기본) / 해외예약 토글 */}
       <div className="visit-toggle pos-resv-tab" role="group" aria-label="예약 구분">
         <button
           type="button"
           className={tab === 'domestic' ? 'active' : ''}
           onClick={() => setTab('domestic')}
         >
-          내국인
+          국내예약
         </button>
         <button
           type="button"
           className={tab === 'foreign' ? 'active' : ''}
           onClick={() => setTab('foreign')}
         >
-          외국인
+          해외예약
         </button>
       </div>
 
       {tab === 'domestic' ? (
-        <div className="pos-domestic notice info" style={{ marginTop: 16 }}>
-          기존 환전예약 사이트
+        <div className="fxflow-placeholder" style={{ marginTop: 16 }}>
+          <div className="fxflow-text">기존 화면 (국내예약)</div>
         </div>
       ) : (
-      <form className="pos-search-form" onSubmit={search}>
-        <label className="field">
-          <span className="lbl">이름</span>
-          <input
-            type="text"
-            value={form.name}
-            onChange={(e) => set({ name: e.target.value })}
-            placeholder="예약자명"
-            autoFocus
-          />
-        </label>
-        <label className="field">
-          <span className="lbl">수령일</span>
-          <input
-            type="date"
-            value={form.pickupDate}
-            onChange={(e) => set({ pickupDate: e.target.value })}
-          />
-        </label>
-        <label className="field">
-          <span className="lbl">예약번호 끝 4자리</span>
-          <input
-            type="text"
-            inputMode="numeric"
-            maxLength={4}
-            value={form.no4}
-            onChange={(e) => set({ no4: e.target.value.replace(/\D/g, '').slice(0, 4) })}
-            placeholder="예: 0001"
-          />
-          <span className="tiny" style={{ marginTop: 4, display: 'block' }}>
-            끝 4자리만 입력하면 단독으로 검색돼요 (다른 조건 무시)
-          </span>
-        </label>
-        <button type="submit" className="pos-search-btn">
-          검색
-        </button>
-      </form>
+        <div className="pos-scan" style={{ marginTop: 16 }}>
+          <div className="card scan-panel">
+            <h3 className="scan-h">🪪 신분증 스캔</h3>
+            <p className="muted">
+              여권/신분증을 스캔하면 이름·생년월일이 일치하거나 유사한 예약을 조회합니다.
+            </p>
+            {!scanned ? (
+              <>
+                <div className="tiny scan-demo-label">데모: 스캔할 신분증 선택</div>
+                <div className="scan-demo-list">
+                  {demoIds.map((id) => (
+                    <button
+                      key={`${id.name}|${id.birthDate}`}
+                      type="button"
+                      className="scan-demo-btn"
+                      onClick={() => setScanned(id)}
+                    >
+                      📷 {id.name} · {id.birthDate}
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="scan-result">
+                  <span>
+                    🪪 <b>{scanned.name}</b> · {scanned.birthDate}
+                  </span>
+                  <button type="button" className="btn ghost sm" onClick={() => setScanned(null)}>
+                    다시 스캔
+                  </button>
+                </div>
+
+                {exactMatches.length === 0 && similarMatches.length === 0 && (
+                  <div className="notice danger" style={{ marginTop: 10 }}>
+                    이름·생년월일이 일치하거나 유사한 예약이 없습니다.
+                  </div>
+                )}
+
+                {exactMatches.length > 0 && (
+                  <div className="scan-matches">
+                    <div className="tiny">일치 예약 ({exactMatches.length})</div>
+                    {exactMatches.map((m) => (
+                      <button key={m.reservationNo} type="button" className="scan-match" onClick={proceed}>
+                        <span className="sm-no">{m.reservationNo}</span>
+                        <span className="sm-cur">
+                          {CURRENCY_META[m.currency]?.flag} {formatNumber(m.foreignAmount)} {m.currency}
+                        </span>
+                        <span className="sm-date">{formatDate(m.pickupDate, 'ko')}</span>
+                        <StatusBadge status={m.status} />
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {similarMatches.length > 0 && (
+                  <div className="scan-matches">
+                    <div className="tiny scan-similar-label">
+                      ⚠️ 유사 (오입력 의심) ({similarMatches.length})
+                    </div>
+                    {similarMatches.map((m) => (
+                      <button
+                        key={m.reservationNo}
+                        type="button"
+                        className="scan-match similar"
+                        onClick={proceed}
+                      >
+                        <span className="sm-no">
+                          {m.reservationNo}
+                          <span className="sm-typo">{m.customerName}</span>
+                        </span>
+                        <span className="sm-cur">
+                          {CURRENCY_META[m.currency]?.flag} {formatNumber(m.foreignAmount)} {m.currency}
+                        </span>
+                        <span className="sm-date">{formatDate(m.pickupDate, 'ko')}</span>
+                        <StatusBadge status={m.status} />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
       )}
     </div>
   )

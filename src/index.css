@@ -6316,6 +6316,25 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 .scan-match .sm-date {
   color: var(--text-2);
 }
+.scan-similar-label {
+  color: #b45309;
+  font-weight: 700;
+}
+.scan-match.similar {
+  border-color: #f5d9a8;
+  background: #fffdf7;
+}
+.scan-match.similar:hover {
+  border-color: #d98a00;
+  box-shadow: 0 0 0 3px rgba(217, 138, 0, 0.15);
+}
+.scan-match .sm-typo {
+  display: block;
+  margin-top: 2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #b45309;
+}
 @media (max-width: 560px) {
   .scan-match {
     grid-template-columns: 1fr auto;

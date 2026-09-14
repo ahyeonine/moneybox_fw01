@@ -7,6 +7,8 @@ import { toKrw, getRate } from './rates.js'
 // 이름 → 생년월일(여권/신분증 대조·POS 신분증 스캔 매칭용). 같은 이름은 같은 생년월일.
 const NAME_DOB = {
   'JOHN SMITH': '1986-04-12',
+  'JON SMITH': '1986-04-12', // 오입력(철자 오타) 데모 — 생년월일 동일
+
   'YUKI TANAKA': '1992-09-03',
   'MARIE DUBOIS': '1990-01-27',
   'WEI CHEN': '1988-11-15',
@@ -185,6 +187,22 @@ export const SEED_RESERVATIONS = [
     createdAt: '2026-07-26T16:20:00+09:00',
     processedAt: '2026-07-28T11:10:00+09:00',
     idVerified: true,
+    reminderStatus: 'CONFIRMED',
+  }),
+  // ── 신분증 스캔 오입력(철자 오타) 데모 ──
+  // 이름 'JON SMITH'(JOHN SMITH의 오타), 생년월일은 동일(1986-04-12).
+  // POS 신분증 스캔(JOHN SMITH) 시 "유사(오입력 의심)"로 함께 노출된다.
+  make({
+    reservationNo: 'RSV-20260730-0009',
+    status: 'BOOKED',
+    transactionType: 'BUY',
+    branchId: 'B001',
+    currency: 'USD',
+    foreignAmount: 700,
+    customerName: 'JON SMITH',
+    email: 'jon.typo@example.com',
+    pickupDate: '2026-08-02',
+    createdAt: '2026-07-30T09:00:00+09:00',
     reminderStatus: 'CONFIRMED',
   }),
   // ── 재고 경쟁 데모: 같은 지점·통화(B004+USD, 재고 1개)에 방문예정 미확인 예약 2건 ──
