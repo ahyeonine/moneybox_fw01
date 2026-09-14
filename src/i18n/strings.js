@@ -641,8 +641,8 @@ export const STRINGS = {
   // ── 외국인 사이트 2안 (WOWPASS 참고 · 금액→위치검색→지점추천 플로우) ──
   's2.hero.t': { ko: '몇 번의 탭으로 끝나는 환전 예약', en: 'Reserve your exchange in a few taps' },
   's2.hero.d': {
-    ko: '먼저 얼마를 바꿀지 정하고, 가까운 지점을 찾아 예약하세요.',
-    en: 'Choose your amount, then find a nearby branch to reserve.',
+    ko: '지역을 고르고, 지점을 선택한 뒤, 얼마를 바꿀지 정해 예약하세요.',
+    en: 'Pick a region, choose a branch, then enter your amount to reserve.',
   },
   's2.step.amount': { ko: '금액', en: 'Amount' },
   's2.step.location': { ko: '위치', en: 'Location' },
@@ -780,6 +780,12 @@ export const STRINGS = {
 
   // ── 2안 예약 플로우 (환율 미고정 · 전광판 환율 · 쿠폰 우대) ──
   's2v.step.info': { ko: '예약자 정보', en: 'Your details' },
+  's2v.step.region': { ko: '지역', en: 'Region' },
+  's2v.region.title': { ko: '어느 지역에서 받으실래요?', en: 'Where will you pick up?' },
+  's2v.region.sub': {
+    ko: '지역을 먼저 선택하면 가까운 지점을 보여드려요.',
+    en: 'Pick a region first — we’ll show branches there.',
+  },
   's2v.rate.note': {
     ko: '환율은 예약 시 확정하지 않아요. 수령일 지점 전광판 환율이 적용됩니다.',
     en: 'No rate is locked at booking. The branch board rate on your pickup day applies.',
