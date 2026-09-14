@@ -1577,6 +1577,22 @@ th.num {
   padding: 16px;
   margin-bottom: 14px;
 }
+.cems-empty {
+  text-align: center;
+  padding: 40px 20px;
+}
+.cems-empty-t {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-2);
+}
+.cems-empty-d {
+  margin: 10px auto 0;
+  max-width: 460px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-3);
+}
 .panel-head {
   display: flex;
   align-items: center;

@@ -16,7 +16,7 @@ const D = {
 const DOC_REFS = [
   { route: '/site', screen: '외국인 웹사이트 · 예약(금액→지점→정보→완료)', docs: [D.overview, D.ia, D.flow, D.data, D.policy] },
   { route: '/cems/reservations', screen: 'CEMS · 외국인 환전예약관리', docs: [D.ia, D.data] },
-  { route: '/cems/settings/rates', screen: 'CEMS · 환율관리', docs: [D.ia, D.policy] },
+  { route: '/cems/settings', screen: 'CEMS · 설정', docs: [D.ia, D.policy] },
   { route: '/pos', screen: 'POS · 홈', docs: [D.ia] },
   { route: '/pos/reservation', screen: 'POS · 환전예약 검색/결과', docs: [D.flow] },
   { route: '/pos/transaction', screen: 'POS · 거래처리', docs: [D.state, D.policy] },

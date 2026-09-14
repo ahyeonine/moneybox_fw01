@@ -3,8 +3,7 @@ import { MOCK_RATES } from '../data/rates.js'
 
 // 환율 공유 상태(mock store).
 //  - rates: 통화별 기준환율(KRW per 1 unit). 2분마다 소폭 자동 변동(±0.1~0.5%).
-//  - webOverride: CEMS 환전율관리 "외국인 웹사이트" 채널에서 수동 지정한 환율(통화별).
-//    값이 있으면 외국인 웹사이트(STEP B)가 이 값을 기준환율로 사용한다.
+//  예약 시 환율을 고정하지 않고 수령일 전광판(기준) 환율을 적용한다.
 //  실제 외부 환율 API 없음. 프로토타입용 시뮬레이션.
 
 const RatesContext = createContext(null)
@@ -29,7 +28,6 @@ function drift(rate) {
 
 export function RatesProvider({ children }) {
   const [rates, setRates] = useState(() => ({ ...MOCK_RATES }))
-  const [webOverride, setWebOverride] = useState({}) // { [currency]: number }
   const [lastUpdated, setLastUpdated] = useState(() => Date.now())
   const [tick, setTick] = useState(0) // 갱신 횟수(참고/디버그)
 
@@ -47,11 +45,8 @@ export function RatesProvider({ children }) {
     return () => clearInterval(id)
   }, [])
 
-  // 외국인 웹사이트가 적용하는 기준환율: 수동 오버라이드 우선, 없으면 자동 변동 기준환율
-  const getRate = useCallback(
-    (cur) => webOverride[cur] ?? rates[cur] ?? null,
-    [rates, webOverride]
-  )
+  // 적용 기준환율(수령일 전광판) — 2분 주기 자동 변동
+  const getRate = useCallback((cur) => rates[cur] ?? null, [rates])
 
   // 표시용 살 때/팔 때 (기준 ± 스프레드)
   const getDisplayRates = useCallback(
@@ -80,27 +75,13 @@ export function RatesProvider({ children }) {
     [getRate]
   )
 
-  // CEMS "외국인 웹사이트" 채널 수동 환율 지정/해제. (value 없으면 자동 변동으로 복귀)
-  const setWebRate = useCallback((cur, value) => {
-    setWebOverride((prev) => {
-      const next = { ...prev }
-      const n = Number(value)
-      if (value === '' || value == null || !Number.isFinite(n) || n <= 0) delete next[cur]
-      else next[cur] = roundSig(n)
-      return next
-    })
-    setLastUpdated(Date.now())
-  }, [])
-
   const value = {
     rates,
-    webOverride,
     lastUpdated,
     tick,
     getRate,
     getDisplayRates,
     getBankCompare,
-    setWebRate,
   }
   return <RatesContext.Provider value={value}>{children}</RatesContext.Provider>
 }

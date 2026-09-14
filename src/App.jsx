@@ -10,7 +10,7 @@ import PosReservationResults from './pages/operator/PosReservationResults.jsx'
 import FxFlowPlaceholder from './pages/operator/FxFlowPlaceholder.jsx'
 import ForeignReservationAdmin from './pages/cems/ForeignReservationAdmin.jsx'
 import HqReservationAdmin from './pages/cems/HqReservationAdmin.jsx'
-import RateManagement from './pages/cems/RateManagement.jsx'
+import CemsSettings from './pages/cems/CemsSettings.jsx'
 import DocsViewer from './pages/DocsViewer.jsx'
 import EmailAdmin from './pages/email/EmailAdmin.jsx'
 
@@ -30,8 +30,9 @@ export default function App() {
           <Route index element={<Navigate to="/cems/reservations" replace />} />
           <Route path="reservations" element={<ForeignReservationAdmin />} />
           <Route path="hq" element={<HqReservationAdmin />} />
-          <Route path="settings" element={<Navigate to="/cems/settings/rates" replace />} />
-          <Route path="settings/rates" element={<RateManagement />} />
+          <Route path="settings" element={<CemsSettings />} />
+          {/* 이전 링크 호환: 제거된 환전율관리 → 설정 랜딩 */}
+          <Route path="settings/rates" element={<Navigate to="/cems/settings" replace />} />
         </Route>
 
         {/* 탭 3 · POS */}
