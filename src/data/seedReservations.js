@@ -4,6 +4,22 @@
 
 import { toKrw, getRate } from './rates.js'
 
+// 이름 → 생년월일(여권/신분증 대조·POS 신분증 스캔 매칭용). 같은 이름은 같은 생년월일.
+const NAME_DOB = {
+  'JOHN SMITH': '1986-04-12',
+  'YUKI TANAKA': '1992-09-03',
+  'MARIE DUBOIS': '1990-01-27',
+  'WEI CHEN': '1988-11-15',
+  'DAVID LEE': '1979-06-08',
+  'AKIRA SATO': '1995-03-21',
+  'NOSHOW USER': '1991-07-19',
+  'RUSH ONE': '1993-12-01',
+  'RUSH TWO': '1990-05-30',
+  'CONFIRMED NOSHOW': '1987-02-14',
+  'BEST RATE': '1994-08-25',
+  'MEI LIN': '1996-10-10',
+}
+
 // 헬퍼: 시드 한 건 생성
 function make(o) {
   const rate = o.rate ?? getRate(o.currency)
@@ -17,6 +33,7 @@ function make(o) {
     foreignAmount: o.foreignAmount,
     krwAmount: toKrw(o.foreignAmount, rate),
     customerName: o.customerName,
+    birthDate: o.birthDate ?? NAME_DOB[o.customerName] ?? null, // 여권/신분증 생년월일
     email: o.email,
     pickupDate: o.pickupDate, // YYYY-MM-DD
     pickupTime: o.pickupTime ?? '10:00', // HH:mm (지점 상세 화면에서 선택)

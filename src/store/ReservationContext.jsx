@@ -60,6 +60,7 @@ export function ReservationProvider({ children }) {
         foreignAmount: draft.foreignAmount,
         krwAmount: draft.krwAmount,
         customerName: draft.customerName,
+        birthDate: draft.birthDate ?? null, // 여권 OCR 생년월일(있으면)
         email: draft.email,
         pickupDate: draft.pickupDate,
         pickupTime: draft.pickupTime ?? '10:00',
