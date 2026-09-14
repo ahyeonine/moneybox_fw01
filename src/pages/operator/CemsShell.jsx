@@ -10,7 +10,7 @@ const TOP_TABS = [
   { key: 'money24', label: '머니 24h', enabled: false },
   { key: 'reservation', label: '환전예약', enabled: true, to: '/cems/reservations' },
   { key: 'online', label: '온라인환전', enabled: false },
-  { key: 'settings', label: '설정', enabled: true, to: '/cems/settings/rates' },
+  { key: 'settings', label: '설정', enabled: false }, // 환율관리 제거로 비활성(클릭 불가)
 ]
 
 // 환전예약 탭 사이드바
@@ -25,8 +25,11 @@ const RESV_MENU = [
 ]
 
 // 설정 탭 사이드바
+// 환전율관리는 예약 시 환율 미고정(수령일 전광판 환율) 모델 전환으로 제거됨.
 const SETTINGS_MENU = [
-  { label: '환전율관리', to: '/cems/settings/rates', enabled: true },
+  { label: '환전율관리 (미사용)', enabled: false },
+  { label: '휴일관리', enabled: false },
+  { label: '가상계좌설정', enabled: false },
 ]
 
 export default function CemsShell() {

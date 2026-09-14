@@ -15,8 +15,7 @@ graph TD
     subgraph SCEMS["CEMS 지점 어드민 · /cems"]
       C1["외국인 환전예약관리 /cems/reservations"]
       C2["본사 예약관리 /cems/hq"]
-      C3["환율관리(전광판 매입환율) /cems/settings/rates"]
-      C4["한도관리 /cems/settings/limits"]
+      C5["설정(비활성 · 환율관리 제거됨) /cems/settings"]
     end
     subgraph SPOS["POS · /pos"]
       P2["예약검색/결과 /pos/reservation"]
@@ -36,8 +35,6 @@ graph TD
   Root --> Docs
 
   %% 시스템 간 연동 (점선)
-  C3 -. "전광판(매입) 환율 · 수령일 적용" .-> FLOW
-  C4 -. "통화별 최소·단위·최대 한도" .-> FLOW
   FLOW -. "예약 생성(환율 미고정·쿠폰)" .-> C1
   FLOW -. "확인·리마인더 발송" .-> Email
   C1 -. "거래 이관" .-> P2
