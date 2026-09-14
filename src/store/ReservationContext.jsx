@@ -54,6 +54,9 @@ export function ReservationProvider({ children }) {
         branchId: draft.branchId,
         currency: draft.currency,
         rate: draft.rate,
+        // 환율 확정 방식: 'FIXED'(V1 예약시점 고정) | 'BOARD'(V2 수령일 전광판 환율)
+        rateMode: draft.rateMode ?? 'FIXED',
+        coupon: draft.coupon ?? false, // 쿠폰(전광판보다 우대) 적용 여부
         foreignAmount: draft.foreignAmount,
         krwAmount: draft.krwAmount,
         customerName: draft.customerName,

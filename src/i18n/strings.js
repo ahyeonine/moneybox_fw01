@@ -733,6 +733,65 @@ export const STRINGS = {
     en: 'No sign-up needed — just your name and email.',
   },
 
+  // ── 2안 예약 플로우 (환율 미고정 · 전광판 환율 · 쿠폰 우대) ──
+  's2v.step.info': { ko: '예약자 정보', en: 'Your details' },
+  's2v.rate.note': {
+    ko: '환율은 예약 시 확정하지 않아요. 수령일 지점 전광판 환율이 적용됩니다.',
+    en: 'No rate is locked at booking. The branch board rate on your pickup day applies.',
+  },
+  's2v.rate.note.coupon': {
+    ko: '🎟️ 쿠폰 적용 — 수령일 전광판 환율보다 우대해 드려요.',
+    en: '🎟️ Coupon applied — you’ll get better than the board rate on pickup day.',
+  },
+  's2v.coupon.badge': { ko: '전광판보다 우대', en: 'Better than board' },
+  's2v.coupon.applied': {
+    ko: '쿠폰 적용됨 — 전광판 환율보다 우대 적용',
+    en: 'Coupon applied — better than the board rate',
+  },
+  's2v.coupon.cta.t': { ko: '회원가입하고 더 좋은 환율 받기', en: 'Sign up for a better rate' },
+  's2v.coupon.cta.d': {
+    ko: '가입하면 쿠폰 지급 — 전광판 환율보다 우대해 드려요.',
+    en: 'Get a coupon on sign-up — beat the branch board rate.',
+  },
+  's2v.info.title': { ko: '예약자 정보', en: 'Your details' },
+  's2v.info.namehint': {
+    ko: '여권 영문 이름(대문자)으로 입력해 주세요.',
+    en: 'Enter your name in passport English (uppercase).',
+  },
+  's2v.info.pickup': { ko: '수령 예정일', en: 'Pickup date' },
+  's2v.info.pickuphint': {
+    ko: '오늘부터 최대 2주 이내에서 선택하세요. (준비일수 제한 없음)',
+    en: 'Choose any day within 2 weeks from today. (No lead time)',
+  },
+  's2v.info.submit': { ko: '예약하기', en: 'Reserve' },
+  's2v.sum.branch': { ko: '수령 지점', en: 'Branch' },
+  's2v.sum.amount': { ko: '환전 금액', en: 'Amount' },
+  's2v.sum.pickup': { ko: '수령 예정일', en: 'Pickup date' },
+  's2v.sum.rate': { ko: '적용 환율', en: 'Applied rate' },
+  's2v.sum.rate.board': {
+    ko: '수령일 전광판 환율',
+    en: 'Board rate on pickup day',
+  },
+  's2v.sum.rate.coupon': {
+    ko: '전광판보다 우대 (쿠폰)',
+    en: 'Better than board (coupon)',
+  },
+  's2v.done.title': { ko: '예약이 완료됐어요!', en: 'Reservation confirmed!' },
+  's2v.done.note': {
+    ko: '수령일에 지점을 방문해 여권 확인 후 현금으로 받아가세요. 환율은 방문일 전광판 기준으로 적용됩니다.',
+    en: 'Visit the branch on your pickup day, show your passport, and collect cash. The board rate on that day applies.',
+  },
+  's2v.done.again': { ko: '새 예약 하기', en: 'New reservation' },
+  's2v.signup.badge': { ko: '전광판보다 우대 쿠폰', en: 'Better-than-board coupon' },
+  's2v.signup.title': { ko: '회원가입하고 쿠폰 받기', en: 'Sign up & get the coupon' },
+  's2v.signup.d': {
+    ko: '이름과 이메일만으로 가입하면 쿠폰이 지급돼요. 예약에 자동 적용되어 전광판 환율보다 우대해 드립니다.',
+    en: 'Sign up with just your name and email to get a coupon — auto-applied to your booking for a better-than-board rate.',
+  },
+  's2v.signup.cta': { ko: '가입하고 쿠폰 받기', en: 'Sign up & get coupon' },
+  's2v.signup.skip': { ko: '쿠폰 없이 예약 계속', en: 'Continue without coupon' },
+  's2v.signup.err': { ko: '이름과 올바른 이메일을 입력해 주세요.', en: 'Enter your name and a valid email.' },
+
   // 푸터
   'footer.company': { ko: '(주) 머니박스', en: 'MoneyBox Inc.' },
   'footer.addr': { ko: '서울특별시 ○○구 ○○로 000 (프로토타입 더미 주소)', en: 'Seoul, Korea (placeholder address)' },
