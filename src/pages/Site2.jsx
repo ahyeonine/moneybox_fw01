@@ -15,6 +15,36 @@ import LookupPage from './LookupPage.jsx'
 // 회원가입 쿠폰 보유 시 전광판 환율보다 우대(더 많은 원화)를 적용한다.
 const COUPON_BONUS = WEB_COUPON_BONUS
 
+// 깔끔한 라인 아이콘 (이모지 대체) — 브랜드 블루 톤, currentColor 상속.
+const ICON_PATHS = {
+  bank: 'M3 10 12 4l9 6M5 10v8m4-8v8m6-8v8m4-8v8M3 20h18',
+  kiosk: 'M6 3h12a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm2 15h8m-4-3v3M8 6h8M8 9h5',
+  airport: 'M21 15.5 3 10V6.5l2 .5 3 2 6-1L11 3l2-.5 5 6 2.5.7a1.2 1.2 0 0 1 0 2.3L21 12v3.5ZM6 20h9',
+  shield: 'M12 3 5 6v5c0 4 3 6.5 7 8 4-1.5 7-4 7-8V6l-7-3Zm-2.5 8.5 2 2 3.5-4',
+  passport: 'M5 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm6 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM8.5 15h5',
+  pin: 'M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Zm0-8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
+  trophy: 'M7 4h10v3a5 5 0 0 1-10 0V4Zm0 1H4v1a3 3 0 0 0 3 3m10-4h3v1a3 3 0 0 1-3 3m-5 4v3m-3 3h6',
+  chart: 'M4 20V10m5 10V4m5 16v-7m5 7V8',
+}
+function Ic({ name, className = '' }) {
+  const d = ICON_PATHS[name]
+  if (!d) return null
+  return (
+    <svg
+      className={`ic ${className}`}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={d} />
+    </svg>
+  )
+}
+
 // 은행·키오스크·공항이 머니박스보다 "덜 주는" 비율(예시 수치, V1 비교 카드와 동일 톤).
 // 원화 환산액 대신 "평균 몇 % 더 많이 받는지"를 노출하기 위한 산출용.
 const CHANNEL_LESS = { bank: 0.021, kiosk: 0.041, airport: 0.093 }
@@ -30,9 +60,9 @@ const AVG_MORE_PCT = (() => {
 })()
 // 비교 막대: 각 채널이 머니박스(100%) 대비 받는 비율(%)
 const CHANNEL_BARS = [
-  { key: 'bank', emoji: '🏦' },
-  { key: 'kiosk', emoji: '🏧' },
-  { key: 'airport', emoji: '✈️' },
+  { key: 'bank', icon: 'bank' },
+  { key: 'kiosk', icon: 'kiosk' },
+  { key: 'airport', icon: 'airport' },
 ].map((c) => ({
   ...c,
   more: CHANNEL_MORE_PCT[c.key],
@@ -84,12 +114,16 @@ function CompareMini({ t, amount, board }) {
   const amt = Number(amount) || 0
   return (
     <div className="s2v-cmpmini">
-      <div className="s2v-cmpmini-h">📈 {t('s2.home.cmp.mini')}</div>
+      <div className="s2v-cmpmini-h">
+        <Ic name="chart" /> {t('s2.home.cmp.mini')}
+      </div>
       {CHANNEL_BARS.map((c) => {
         const won = amt > 0 && board > 0 ? Math.round(amt * board * c.less) : null
         return (
           <div key={c.key} className="s2v-cmpmini-row">
-            <span className="s2v-cmpmini-name">{c.emoji} {t(`s2.home.cmp.${c.key}`)}</span>
+            <span className="s2v-cmpmini-name">
+              <Ic name={c.icon} /> {t(`s2.home.cmp.${c.key}`)}
+            </span>
             <span className="s2v-cmpmini-bar">
               <span className="s2v-cmpmini-fill" style={{ width: `${c.rel}%` }} />
             </span>
@@ -464,7 +498,9 @@ export default function Site2() {
             {/* 랜딩 히어로 + 환율 위젯 */}
             <section className="s2-lp-hero">
               <div className="s2-lp-hero-copy">
-                <span className="s2-lp-eyebrow">{t('s2.home.hero.eyebrow')}</span>
+                <span className="s2-lp-eyebrow">
+                  <Ic name="shield" /> {t('s2.home.hero.eyebrow')}
+                </span>
                 <h1 className="s2-lp-title">{t('s2.home.hero.t')}</h1>
                 <p className="s2-lp-desc">{t('s2.home.hero.d')}</p>
                 <div className="s2-lp-cta-row">
@@ -493,7 +529,7 @@ export default function Site2() {
                       className="s2-region-chip"
                       onClick={() => enterFlow(r.ko)}
                     >
-                      <span className="s2-region-emoji" aria-hidden="true">📍</span>
+                      <Ic name="pin" className="s2-region-ic" />
                       <span className="s2-region-name">{r[lang] || r.ko}</span>
                     </button>
                   ))}
@@ -513,7 +549,9 @@ export default function Site2() {
               </p>
               <div className="s2-lp-cmp-card">
                 <div className="s2-lp-cmp-row mb">
-                  <span className="s2-lp-cmp-name">🏆 {t('s2.home.cmp.mb')}</span>
+                  <span className="s2-lp-cmp-name">
+                    <Ic name="trophy" /> {t('s2.home.cmp.mb')}
+                  </span>
                   <div className="s2-lp-cmp-bar">
                     <span className="s2-lp-cmp-fill mb" style={{ width: '100%' }} />
                   </div>
@@ -521,7 +559,9 @@ export default function Site2() {
                 </div>
                 {CHANNEL_BARS.map((c) => (
                   <div key={c.key} className="s2-lp-cmp-row">
-                    <span className="s2-lp-cmp-name">{c.emoji} {t(`s2.home.cmp.${c.key}`)}</span>
+                    <span className="s2-lp-cmp-name">
+                      <Ic name={c.icon} /> {t(`s2.home.cmp.${c.key}`)}
+                    </span>
                     <div className="s2-lp-cmp-bar">
                       <span className="s2-lp-cmp-fill" style={{ width: `${c.rel}%` }} />
                     </div>
@@ -539,12 +579,14 @@ export default function Site2() {
               <h2 className="s2-lp-sec-t">{t('s2.home.val.title')}</h2>
               <div className="s2-lp-vals">
                 {[
-                  { ic: '🛡️', t: 's2.home.val1.t', d: 's2.home.val1.d' },
-                  { ic: '🛂', t: 's2.home.val2.t', d: 's2.home.val2.d' },
-                  { ic: '📍', t: 's2.home.val3.t', d: 's2.home.val3.d' },
+                  { ic: 'shield', t: 's2.home.val1.t', d: 's2.home.val1.d' },
+                  { ic: 'passport', t: 's2.home.val2.t', d: 's2.home.val2.d' },
+                  { ic: 'pin', t: 's2.home.val3.t', d: 's2.home.val3.d' },
                 ].map((v) => (
                   <div key={v.t} className="s2-lp-val">
-                    <span className="s2-lp-val-ic" aria-hidden="true">{v.ic}</span>
+                    <span className="s2-lp-val-ic">
+                      <Ic name={v.ic} />
+                    </span>
                     <div className="s2-lp-val-t">{t(v.t)}</div>
                     <div className="s2-lp-val-d">{t(v.d)}</div>
                   </div>
@@ -640,7 +682,7 @@ export default function Site2() {
                   className="s2-region-chip"
                   onClick={() => selectRegion(r.ko)}
                 >
-                  <span className="s2-region-emoji" aria-hidden="true">📍</span>
+                  <Ic name="pin" className="s2-region-ic" />
                   <span className="s2-region-name">{r[lang] || r.ko}</span>
                 </button>
               ))}
