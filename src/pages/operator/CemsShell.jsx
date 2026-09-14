@@ -27,7 +27,6 @@ const RESV_MENU = [
 // 설정 탭 사이드바
 const SETTINGS_MENU = [
   { label: '환전율관리', to: '/cems/settings/rates', enabled: true },
-  { label: '외국인서비스 한도관리', to: '/cems/settings/limits', enabled: true },
 ]
 
 export default function CemsShell() {

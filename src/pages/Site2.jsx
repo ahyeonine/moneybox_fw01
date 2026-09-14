@@ -40,7 +40,7 @@ const CHANNEL_BARS = [
 // 지도/검색은 키가 필요 없는 OpenStreetMap(Nominatim + Leaflet) 사용.
 
 const SUPPORTED_CURRENCIES = CURRENCY_ORDER.filter((c) =>
-  BRANCHES.some((b) => Object.prototype.hasOwnProperty.call(b.currencyLimits, c))
+  BRANCHES.some((b) => b.currencies.includes(c))
 )
 
 // 인기 위치 (검색 없이 바로 고를 수 있는 빠른 선택 + 오프라인 폴백)
@@ -64,6 +64,24 @@ function distanceKm(a, b) {
 }
 
 const ESIM_URL = 'https://imoneybox.cafe24.com/shop3/'
+
+// 컴팩트 환율 비교 (은행·키오스크·공항보다 +X% 더) — 히어로 위젯·신청화면에서 강조 노출
+function CompareMini({ t }) {
+  return (
+    <div className="s2v-cmpmini">
+      <div className="s2v-cmpmini-h">📈 {t('s2.home.cmp.mini')}</div>
+      {CHANNEL_BARS.map((c) => (
+        <div key={c.key} className="s2v-cmpmini-row">
+          <span className="s2v-cmpmini-name">{c.emoji} {t(`s2.home.cmp.${c.key}`)}</span>
+          <span className="s2v-cmpmini-bar">
+            <span className="s2v-cmpmini-fill" style={{ width: `${c.rel}%` }} />
+          </span>
+          <span className="s2v-cmpmini-pct">+{c.more}%</span>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 // Leaflet 지도 (실제 OpenStreetMap). 라이브러리/타일 로드 실패해도 앱은 계속 동작.
 function Site2Map({ center, points }) {
@@ -239,7 +257,7 @@ export default function Site2() {
   // 선택 통화를 취급하는 지점 (위치 있으면 가까운 순, 없으면 전체)
   const branches = useMemo(() => {
     const supported = BRANCHES.filter((b) =>
-      Object.prototype.hasOwnProperty.call(b.currencyLimits, currency)
+      b.currencies.includes(currency)
     )
     if (!loc) return supported.map((b) => ({ b, km: null }))
     return supported.map((b) => ({ b, km: distanceKm(loc, b) })).sort((x, y) => x.km - y.km)
@@ -425,10 +443,7 @@ export default function Site2() {
                   />
                   <span className="s2-amount-cur">{currency}</span>
                 </div>
-                <div className="s2v-more s2v-more-widget">
-                  <span className="s2v-more-ic" aria-hidden="true">📈</span>
-                  <span className="s2v-more-txt">{t('s2v.more.line').replace('{pct}', AVG_MORE_PCT)}</span>
-                </div>
+                <CompareMini t={t} />
                 <button className="btn s2-primary block" onClick={() => enterFlow(true)}>
                   {t('s2.home.widget.cta')} →
                 </button>
@@ -536,7 +551,7 @@ export default function Site2() {
         ) : (
         <>
         <section className="s2-hero">
-          <div className="s2-hero-eyebrow">🛡️ {t('home.hero.grt.t')}</div>
+          <div className="s2-hero-eyebrow">{t('s2.home.hero.eyebrow')}</div>
           <h1 className="s2-hero-t">{t('s2.hero.t')}</h1>
           <p className="s2-hero-d">{t('s2.hero.d')}</p>
         </section>
@@ -588,13 +603,13 @@ export default function Site2() {
               />
               <span className="s2-amount-cur">{currency}</span>
             </div>
-            <div className="s2v-more">
-              <span className="s2v-more-ic" aria-hidden="true">📈</span>
-              <span className="s2v-more-txt">
-                {t('s2v.more.line').replace('{pct}', AVG_MORE_PCT)}
-                {couponOn && <span className="s2v-krw-badge">{t('s2v.coupon.badge')}</span>}
-              </span>
-            </div>
+            <CompareMini t={t} />
+            {couponOn && (
+              <div className="s2v-more" style={{ marginTop: 10 }}>
+                <span className="s2v-more-ic" aria-hidden="true">🎟️</span>
+                <span className="s2v-more-txt">{t('s2v.coupon.applied')}</span>
+              </div>
+            )}
             <div className="s2v-rate-note">
               {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}
             </div>

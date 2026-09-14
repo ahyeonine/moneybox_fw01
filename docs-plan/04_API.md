@@ -52,7 +52,7 @@
 > Base `/api/v1` · 날짜 `YYYY-MM-DD`, 일시 ISO-8601(+09:00) · KRW=정수, 외화=소수.
 
 ### 참조 데이터 (Public)
-- `GET /branches` — 지점(취급통화·한도·리드타임·좌표)
+- `GET /branches` — 지점(취급통화·좌표)
 - `GET /branches/{id}/currencies`
 - `GET /rates?currencies=USD,JPY` — 현재 적용환율(전 고객 동일)
 - `GET /branches/{id}/availability?currency&date&amount` — 재고 확인 (`200 {available}` / `409 SOLD_OUT`)

@@ -11,7 +11,6 @@ import FxFlowPlaceholder from './pages/operator/FxFlowPlaceholder.jsx'
 import ForeignReservationAdmin from './pages/cems/ForeignReservationAdmin.jsx'
 import HqReservationAdmin from './pages/cems/HqReservationAdmin.jsx'
 import RateManagement from './pages/cems/RateManagement.jsx'
-import LimitManagement from './pages/cems/LimitManagement.jsx'
 import DocsViewer from './pages/DocsViewer.jsx'
 import EmailAdmin from './pages/email/EmailAdmin.jsx'
 
@@ -33,7 +32,6 @@ export default function App() {
           <Route path="hq" element={<HqReservationAdmin />} />
           <Route path="settings" element={<Navigate to="/cems/settings/rates" replace />} />
           <Route path="settings/rates" element={<RateManagement />} />
-          <Route path="settings/limits" element={<LimitManagement />} />
         </Route>
 
         {/* 탭 3 · POS */}
