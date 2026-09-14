@@ -73,6 +73,9 @@ export const POLICY_MIN_AMOUNTS = Object.fromEntries(
   })
 )
 
+// 외국인 웹사이트 쿠폰(회원가입 지급) 우대율 — 수령일 전광판 환율보다 더 얹어주는 비율.
+export const WEB_COUPON_BONUS = 0.008 // +0.8% (데모)
+
 /** 예약 시점 환율 조회 (전 고객 동일 환율) */
 export function getRate(currency) {
   return MOCK_RATES[currency] ?? null

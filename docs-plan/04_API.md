@@ -13,7 +13,7 @@
 
 ### 2. 환율 피드 (필수)
 - 실시간 환율 소스(내부 딜링/외부 환율 API) → `Rate.baseRate` 갱신(현재 2분 자동변동은 목).
-- **스프레드/우대 정책** 적용해 `appliedRate` 산출(현재 미반영, `// TODO`). 예약 생성 시 스냅샷을 `Reservation.rate`로 픽스.
+- **전광판(외국인 웹사이트 매입) 환율** 제공. 예약은 환율을 고정하지 않고(`rateMode=BOARD`), 수령일 전광판 환율로 POS 정산. 쿠폰 보유 시 `WEB_COUPON_BONUS`만큼 우대.
 - CEMS "외국인 웹사이트 매입환율 직접입력"이 실 환율 관리와 연동되어야 함.
 
 ### 3. 재고(시재) 시스템 (필수)
@@ -29,7 +29,7 @@
 - **선택 회원가입**(쿠폰용): 이름+이메일+이메일 인증. 실제 계정/세션 발급 필요(현재 시뮬레이션).
 - 운영자(CEMS/POS): 스태프 인증(SSO/토큰) + 권한(지점/본사). `Authorization: Bearer`.
 
-### 6. 지도/위치 (V2)
+### 6. 지도/위치
 - 장소 검색·지오코딩: 프로토타입은 **OpenStreetMap Nominatim**(무료·정책상 프로덕션 부적합). 실서비스는 **Google/네이버/카카오 지오코딩 + 지도 SDK(키·쿼터·요금)** 권장.
 - 지점 좌표 정합성, "가까운 지점" 계산(현재 하버사인, 실서비스는 실도로/소요시간 고려 가능).
 
@@ -37,7 +37,7 @@
 - 자동취소(수령기한 경과 → CANCELLED, 조건부 재고복구), 리마인더 발송 크론.
 
 ### 8. CEMS/POS 연동
-- 예약 생성 → CEMS 예약관리 리스트 반영. POS 거래완료 시 상태전이 + **베스트레이트 정산(예약환율 vs 오늘환율 → 유리한 쪽)** 결과·실제적용환율·최종원화금액 기록.
+- 예약 생성 → CEMS 예약관리 리스트 반영. POS 거래완료 시 상태전이 + **정산(수령일 전광판 환율, 쿠폰 시 우대)** 결과·실제적용환율·최종원화금액 기록.
 - 신분증 대조는 기존 POS 흐름(온라인 사전수집 없음).
 
 ### 9. 비기능 요구사항
@@ -56,10 +56,10 @@
 - `GET /branches/{id}/currencies`
 - `GET /rates?currencies=USD,JPY` — 현재 적용환율(전 고객 동일)
 - `GET /branches/{id}/availability?currency&date&amount` — 재고 확인 (`200 {available}` / `409 SOLD_OUT`)
-- `GET /geocode?q=&countrycodes=kr` — (V2) 장소 검색 → 좌표 *(실서비스: 유료 지오코딩)*
+- `GET /geocode?q=&countrycodes=kr` — 장소 검색 → 좌표 *(실서비스: 유료 지오코딩)*
 
 ### 예약 (Customer · 무인증)
-- `POST /reservations` — 신규 예약(무결제). `transactionType='BUY'`(원화구매) 고정. 서버가 예약번호 발급 + 환율 픽스.
+- `POST /reservations` — 신규 예약(무결제). `transactionType='BUY'`, `rateMode='BOARD'`, `coupon`. 서버가 예약번호 발급(환율 미고정).
   - 검증코드: `BELOW_MIN | ABOVE_MAX | INVALID_FORMAT | LEAD_TIME | OUT_OF_WINDOW | SOLD_OUT`. 수령일 = 리드타임 이후 ~ 14일.
 - `GET /reservations/lookup?reservationNo&email` — 조회(번호+이메일)
 - `PATCH /reservations/{no}` — 변경(BOOKED만)
@@ -75,7 +75,7 @@
 - `GET /operator/reservations` — 시재준비 리스트(필터/정렬, 리마인더 노출규칙)
 - `GET /operator/reservations/{no}`
 - `POST /operator/reservations/{no}/verify-id` — 현장 신분증 대조 기록
-- `POST /operator/reservations/{no}/complete` — 거래완료(`idVerified` 선행) + **베스트레이트 정산**
+- `POST /operator/reservations/{no}/complete` — 거래완료(`idVerified` 선행) + **정산(전광판/쿠폰)**
 
 ### 배치/시스템
 - `POST /system/auto-cancel` — 수령기한 경과 예약 일괄 취소(+조건부 재고복구)

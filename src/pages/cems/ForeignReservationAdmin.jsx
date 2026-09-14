@@ -257,9 +257,13 @@ export default function ForeignReservationAdmin() {
                   <td>
                     {CURRENCY_META[r.currency]?.flag} {r.currency}
                   </td>
-                  <td className="num">{formatNumber(r.rate)}</td>
+                  <td className="num">
+                    {r.rateMode === 'BOARD'
+                      ? `전광판${r.coupon ? '·쿠폰' : ''}`
+                      : formatNumber(r.rate)}
+                  </td>
                   <td className="num">{formatNumber(r.foreignAmount)}</td>
-                  <td className="num">{formatKrw(r.krwAmount)}</td>
+                  <td className="num">{r.rateMode === 'BOARD' ? '—' : formatKrw(r.krwAmount)}</td>
                   <td>{r.createdAt.slice(0, 10)}</td>
                 </tr>
               ))
@@ -314,9 +318,11 @@ export default function ForeignReservationAdmin() {
               </span>
             </div>
             <div className="row">
-              <span className="k">예약환율</span>
+              <span className="k">적용환율</span>
               <span className="v">
-                1 {selected.currency} = {formatNumber(selected.rate)} KRW
+                {selected.rateMode === 'BOARD'
+                  ? `수령일 전광판 환율(미고정)${selected.coupon ? ' · 쿠폰 우대' : ''}`
+                  : `1 ${selected.currency} = ${formatNumber(selected.rate)} KRW`}
               </span>
             </div>
             <div className="row">
@@ -327,7 +333,9 @@ export default function ForeignReservationAdmin() {
             </div>
             <div className="row total">
               <span className="k">원화금액</span>
-              <span className="v">{formatKrw(selected.krwAmount)}</span>
+              <span className="v">
+                {selected.rateMode === 'BOARD' ? '수령일 정산' : formatKrw(selected.krwAmount)}
+              </span>
             </div>
             <div className="row">
               <span className="k">신청일시</span>

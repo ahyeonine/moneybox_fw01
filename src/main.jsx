@@ -7,7 +7,6 @@ import { ReservationProvider } from './store/ReservationContext.jsx'
 import { SettingsProvider } from './store/SettingsContext.jsx'
 import { RatesProvider } from './store/RatesContext.jsx'
 import { EmailProvider } from './store/EmailContext.jsx'
-import { BookingProvider } from './store/BookingContext.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -18,9 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <ReservationProvider>
             <SettingsProvider>
               <EmailProvider>
-                <BookingProvider>
-                  <App />
-                </BookingProvider>
+                <App />
               </EmailProvider>
             </SettingsProvider>
           </ReservationProvider>

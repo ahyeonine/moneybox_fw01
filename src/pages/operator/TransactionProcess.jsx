@@ -5,7 +5,7 @@ import { useReservations } from '../../store/ReservationContext.jsx'
 import { useRates } from '../../store/RatesContext.jsx'
 import { useEmail, BRANCH_CANCEL_REASON } from '../../store/EmailContext.jsx'
 import { getBranch } from '../../data/branches.js'
-import { CURRENCY_META, toKrw } from '../../data/rates.js'
+import { CURRENCY_META, toKrw, WEB_COUPON_BONUS } from '../../data/rates.js'
 import { formatDate, formatKrw, formatForeign, formatNumber } from '../../lib/format.js'
 import { StatusBadge } from '../../components/Badges.jsx'
 
@@ -40,12 +40,21 @@ export default function TransactionProcess() {
   // 항상 store 최신 상태를 참조
   const rec = no ? getByNo(no) : null
 
-  // ── 베스트레이트 정산 ──
-  // 원화구매(BUY): 1통화당 원화가 많을수록 고객에게 유리 → 예약환율 vs 오늘환율 중 큰 값 적용.
+  // ── 정산 ──
+  // 원화구매(BUY): 1통화당 원화가 많을수록 고객에게 유리.
+  //  - FIXED(예약시점 고정): 예약환율 vs 오늘환율 중 큰 값(베스트레이트 보장).
+  //  - BOARD(환율 미고정): 수령일 전광판(오늘) 환율 적용 + 쿠폰 보유 시 우대.
+  const isBoard = rec?.rateMode === 'BOARD'
+  const hasCoupon = !!rec?.coupon
   const todayRate = rec ? getRate(rec.currency) : null
-  const appliedRate = rec && todayRate != null ? Math.max(rec.rate, todayRate) : rec?.rate
+  const round2 = (n) => Math.round(n * 100) / 100
+  const appliedRate = (() => {
+    if (!rec || todayRate == null) return rec?.rate
+    if (isBoard) return hasCoupon ? round2(todayRate * (1 + WEB_COUPON_BONUS)) : todayRate
+    return Math.max(rec.rate, todayRate)
+  })()
   const appliedKrw = rec ? toKrw(rec.foreignAmount, appliedRate) : 0
-  const rateImproved = rec && todayRate != null && appliedRate > rec.rate
+  const rateImproved = rec && !isBoard && todayRate != null && appliedRate > rec.rate
 
   function doLookup(e) {
     e?.preventDefault()
@@ -159,32 +168,49 @@ export default function TransactionProcess() {
             <div className="row">
               <span className="k">{t('common.rate')}</span>
               <span className="v">
-                1 {rec.currency} = {formatNumber(rec.rate)} KRW
+                {isBoard ? t('op.tx.board.reservedNone') : `1 ${rec.currency} = ${formatNumber(rec.rate)} KRW`}
               </span>
             </div>
             <div className="row total">
               <span className="k">{t('common.krwAmount')}</span>
-              <span className="v">{formatKrw(rec.krwAmount)}</span>
+              <span className="v">{isBoard ? '—' : formatKrw(rec.krwAmount)}</span>
             </div>
           </div>
 
-          {/* 베스트레이트 정산: 예약환율 vs 오늘환율 비교 → 유리한 쪽 적용 */}
+          {/* 정산: BOARD(전광판+쿠폰) / FIXED(베스트레이트) */}
           {rec.status === 'BOOKED' && (
             <div className="bestrate-box" style={{ marginTop: 14 }}>
-              <div className="bestrate-title">💱 {t('op.tx.bestRate.title')}</div>
+              <div className="bestrate-title">
+                💱 {isBoard ? t('op.tx.board.title') : t('op.tx.bestRate.title')}
+              </div>
               <div className="summary">
-                <div className="row">
-                  <span className="k">{t('op.tx.bestRate.reserved')}</span>
-                  <span className="v">
-                    1 {rec.currency} = {formatNumber(rec.rate)} KRW
-                  </span>
-                </div>
-                <div className="row">
-                  <span className="k">{t('op.tx.bestRate.today')}</span>
-                  <span className="v">
-                    1 {rec.currency} = {formatNumber(todayRate)} KRW
-                  </span>
-                </div>
+                {isBoard ? (
+                  <>
+                    <div className="row">
+                      <span className="k">{t('op.tx.board.board')}</span>
+                      <span className="v">1 {rec.currency} = {formatNumber(todayRate)} KRW</span>
+                    </div>
+                    {hasCoupon && (
+                      <div className="row">
+                        <span className="k">{t('op.tx.board.coupon')}</span>
+                        <span className="v" style={{ color: '#0a7d3c', fontWeight: 700 }}>
+                          +{(WEB_COUPON_BONUS * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <div className="row">
+                      <span className="k">{t('op.tx.bestRate.reserved')}</span>
+                      <span className="v">1 {rec.currency} = {formatNumber(rec.rate)} KRW</span>
+                    </div>
+                    <div className="row">
+                      <span className="k">{t('op.tx.bestRate.today')}</span>
+                      <span className="v">1 {rec.currency} = {formatNumber(todayRate)} KRW</span>
+                    </div>
+                  </>
+                )}
                 <div className="row">
                   <span className="k">{t('op.tx.bestRate.applied')}</span>
                   <span className="v" style={{ color: 'var(--brand)', fontWeight: 700 }}>
@@ -197,7 +223,13 @@ export default function TransactionProcess() {
                 </div>
               </div>
               <div className="tiny" style={{ marginTop: 8 }}>
-                {rateImproved ? t('op.tx.bestRate.improved') : t('op.tx.bestRate.same')}
+                {isBoard
+                  ? hasCoupon
+                    ? t('op.tx.board.couponNote')
+                    : t('op.tx.board.note')
+                  : rateImproved
+                    ? t('op.tx.bestRate.improved')
+                    : t('op.tx.bestRate.same')}
               </div>
             </div>
           )}

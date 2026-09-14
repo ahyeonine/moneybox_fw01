@@ -2,17 +2,18 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { useRates } from '../store/RatesContext.jsx'
 import { useReservations } from '../store/ReservationContext.jsx'
-import { CURRENCY_META, CURRENCY_ORDER } from '../data/rates.js'
+import { CURRENCY_META, CURRENCY_ORDER, WEB_COUPON_BONUS } from '../data/rates.js'
 import { BRANCHES, getBranch } from '../data/branches.js'
 import { formatKrw } from '../lib/format.js'
 import { isValidName, isValidEmail } from '../lib/validation.js'
 import { pickupRange } from '../lib/date.js'
 import LanguageDropdown from '../components/LanguageDropdown.jsx'
 import AboutPage from './AboutPage.jsx'
+import LookupPage from './LookupPage.jsx'
 
-// V2는 환율을 예약 시점에 고정하지 않는다(수령일 전광판 환율 적용).
+// 외국인 웹사이트: 환율을 예약 시점에 고정하지 않는다(수령일 전광판 환율 적용).
 // 회원가입 쿠폰 보유 시 전광판 환율보다 우대(더 많은 원화)를 적용한다.
-const COUPON_BONUS = 0.008 // 전광판 대비 +0.8% 우대(데모 값)
+const COUPON_BONUS = WEB_COUPON_BONUS
 
 // 은행·키오스크·공항이 머니박스보다 "덜 주는" 비율(예시 수치, V1 비교 카드와 동일 톤).
 // 원화 환산액 대신 "평균 몇 % 더 많이 받는지"를 노출하기 위한 산출용.
@@ -325,12 +326,18 @@ export default function Site2() {
         <div className="s2-header-inner">
           <button type="button" className="s2-logo" onClick={() => setView('home')}>
             MONEY<span>BOX</span>
-            <span className="s2-logo-tag">v2</span>
           </button>
           <nav className="s2-nav">
             <span className="s2-nav-langs">🌏 EN · 中文 · 日本語 · 한국어</span>
           </nav>
           <div className="s2-header-right">
+            <button
+              type="button"
+              className={`s2-about-link${view === 'lookup' ? ' on' : ''}`}
+              onClick={() => setView('lookup')}
+            >
+              {t('s2.nav.lookup')}
+            </button>
             <button
               type="button"
               className={`s2-about-link${view === 'about' ? ' on' : ''}`}
@@ -347,12 +354,14 @@ export default function Site2() {
       </header>
 
       <main
-        className={`s2-main${view === 'about' ? ' s2-main-wide' : ''}${
+        className={`s2-main${view === 'about' || view === 'lookup' ? ' s2-main-wide' : ''}${
           view === 'home' ? ' s2-main-home' : ''
         }`}
       >
         {view === 'about' ? (
           <AboutPage />
+        ) : view === 'lookup' ? (
+          <LookupPage />
         ) : view === 'home' ? (
           <>
             {/* 랜딩 히어로 + 환율 위젯 */}
