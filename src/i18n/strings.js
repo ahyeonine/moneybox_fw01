@@ -130,6 +130,18 @@ export const STRINGS = {
   // 예약조회
   'lookup.title': { ko: '신청내역조회', en: 'My reservations' },
   'lookup.sub': { ko: '이름과 이메일로 신청내역을 조회하세요.', en: 'Look up your reservations with your name and email.' },
+  'lookup.demohint': {
+    ko: '데모: JOHN SMITH / john@example.com (같은 이메일 3건) · AKIRA SATO / akira@example.com',
+    en: 'Demo: JOHN SMITH / john@example.com (3 under same email) · AKIRA SATO / akira@example.com',
+  },
+  'footer.copy': {
+    ko: '© 2026 (주)머니박스 · 프로토타입 (예시 데이터)',
+    en: '© 2026 MONEYBOX Corp. · Prototype (dummy data)',
+  },
+  's2.foot.copy': {
+    ko: '© 2026 (주)머니박스 · 2안 프로토타입 (예시 데이터)',
+    en: '© 2026 MONEYBOX Corp. · Site v2 prototype (dummy data)',
+  },
   'lookup.notfound': {
     ko: '일치하는 예약을 찾을 수 없습니다. 예약번호와 이메일을 확인하세요.',
     en: 'No matching reservation. Check your number and email.',
