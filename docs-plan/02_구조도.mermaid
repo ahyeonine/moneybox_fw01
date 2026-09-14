@@ -1,30 +1,26 @@
 graph TD
   Root["/ · 상단 데모 탭 (RootLayout)"]
 
-  subgraph CUST["고객 서비스 (인바운드)"]
-    subgraph SV1["외국인 웹사이트 V1 · /site"]
-      V1H["홈 /site"]
-      V1B["예약 /site/book<br/>지점→신청→정보→확인→동의→완료"]
-      V1L["예약조회 /site/lookup"]
-      V1Br["지점 /site/branches"]
-      V1K["무인환전기 /site/kiosks"]
-      V1A["회사소개 /site/about"]
-    end
-    subgraph SV2["외국인 사이트 2안 V2 · /site2"]
-      V2F["금액 입력 → 지점 선택<br/>(검색·내위치·거리순 추천 지도)"]
-    end
+  subgraph CUST["고객 서비스 (외국인 웹사이트 · /site)"]
+    SITE["랜딩(home)"]
+    FLOW["예약 flow<br/>금액 → 지점 → 예약자 정보 → 완료"]
+    LOOK["예약조회 lookup"]
+    ABOUT["회사 소개 about"]
+    SITE --> FLOW
+    SITE --> LOOK
+    SITE --> ABOUT
   end
 
   subgraph OPS["운영 · 지점"]
     subgraph SCEMS["CEMS 지점 어드민 · /cems"]
       C1["외국인 환전예약관리 /cems/reservations"]
       C2["본사 예약관리 /cems/hq"]
-      C3["환율관리 /cems/settings/rates"]
+      C3["환율관리(전광판 매입환율) /cems/settings/rates"]
       C4["한도관리 /cems/settings/limits"]
     end
     subgraph SPOS["POS · /pos"]
       P2["예약검색/결과 /pos/reservation"]
-      P3["거래처리 /pos/transaction<br/>신분증 대조·베스트레이트 정산"]
+      P3["거래처리 /pos/transaction<br/>신분증 대조·전광판/쿠폰 정산"]
     end
   end
 
@@ -33,18 +29,16 @@ graph TD
     Docs["기획문서 /docs"]
   end
 
-  Root --> SV1
-  Root --> SV2
+  Root --> SITE
   Root --> SCEMS
   Root --> SPOS
   Root --> Email
   Root --> Docs
 
   %% 시스템 간 연동 (점선)
-  V2F -. "예약(지점·통화·금액 전달)" .-> V1B
-  C3 -. "외국인 매입환율 실시간 반영" .-> V1B
-  C4 -. "통화별 최소·단위·최대 한도" .-> V1B
-  V1B -. "예약 생성" .-> C1
-  V1B -. "확인·리마인더·OTP 발송" .-> Email
+  C3 -. "전광판(매입) 환율 · 수령일 적용" .-> FLOW
+  C4 -. "통화별 최소·단위·최대 한도" .-> FLOW
+  FLOW -. "예약 생성(환율 미고정·쿠폰)" .-> C1
+  FLOW -. "확인·리마인더 발송" .-> Email
   C1 -. "거래 이관" .-> P2
-  P3 -. "거래완료 → 상태 갱신" .-> C1
+  P3 -. "거래완료 → 상태·적용환율 기록" .-> C1

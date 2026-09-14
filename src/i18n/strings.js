@@ -139,8 +139,8 @@ export const STRINGS = {
     en: '© 2026 MONEYBOX Corp. · Prototype (dummy data)',
   },
   's2.foot.copy': {
-    ko: '© 2026 (주)머니박스 · 2안 프로토타입 (예시 데이터)',
-    en: '© 2026 MONEYBOX Corp. · Site v2 prototype (dummy data)',
+    ko: '© 2026 (주)머니박스 · 프로토타입 (예시 데이터)',
+    en: '© 2026 MONEYBOX Corp. · Prototype (dummy data)',
   },
   'lookup.notfound': {
     ko: '일치하는 예약을 찾을 수 없습니다. 예약번호와 이메일을 확인하세요.',
@@ -204,6 +204,19 @@ export const STRINGS = {
   'op.tx.bestRate.same': {
     ko: '예약환율이 여전히 가장 유리하여 예약환율로 적용됩니다.',
     en: 'The reserved rate is still the most favorable — it will be applied.',
+  },
+  // 전광판 정산 (환율 미고정 예약)
+  'op.tx.board.title': { ko: '전광판 정산 (환율 미고정)', en: 'Board-rate settlement (no fixed rate)' },
+  'op.tx.board.reservedNone': { ko: '예약 시 미고정 (수령일 전광판)', en: 'Not fixed at booking (board rate on pickup)' },
+  'op.tx.board.board': { ko: '수령일 전광판 환율', en: 'Board rate on pickup day' },
+  'op.tx.board.coupon': { ko: '쿠폰 우대', en: 'Coupon bonus' },
+  'op.tx.board.note': {
+    ko: '환율을 예약 시 고정하지 않았습니다. 수령일 전광판(오늘) 환율로 정산합니다.',
+    en: 'No rate was fixed at booking. Settled at the board (today) rate on pickup.',
+  },
+  'op.tx.board.couponNote': {
+    ko: '쿠폰 보유 — 수령일 전광판 환율보다 우대해 정산합니다.',
+    en: 'Coupon held — settled better than the board rate on pickup.',
   },
 
   // 시뮬레이션 도구
@@ -686,7 +699,7 @@ export const STRINGS = {
     en: 'In the real service you’d pick a date and details here to finish booking. (Prototype demo)',
   },
   's2.done.again': { ko: '처음부터 다시', en: 'Start over' },
-  's2.note': { ko: '※ 2안 프로토타입 — 예시 데이터', en: '* Site v2 prototype — example data' },
+  's2.note': { ko: '※ 프로토타입 — 예시 데이터', en: '* Prototype — example data' },
   // 2안 다크 푸터 (OrangeSquare 참고)
   's2.foot.cs': { ko: '서비스 문의', en: 'Customer support' },
   's2.foot.partner': { ko: '협력 문의', en: 'Partnerships' },
@@ -698,27 +711,28 @@ export const STRINGS = {
 
   // ── 2안 첫화면(랜딩) ──
   's2.nav.book': { ko: '환전 예약', en: 'Reserve' },
-  's2.home.hero.eyebrow': { ko: '🛡️ 베스트레이트 보장 · 여권만', en: '🛡️ Best-rate guarantee · passport only' },
+  's2.nav.lookup': { ko: '예약조회', en: 'My reservation' },
+  's2.home.hero.eyebrow': { ko: '🛡️ 은행보다 좋은 환율 · 여권만', en: '🛡️ Better than bank rates · passport only' },
   's2.home.hero.t': {
     ko: '한국에서 가장 간편한\n환전의 시작',
     en: 'The easiest way to\nexchange money in Korea',
   },
   's2.home.hero.d': {
-    ko: '온라인으로 예약하고, 가까운 지점에서 여권만 보여주고 받아가세요. 결제는 현장에서, 환율은 예약 시점에 고정 — 손해 없는 환전.',
-    en: 'Reserve online, then just show your passport at a nearby branch to pick up. Pay on site, rate locked at reservation — no-loss exchange.',
+    ko: '온라인으로 예약하고, 가까운 지점에서 여권만 보여주고 받아가세요. 결제는 현장에서, 은행·키오스크·공항보다 평균 더 좋은 환율.',
+    en: 'Reserve online, then just show your passport at a nearby branch to pick up. Pay on site — on average a better rate than banks, kiosks & airports.',
   },
   's2.home.hero.cta': { ko: '환전 예약 시작', en: 'Start your reservation' },
   's2.home.hero.how': { ko: '이용 방법 보기', en: 'See how it works' },
   's2.home.widget.t': { ko: '환율 확인하고 시작', en: 'Check the rate & start' },
   's2.home.widget.cta': { ko: '이 금액으로 지점 찾기', en: 'Find a branch for this amount' },
-  's2.home.trust.rate': { ko: '예약 시점 환율 고정', en: 'Rate locked at reservation' },
+  's2.home.trust.rate': { ko: '은행보다 좋은 환율', en: 'Better than bank rates' },
   's2.home.trust.pay': { ko: '온라인 결제 없음', en: 'No online payment' },
   's2.home.trust.branch': { ko: '전국 40+ 지점·공항', en: '40+ branches · airports' },
   's2.home.val.title': { ko: '왜 머니박스인가요?', en: 'Why MoneyBox?' },
-  's2.home.val1.t': { ko: '베스트레이트 보장', en: 'Best-rate guarantee' },
+  's2.home.val1.t': { ko: '은행보다 좋은 환율', en: 'Better than bank rates' },
   's2.home.val1.d': {
-    ko: '방문일에 환율이 더 좋아지면 그날의 더 좋은 환율로 드려요. 예약보다 불리해지지 않습니다.',
-    en: 'If the rate improves by your visit, you get that better rate. Never worse than when you booked.',
+    ko: '은행·키오스크·공항보다 평균 더 많이 받아요. 회원가입 쿠폰이면 수령일 전광판 환율보다 우대해 드립니다.',
+    en: 'On average more than banks, kiosks & airports. With a sign-up coupon, even better than the board rate on pickup day.',
   },
   's2.home.val2.t': { ko: '여권만, 결제는 현장에서', en: 'Passport only, pay on site' },
   's2.home.val2.d': {

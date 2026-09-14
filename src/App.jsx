@@ -1,13 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import RootLayout from './components/RootLayout.jsx'
-import CustomerSite from './components/CustomerSite.jsx'
-import Home from './pages/Home.jsx'
-import BookingFlow from './pages/booking/BookingFlow.jsx'
-import LookupPage from './pages/LookupPage.jsx'
-import AboutPage from './pages/AboutPage.jsx'
-import EsimPage from './pages/EsimPage.jsx'
-import KiosksPage from './pages/KiosksPage.jsx'
-import BranchesPage from './pages/BranchesPage.jsx'
 import Site2 from './pages/Site2.jsx'
 import CemsShell from './pages/operator/CemsShell.jsx'
 import PosShell from './pages/operator/PosShell.jsx'
@@ -30,21 +22,11 @@ export default function App() {
         <Route index element={<Navigate to="/site" replace />} />
 
         {/* 탭 1 · 외국인 웹사이트 (고객용) */}
-        <Route path="site" element={<CustomerSite />}>
-          <Route index element={<Home />} /> {/* 기본 진입 = 랜딩 홈 */}
-          <Route path="book" element={<BookingFlow />} /> {/* 지점 수령 예약 (STEP A~) */}
-          <Route path="kiosks" element={<KiosksPage />} /> {/* 키오스크 찾기 */}
-          <Route path="branches" element={<BranchesPage />} /> {/* 지점 정보 */}
-          <Route path="esim" element={<EsimPage />} />
-          <Route path="about" element={<AboutPage />} /> {/* 회사 소개 */}
-          <Route path="company" element={<Navigate to="/site/about" replace />} /> {/* 별칭 */}
-          <Route path="lookup" element={<LookupPage />} />
-        </Route>
+        <Route path="site" element={<Site2 />} />
+        {/* 이전 링크 호환: /site2 → /site */}
+        <Route path="site2" element={<Navigate to="/site" replace />} />
 
-        {/* 탭 1-2 · 외국인 사이트 2안 (WOWPASS 참고 · 금액→위치→지점추천) */}
-        <Route path="site2" element={<Site2 />} />
-
-        {/* 탭 2 · CEMS (어드민) */}
+        {/* 탭 2 · CEMS (지점 어드민) */}
         <Route path="cems" element={<CemsShell />}>
           <Route index element={<Navigate to="/cems/reservations" replace />} />
           <Route path="reservations" element={<ForeignReservationAdmin />} />
