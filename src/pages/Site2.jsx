@@ -205,6 +205,7 @@ export default function Site2() {
   const [showSignup, setShowSignup] = useState(false)
   const [suName, setSuName] = useState('')
   const [suEmail, setSuEmail] = useState('')
+  const [suPassport, setSuPassport] = useState('') // 여권 스캔 파일명(프로토타입)
   const [suErr, setSuErr] = useState('')
 
   const couponOn = !!couponMember
@@ -314,13 +315,13 @@ export default function Site2() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // 회원가입(쿠폰 지급) — 이름·이메일. 지급 즉시 전광판보다 우대 쿠폰 보유.
+  // 회원가입(쿠폰 지급) — 이름·이메일·여권 스캔. 지급 즉시 전광판보다 우대 쿠폰 보유.
   function claimCoupon() {
-    if (!isValidName(suName) || !isValidEmail(suEmail)) {
+    if (!isValidName(suName) || !isValidEmail(suEmail) || !suPassport) {
       setSuErr(t('s2v.signup.err'))
       return
     }
-    setCouponMember({ name: suName.trim(), email: suEmail.trim() })
+    setCouponMember({ name: suName.trim(), email: suEmail.trim(), passport: suPassport })
     setCustName((v) => v || suName.trim())
     setCustEmail((v) => v || suEmail.trim())
     setShowSignup(false)
@@ -926,6 +927,23 @@ export default function Site2() {
               onChange={(e) => setSuEmail(e.target.value)}
               placeholder="you@example.com"
             />
+            <label className="signup-label">{t('s2v.signup.passport')}</label>
+            <label className={`signup-passport${suPassport ? ' done' : ''}`}>
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                hidden
+                onChange={(e) => setSuPassport(e.target.files?.[0]?.name || '')}
+              />
+              <span className="signup-passport-ic" aria-hidden="true">{suPassport ? '✅' : '📷'}</span>
+              <span className="signup-passport-txt">
+                {suPassport
+                  ? t('s2v.signup.passport.done').replace('{file}', suPassport)
+                  : t('s2v.signup.passport.btn')}
+              </span>
+            </label>
+            <div className="signup-passport-hint">{t('s2v.signup.passport.hint')}</div>
             {suErr && <div className="err-text">{suErr}</div>}
             <button className="btn primary block" onClick={claimCoupon}>
               {t('s2v.signup.cta')}
