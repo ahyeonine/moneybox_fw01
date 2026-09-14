@@ -7,7 +7,7 @@ export default function FxFlowPlaceholder() {
   return (
     <div className="pos-resv">
       <div className="fxflow-placeholder">
-        <div className="fxflow-text">기존 환전예약플로우</div>
+        <div className="fxflow-text">기존 화면 (거래진행)</div>
         <button className="cems-btn" onClick={() => navigate('/pos/reservation')}>
           ‹ 검색으로
         </button>
