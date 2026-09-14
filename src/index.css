@@ -6221,3 +6221,104 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: var(--text-3);
   font-weight: 600;
 }
+
+/* 회원가입 여권 OCR 자동입력 배지 */
+.signup-ocr-badge {
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #0a7d3c;
+  background: #ecfdf3;
+  border: 1px solid #bbf7d0;
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+.signup-input[readonly] {
+  background: #f4f7fc;
+  color: var(--text-2);
+}
+
+/* POS 신분증 스캔 패널 */
+.scan-panel .scan-h {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 800;
+}
+.scan-demo-label {
+  margin: 10px 0 6px;
+  font-weight: 700;
+  color: var(--text-3);
+}
+.scan-demo-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.scan-demo-btn {
+  border: 1.5px dashed #c7d4ea;
+  background: #f7faff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.scan-demo-btn:hover {
+  border-color: var(--travel);
+  background: var(--travel-soft);
+  color: var(--travel-dark);
+}
+.scan-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #ecfdf3;
+  border: 1px solid #bbf7d0;
+  font-size: 14px;
+}
+.btn.sm {
+  padding: 6px 12px;
+  font-size: 12.5px;
+}
+.scan-matches {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.scan-match {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  border: 1px solid #e6ebf4;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13.5px;
+}
+.scan-match:hover {
+  border-color: var(--travel);
+  box-shadow: 0 0 0 3px var(--travel-soft);
+}
+.scan-match .sm-no {
+  font-weight: 800;
+  color: var(--text);
+}
+.scan-match .sm-cur,
+.scan-match .sm-date {
+  color: var(--text-2);
+}
+@media (max-width: 560px) {
+  .scan-match {
+    grid-template-columns: 1fr auto;
+    row-gap: 4px;
+  }
+}

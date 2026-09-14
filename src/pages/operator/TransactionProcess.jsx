@@ -11,7 +11,7 @@ import { StatusBadge } from '../../components/Badges.jsx'
 
 export default function TransactionProcess() {
   const { t, lang } = useI18n()
-  const { getByNo, completeReservation, cancelByBranch } = useReservations()
+  const { reservations, getByNo, completeReservation, cancelByBranch } = useReservations()
   const { getRate } = useRates()
   const { sendEmail } = useEmail()
   const [params] = useSearchParams()
@@ -21,6 +21,38 @@ export default function TransactionProcess() {
   const [notFound, setNotFound] = useState(false)
   const [idChecked, setIdChecked] = useState(false)
   const [flash, setFlash] = useState(null)
+  const [scanned, setScanned] = useState(null) // 신분증 스캔 결과 { name, birthDate }
+
+  // 신분증 스캔 데모용 신원 목록 — 예약에 있는 (이름+생년월일) 중복 제거.
+  const demoIds = []
+  {
+    const seen = new Set()
+    for (const r of reservations) {
+      if (!r.birthDate) continue
+      const k = `${r.customerName}|${r.birthDate}`
+      if (seen.has(k)) continue
+      seen.add(k)
+      demoIds.push({ name: r.customerName, birthDate: r.birthDate })
+    }
+  }
+  // 스캔된 신분증과 이름·생년월일이 모두 일치하는 예약
+  const matches = scanned
+    ? reservations.filter(
+        (r) => r.customerName === scanned.name && r.birthDate === scanned.birthDate
+      )
+    : []
+
+  function doScan(id) {
+    setScanned(id)
+    setNo(null)
+    setNotFound(false)
+    setFlash(null)
+  }
+  function selectMatch(r) {
+    setNo(r.reservationNo)
+    setIdChecked(true) // 신분증 스캔·대조 완료로 간주
+    setFlash(null)
+  }
 
   // 예약조회 결과 리스트에서 행 클릭 → ?no=RSV-... 로 진입 시 자동 조회
   useEffect(() => {
@@ -108,31 +140,108 @@ export default function TransactionProcess() {
       <h2>{t('op.tx.title')}</h2>
       <p className="muted">{t('op.tx.sub')}</p>
 
-      <form className="card" onSubmit={doLookup}>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t('op.tx.lookupPlaceholder')}
-          />
-          <button className="btn primary" type="submit" disabled={!query}>
-            {t('common.search')}
-          </button>
-        </div>
-        <div className="tiny" style={{ marginTop: 10 }}>
-          demo: RSV-20260728-0001 · RSV-20260728-0002 · RSV-20260729-0401(베스트레이트)
-        </div>
-      </form>
+      {!rec && (
+        <>
+          {/* ① 신분증 스캔 → 이름·생년월일 일치 예약 조회 */}
+          <div className="card scan-panel">
+            <h3 className="scan-h">🪪 {t('op.tx.scan.title')}</h3>
+            <p className="muted">{t('op.tx.scan.sub')}</p>
+            {!scanned ? (
+              <>
+                <div className="tiny scan-demo-label">{t('op.tx.scan.demoLabel')}</div>
+                <div className="scan-demo-list">
+                  {demoIds.map((id) => (
+                    <button
+                      key={`${id.name}|${id.birthDate}`}
+                      type="button"
+                      className="scan-demo-btn"
+                      onClick={() => doScan(id)}
+                    >
+                      📷 {id.name} · {id.birthDate}
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="scan-result">
+                  <span>
+                    🪪 <b>{scanned.name}</b> · {scanned.birthDate}
+                  </span>
+                  <button type="button" className="btn ghost sm" onClick={() => setScanned(null)}>
+                    {t('op.tx.scan.again')}
+                  </button>
+                </div>
+                {matches.length === 0 ? (
+                  <div className="notice danger" style={{ marginTop: 10 }}>
+                    {t('op.tx.scan.none')}
+                  </div>
+                ) : (
+                  <div className="scan-matches">
+                    <div className="tiny">
+                      {t('op.tx.scan.matched')} ({matches.length})
+                    </div>
+                    {matches.map((m) => (
+                      <button
+                        key={m.reservationNo}
+                        type="button"
+                        className="scan-match"
+                        onClick={() => selectMatch(m)}
+                      >
+                        <span className="sm-no">{m.reservationNo}</span>
+                        <span className="sm-cur">
+                          {CURRENCY_META[m.currency]?.flag} {formatNumber(m.foreignAmount)} {m.currency}
+                        </span>
+                        <span className="sm-date">{formatDate(m.pickupDate, lang)}</span>
+                        <StatusBadge status={m.status} />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
-      {notFound && (
-        <div className="notice danger" style={{ marginTop: 14 }}>
-          {t('lookup.notfound')}
-        </div>
+          {/* ② 또는 예약번호로 검색 */}
+          <form className="card" onSubmit={doLookup}>
+            <div className="tiny" style={{ marginBottom: 8, fontWeight: 700 }}>
+              {t('op.tx.orSearch')}
+            </div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={t('op.tx.lookupPlaceholder')}
+              />
+              <button className="btn primary" type="submit" disabled={!query}>
+                {t('common.search')}
+              </button>
+            </div>
+          </form>
+
+          {notFound && (
+            <div className="notice danger" style={{ marginTop: 14 }}>
+              {t('lookup.notfound')}
+            </div>
+          )}
+        </>
       )}
 
       {rec && (
         <div className="card" style={{ marginTop: 14 }}>
+          <button
+            type="button"
+            className="btn ghost sm"
+            style={{ marginBottom: 12 }}
+            onClick={() => {
+              setNo(null)
+              setNotFound(false)
+              setFlash(null)
+            }}
+          >
+            ‹ {t('op.tx.scan.back')}
+          </button>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
             <h2 style={{ margin: 0 }}>{rec.reservationNo}</h2>
             <StatusBadge status={rec.status} />
@@ -143,6 +252,12 @@ export default function TransactionProcess() {
               <span className="k">{t('common.name')}</span>
               <span className="v">{rec.customerName}</span>
             </div>
+            {rec.birthDate && (
+              <div className="row">
+                <span className="k">{t('op.tx.birth')}</span>
+                <span className="v">{rec.birthDate}</span>
+              </div>
+            )}
             <div className="row">
               <span className="k">{t('common.email')}</span>
               <span className="v">{rec.email}</span>
