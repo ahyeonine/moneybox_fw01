@@ -840,12 +840,19 @@ export const STRINGS = {
   's2v.signup.badge': { ko: '전광판보다 우대 쿠폰', en: 'Better-than-board coupon' },
   's2v.signup.title': { ko: '회원가입하고 쿠폰 받기', en: 'Sign up & get the coupon' },
   's2v.signup.d': {
-    ko: '이름과 이메일만으로 가입하면 쿠폰이 지급돼요. 예약에 자동 적용되어 전광판 환율보다 우대해 드립니다.',
-    en: 'Sign up with just your name and email to get a coupon — auto-applied to your booking for a better-than-board rate.',
+    ko: '이름·이메일·여권 스캔으로 가입하면 쿠폰이 지급돼요. 예약에 자동 적용되어 전광판 환율보다 우대해 드립니다.',
+    en: 'Sign up with your name, email and a passport scan to get a coupon — auto-applied for a better-than-board rate.',
+  },
+  's2v.signup.passport': { ko: '여권 스캔', en: 'Passport scan' },
+  's2v.signup.passport.btn': { ko: '📷 여권 촬영 / 업로드', en: '📷 Scan or upload passport' },
+  's2v.signup.passport.done': { ko: '{file} 첨부됨', en: '{file} attached' },
+  's2v.signup.passport.hint': {
+    ko: '여권 사진면을 촬영하거나 업로드하세요. (프로토타입 — 실제 저장·OCR 아님)',
+    en: 'Scan or upload your passport photo page. (Prototype — not actually stored/OCR’d)',
   },
   's2v.signup.cta': { ko: '가입하고 쿠폰 받기', en: 'Sign up & get coupon' },
   's2v.signup.skip': { ko: '쿠폰 없이 예약 계속', en: 'Continue without coupon' },
-  's2v.signup.err': { ko: '이름과 올바른 이메일을 입력해 주세요.', en: 'Enter your name and a valid email.' },
+  's2v.signup.err': { ko: '이름·이메일·여권 스캔을 모두 입력해 주세요.', en: 'Enter your name, valid email and a passport scan.' },
 
   // 푸터
   'footer.company': { ko: '(주) 머니박스', en: 'MoneyBox Inc.' },
