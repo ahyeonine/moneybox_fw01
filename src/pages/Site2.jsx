@@ -387,9 +387,6 @@ export default function Site2() {
             >
               {t('about.title')}
             </button>
-            <button type="button" className="btn s2-primary s2-nav-book" onClick={() => enterFlow(false)}>
-              {t('s2.nav.book')}
-            </button>
             <LanguageDropdown />
           </div>
         </div>
