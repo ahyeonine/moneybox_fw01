@@ -14,6 +14,16 @@ import AboutPage from './AboutPage.jsx'
 // 회원가입 쿠폰 보유 시 전광판 환율보다 우대(더 많은 원화)를 적용한다.
 const COUPON_BONUS = 0.008 // 전광판 대비 +0.8% 우대(데모 값)
 
+// 은행·키오스크·공항이 머니박스보다 "덜 주는" 비율(예시 수치, V1 비교 카드와 동일 톤).
+// 원화 환산액 대신 "평균 몇 % 더 많이 받는지"를 노출하기 위한 산출용.
+const CHANNEL_LESS = { bank: 0.021, kiosk: 0.041, airport: 0.093 }
+// 각 채널 대비 머니박스가 더 주는 비율 = p/(1-p), 세 채널 평균 (소수 1자리 %)
+const AVG_MORE_PCT = (() => {
+  const mores = Object.values(CHANNEL_LESS).map((p) => p / (1 - p))
+  const avg = mores.reduce((a, b) => a + b, 0) / mores.length
+  return Math.round(avg * 1000) / 10
+})()
+
 // 외국인 사이트 2안 (WOWPASS 참고) — 별도 surface.
 // 플로우: ① 금액 입력 → ② 지점 선택 (실제 지도 검색 + 내 위치로 찾기 + 추천).
 // 지도/검색은 키가 필요 없는 OpenStreetMap(Nominatim + Leaflet) 사용.
@@ -396,9 +406,9 @@ export default function Site2() {
                   />
                   <span className="s2-amount-cur">{currency}</span>
                 </div>
-                <div className="s2-krw">
-                  <span className="s2-krw-label">{t('s2.amount.krw')}</span>
-                  <span className="s2-krw-val">≈ {krw ? formatKrw(krw) : '₩0'}</span>
+                <div className="s2v-more s2v-more-widget">
+                  <span className="s2v-more-ic" aria-hidden="true">📈</span>
+                  <span className="s2v-more-txt">{t('s2v.more.line').replace('{pct}', AVG_MORE_PCT)}</span>
                 </div>
                 <button className="btn s2-primary block" onClick={() => enterFlow(true)}>
                   {t('s2.home.widget.cta')} →
@@ -530,12 +540,12 @@ export default function Site2() {
               />
               <span className="s2-amount-cur">{currency}</span>
             </div>
-            <div className="s2-krw">
-              <span className="s2-krw-label">
-                {t('s2.amount.krw')}
+            <div className="s2v-more">
+              <span className="s2v-more-ic" aria-hidden="true">📈</span>
+              <span className="s2v-more-txt">
+                {t('s2v.more.line').replace('{pct}', AVG_MORE_PCT)}
                 {couponOn && <span className="s2v-krw-badge">{t('s2v.coupon.badge')}</span>}
               </span>
-              <span className="s2-krw-val">≈ {krw ? formatKrw(krw) : '₩0'}</span>
             </div>
             <div className="s2v-rate-note">
               {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}

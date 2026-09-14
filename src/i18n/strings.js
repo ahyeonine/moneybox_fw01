@@ -743,6 +743,10 @@ export const STRINGS = {
     ko: '🎟️ 쿠폰 적용 — 수령일 전광판 환율보다 우대해 드려요.',
     en: '🎟️ Coupon applied — you’ll get better than the board rate on pickup day.',
   },
+  's2v.more.line': {
+    ko: '은행·키오스크·공항보다 평균 약 {pct}% 더 많이 받아요',
+    en: 'About {pct}% more on average than banks, kiosks & airports',
+  },
   's2v.coupon.badge': { ko: '전광판보다 우대', en: 'Better than board' },
   's2v.coupon.applied': {
     ko: '쿠폰 적용됨 — 전광판 환율보다 우대 적용',
