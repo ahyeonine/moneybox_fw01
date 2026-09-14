@@ -33,7 +33,12 @@ const CHANNEL_BARS = [
   { key: 'bank', emoji: '🏦' },
   { key: 'kiosk', emoji: '🏧' },
   { key: 'airport', emoji: '✈️' },
-].map((c) => ({ ...c, more: CHANNEL_MORE_PCT[c.key], rel: Math.round((1 - CHANNEL_LESS[c.key]) * 100) }))
+].map((c) => ({
+  ...c,
+  more: CHANNEL_MORE_PCT[c.key],
+  rel: Math.round((1 - CHANNEL_LESS[c.key]) * 100),
+  less: CHANNEL_LESS[c.key],
+}))
 
 // 외국인 사이트 2안 (WOWPASS 참고) — 별도 surface.
 // 플로우: ① 금액 입력 → ② 지점 선택 (실제 지도 검색 + 내 위치로 찾기 + 추천).
@@ -65,20 +70,29 @@ function distanceKm(a, b) {
 
 const ESIM_URL = 'https://imoneybox.cafe24.com/shop3/'
 
-// 컴팩트 환율 비교 (은행·키오스크·공항보다 +X% 더) — 히어로 위젯·신청화면에서 강조 노출
-function CompareMini({ t }) {
+// 컴팩트 환율 비교 — 은행·키오스크·공항보다 "약 얼마 더 받는지"(원화).
+// 금액 입력 시 원화 차액, 미입력 시 %로 폴백. 히어로 위젯·신청화면에서 강조 노출.
+function CompareMini({ t, amount, board }) {
+  const amt = Number(amount) || 0
   return (
     <div className="s2v-cmpmini">
       <div className="s2v-cmpmini-h">📈 {t('s2.home.cmp.mini')}</div>
-      {CHANNEL_BARS.map((c) => (
-        <div key={c.key} className="s2v-cmpmini-row">
-          <span className="s2v-cmpmini-name">{c.emoji} {t(`s2.home.cmp.${c.key}`)}</span>
-          <span className="s2v-cmpmini-bar">
-            <span className="s2v-cmpmini-fill" style={{ width: `${c.rel}%` }} />
-          </span>
-          <span className="s2v-cmpmini-pct">+{c.more}%</span>
-        </div>
-      ))}
+      {CHANNEL_BARS.map((c) => {
+        const won = amt > 0 && board > 0 ? Math.round(amt * board * c.less) : null
+        return (
+          <div key={c.key} className="s2v-cmpmini-row">
+            <span className="s2v-cmpmini-name">{c.emoji} {t(`s2.home.cmp.${c.key}`)}</span>
+            <span className="s2v-cmpmini-bar">
+              <span className="s2v-cmpmini-fill" style={{ width: `${c.rel}%` }} />
+            </span>
+            <span className="s2v-cmpmini-pct">
+              {won != null
+                ? t('s2.home.cmp.wonmore').replace('{won}', formatKrw(won))
+                : `+${c.more}%`}
+            </span>
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -443,7 +457,7 @@ export default function Site2() {
                   />
                   <span className="s2-amount-cur">{currency}</span>
                 </div>
-                <CompareMini t={t} />
+                <CompareMini t={t} amount={amount} board={board} />
                 <button className="btn s2-primary block" onClick={() => enterFlow(true)}>
                   {t('s2.home.widget.cta')} →
                 </button>
@@ -603,7 +617,7 @@ export default function Site2() {
               />
               <span className="s2-amount-cur">{currency}</span>
             </div>
-            <CompareMini t={t} />
+            <CompareMini t={t} amount={amount} board={board} />
             {couponOn && (
               <div className="s2v-more" style={{ marginTop: 10 }}>
                 <span className="s2v-more-ic" aria-hidden="true">🎟️</span>

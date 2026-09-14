@@ -736,6 +736,7 @@ export const STRINGS = {
     en: 'For the same amount, you get about {pct}% more won on average with MoneyBox.',
   },
   's2.home.cmp.mini': { ko: '이만큼 더 받아요', en: 'You get this much more' },
+  's2.home.cmp.wonmore': { ko: '약 {won} 더', en: '≈ {won} more' },
   's2.home.cmp.mb': { ko: '머니박스', en: 'MoneyBox' },
   's2.home.cmp.mbtag': { ko: '가장 많이 받아요', en: 'You get the most' },
   's2.home.cmp.bank': { ko: '은행', en: 'Bank' },
