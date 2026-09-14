@@ -459,7 +459,7 @@ export default function Site2() {
                 </div>
                 <CompareMini t={t} amount={amount} board={board} />
                 <button className="btn s2-primary block" onClick={() => enterFlow(true)}>
-                  {t('s2.home.widget.cta')} →
+                  {t('s2.nav.book')} →
                 </button>
               </div>
             </section>
