@@ -820,6 +820,12 @@ export const STRINGS = {
     ko: '실시간 기준율(참고용) · 실제는 수령일 전광판 환율로 적용돼요.',
     en: 'Live reference rate · the actual rate is the board rate on your pickup day.',
   },
+  's2v.trend.title': { ko: '최근 환율 추이', en: 'Recent rate trend' },
+  's2v.fav.title': { ko: '지금 픽업 유리도', en: 'Pickup timing' },
+  's2v.fav.good': { ko: '지금 유리', en: 'Good time' },
+  's2v.fav.mid': { ko: '보통', en: 'Average' },
+  's2v.fav.bad': { ko: '지금 불리', en: 'Below average' },
+  's2v.fav.vsavg': { ko: '최근 평균 대비 {v}', en: '{v} vs recent avg' },
   's2v.rate.note.coupon': {
     ko: '🏆 최고가 보장 적용 — 주변 시세보다 무조건 더 좋은 환율로 드려요.',
     en: '🏆 Best Rate Guarantee applied — always better than nearby market rates.',
