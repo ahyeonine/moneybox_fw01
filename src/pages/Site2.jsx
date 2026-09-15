@@ -7,6 +7,7 @@ import { BRANCHES, getBranch, branchCurrencies, regionChips, branchMatchesRegion
 import { formatKrw } from '../lib/format.js'
 import { isValidName, isValidEmail } from '../lib/validation.js'
 import { pickupRange } from '../lib/date.js'
+import { usePolicy } from '../store/PolicyContext.jsx'
 import LanguageDropdown from '../components/LanguageDropdown.jsx'
 import AboutPage from './AboutPage.jsx'
 import LookupPage from './LookupPage.jsx'
@@ -242,6 +243,7 @@ export default function Site2() {
   const { t, lang } = useI18n()
   const { getDisplayRates } = useRates()
   const { today, createReservation } = useReservations()
+  const { maxWindowDays } = usePolicy() // 본사 설정 예약 가능 기간(수령일 최대 N일)
 
   const [view, setView] = useState('home') // home | flow | about
   const [step, setStep] = useState('region') // region | branch | amount | info | done
@@ -277,7 +279,7 @@ export default function Site2() {
   const couponOn = !!couponMember // 최고가 보장 회원 여부(수령 시 현장 우대)
   const board = getDisplayRates(currency)?.base || 0 // 현재(전광판/기준) 환율
 
-  const range = pickupRange(today, 0, 14) // 리드타임 0, 최대 2주
+  const range = pickupRange(today, 0, maxWindowDays) // 리드타임 0, 본사 설정 예약 가능 기간
   const pickBranchObj = pickedBranch ? getBranch(pickedBranch) : null
 
   // 실제 지오코딩 검색 (OpenStreetMap Nominatim, 키 불필요) — 디바운스
@@ -1000,7 +1002,9 @@ export default function Site2() {
               max={range.maxDate}
               onChange={(e) => setPickupDate(e.target.value)}
             />
-            <div className="s2v-hint">{t('s2v.info.pickuphint')}</div>
+            <div className="s2v-hint">
+              {t('s2v.info.pickuphint').replace('{days}', maxWindowDays)}
+            </div>
 
             <button className="btn s2-primary block" disabled={!infoValid} onClick={submitV2}>
               {t('s2v.info.submit')}

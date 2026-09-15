@@ -6,19 +6,22 @@ import { I18nProvider } from './i18n/I18nContext.jsx'
 import { ReservationProvider } from './store/ReservationContext.jsx'
 import { RatesProvider } from './store/RatesContext.jsx'
 import { EmailProvider } from './store/EmailContext.jsx'
+import { PolicyProvider } from './store/PolicyContext.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <HashRouter>
       <I18nProvider>
-        <RatesProvider>
-          <ReservationProvider>
-            <EmailProvider>
-              <App />
-            </EmailProvider>
-          </ReservationProvider>
-        </RatesProvider>
+        <PolicyProvider>
+          <RatesProvider>
+            <ReservationProvider>
+              <EmailProvider>
+                <App />
+              </EmailProvider>
+            </ReservationProvider>
+          </RatesProvider>
+        </PolicyProvider>
       </I18nProvider>
     </HashRouter>
   </React.StrictMode>
