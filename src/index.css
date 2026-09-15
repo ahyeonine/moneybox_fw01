@@ -6052,69 +6052,6 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: var(--travel-dark);
   white-space: nowrap;
 }
-.s2v-baserate-note {
-  margin-top: 8px;
-  font-size: 11px;
-  color: var(--text-3);
-  font-weight: 600;
-  line-height: 1.5;
-}
-/* 환율 추이 스파크라인 */
-.s2v-trend {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px dashed #cdddfb;
-}
-.s2v-trend-l {
-  display: block;
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--text-3);
-  margin-bottom: 4px;
-}
-.s2v-spark {
-  display: block;
-  width: 100%;
-  height: 46px;
-}
-/* 지금 픽업 유리도 */
-.s2v-fav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 8px;
-}
-.s2v-fav-l {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--text-2);
-}
-.s2v-fav-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 11px;
-  border-radius: 999px;
-  font-size: 12.5px;
-  font-weight: 800;
-}
-.s2v-fav-pct {
-  font-weight: 600;
-  opacity: 0.85;
-}
-.s2v-fav.good .s2v-fav-badge {
-  color: var(--travel-dark);
-  background: #e6efff;
-}
-.s2v-fav.mid .s2v-fav-badge {
-  color: var(--text-2);
-  background: #eef1f7;
-}
-.s2v-fav.bad .s2v-fav-badge {
-  color: #7c8698;
-  background: #eef1f7;
-}
 /* 최고가 보장(Best Rate Guarantee) 배너 — 프리미엄 씰 + 딥블루 */
 .s2v-guar {
   position: relative;
