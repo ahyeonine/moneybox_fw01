@@ -794,8 +794,12 @@ export const STRINGS = {
   's2.home.how.s2d': { ko: '검색하거나 가까운 지점을 추천받아 선택하세요.', en: 'Search or get the nearest branch recommended.' },
   's2.home.how.s3t': { ko: '방문 수령', en: 'Pick up' },
   's2.home.how.s3d': { ko: '지점에서 여권 확인 후 현금으로 받아가세요.', en: 'Show your passport and collect your cash.' },
-  's2.home.rates.title': { ko: '오늘의 환율', en: "Today's rates" },
+  's2.home.rates.title': { ko: '현재 환율', en: 'Current rates' },
   's2.home.rates.unit': { ko: '원 (1단위)', en: 'KRW (per unit)' },
+  's2v.rate.disclaimer': {
+    ko: '※ 현재 환율은 참고용 실시간 시세예요. 지점에서 우대율이 적용된 실제 환율과 다를 수 있어요.',
+    en: '* The current rate is a live reference only. The actual rate at the branch (with your preferential rate applied) may differ.',
+  },
   's2.home.final.t': { ko: '지금 바로 예약해 보세요', en: 'Reserve in under a minute' },
   's2.home.final.d': {
     ko: '회원가입 없이 이름·이메일만으로 예약할 수 있어요.',
