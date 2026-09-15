@@ -668,6 +668,7 @@ export default function Site2() {
                   </button>
                 ))}
               </div>
+              <div className="s2-lp-rates-note">{t('s2v.rate.disclaimer')}</div>
             </section>
 
             {/* 최종 CTA */}
@@ -933,6 +934,7 @@ export default function Site2() {
                     </span>
                   </div>
                 )}
+                <div className="s2v-baserate-note">{t('s2v.rate.disclaimer')}</div>
               </div>
             )}
 
@@ -1003,6 +1005,7 @@ export default function Site2() {
                 </b>
               </div>
             </div>
+            <div className="s2v-sum-note">{t('s2v.rate.disclaimer')}</div>
 
             {!couponOn && <GuaranteeCTA t={t} onClick={() => setShowSignup(true)} />}
 
@@ -1075,6 +1078,7 @@ export default function Site2() {
                 </b>
               </div>
             </div>
+            <div className="s2v-sum-note">{t('s2v.rate.disclaimer')}</div>
             <div className="s2v-done-note">{t('s2v.done.note')}</div>
             <button className="btn s2-ghost block" onClick={restartV2}>
               {t('s2v.done.again')}
