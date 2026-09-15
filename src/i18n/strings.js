@@ -611,46 +611,7 @@ export const STRINGS = {
     en: 'One-minute booking, no payment or sign-up. Pick up at 40+ spots incl. Myeongdong, Hongdae, Gangnam, airports.',
   },
 
-  // 신청 페이지 내 환율보장 쿠폰(배너) — 누르면 회원가입 (예약 자체는 가입 불필요)
-  'coupon.title': { ko: '환율 최저가 보장 쿠폰', en: 'Best-rate guarantee coupon' },
-  'coupon.body': {
-    ko: '회원가입하면 예약보다 나빠지지 않는 환율을 보장해드려요. 방문일에 더 좋아지면 그날 환율로.',
-    en: 'Sign up and we guarantee a rate never worse than when you booked — the better one if it improves by your visit.',
-  },
-  'coupon.cta': { ko: '회원가입하고 받기', en: 'Sign up to claim' },
-  'coupon.claimed': { ko: '쿠폰 적용됨 · 환율 최저가 보장', en: 'Coupon applied · best-rate guaranteed' },
-  'coupon.optional': {
-    ko: '신청에는 회원가입이 필요 없어요',
-    en: 'Sign-up is not required to book',
-  },
-  // 회원가입 모달 (쿠폰 받기)
-  'signup.badge': { ko: '환율 최저가 보장 쿠폰', en: 'Best-rate guarantee coupon' },
-  'signup.title': { ko: '회원가입하고 쿠폰 받기', en: 'Sign up and claim your coupon' },
-  'signup.name': { ko: '이름', en: 'Name' },
-  'signup.emailhint': {
-    ko: '수신 가능한 이메일인지 인증번호로 확인해요.',
-    en: 'We verify your email is reachable with a code.',
-  },
-  'signup.d': {
-    ko: '가입하면 베스트레이트 보장 쿠폰이 적용돼요. 예약만 하실 거면 가입 없이 그대로 진행하셔도 됩니다.',
-    en: 'Signing up applies the best-rate guarantee coupon. Just booking? You can continue without signing up.',
-  },
-  'signup.submit': { ko: '회원가입하고 쿠폰 받기', en: 'Sign up & claim' },
-  'signup.skip': { ko: '가입 없이 예약 계속', en: 'Continue without signing up' },
-  'signup.done.t': { ko: '가입 완료! 쿠폰이 적용됐어요', en: 'Signed up! Your coupon is applied' },
-  'signup.done.d': {
-    ko: '이제 예약을 이어서 진행하세요. 베스트레이트 보장이 함께 적용됩니다.',
-    en: 'Continue your booking — the best-rate guarantee now applies.',
-  },
-  'signup.done.skip': {
-    ko: '회원 정보가 저장되어, 다음부터 예약자 정보(이름·이메일) 입력 단계를 건너뜁니다.',
-    en: 'Your member details are saved — the applicant info step (name & email) is now skipped.',
-  },
-  'signup.done.cta': { ko: '예약 계속하기', en: 'Continue booking' },
-  'book.member.note': {
-    ko: '회원 정보로 예약 중 — 예약자 정보 입력을 건너뜁니다.',
-    en: 'Booking as a member — the applicant info step is skipped.',
-  },
+  // 회원가입 모달
   'signup.note': { ko: '※ 프로토타입 — 실제 가입 없이 시뮬레이션됩니다', en: '* Prototype — simulated, no real account created' },
 
   // ── 외국인 사이트 2안 (WOWPASS 참고 · 금액→위치검색→지점추천 플로우) ──
@@ -819,10 +780,9 @@ export const STRINGS = {
     en: 'No rate is locked at booking. The branch board rate on your pickup day applies.',
   },
   's2v.baserate.label': { ko: '현재 환율', en: 'Current rate' },
-  's2v.baserate.guar': { ko: '최고가 보장 적용 시', en: 'With Best Rate Guarantee' },
   's2v.rate.note.coupon': {
-    ko: '🏆 최고가 보장 적용 — 주변 시세보다 무조건 더 좋은 환율로 드려요.',
-    en: '🏆 Best Rate Guarantee applied — always better than nearby market rates.',
+    ko: '🏆 최고가 보장 회원 — 수령 시 현장에서 상황에 맞춰 최대한 우대해 드려요.',
+    en: '🏆 Best Rate member — at pickup the branch gives you the best rate they can.',
   },
   's2v.more.line': {
     ko: '은행·키오스크·공항보다 평균 약 {pct}% 더 많이 받아요',
@@ -830,17 +790,17 @@ export const STRINGS = {
   },
   's2v.coupon.badge': { ko: '최고가 보장', en: 'Best Rate Guarantee' },
   's2v.coupon.applied': {
-    ko: '최고가 보장 적용됨 — 주변 시세보다 무조건 우대',
-    en: 'Best Rate Guarantee active — always beat nearby rates',
+    ko: '최고가 보장 회원 — 수령 시 현장에서 우대',
+    en: 'Best Rate member — preferential rate at pickup',
   },
-  's2v.coupon.cta.t': { ko: '최고가 보장 받기', en: 'Get the Best Rate Guarantee' },
+  's2v.coupon.cta.t': { ko: '최고가 보장 받기', en: 'Get the Best Rate perk' },
   's2v.coupon.cta.d': {
-    ko: '회원가입하면 주변 시세보다 무조건 더 좋은 환율을 보장해 드려요.',
-    en: 'Sign up and we guarantee a better rate than any nearby exchange.',
+    ko: '회원가입하면 수령 시 현장에서 상황에 맞춰 최대한 우대해 드려요.',
+    en: 'Sign up and the branch gives you the best rate they can at pickup.',
   },
   's2v.coupon.fine': {
-    ko: '주변 시세 기준 · 타지역 제외',
-    en: 'Based on nearby market rates · other regions excluded',
+    ko: '우대폭은 수령 시 현장 상황에 따라 적용돼요',
+    en: 'The preferential amount depends on conditions at pickup',
   },
   's2v.info.title': { ko: '예약자 정보', en: 'Your details' },
   's2v.info.namehint': {
@@ -863,8 +823,8 @@ export const STRINGS = {
     en: 'Board rate on pickup day',
   },
   's2v.sum.rate.coupon': {
-    ko: '최고가 보장 (주변 시세 우대)',
-    en: 'Best Rate Guarantee',
+    ko: '전광판 환율 (최고가 보장 회원 · 현장 우대)',
+    en: 'Board rate (Best Rate member · preferential at pickup)',
   },
   's2v.done.title': { ko: '예약이 완료됐어요!', en: 'Reservation confirmed!' },
   's2v.done.note': {
@@ -873,10 +833,10 @@ export const STRINGS = {
   },
   's2v.done.again': { ko: '새 예약 하기', en: 'New reservation' },
   's2v.signup.badge': { ko: '최고가 보장', en: 'Best Rate Guarantee' },
-  's2v.signup.title': { ko: '최고가 보장 받기', en: 'Get the Best Rate Guarantee' },
+  's2v.signup.title': { ko: '최고가 보장 받기', en: 'Get the Best Rate perk' },
   's2v.signup.d': {
-    ko: '이름·이메일·여권 스캔으로 가입하면, 주변 시세보다 무조건 더 좋은 환율을 보장해 드려요. 예약에 자동 적용됩니다.',
-    en: 'Sign up with your name, email and a passport scan — we guarantee a rate better than any nearby exchange, auto-applied to your booking.',
+    ko: '이름·이메일·여권 스캔으로 가입하면 최고가 보장 회원이 돼요. 수령 시 현장에서 상황에 맞춰 최대한 우대해 드립니다.',
+    en: 'Sign up with your name, email and a passport scan to become a Best Rate member. At pickup, the branch gives you the best rate they can.',
   },
   's2v.signup.passport': { ko: '여권 스캔 (자동입력)', en: 'Passport scan (auto-fill)' },
   's2v.signup.passport.btn': { ko: '여권 촬영 / 업로드', en: 'Scan or upload passport' },
