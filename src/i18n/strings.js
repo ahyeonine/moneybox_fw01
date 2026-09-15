@@ -809,8 +809,8 @@ export const STRINGS = {
   },
   's2v.info.pickup': { ko: '수령 예정일', en: 'Pickup date' },
   's2v.info.pickuphint': {
-    ko: '오늘부터 최대 2주 이내에서 선택하세요. (준비일수 제한 없음)',
-    en: 'Choose any day within 2 weeks from today. (No lead time)',
+    ko: '오늘부터 최대 {days}일 이내에서 선택하세요.',
+    en: 'Choose any day within {days} days from today.',
   },
   's2v.info.submit': { ko: '예약하기', en: 'Reserve' },
   's2v.sum.branch': { ko: '수령 지점', en: 'Branch' },

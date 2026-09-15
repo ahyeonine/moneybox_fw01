@@ -6,6 +6,7 @@ import { getBranch, branchCurrencies, BRANCHES } from '../data/branches.js'
 import { CURRENCY_META, toKrw } from '../data/rates.js'
 import { useRates } from '../store/RatesContext.jsx'
 import { useEmail } from '../store/EmailContext.jsx'
+import { usePolicy } from '../store/PolicyContext.jsx'
 import { pickupRange } from '../lib/date.js'
 import { formatKrw, formatForeign, formatDate, formatNumber } from '../lib/format.js'
 import { StatusBadge } from '../components/Badges.jsx'
@@ -302,6 +303,7 @@ function Detail({ rec, onBack, onCancel, onConfirmVisit, onEdit }) {
 function ChangeForm({ rec, today, onSave, onCancel }) {
   const { t, lang } = useI18n()
   const { getRate } = useRates() // 변경 시에도 실시간 환율로 재계산
+  const { maxWindowDays } = usePolicy() // 본사 설정 예약 가능 기간
   const [branchId, setBranchId] = useState(rec.branchId)
   const [currency, setCurrency] = useState(rec.currency)
   const [amount, setAmount] = useState(String(rec.foreignAmount))
@@ -312,7 +314,7 @@ function ChangeForm({ rec, today, onSave, onCancel }) {
   const effectiveCurrency = currencies.includes(currency) ? currency : currencies[0]
   const amountValid = Number(amount) > 0
   const branch = getBranch(branchId)
-  const range = pickupRange(today, branch.leadTimeDays, 14)
+  const range = pickupRange(today, branch.leadTimeDays, maxWindowDays)
   const rate = getRate(effectiveCurrency)
   const krw = amountValid ? toKrw(Number(amount), rate) : 0
 
