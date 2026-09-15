@@ -28,7 +28,7 @@ export default function AboutPage() {
     <div className="about about-k">
       <DevNote
         items={[
-          '회사 소개 — 당근 about 페이지풍으로 구성한 임시 콘텐츠(스토리텔링·큰 숫자). 회사소개서 상세는 추후 반영',
+          '회사 소개 — 스토리텔링·핵심 지표 중심의 임시 콘텐츠. 상세 회사소개는 추후 반영',
           '자세히: 01_IA.md',
         ]}
       />
