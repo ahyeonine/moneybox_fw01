@@ -6616,6 +6616,16 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   font-weight: 600;
   color: #b45309;
 }
+.scan-match .sm-name {
+  display: block;
+  margin-top: 2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+.scan-skip-btn {
+  margin-top: 10px;
+}
 @media (max-width: 560px) {
   .scan-match {
     grid-template-columns: 1fr auto;
