@@ -5204,6 +5204,33 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   background: var(--travel);
   color: #fff;
 }
+/* 환전 방향 세그먼트 토글 (외화→원화 / 원화→외화) */
+.s2-dir-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  background: #f1f5fc;
+  border: 1px solid #e0e9fb;
+  border-radius: 14px;
+  margin-bottom: 4px;
+}
+.s2-dir-btn {
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  padding: 12px 10px;
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, box-shadow 0.12s;
+}
+.s2-dir-btn.on {
+  background: var(--travel);
+  color: #fff;
+  box-shadow: 0 6px 16px -6px rgba(31, 107, 255, 0.6);
+}
 /* 금액 입력 */
 .s2-amount-row {
   display: flex;
@@ -5472,6 +5499,60 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   margin-top: 5px;
   font-size: 13px;
   color: var(--text-3);
+}
+/* 지점 상세 토글 + 패널 (영업시간·전화·지도) */
+.s2-branch-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--travel);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.s2-branch-more-caret {
+  font-size: 11px;
+}
+.s2-branch-detail {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid #e6ebf4;
+  border-radius: 12px;
+  background: #f8fafe;
+}
+.s2-branch-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  padding: 4px 0;
+  color: var(--text-2);
+}
+.s2-branch-detail-row .ic {
+  color: var(--travel);
+  width: 18px;
+  height: 18px;
+}
+.s2-branch-detail-row span {
+  color: var(--text-3);
+  font-weight: 600;
+}
+.s2-branch-detail-row b {
+  margin-left: auto;
+  color: var(--text);
+  font-weight: 800;
+}
+.s2-branch-detail-row b a {
+  color: var(--travel-dark);
+  text-decoration: none;
+}
+.s2-branch-detail .s2-map {
+  margin-top: 10px;
+  height: 180px;
 }
 .s2-branch-foot {
   display: flex;
@@ -5930,42 +6011,96 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: var(--text-3);
   font-weight: 600;
 }
-/* 쿠폰 배너/버튼 */
-.s2v-coupon {
+/* 최고가 보장(Best Rate Guarantee) 배너 — 프리미엄 씰 + 딥블루 */
+.s2v-guar {
+  position: relative;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  gap: 14px;
   width: 100%;
   text-align: left;
   margin-top: 14px;
-  border: 1.5px dashed var(--travel);
-  background: linear-gradient(120deg, var(--travel-soft) 0%, #f4f8ff 100%);
-  border-radius: 12px;
-  padding: 14px 16px;
+  padding: 16px 18px;
+  border: none;
+  border-radius: 16px;
+  color: #fff;
   cursor: pointer;
+  background:
+    radial-gradient(120% 180% at 100% 0%, rgba(56, 189, 248, 0.5) 0%, rgba(56, 189, 248, 0) 55%),
+    linear-gradient(135deg, #0b1f4d 0%, var(--travel-dark) 55%, var(--travel) 100%);
+  box-shadow: 0 14px 30px -12px rgba(12, 40, 100, 0.5);
+  transition: box-shadow 0.15s, transform 0.1s;
 }
-.s2v-coupon:hover {
-  background: var(--travel-soft);
+.s2v-guar:hover {
+  box-shadow: 0 18px 38px -12px rgba(12, 40, 100, 0.6);
+  transform: translateY(-1px);
 }
-.s2v-coupon.on {
-  cursor: default;
-  border-style: solid;
-  border-color: #16a34a;
-  background: #ecfdf3;
-  color: #0a7d3c;
-  font-weight: 800;
-  font-size: 14px;
-  flex-direction: row;
+.s2v-guar-seal {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
 }
-.s2v-coupon-t {
+.s2v-guar-seal .ic {
+  width: 25px;
+  height: 25px;
+  color: #fff;
+}
+.s2v-guar-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+.s2v-guar-t {
+  font-size: 15.5px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+.s2v-guar-d {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.9);
+}
+.s2v-guar-fine {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.62);
+  margin-top: 1px;
+}
+.s2v-guar-arrow {
+  flex-shrink: 0;
+  font-size: 18px;
   font-weight: 800;
-  font-size: 14.5px;
+  opacity: 0.85;
+}
+/* 적용됨 — 라이트 확정 상태(블루) */
+.s2v-guar.on {
+  cursor: default;
+  color: var(--text);
+  background: linear-gradient(180deg, #f2f7ff 0%, #eaf1ff 100%);
+  border: 1px solid #cdddfb;
+  box-shadow: none;
+}
+.s2v-guar.on:hover {
+  transform: none;
+  box-shadow: none;
+}
+.s2v-guar.on .s2v-guar-seal {
+  background: var(--travel);
+  border-color: var(--travel);
+}
+.s2v-guar.on .s2v-guar-t {
   color: var(--travel-dark);
 }
-.s2v-coupon-d {
-  font-size: 12.5px;
-  color: var(--text-2);
+.s2v-guar.on .s2v-guar-fine {
+  color: var(--text-3);
 }
 /* 예약 요약 */
 .s2v-summary {

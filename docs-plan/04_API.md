@@ -13,8 +13,8 @@
 
 ### 2. 환율 피드 (필수)
 - 실시간 환율 소스(내부 딜링/외부 환율 API) → `Rate.baseRate` 갱신(현재 2분 자동변동은 목).
-- **전광판(외국인 웹사이트 매입) 환율** 제공. 예약은 환율을 고정하지 않고(`rateMode=BOARD`), 수령일 전광판 환율로 POS 정산. 쿠폰 보유 시 `WEB_COUPON_BONUS`만큼 우대.
-- CEMS "외국인 웹사이트 매입환율 직접입력"이 실 환율 관리와 연동되어야 함.
+- **전광판(기준) 환율** 제공(매입·매각 양방향). 예약은 환율을 고정하지 않고(`rateMode=BOARD`), 수령일 전광판 환율로 POS 정산. 쿠폰 보유 시 `WEB_COUPON_BONUS`만큼 우대.
+- 전광판 환율은 지점의 기존 전광판 시스템에서 공급(프로토타입은 목 자동변동). CEMS 내 별도 환율관리 화면은 없음.
 
 ### 3. 재고(시재) 시스템 (필수)
 - 지점×통화별 가용시재 관리. `availability` 조회, **방문예정 확인 시 차감(consume)**, 자동취소 시 조건부 복구(restore).
@@ -59,7 +59,7 @@
 - `GET /geocode?q=&countrycodes=kr` — 장소 검색 → 좌표 *(실서비스: 유료 지오코딩)*
 
 ### 예약 (Customer · 무인증)
-- `POST /reservations` — 신규 예약(무결제). `transactionType='BUY'`, `rateMode='BOARD'`, `coupon`. 서버가 예약번호 발급(환율 미고정).
+- `POST /reservations` — 신규 예약(무결제). `transactionType`(`BUY` 외화→원화 / `SELL` 원화→외화), `rateMode='BOARD'`, `coupon`. 서버가 예약번호 발급(환율 미고정).
   - 검증코드: `BELOW_MIN | ABOVE_MAX | INVALID_FORMAT | LEAD_TIME | OUT_OF_WINDOW | SOLD_OUT`. 수령일 = 리드타임 이후 ~ 14일.
 - `GET /reservations/lookup?reservationNo&email` — 조회(번호+이메일)
 - `PATCH /reservations/{no}` — 변경(BOOKED만)
