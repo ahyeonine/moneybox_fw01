@@ -128,14 +128,6 @@ function distanceKm(a, b) {
 
 const ESIM_URL = 'https://imoneybox.cafe24.com/shop3/'
 
-// 여권 OCR 시뮬레이션용 신원 풀 — 업로드 시 하나를 "인식 결과"로 자동 채운다(데모).
-const MOCK_PASSPORTS = [
-  { name: 'HONG GILDONG', birth: '1990-03-15' },
-  { name: 'JAMES PARK', birth: '1988-11-02' },
-  { name: 'EMILY WATSON', birth: '1993-06-24' },
-  { name: 'KENJI YAMADA', birth: '1991-09-08' },
-]
-
 // 컴팩트 환율 비교 — 은행·키오스크·공항보다 "약 얼마 더 받는지"(원화).
 // 금액 입력 시 원화 차액, 미입력 시 %로 폴백. 히어로 위젯·신청화면에서 강조 노출.
 function CompareMini({ t, amount, board, direction = 'BUY' }) {
@@ -274,14 +266,12 @@ export default function Site2() {
   const [pickupDate, setPickupDate] = useState('')
   const [result, setResult] = useState(null)
 
-  // 쿠폰(회원가입 지급) — 보유 시 전광판보다 우대. couponMember != null = 쿠폰 보유
+  // 최고가 보장 회원가입 — couponMember != null = 회원(수령 시 현장 우대)
   const [couponMember, setCouponMember] = useState(null)
   const [showSignup, setShowSignup] = useState(false)
   const [suName, setSuName] = useState('')
   const [suEmail, setSuEmail] = useState('')
-  const [suPassport, setSuPassport] = useState('') // 여권 스캔 파일명(프로토타입)
-  const [suBirth, setSuBirth] = useState('') // 여권 OCR 생년월일
-  const [suOcr, setSuOcr] = useState('idle') // idle | reading | done
+  const [suPw, setSuPw] = useState('') // 비밀번호
   const [suErr, setSuErr] = useState('')
 
   const couponOn = !!couponMember // 최고가 보장 회원 여부(수령 시 현장 우대)
@@ -389,31 +379,15 @@ export default function Site2() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // 여권 스캔 → OCR 시뮬레이션: 파일 선택 시 잠깐 "인식 중" 후 영문 이름·생년월일 자동 입력.
-  function onPassportScan(file) {
-    if (!file) return
-    setSuPassport(file.name)
-    setSuOcr('reading')
-    setSuErr('')
-    const id = MOCK_PASSPORTS[Math.floor(Math.random() * MOCK_PASSPORTS.length)]
-    setTimeout(() => {
-      setSuName(id.name)
-      setSuBirth(id.birth)
-      setSuOcr('done')
-    }, 800)
-  }
-
-  // 회원가입(쿠폰 지급) — 여권 OCR로 채운 이름·생년월일 + 이메일. 지급 즉시 우대 쿠폰 보유.
+  // 회원가입 — 이름·이메일·비밀번호. 가입 즉시 최고가 보장 회원(수령 시 현장 우대).
   function claimCoupon() {
-    if (!isValidName(suName) || !isValidEmail(suEmail) || !suPassport || suOcr !== 'done') {
+    if (!isValidName(suName) || !isValidEmail(suEmail) || suPw.length < 6) {
       setSuErr(t('s2v.signup.err'))
       return
     }
     setCouponMember({
       name: suName.trim(),
       email: suEmail.trim(),
-      birth: suBirth,
-      passport: suPassport,
     })
     setCustName((v) => v || suName.trim())
     setCustEmail((v) => v || suEmail.trim())
@@ -441,7 +415,7 @@ export default function Site2() {
       foreignAmount: Number(amount),
       krwAmount: null,
       customerName: custName.trim().toUpperCase(),
-      birthDate: couponMember?.birth || null, // 여권 OCR 생년월일(회원)
+      birthDate: null, // 웹 예약은 생년월일 미수집(POS 신분증 대조 시 확인)
       email: custEmail.trim(),
       pickupDate,
       pickupTime: '10:00',
@@ -1086,48 +1060,13 @@ export default function Site2() {
             <h3 className="signup-title">{t('s2v.signup.title')}</h3>
             <p className="signup-d">{t('s2v.signup.d')}</p>
 
-            {/* 여권 스캔 → OCR 자동입력 */}
-            <label className="signup-label">{t('s2v.signup.passport')}</label>
-            <label className={`signup-passport${suPassport ? ' done' : ''}`}>
-              <input
-                type="file"
-                accept="image/*"
-                capture="environment"
-                hidden
-                onChange={(e) => onPassportScan(e.target.files?.[0])}
-              />
-              <span className="signup-passport-ic" aria-hidden="true">
-                {suOcr === 'reading' ? '⏳' : suPassport ? '✅' : '📷'}
-              </span>
-              <span className="signup-passport-txt">
-                {suOcr === 'reading'
-                  ? t('s2v.signup.passport.reading')
-                  : suPassport
-                    ? t('s2v.signup.passport.done').replace('{file}', suPassport)
-                    : t('s2v.signup.passport.btn')}
-              </span>
-            </label>
-            <div className="signup-passport-hint">{t('s2v.signup.passport.hint')}</div>
-
-            <label className="signup-label">
-              {t('common.name')}
-              {suOcr === 'done' && <span className="signup-ocr-badge">✔ {t('s2v.signup.ocr')}</span>}
-            </label>
+            <label className="signup-label">{t('common.name')}</label>
             <input
               className="signup-input"
               type="text"
               value={suName}
-              readOnly={suOcr === 'done'}
               onChange={(e) => setSuName(e.target.value)}
-              placeholder={t('s2v.signup.name.ph')}
-            />
-            <label className="signup-label">{t('s2v.signup.birth')}</label>
-            <input
-              className="signup-input"
-              type="text"
-              value={suBirth}
-              readOnly
-              placeholder="YYYY-MM-DD"
+              placeholder="HONG GILDONG"
             />
 
             <label className="signup-label">{t('common.email')}</label>
@@ -1137,6 +1076,15 @@ export default function Site2() {
               value={suEmail}
               onChange={(e) => setSuEmail(e.target.value)}
               placeholder="you@example.com"
+            />
+
+            <label className="signup-label">{t('s2v.signup.pw')}</label>
+            <input
+              className="signup-input"
+              type="password"
+              value={suPw}
+              onChange={(e) => setSuPw(e.target.value)}
+              placeholder={t('s2v.signup.pw.ph')}
             />
             {suErr && <div className="err-text">{suErr}</div>}
             <button className="btn primary block" onClick={claimCoupon}>
