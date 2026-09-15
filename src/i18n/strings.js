@@ -814,6 +814,12 @@ export const STRINGS = {
     ko: '환율은 예약 시 확정하지 않아요. 수령일 지점 전광판 환율이 적용됩니다.',
     en: 'No rate is locked at booking. The branch board rate on your pickup day applies.',
   },
+  's2v.baserate.label': { ko: '오늘 전광판 기준율', en: "Today's board rate" },
+  's2v.baserate.guar': { ko: '최고가 보장 적용 시', en: 'With Best Rate Guarantee' },
+  's2v.baserate.note': {
+    ko: '실시간 기준율(참고용) · 실제는 수령일 전광판 환율로 적용돼요.',
+    en: 'Live reference rate · the actual rate is the board rate on your pickup day.',
+  },
   's2v.rate.note.coupon': {
     ko: '🏆 최고가 보장 적용 — 주변 시세보다 무조건 더 좋은 환율로 드려요.',
     en: '🏆 Best Rate Guarantee applied — always better than nearby market rates.',
