@@ -25,6 +25,35 @@ const ICON_PATHS = {
   pin: 'M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Zm0-8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
   trophy: 'M7 4h10v3a5 5 0 0 1-10 0V4Zm0 1H4v1a3 3 0 0 0 3 3m10-4h3v1a3 3 0 0 1-3 3m-5 4v3m-3 3h6',
   chart: 'M4 20V10m5 10V4m5 16v-7m5 7V8',
+  clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 7.5V12l3.5 2',
+  phone: 'M15.5 20.5a12.5 12.5 0 0 1-12-12A2 2 0 0 1 5.4 6.4l2 .3a2 2 0 0 1 1.7 1.6l.3 1.5a2 2 0 0 1-.6 1.9l-.9.8a10 10 0 0 0 4 4l.8-.9a2 2 0 0 1 1.9-.6l1.5.3a2 2 0 0 1 1.6 1.7l.3 2a2 2 0 0 1-2.1 2.2Z',
+  check: 'M5 12.5 10 17.5 19.5 7',
+}
+
+// 최고가 보장(Best Rate Guarantee) 배너 — 회원가입 시 주변 시세보다 무조건 우대.
+function GuaranteeCTA({ t, onClick }) {
+  return (
+    <button type="button" className="s2v-guar" onClick={onClick}>
+      <span className="s2v-guar-seal"><Ic name="shield" /></span>
+      <span className="s2v-guar-body">
+        <span className="s2v-guar-t">{t('s2v.coupon.cta.t')}</span>
+        <span className="s2v-guar-d">{t('s2v.coupon.cta.d')}</span>
+        <span className="s2v-guar-fine">{t('s2v.coupon.fine')}</span>
+      </span>
+      <span className="s2v-guar-arrow" aria-hidden="true">→</span>
+    </button>
+  )
+}
+function GuaranteeApplied({ t }) {
+  return (
+    <div className="s2v-guar on">
+      <span className="s2v-guar-seal on"><Ic name="check" /></span>
+      <span className="s2v-guar-body">
+        <span className="s2v-guar-t">{t('s2v.coupon.applied')}</span>
+        <span className="s2v-guar-fine">{t('s2v.coupon.fine')}</span>
+      </span>
+    </div>
+  )
 }
 function Ic({ name, className = '' }) {
   const d = ICON_PATHS[name]
@@ -110,15 +139,17 @@ const MOCK_PASSPORTS = [
 
 // 컴팩트 환율 비교 — 은행·키오스크·공항보다 "약 얼마 더 받는지"(원화).
 // 금액 입력 시 원화 차액, 미입력 시 %로 폴백. 히어로 위젯·신청화면에서 강조 노출.
-function CompareMini({ t, amount, board }) {
+function CompareMini({ t, amount, board, direction = 'BUY' }) {
   const amt = Number(amount) || 0
+  // 원화 차액 표기는 "외화→원화(BUY, 원화 수령)"일 때만. 원화→외화는 % 표기.
+  const showWon = direction === 'BUY'
   return (
     <div className="s2v-cmpmini">
       <div className="s2v-cmpmini-h">
         <Ic name="chart" /> {t('s2.home.cmp.mini')}
       </div>
       {CHANNEL_BARS.map((c) => {
-        const won = amt > 0 && board > 0 ? Math.round(amt * board * c.less) : null
+        const won = showWon && amt > 0 && board > 0 ? Math.round(amt * board * c.less) : null
         return (
           <div key={c.key} className="s2v-cmpmini-row">
             <span className="s2v-cmpmini-name">
@@ -225,6 +256,7 @@ export default function Site2() {
   const [step, setStep] = useState('region') // region | branch | amount | info | done
   const howRef = useRef(null)
   const [region, setRegion] = useState('') // 선택 지역(ko)
+  const [direction, setDirection] = useState('BUY') // BUY(외화→원화·매입) | SELL(원화→외화·매각)
   const [currency, setCurrency] = useState('USD')
   const [amount, setAmount] = useState('')
 
@@ -234,6 +266,7 @@ export default function Site2() {
   const [searching, setSearching] = useState(false)
   const [geoStatus, setGeoStatus] = useState('') // '' | 'locating' | 'error'
   const [loc, setLoc] = useState(null) // { name, lat, lng }
+  const [detailBranch, setDetailBranch] = useState('') // 상세(영업시간·전화·지도) 펼친 지점 id
 
   // 예약자 정보 + 수령일 (환율 고정 없음)
   const [pickedBranch, setPickedBranch] = useState('')
@@ -402,7 +435,7 @@ export default function Site2() {
   function submitV2() {
     if (!infoValid || !pickedBranch) return
     const rec = createReservation({
-      transactionType: 'BUY',
+      transactionType: direction, // BUY(외화→원화) | SELL(원화→외화)
       branchId: pickedBranch,
       currency,
       rate: null, // 환율 고정 없음 → 수령일 전광판 환율 적용
@@ -425,6 +458,7 @@ export default function Site2() {
     setResult(null)
     setPickedBranch('')
     setRegion('')
+    setDirection('BUY')
     setLoc(null)
     setCustName(couponMember?.name || '')
     setCustEmail(couponMember?.email || '')
@@ -783,6 +817,39 @@ export default function Site2() {
                     {loc && i === 0 && <span className="s2-branch-badge">{t('s2.br.best')}</span>}
                   </div>
                   <div className="s2-branch-addr">{b.address[lang] || b.address.ko}</div>
+
+                  {/* 지점 상세 토글 (영업시간·전화·지도) */}
+                  <button
+                    type="button"
+                    className="s2-branch-more"
+                    aria-expanded={detailBranch === b.id}
+                    onClick={() => setDetailBranch((cur) => (cur === b.id ? '' : b.id))}
+                  >
+                    {detailBranch === b.id ? t('s2.br.detail.hide') : t('s2.br.detail')}
+                    <span className="s2-branch-more-caret" aria-hidden="true">
+                      {detailBranch === b.id ? '▴' : '▾'}
+                    </span>
+                  </button>
+                  {detailBranch === b.id && (
+                    <div className="s2-branch-detail">
+                      <div className="s2-branch-detail-row">
+                        <Ic name="clock" />
+                        <span>{t('s2.br.hours')}</span>
+                        <b>{b.hours.open} – {b.hours.close}</b>
+                      </div>
+                      <div className="s2-branch-detail-row">
+                        <Ic name="phone" />
+                        <span>{t('s2.br.phone')}</span>
+                        <b><a href={`tel:${b.phone}`}>{b.phone}</a></b>
+                      </div>
+                      <Site2Map
+                        center={{ lat: b.lat, lng: b.lng, label: b.name[lang] || b.name.ko }}
+                        points={[]}
+                      />
+                      <div className="s2-map-attr">{t('s2.mapattr')}</div>
+                    </div>
+                  )}
+
                   <div className="s2-branch-foot">
                     <span className="s2-branch-km">
                       {km == null
@@ -816,6 +883,25 @@ export default function Site2() {
               </div>
             </div>
 
+            {/* 환전 방향 — 외화→원화(매입) / 원화→외화(매각) */}
+            <div className="s2-field-label">{t('s2.dir.label')}</div>
+            <div className="s2-dir-toggle" role="group" aria-label={t('s2.dir.label')}>
+              <button
+                type="button"
+                className={`s2-dir-btn${direction === 'BUY' ? ' on' : ''}`}
+                onClick={() => setDirection('BUY')}
+              >
+                {t('s2.dir.buy')}
+              </button>
+              <button
+                type="button"
+                className={`s2-dir-btn${direction === 'SELL' ? ' on' : ''}`}
+                onClick={() => setDirection('SELL')}
+              >
+                {t('s2.dir.sell')}
+              </button>
+            </div>
+
             <div className="s2-field-label">{t('s2.amount.cur')}</div>
             <div className="s2-cur-chips">
               {branchCurrencies(pickedBranch).map((c) => (
@@ -843,19 +929,19 @@ export default function Site2() {
               />
               <span className="s2-amount-cur">{currency}</span>
             </div>
-            <CompareMini t={t} amount={amount} board={board} />
+            <div className="s2v-hint">
+              {direction === 'BUY' ? t('s2.dir.buy.hint') : t('s2.dir.sell.hint')}
+            </div>
+            <CompareMini t={t} amount={amount} board={board} direction={direction} />
             <div className="s2v-rate-note">
               {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}
             </div>
 
-            {/* 쿠폰(회원가입) 배너 — 전광판보다 좋은 환율 */}
+            {/* 최고가 보장 배너 — 회원가입 시 주변 시세보다 무조건 우대 */}
             {couponOn ? (
-              <div className="s2v-coupon on">🎟️ {t('s2v.coupon.applied')}</div>
+              <GuaranteeApplied t={t} />
             ) : (
-              <button type="button" className="s2v-coupon" onClick={() => setShowSignup(true)}>
-                <span className="s2v-coupon-t">🎟️ {t('s2v.coupon.cta.t')}</span>
-                <span className="s2v-coupon-d">{t('s2v.coupon.cta.d')}</span>
-              </button>
+              <GuaranteeCTA t={t} onClick={() => setShowSignup(true)} />
             )}
 
             <button
@@ -883,6 +969,10 @@ export default function Site2() {
                 <b>{pickBranchObj ? pickBranchObj.name[lang] || pickBranchObj.name.ko : '-'}</b>
               </div>
               <div className="s2v-sum-row">
+                <span>{t('s2v.sum.direction')}</span>
+                <b>{direction === 'BUY' ? t('s2.dir.buy') : t('s2.dir.sell')}</b>
+              </div>
+              <div className="s2v-sum-row">
                 <span>{t('s2v.sum.amount')}</span>
                 <b>{CURRENCY_META[currency]?.flag} {formatKrw(Number(amount)).replace('₩', '')} {currency}</b>
               </div>
@@ -894,12 +984,7 @@ export default function Site2() {
               </div>
             </div>
 
-            {!couponOn && (
-              <button type="button" className="s2v-coupon" onClick={() => setShowSignup(true)}>
-                <span className="s2v-coupon-t">🎟️ {t('s2v.coupon.cta.t')}</span>
-                <span className="s2v-coupon-d">{t('s2v.coupon.cta.d')}</span>
-              </button>
-            )}
+            {!couponOn && <GuaranteeCTA t={t} onClick={() => setShowSignup(true)} />}
 
             <div className="s2-field-label">{t('common.name')}</div>
             <input
@@ -952,6 +1037,10 @@ export default function Site2() {
                 <b>{pickBranchObj ? pickBranchObj.name[lang] || pickBranchObj.name.ko : '-'}</b>
               </div>
               <div className="s2v-sum-row">
+                <span>{t('s2v.sum.direction')}</span>
+                <b>{result.transactionType === 'SELL' ? t('s2.dir.sell') : t('s2.dir.buy')}</b>
+              </div>
+              <div className="s2v-sum-row">
                 <span>{t('s2v.sum.amount')}</span>
                 <b>{CURRENCY_META[currency]?.flag} {formatKrw(Number(amount)).replace('₩', '')} {currency}</b>
               </div>
@@ -980,7 +1069,7 @@ export default function Site2() {
       {showSignup && (
         <div className="coupon-overlay" onClick={() => setShowSignup(false)}>
           <div className="signup-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-            <span className="signup-badge">🎟️ {t('s2v.signup.badge')}</span>
+            <span className="signup-badge"><Ic name="shield" /> {t('s2v.signup.badge')}</span>
             <h3 className="signup-title">{t('s2v.signup.title')}</h3>
             <p className="signup-d">{t('s2v.signup.d')}</p>
 
