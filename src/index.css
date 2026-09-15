@@ -6690,6 +6690,21 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   font-weight: 600;
   color: var(--text-3);
 }
+.scan-match .sm-member {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+  border: 1px solid #cdddfb;
+  white-space: nowrap;
+}
+.scan-match .sm-typo + .sm-member {
+  margin-left: 6px;
+}
 .scan-skip-btn {
   margin-top: 10px;
 }

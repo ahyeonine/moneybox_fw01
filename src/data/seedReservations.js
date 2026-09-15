@@ -44,6 +44,7 @@ function make(o) {
     krwAmount: toKrw(o.foreignAmount, rate),
     customerName: o.customerName,
     birthDate: o.birthDate ?? NAME_DOB[o.customerName] ?? null, // 여권/신분증 생년월일
+    coupon: o.coupon ?? false, // 최고가 보장 회원 여부(수령 시 현장 우대)
     email: o.email,
     pickupDate: o.pickupDate, // YYYY-MM-DD
     pickupTime: o.pickupTime ?? '10:00', // HH:mm (지점 상세 화면에서 선택)
@@ -66,6 +67,7 @@ export const SEED_RESERVATIONS = [
     currency: 'USD',
     foreignAmount: 500,
     customerName: 'JOHN SMITH',
+    coupon: true, // 최고가 보장 회원 데모
     email: 'john@example.com',
     pickupDate: '2026-07-31',
     createdAt: '2026-07-28T09:12:00+09:00',
@@ -79,6 +81,7 @@ export const SEED_RESERVATIONS = [
     currency: 'JPY',
     foreignAmount: 80000,
     customerName: 'YUKI TANAKA',
+    coupon: true, // 최고가 보장 회원 데모
     email: 'yuki@example.com',
     pickupDate: '2026-07-30',
     createdAt: '2026-07-28T14:40:00+09:00',
@@ -302,6 +305,7 @@ export const SEED_RESERVATIONS = [
     currency: 'USD',
     foreignAmount: 1000,
     customerName: '홍길동',
+    coupon: true, // 최고가 보장 회원 데모
     email: 'hong@example.com',
     pickupDate: '2026-07-31',
     createdAt: '2026-07-30T10:10:00+09:00',
@@ -328,6 +332,7 @@ export const SEED_RESERVATIONS = [
     currency: 'EUR',
     foreignAmount: 700,
     customerName: '이서연',
+    coupon: true, // 최고가 보장 회원 데모
     email: 'lee@example.com',
     pickupDate: '2026-07-29',
     createdAt: '2026-07-28T09:40:00+09:00',

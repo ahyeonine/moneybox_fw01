@@ -33,6 +33,7 @@ export const POS_RESV_NOTES = [
   '두 탭 모두 하단 "건너뛰기" → 예약 목록 → 선택 시 기존 거래처리 화면 (모든 예약건에 이름 표시)',
   '건너뛰기 목록 구분: 국내예약=한국인(한글 이름), 해외예약=외국인(영문 이름)',
   '해외예약 스캔: 이름·생년월일이 일치(공통값)하거나 유사(오입력 의심·편집거리 ≤ 2)한 예약을 조회 → 선택 시 거래처리',
+  '최고가 보장 회원 예약은 목록에 🏆 배지로 표시 — 수령 시 현장에서 우대',
   '거래진행은 기존 거래처리 화면으로 연결(프로토타입은 플레이스홀더)',
   '자세히: 01_IA.md',
 ]
@@ -148,7 +149,10 @@ export default function PosReservationSearch() {
                   <button key={m.reservationNo} type="button" className="scan-match" onClick={proceed}>
                     <span className="sm-no">
                       {m.reservationNo}
-                      <span className="sm-name">{m.customerName}</span>
+                      <span className="sm-name">
+                        {m.customerName}
+                        {m.coupon && <span className="sm-member">🏆 최고가 보장</span>}
+                      </span>
                     </span>
                     <span className="sm-cur">
                       {CURRENCY_META[m.currency]?.flag} {formatNumber(m.foreignAmount)} {m.currency}
@@ -230,7 +234,10 @@ export default function PosReservationSearch() {
                     <button key={m.reservationNo} type="button" className="scan-match" onClick={proceed}>
                       <span className="sm-no">
                         {m.reservationNo}
-                        <span className="sm-name">{m.customerName}</span>
+                        <span className="sm-name">
+                          {m.customerName}
+                          {m.coupon && <span className="sm-member">🏆 최고가 보장</span>}
+                        </span>
                       </span>
                       <span className="sm-cur">
                         {CURRENCY_META[m.currency]?.flag} {formatNumber(m.foreignAmount)} {m.currency}
@@ -257,6 +264,7 @@ export default function PosReservationSearch() {
                       <span className="sm-no">
                         {m.reservationNo}
                         <span className="sm-typo">{m.customerName}</span>
+                        {m.coupon && <span className="sm-member">🏆 최고가 보장</span>}
                       </span>
                       <span className="sm-cur">
                         {CURRENCY_META[m.currency]?.flag} {formatNumber(m.foreignAmount)} {m.currency}
