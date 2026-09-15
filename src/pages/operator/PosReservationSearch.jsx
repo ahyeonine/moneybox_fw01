@@ -25,11 +25,14 @@ function editDistance(a = '', b = '') {
   return dp[m][n]
 }
 
+// 한글 이름 여부 — 국내예약(한국인) / 해외예약(외국인) 목록 구분용.
+const isKoreanName = (n = '') => /[가-힣]/.test(n)
+
 export const POS_RESV_NOTES = [
   '환전예약 = 국내예약(기본) / 해외예약 토글 — 두 탭 모두 신분증 스캔이 먼저',
-  '국내예약: 신분증 스캔 또는 하단 "건너뛰기" → 전체 예약 목록 → 선택 시 기존 거래처리 화면',
-  '해외예약: 스캔 → 이름·생년월일이 일치(공통값)하거나 유사(오입력 의심)한 예약을 조회 → 선택 시 거래처리',
-  '유사 매칭: 생년월일이 같고 이름 편집거리 ≤ 2 (여권 스캔 오인식/카운터 오입력 대비)',
+  '두 탭 모두 하단 "건너뛰기" → 예약 목록 → 선택 시 기존 거래처리 화면 (모든 예약건에 이름 표시)',
+  '건너뛰기 목록 구분: 국내예약=한국인(한글 이름), 해외예약=외국인(영문 이름)',
+  '해외예약 스캔: 이름·생년월일이 일치(공통값)하거나 유사(오입력 의심·편집거리 ≤ 2)한 예약을 조회 → 선택 시 거래처리',
   '거래진행은 기존 거래처리 화면으로 연결(프로토타입은 플레이스홀더)',
   '자세히: 01_IA.md',
 ]
@@ -87,6 +90,11 @@ export default function PosReservationSearch() {
     nav('/pos/reservation/flow')
   }
 
+  // 건너뛰기 목록: 국내=한국인(한글 이름), 해외=외국인(영문 이름)
+  const skipList = reservations.filter((r) =>
+    tab === 'domestic' ? isKoreanName(r.customerName) : !isKoreanName(r.customerName)
+  )
+
   return (
     <div className="pos-resv">
       <DevNote items={POS_RESV_NOTES} />
@@ -122,13 +130,16 @@ export default function PosReservationSearch() {
 
       <div className="pos-scan" style={{ marginTop: 16 }}>
         <div className="card scan-panel">
-          {tab === 'domestic' && skipped ? (
-            /* 건너뛰기 → 전체 예약 목록 */
+          {skipped ? (
+            /* 건너뛰기 → 예약 목록 (국내=한국인 / 해외=외국인) */
             <>
-              <h3 className="scan-h">📋 예약 목록</h3>
+              <h3 className="scan-h">📋 예약 목록 ({skipList.length})</h3>
               <p className="muted">예약을 선택하면 기존 거래처리 화면으로 이동합니다.</p>
               <div className="scan-matches">
-                {reservations.map((m) => (
+                {skipList.length === 0 && (
+                  <div className="notice" style={{ marginTop: 6 }}>예약이 없습니다.</div>
+                )}
+                {skipList.map((m) => (
                   <button key={m.reservationNo} type="button" className="scan-match" onClick={proceed}>
                     <span className="sm-no">
                       {m.reservationNo}
@@ -180,16 +191,14 @@ export default function PosReservationSearch() {
                 {scanning ? '인식 중…' : '📷 신분증 스캔'}
               </button>
               <div className="tiny scan-demo-note">데모: 버튼을 누르면 샘플 신분증으로 스캔됩니다</div>
-              {tab === 'domestic' && (
-                <button
-                  type="button"
-                  className="btn ghost block scan-skip-btn"
-                  onClick={() => setSkipped(true)}
-                  disabled={scanning}
-                >
-                  건너뛰기
-                </button>
-              )}
+              <button
+                type="button"
+                className="btn ghost block scan-skip-btn"
+                onClick={() => setSkipped(true)}
+                disabled={scanning}
+              >
+                건너뛰기
+              </button>
             </>
           ) : (
             /* 스캔 완료 → 일치/유사 예약 조회 (국내·해외 공통) */
@@ -214,7 +223,10 @@ export default function PosReservationSearch() {
                   <div className="tiny">일치 예약 ({exactMatches.length})</div>
                   {exactMatches.map((m) => (
                     <button key={m.reservationNo} type="button" className="scan-match" onClick={proceed}>
-                      <span className="sm-no">{m.reservationNo}</span>
+                      <span className="sm-no">
+                        {m.reservationNo}
+                        <span className="sm-name">{m.customerName}</span>
+                      </span>
                       <span className="sm-cur">
                         {CURRENCY_META[m.currency]?.flag} {formatNumber(m.foreignAmount)} {m.currency}
                       </span>
