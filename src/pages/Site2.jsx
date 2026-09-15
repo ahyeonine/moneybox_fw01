@@ -3,7 +3,7 @@ import { useI18n } from '../i18n/I18nContext.jsx'
 import { useRates } from '../store/RatesContext.jsx'
 import { useReservations } from '../store/ReservationContext.jsx'
 import { CURRENCY_META, CURRENCY_ORDER, WEB_COUPON_BONUS } from '../data/rates.js'
-import { BRANCHES, getBranch, branchCurrencies, regionList } from '../data/branches.js'
+import { BRANCHES, getBranch, branchCurrencies, regionChips, branchMatchesRegion } from '../data/branches.js'
 import { formatKrw } from '../lib/format.js'
 import { isValidName, isValidEmail } from '../lib/validation.js'
 import { pickupRange } from '../lib/date.js'
@@ -317,7 +317,7 @@ export default function Site2() {
   // 지역(선택 시) 기준 지점. 위치 있으면 가까운 순, 없으면 등장 순.
   const branches = useMemo(() => {
     let list = BRANCHES
-    if (region) list = list.filter((b) => b.region.ko === region)
+    if (region) list = list.filter((b) => branchMatchesRegion(b, region))
     if (!loc) return list.map((b) => ({ b, km: null }))
     return list.map((b) => ({ b, km: distanceKm(loc, b) })).sort((x, y) => x.km - y.km)
   }, [loc, region])
@@ -327,7 +327,7 @@ export default function Site2() {
     [branches, lang]
   )
 
-  const REGIONS = regionList()
+  const REGIONS = regionChips()
   const stepIdx = ['region', 'branch', 'amount', 'info'].indexOf(step)
 
   // 지역 선택 → 지점 선택 단계로

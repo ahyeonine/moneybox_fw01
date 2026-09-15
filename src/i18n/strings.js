@@ -750,7 +750,7 @@ export const STRINGS = {
     ko: '같은 금액을 바꿔도 머니박스에서 평균 약 {pct}% 더 많은 원화를 받아요.',
     en: 'For the same amount, you get about {pct}% more won on average with MoneyBox.',
   },
-  's2.home.cmp.mini': { ko: '이만큼 더 받아요', en: 'You get this much more' },
+  's2.home.cmp.mini': { ko: '머니박스에서 환전하면 이만큼 더 받아요', en: 'Exchange at MoneyBox and get this much more' },
   's2.home.cmp.wonmore': { ko: '약 {won} 더', en: '≈ {won} more' },
   's2.home.cmp.mb': { ko: '머니박스', en: 'MoneyBox' },
   's2.home.cmp.mbtag': { ko: '가장 많이 받아요', en: 'You get the most' },

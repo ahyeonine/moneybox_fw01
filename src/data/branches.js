@@ -107,3 +107,25 @@ export function regionList() {
   }
   return out
 }
+
+// 대표 지역만 개별 노출하고 나머지는 "그 외"로 묶는다. (칩 개수를 줄여 4개→3개)
+export const PRIMARY_REGIONS = ['서울', '부산']
+// "그 외" 가상 지역 — 대표 지역이 아닌 모든 지점을 포함.
+export const OTHER_REGION = { ko: '그 외', en: 'Other areas', other: true }
+
+/** 지역 선택 칩: 대표 지역(있는 것만) + "그 외"(비대표 지점이 있으면). */
+export function regionChips() {
+  const chips = []
+  for (const ko of PRIMARY_REGIONS) {
+    const b = BRANCHES.find((x) => x.region.ko === ko)
+    if (b) chips.push(b.region)
+  }
+  if (BRANCHES.some((b) => !PRIMARY_REGIONS.includes(b.region.ko))) chips.push(OTHER_REGION)
+  return chips
+}
+
+/** 지점이 선택 지역에 해당하는지 — "그 외"는 대표 지역이 아닌 전부. */
+export function branchMatchesRegion(b, regionKo) {
+  if (regionKo === OTHER_REGION.ko) return !PRIMARY_REGIONS.includes(b.region.ko)
+  return b.region.ko === regionKo
+}
