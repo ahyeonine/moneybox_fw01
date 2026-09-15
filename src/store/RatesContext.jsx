@@ -26,8 +26,28 @@ function drift(rate) {
   return roundSig(rate * (1 + sign * mag))
 }
 
+const HISTORY_LEN = 24 // 스파크라인용 최근 관측치 최대 개수
+
+// 초기 히스토리 시드 — 현재값 주변에서 소폭 변동하는 n개 관측치(마지막=현재).
+function seedHistory(rates, n = 12) {
+  const h = {}
+  for (const [cur, v] of Object.entries(rates)) {
+    const arr = []
+    let x = v
+    for (let i = 0; i < n; i++) {
+      arr.push(roundSig(x))
+      x = x * (1 + (Math.random() - 0.5) * 0.006) // 과거로 갈수록 ±0.3% 흔들림
+    }
+    arr.reverse()
+    arr[arr.length - 1] = v // 마지막은 현재 기준율
+    h[cur] = arr
+  }
+  return h
+}
+
 export function RatesProvider({ children }) {
   const [rates, setRates] = useState(() => ({ ...MOCK_RATES }))
+  const [history, setHistory] = useState(() => seedHistory(MOCK_RATES))
   const [lastUpdated, setLastUpdated] = useState(() => Date.now())
   const [tick, setTick] = useState(0) // 갱신 횟수(참고/디버그)
 
@@ -45,8 +65,22 @@ export function RatesProvider({ children }) {
     return () => clearInterval(id)
   }, [])
 
+  // 기준율 변동 시 히스토리에 관측치 추가(스파크라인/추이용)
+  useEffect(() => {
+    setHistory((h) => {
+      const nh = { ...h }
+      for (const [cur, v] of Object.entries(rates)) {
+        nh[cur] = [...(h[cur] || []), v].slice(-HISTORY_LEN)
+      }
+      return nh
+    })
+  }, [rates])
+
   // 적용 기준환율(수령일 전광판) — 2분 주기 자동 변동
   const getRate = useCallback((cur) => rates[cur] ?? null, [rates])
+
+  // 통화별 최근 기준율 히스토리(오래된→최신). 스파크라인/유리도 계산용.
+  const getHistory = useCallback((cur) => history[cur] || [], [history])
 
   // 표시용 살 때/팔 때 (기준 ± 스프레드)
   const getDisplayRates = useCallback(
@@ -77,9 +111,11 @@ export function RatesProvider({ children }) {
 
   const value = {
     rates,
+    history,
     lastUpdated,
     tick,
     getRate,
+    getHistory,
     getDisplayRates,
     getBankCompare,
   }

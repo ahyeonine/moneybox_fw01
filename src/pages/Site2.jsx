@@ -30,6 +30,34 @@ const ICON_PATHS = {
   check: 'M5 12.5 10 17.5 19.5 7',
 }
 
+// 환율 추이 스파크라인 (인라인 SVG, 라이브러리 없음). data: 오래된→최신 숫자 배열.
+function Sparkline({ data, positive = true }) {
+  if (!data || data.length < 2) return null
+  const W = 240
+  const H = 46
+  const P = 4
+  const min = Math.min(...data)
+  const max = Math.max(...data)
+  const rng = max - min || 1
+  const pts = data.map((v, i) => {
+    const x = P + (i / (data.length - 1)) * (W - 2 * P)
+    const y = H - P - ((v - min) / rng) * (H - 2 * P)
+    return [x, y]
+  })
+  const line = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`).join(' ')
+  const last = pts[pts.length - 1]
+  const area = `${line} L${last[0].toFixed(1)} ${H - P} L${pts[0][0].toFixed(1)} ${H - P} Z`
+  const stroke = positive ? 'var(--travel)' : '#94a3b8'
+  const fill = positive ? 'rgba(31,107,255,0.12)' : 'rgba(148,163,184,0.12)'
+  return (
+    <svg className="s2v-spark" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
+      <path d={area} fill={fill} stroke="none" />
+      <path d={line} fill="none" stroke={stroke} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+      <circle cx={last[0]} cy={last[1]} r="3" fill={stroke} />
+    </svg>
+  )
+}
+
 // 최고가 보장(Best Rate Guarantee) 배너 — 회원가입 시 주변 시세보다 무조건 우대.
 function GuaranteeCTA({ t, onClick }) {
   return (
@@ -249,7 +277,7 @@ function Site2Map({ center, points }) {
 
 export default function Site2() {
   const { t, lang } = useI18n()
-  const { getDisplayRates } = useRates()
+  const { getDisplayRates, getHistory } = useRates()
   const { today, createReservation } = useReservations()
 
   const [view, setView] = useState('home') // home | flow | about
@@ -289,6 +317,23 @@ export default function Site2() {
   const board = getDisplayRates(currency)?.base || 0 // 전광판(오늘) 환율
   const effRate = couponOn ? board * (1 + COUPON_BONUS) : board // 예상용(실제는 수령일 적용)
   const krw = amount ? Math.round(Number(amount) * effRate) : 0
+
+  // 환율 추이 + "지금 픽업 유리도" — 최근 히스토리 대비 현재 기준율의 위치.
+  // 외화→원화(BUY)는 높을수록 유리(원화 더 받음), 원화→외화(SELL)는 낮을수록 유리.
+  const rateHistory = getHistory(currency)
+  const rateStat = (() => {
+    const h = rateHistory
+    if (!h || h.length < 3 || !board) return null
+    const min = Math.min(...h)
+    const max = Math.max(...h)
+    const avg = h.reduce((a, b) => a + b, 0) / h.length
+    const pos = max > min ? (board - min) / (max - min) : 0.5
+    const goodHigh = direction === 'BUY'
+    const fav = goodHigh ? pos : 1 - pos
+    const level = fav >= 0.6 ? 'good' : fav <= 0.4 ? 'bad' : 'mid'
+    const benefitPct = avg ? ((board - avg) / avg) * 100 * (goodHigh ? 1 : -1) : 0
+    return { level, benefitPct, positive: fav >= 0.5 }
+  })()
 
   const range = pickupRange(today, 0, 14) // 리드타임 0, 최대 2주
   const pickBranchObj = pickedBranch ? getBranch(pickedBranch) : null
@@ -935,6 +980,29 @@ export default function Site2() {
                     </span>
                   </div>
                 )}
+
+                {rateStat && (
+                  <>
+                    <div className="s2v-trend">
+                      <span className="s2v-trend-l">{t('s2v.trend.title')}</span>
+                      <Sparkline data={rateHistory} positive={rateStat.positive} />
+                    </div>
+                    <div className={`s2v-fav ${rateStat.level}`}>
+                      <span className="s2v-fav-l">{t('s2v.fav.title')}</span>
+                      <span className="s2v-fav-badge">
+                        {rateStat.level === 'good' ? '▲' : rateStat.level === 'bad' ? '▼' : '•'}{' '}
+                        {t(`s2v.fav.${rateStat.level}`)}
+                        <span className="s2v-fav-pct">
+                          {t('s2v.fav.vsavg').replace(
+                            '{v}',
+                            `${rateStat.benefitPct >= 0 ? '+' : ''}${rateStat.benefitPct.toFixed(1)}%`
+                          )}
+                        </span>
+                      </span>
+                    </div>
+                  </>
+                )}
+
                 <div className="s2v-baserate-note">{t('s2v.baserate.note')}</div>
               </div>
             )}
