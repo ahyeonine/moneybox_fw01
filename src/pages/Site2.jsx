@@ -916,6 +916,29 @@ export default function Site2() {
               ))}
             </div>
 
+            {/* 오늘 전광판 기준율 (실시간 참고 · 수령일 기준 적용) */}
+            {board > 0 && (
+              <div className="s2v-baserate">
+                <div className="s2v-baserate-row">
+                  <span className="s2v-baserate-l">
+                    <Ic name="chart" /> {t('s2v.baserate.label')}
+                  </span>
+                  <span className="s2v-baserate-v">
+                    1 {currency} = {formatKrw(Math.round(board))}
+                  </span>
+                </div>
+                {couponOn && (
+                  <div className="s2v-baserate-row guar">
+                    <span className="s2v-baserate-l">🏆 {t('s2v.baserate.guar')}</span>
+                    <span className="s2v-baserate-v">
+                      1 {currency} = {formatKrw(Math.round(board * (1 + COUPON_BONUS)))}
+                    </span>
+                  </div>
+                )}
+                <div className="s2v-baserate-note">{t('s2v.baserate.note')}</div>
+              </div>
+            )}
+
             <div className="s2-field-label">{t('s2.amount.amt')}</div>
             <div className="s2-amount-row">
               <span className="s2-amount-flag" aria-hidden="true">{CURRENCY_META[currency]?.flag}</span>
