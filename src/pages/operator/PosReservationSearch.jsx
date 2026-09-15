@@ -47,9 +47,13 @@ export default function PosReservationSearch() {
   const [scanned, setScanned] = useState(null) // { name, birthDate }
   const [skipped, setSkipped] = useState(false) // 국내예약: 스캔 건너뛰고 전체 목록 보기
 
-  // 데모 신분증 1개 — 일치/유사 매칭을 모두 보여줄 수 있는 신원으로 고정.
-  // (일치 예약 다수 + 생년월일 동일한 오타 이름 'JON SMITH' 예약이 유사로 잡힘)
-  const DEMO_ID = { name: 'JOHN SMITH', birthDate: '1986-04-12' }
+  // 데모 신분증 — 탭별 신원. 국내는 한국인(한글 이름), 해외는 외국인(영문 이름).
+  //  · 해외(JOHN SMITH): 일치 예약 다수 + 생년월일 동일한 오타 이름 'JON SMITH'가 유사로 잡힘
+  //  · 국내(홍길동): 한글 이름 예약과 일치
+  const DEMO_IDS = {
+    domestic: { name: '홍길동', birthDate: '1985-05-16' },
+    foreign: { name: 'JOHN SMITH', birthDate: '1986-04-12' },
+  }
 
   // 탭 전환 시 스캔/건너뛰기 상태 초기화
   function selectTab(next) {
@@ -59,12 +63,13 @@ export default function PosReservationSearch() {
     setSkipped(false)
   }
 
-  // 스캔 시뮬레이션: 잠깐 인식 중 → 신분증 정보 인식 완료
+  // 스캔 시뮬레이션: 잠깐 인식 중 → 신분증 정보 인식 완료 (현재 탭의 데모 신원)
   function runScan() {
     setScanning(true)
+    const id = DEMO_IDS[tab]
     setTimeout(() => {
       setScanning(false)
-      setScanned(DEMO_ID)
+      setScanned(id)
     }, 1400)
   }
 
