@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { useRates } from '../store/RatesContext.jsx'
 import { useReservations } from '../store/ReservationContext.jsx'
-import { CURRENCY_META, CURRENCY_ORDER, WEB_COUPON_BONUS } from '../data/rates.js'
+import { CURRENCY_META, CURRENCY_ORDER } from '../data/rates.js'
 import { BRANCHES, getBranch, branchCurrencies, regionChips, branchMatchesRegion } from '../data/branches.js'
 import { formatKrw } from '../lib/format.js'
 import { isValidName, isValidEmail } from '../lib/validation.js'
@@ -12,8 +12,7 @@ import AboutPage from './AboutPage.jsx'
 import LookupPage from './LookupPage.jsx'
 
 // 외국인 웹사이트: 환율을 예약 시점에 고정하지 않는다(수령일 전광판 환율 적용).
-// 회원가입 쿠폰 보유 시 전광판 환율보다 우대(더 많은 원화)를 적용한다.
-const COUPON_BONUS = WEB_COUPON_BONUS
+// 최고가 보장 회원은 수령 시 현장에서 상황에 맞춰 최대한 우대(고정 우대율·자동적용 아님).
 
 // 깔끔한 라인 아이콘 (이모지 대체) — 브랜드 블루 톤, currentColor 상속.
 const ICON_PATHS = {
@@ -285,10 +284,8 @@ export default function Site2() {
   const [suOcr, setSuOcr] = useState('idle') // idle | reading | done
   const [suErr, setSuErr] = useState('')
 
-  const couponOn = !!couponMember
-  const board = getDisplayRates(currency)?.base || 0 // 전광판(오늘) 환율
-  const effRate = couponOn ? board * (1 + COUPON_BONUS) : board // 예상용(실제는 수령일 적용)
-  const krw = amount ? Math.round(Number(amount) * effRate) : 0
+  const couponOn = !!couponMember // 최고가 보장 회원 여부(수령 시 현장 우대)
+  const board = getDisplayRates(currency)?.base || 0 // 현재(전광판/기준) 환율
 
   const range = pickupRange(today, 0, 14) // 리드타임 0, 최대 2주
   const pickBranchObj = pickedBranch ? getBranch(pickedBranch) : null
@@ -926,14 +923,6 @@ export default function Site2() {
                     1 {currency} = {formatKrw(Math.round(board))}
                   </span>
                 </div>
-                {couponOn && (
-                  <div className="s2v-baserate-row guar">
-                    <span className="s2v-baserate-l">🏆 {t('s2v.baserate.guar')}</span>
-                    <span className="s2v-baserate-v">
-                      1 {currency} = {formatKrw(Math.round(board * (1 + COUPON_BONUS)))}
-                    </span>
-                  </div>
-                )}
                 <div className="s2v-baserate-note">{t('s2v.rate.disclaimer')}</div>
               </div>
             )}
