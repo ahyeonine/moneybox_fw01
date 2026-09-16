@@ -14,7 +14,7 @@ import AboutPage from './AboutPage.jsx'
 import LookupPage from './LookupPage.jsx'
 
 // 외국인 웹사이트: 환율을 예약 시점에 고정하지 않는다(수령일 전광판 환율 적용).
-// 최고가 보장 회원은 수령 시 현장에서 상황에 맞춰 최대한 우대(고정 우대율·자동적용 아님).
+// 회원 우대 대상은 수령 시 현장에서 상황에 맞춰 최대한 우대(고정 우대율·자동적용 아님).
 
 // 깔끔한 라인 아이콘 (이모지 대체) — 브랜드 블루 톤, currentColor 상속.
 const ICON_PATHS = {
@@ -26,12 +26,14 @@ const ICON_PATHS = {
   pin: 'M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Zm0-8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
   trophy: 'M7 4h10v3a5 5 0 0 1-10 0V4Zm0 1H4v1a3 3 0 0 0 3 3m10-4h3v1a3 3 0 0 1-3 3m-5 4v3m-3 3h6',
   chart: 'M4 20V10m5 10V4m5 16v-7m5 7V8',
+  store: 'M4 9 5.2 4h13.6L20 9M4 9h16M4 9v11h16V9M4 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0M9.5 20v-5h5v5',
+  money: 'M3 6h18a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm9 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM6 8v8m12-8v8',
   clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 7.5V12l3.5 2',
   phone: 'M15.5 20.5a12.5 12.5 0 0 1-12-12A2 2 0 0 1 5.4 6.4l2 .3a2 2 0 0 1 1.7 1.6l.3 1.5a2 2 0 0 1-.6 1.9l-.9.8a10 10 0 0 0 4 4l.8-.9a2 2 0 0 1 1.9-.6l1.5.3a2 2 0 0 1 1.6 1.7l.3 2a2 2 0 0 1-2.1 2.2Z',
   check: 'M5 12.5 10 17.5 19.5 7',
 }
 
-// 최고가 보장 회원 유도 배너. quick=true(정보 입력 후)면 "비밀번호만 추가" 후킹으로 전환.
+// 회원 우대 유도 배너. quick=true(정보 입력 후)면 "비밀번호만 추가" 후킹으로 전환.
 function GuaranteeCTA({ t, onClick, quick = false }) {
   return (
     <button type="button" className="s2v-guar" onClick={onClick}>
@@ -148,9 +150,9 @@ function Ic({ name, className = '' }) {
   )
 }
 
-// 은행·키오스크·공항이 머니박스보다 "덜 주는" 비율(예시 수치, V1 비교 카드와 동일 톤).
+// 타 환전 채널·키오스크·공항이 머니박스보다 "덜 주는" 비율(예시 수치, V1 비교 카드와 동일 톤).
 // 원화 환산액 대신 "평균 몇 % 더 많이 받는지"를 노출하기 위한 산출용.
-const CHANNEL_LESS = { bank: 0.021, kiosk: 0.041, airport: 0.093 }
+const CHANNEL_LESS = { other: 0.021, kiosk: 0.041, airport: 0.093 }
 // 각 채널 대비 머니박스가 더 주는 비율 = p/(1-p)
 const CHANNEL_MORE_PCT = Object.fromEntries(
   Object.entries(CHANNEL_LESS).map(([k, p]) => [k, Math.round((p / (1 - p)) * 1000) / 10])
@@ -163,7 +165,7 @@ const AVG_MORE_PCT = (() => {
 })()
 // 비교 막대: 각 채널이 머니박스(100%) 대비 받는 비율(%)
 const CHANNEL_BARS = [
-  { key: 'bank', icon: 'bank' },
+  { key: 'other', icon: 'store' },
   { key: 'kiosk', icon: 'kiosk' },
   { key: 'airport', icon: 'airport' },
 ].map((c) => ({
@@ -191,6 +193,18 @@ const POPULAR = [
   { id: 'haeundae', name: { ko: '해운대', en: 'Haeundae' }, lat: 35.1587, lng: 129.1604 },
 ]
 
+// 머니24h 무인환전기(24시간·예약 없이 이용) 위치 — 위치 안내용 목데이터.
+// 예약·수령은 지점에서만. 무인기는 지도에 "어디에 있다" 정도만 표시한다.
+const MONEY24H = [
+  { id: 'k-mdong', name: { ko: '명동 눈스퀘어', en: 'Myeongdong Noon Square' }, lat: 37.5638, lng: 126.9827 },
+  { id: 'k-hongdae', name: { ko: '홍대입구역 9번 출구', en: 'Hongdae Stn Exit 9' }, lat: 37.5571, lng: 126.9235 },
+  { id: 'k-gangnam', name: { ko: '강남역 지하상가', en: 'Gangnam Stn Mall' }, lat: 37.4972, lng: 127.0286 },
+  { id: 'k-dongdaemun', name: { ko: '동대문 DDP', en: 'Dongdaemun DDP' }, lat: 37.5663, lng: 127.0092 },
+  { id: 'k-icn', name: { ko: '인천공항 T1 입국장', en: 'Incheon Airport T1 Arrivals' }, lat: 37.4487, lng: 126.4526 },
+  { id: 'k-seomyeon', name: { ko: '부산 서면역', en: 'Busan Seomyeon Stn' }, lat: 35.1578, lng: 129.0596 },
+  { id: 'k-haeundae', name: { ko: '해운대 해수욕장', en: 'Haeundae Beach' }, lat: 35.1587, lng: 129.1604 },
+]
+
 function distanceKm(a, b) {
   const R = 6371
   const dLat = ((b.lat - a.lat) * Math.PI) / 180
@@ -203,7 +217,7 @@ function distanceKm(a, b) {
 
 const ESIM_URL = 'https://imoneybox.cafe24.com/shop3/'
 
-// 컴팩트 환율 비교 — 은행·키오스크·공항보다 "약 얼마 더 받는지"(원화).
+// 컴팩트 환율 비교 — 타 환전 채널·키오스크·공항보다 "약 얼마 더 받는지"(원화).
 // 금액 입력 시 원화 차액, 미입력 시 %로 폴백. 히어로 위젯·신청화면에서 강조 노출.
 function CompareMini({ t, amount, board, direction = 'BUY' }) {
   const amt = Number(amount) || 0
@@ -237,7 +251,8 @@ function CompareMini({ t, amount, board, direction = 'BUY' }) {
 }
 
 // Leaflet 지도 (실제 OpenStreetMap). 라이브러리/타일 로드 실패해도 앱은 계속 동작.
-function Site2Map({ center, points }) {
+// kiosks: 머니24h 무인환전기 위치(위치 안내용 · 예약 불가) — 지점(파랑)과 다른 색으로 표시.
+function Site2Map({ center, points, kiosks = [] }) {
   const elRef = useRef(null)
   const mapRef = useRef(null)
   const layerRef = useRef(null)
@@ -287,6 +302,19 @@ function Site2Map({ center, points }) {
             .bindPopup(p.label)
           bounds.push([p.lat, p.lng])
         })
+        // 머니24h 무인환전기 — 위치 안내용(예약 불가). 지점과 구분되는 청록색 마커.
+        kiosks.forEach((k) => {
+          L.circleMarker([k.lat, k.lng], {
+            radius: 6,
+            color: '#0d9488',
+            fillColor: '#14b8a6',
+            fillOpacity: 0.9,
+            weight: 2,
+          })
+            .addTo(layer)
+            .bindPopup(k.label)
+          bounds.push([k.lat, k.lng])
+        })
         if (bounds.length > 1) map.fitBounds(bounds, { padding: [36, 36], maxZoom: 13 })
         else map.setView([center.lat, center.lng], 13)
         setTimeout(() => map && map.invalidateSize(), 120)
@@ -298,7 +326,7 @@ function Site2Map({ center, points }) {
     return () => {
       cancelled = true
     }
-  }, [center, points])
+  }, [center, points, kiosks])
 
   useEffect(
     () => () => {
@@ -345,7 +373,7 @@ export default function Site2() {
   const [marketingOptIn, setMarketingOptIn] = useState(false) // 마케팅 정보 수신 동의(선택)
   const [result, setResult] = useState(null)
 
-  // 최고가 보장 회원가입 — couponMember != null = 회원(수령 시 현장 우대)
+  // 회원가입 — couponMember != null = 회원(수령 시 현장 우대)
   const [couponMember, setCouponMember] = useState(null)
   const [showSignup, setShowSignup] = useState(false)
   const [suName, setSuName] = useState('')
@@ -355,7 +383,7 @@ export default function Site2() {
   const [suMarketing, setSuMarketing] = useState(true) // 회원가입 마케팅 수신 동의(기본 동의)
   const [suErr, setSuErr] = useState('')
 
-  const couponOn = !!couponMember // 최고가 보장 회원 여부(수령 시 현장 우대)
+  const couponOn = !!couponMember // 회원 우대 대상 여부(수령 시 현장 우대)
   const board = getDisplayRates(currency)?.base || 0 // 현재(전광판/기준) 환율
 
   const range = pickupRange(today, 0, maxWindowDays) // 리드타임 0, 본사 설정 예약 가능 기간
@@ -428,6 +456,16 @@ export default function Site2() {
     [branches, lang]
   )
 
+  // 선택 위치 주변 머니24h 무인환전기(가까운 3곳) — 지도에 위치 안내용으로만 표시(예약 불가)
+  const nearestKiosks = useMemo(() => {
+    if (!loc) return []
+    const suffix = t('s2.kiosk.pin')
+    return MONEY24H.map((k) => ({ k, km: distanceKm(loc, k) }))
+      .sort((a, b) => a.km - b.km)
+      .slice(0, 3)
+      .map(({ k }) => ({ lat: k.lat, lng: k.lng, label: `${k.name[lang] || k.name.ko} · ${suffix}` }))
+  }, [loc, lang, t])
+
   const REGIONS = regionChips()
   const stepIdx = ['region', 'branch', 'amount', 'info'].indexOf(step)
 
@@ -450,7 +488,7 @@ export default function Site2() {
   }
 
   // 금액·수령일 입력 완료 → 다음 단계.
-  // 회원(최고가 보장)은 이름·이메일이 이미 있으므로 예약자 정보 입력 단계를 건너뛰고 바로 예약.
+  // 회원(회원 우대)은 이름·이메일이 이미 있으므로 예약자 정보 입력 단계를 건너뛰고 바로 예약.
   // 비회원은 예약자 정보(이름·이메일) 입력 단계로 이동.
   function goNext() {
     if (!amountValid) return
@@ -462,7 +500,7 @@ export default function Site2() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // 회원가입 — 이름·이메일·비밀번호. 가입 즉시 최고가 보장 회원(수령 시 현장 우대).
+  // 회원가입 — 이름·이메일·비밀번호. 가입 즉시 회원 우대 대상(수령 시 현장 우대).
   // 이메일 인증(수신 가능 확인) 완료 필수. 회원은 예약 시 정보 단계를 건너뛰므로
   // 여기서 확인한 인증·마케팅 동의를 예약 흐름(custEmail/verifiedEmail/marketingOptIn)에 넘겨준다.
   function claimCoupon() {
@@ -662,7 +700,7 @@ export default function Site2() {
               </div>
             </section>
 
-            {/* 환율 비교 강조 — 은행·키오스크·공항보다 얼마나 더 받는지 */}
+            {/* 환율 비교 강조 — 타 환전 채널·키오스크·공항보다 얼마나 더 받는지 */}
             <section className="s2-lp-cmp-sec">
               <h2 className="s2-lp-cmp-h">{t('s2.home.cmp.title')}</h2>
               <p className="s2-lp-cmp-sub">
@@ -888,8 +926,24 @@ export default function Site2() {
                 <div className="s2-picked">
                   <span aria-hidden="true">📍</span> {loc.name}
                 </div>
-                <Site2Map center={{ lat: loc.lat, lng: loc.lng, label: loc.name }} points={mapPoints} />
+                <Site2Map
+                  center={{ lat: loc.lat, lng: loc.lng, label: loc.name }}
+                  points={mapPoints}
+                  kiosks={nearestKiosks}
+                />
                 <div className="s2-map-attr">{t('s2.mapattr')}</div>
+
+                {/* 지도 범례 — 지점(예약)과 머니24h 무인환전기(위치 안내) 구분 */}
+                <div className="s2-maplegend">
+                  <span className="s2-maplegend-item">
+                    <span className="s2-dot branch" aria-hidden="true" /> {t('s2.kiosk.legend.branch')}
+                  </span>
+                  <span className="s2-maplegend-item">
+                    <span className="s2-dot kiosk" aria-hidden="true" /> {t('s2.kiosk.legend.kiosk')}
+                  </span>
+                </div>
+                <div className="s2-kiosk-note">{t('s2.kiosk.note')}</div>
+
                 <div className="s2-reco-title">{t('s2.reco.title')}</div>
               </div>
             )}
@@ -1052,7 +1106,7 @@ export default function Site2() {
               {t('s2v.info.pickuphint').replace('{days}', maxWindowDays)}
             </div>
 
-            {/* 최고가 보장 배너 — 회원가입 시 주변 시세보다 무조건 우대 */}
+            {/* 회원 우대 배너 — 회원가입 시 수령 현장에서 우대 */}
             {couponOn ? (
               <GuaranteeApplied t={t} />
             ) : (
