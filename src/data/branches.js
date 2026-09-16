@@ -39,21 +39,6 @@ export const BRANCHES = [
     currencies: ['USD', 'EUR', 'GBP'],
   },
   {
-    id: 'B003',
-    name: { ko: '인천공항 T1점', en: 'Incheon Airport T1' },
-    region: { ko: '인천', en: 'Incheon' },
-    address: { ko: '인천 중구 공항로 272 T1', en: '272 Gonghang-ro, Jung-gu, Incheon (T1)' },
-    leadTimeDays: 0,
-    phone: '032-1234-0003',
-    hours: { open: '06:00', close: '22:00' }, // 더미
-    rating: 0,
-    reviewCount: 0,
-    mapPos: { x: 14, y: 40 }, // 더미
-    lat: 37.4491,
-    lng: 126.4509,
-    currencies: ['USD', 'JPY', 'CNY', 'THB', 'VND'],
-  },
-  {
     id: 'B004',
     name: { ko: '부산 서면점', en: 'Busan Seomyeon Branch' },
     region: { ko: '부산', en: 'Busan' },
