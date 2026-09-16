@@ -370,12 +370,14 @@ export default function Site2() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // 금액 입력 완료 → 예약자 정보 단계로
-  function goInfo() {
-    if (!(Number(amount) > 0)) return
+  // 금액·수령일 입력 완료 → 다음 단계.
+  // 회원(최고가 보장)은 이름·이메일이 이미 있으므로 예약자 정보 입력 단계를 건너뛰고 바로 예약.
+  // 비회원은 예약자 정보(이름·이메일) 입력 단계로 이동.
+  function goNext() {
+    if (!amountValid) return
     if (couponMember) {
-      setCustName((v) => v || couponMember.name)
-      setCustEmail((v) => v || couponMember.email)
+      submitV2()
+      return
     }
     setStep('info')
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -408,12 +410,12 @@ export default function Site2() {
   // 정보 단계에서 이름·이메일을 이미 채웠으면 "비밀번호만 추가" 후킹
   const nameEmailReady = isValidName(custName) && isValidEmail(custEmail)
 
-  const infoValid =
-    isValidName(custName) &&
-    isValidEmail(custEmail) &&
-    !!pickupDate &&
-    pickupDate >= range.minDate &&
-    pickupDate <= range.maxDate
+  // 수령 예정일이 예약 가능 기간(오늘~최대 N일) 안인지
+  const dateValid = !!pickupDate && pickupDate >= range.minDate && pickupDate <= range.maxDate
+  // 금액 단계 완료 조건: 금액 양수 + 수령일 유효
+  const amountValid = Number(amount) > 0 && dateValid
+
+  const infoValid = isValidName(custName) && isValidEmail(custEmail) && dateValid
 
   // 예약 생성 — 환율 미고정(rate=null, rateMode='BOARD'). 쿠폰 여부 기록.
   function submitV2() {
@@ -935,6 +937,20 @@ export default function Site2() {
               {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}
             </div>
 
+            {/* 수령 예정일 — 예약 가능 기간(오늘~본사 설정 N일) 내 선택 */}
+            <div className="s2-field-label">{t('s2v.info.pickup')}</div>
+            <input
+              className="s2-search"
+              type="date"
+              value={pickupDate}
+              min={range.minDate}
+              max={range.maxDate}
+              onChange={(e) => setPickupDate(e.target.value)}
+            />
+            <div className="s2v-hint">
+              {t('s2v.info.pickuphint').replace('{days}', maxWindowDays)}
+            </div>
+
             {/* 최고가 보장 배너 — 회원가입 시 주변 시세보다 무조건 우대 */}
             {couponOn ? (
               <GuaranteeApplied t={t} />
@@ -944,10 +960,10 @@ export default function Site2() {
 
             <button
               className="btn s2-primary block"
-              disabled={!amount || Number(amount) <= 0}
-              onClick={goInfo}
+              disabled={!amountValid}
+              onClick={goNext}
             >
-              {t('s2.next')}
+              {couponOn ? t('s2v.info.submit') : t('s2.next')}
             </button>
             <button className="btn s2-ghost block" onClick={() => setStep('branch')}>
               {t('s2.back')}
@@ -955,7 +971,7 @@ export default function Site2() {
           </section>
         )}
 
-        {/* STEP 4 · 예약자 정보 + 수령일 (환율 고정 없음) */}
+        {/* STEP 4 · 예약자 정보 (비회원만 · 회원은 건너뜀. 환율 고정 없음) */}
         {step === 'info' && (
           <section className="s2-card">
             <h2 className="s2-card-t">{t('s2v.info.title')}</h2>
@@ -973,6 +989,10 @@ export default function Site2() {
               <div className="s2v-sum-row">
                 <span>{t('s2v.sum.amount')}</span>
                 <b>{CURRENCY_META[currency]?.flag} {formatKrw(Number(amount)).replace('₩', '')} {currency}</b>
+              </div>
+              <div className="s2v-sum-row">
+                <span>{t('s2v.sum.pickup')}</span>
+                <b>{pickupDate || '-'}</b>
               </div>
               <div className="s2v-sum-row">
                 <span>{t('s2v.sum.rate')}</span>
@@ -1005,19 +1025,6 @@ export default function Site2() {
               onChange={(e) => setCustEmail(e.target.value)}
               placeholder="you@example.com"
             />
-
-            <div className="s2-field-label">{t('s2v.info.pickup')}</div>
-            <input
-              className="s2-search"
-              type="date"
-              value={pickupDate}
-              min={range.minDate}
-              max={range.maxDate}
-              onChange={(e) => setPickupDate(e.target.value)}
-            />
-            <div className="s2v-hint">
-              {t('s2v.info.pickuphint').replace('{days}', maxWindowDays)}
-            </div>
 
             <button className="btn s2-primary block" disabled={!infoValid} onClick={submitV2}>
               {t('s2v.info.submit')}
