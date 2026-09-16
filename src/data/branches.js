@@ -2,7 +2,8 @@
 // (지점 상세 정보 hours/phone/rating/mapPos 등은 프로토타입 표시용 더미)
 
 /**
- * region: 지역(서울/부산 …) — 예약 플로우에서 지역 먼저 선택 후 지점 필터링.
+ * region: 지역(서울/부산/울산/대구/창원/수원 …) — 예약 플로우에서 지역 먼저 선택 후 지점 필터링.
+ *   대표 지역(서울·부산) 외는 "그 외" 칩으로 묶인다.
  * currencies: 지점이 취급하는 통화 코드 목록. (금액 한도 정책은 제거됨)
  * leadTimeDays: 준비일수(리드타임). 정책상 제한 없음 → 0 (예약일 당일부터 수령 가능).
  *   수령 가능 범위는 예약일 ~ 최대 2주(14일). pickupRange(today, leadTimeDays, 14).
@@ -52,6 +53,67 @@ export const BRANCHES = [
     lat: 35.1577,
     lng: 129.0594,
     currencies: ['USD', 'JPY'],
+  },
+  // ── "그 외" 지역(비대표) 지점 ──
+  {
+    id: 'B005',
+    name: { ko: '울산점', en: 'Ulsan Branch' },
+    region: { ko: '울산', en: 'Ulsan' },
+    address: { ko: '울산 남구 삼산로 200', en: '200 Samsan-ro, Nam-gu, Ulsan' },
+    leadTimeDays: 0,
+    phone: '052-1234-0005',
+    hours: { open: '10:00', close: '20:00' }, // 더미
+    rating: 0,
+    reviewCount: 0,
+    mapPos: { x: 82, y: 74 }, // 더미
+    lat: 35.5384,
+    lng: 129.3114,
+    currencies: ['USD', 'JPY', 'CNY'],
+  },
+  {
+    id: 'B006',
+    name: { ko: '대구 동성로점', en: 'Daegu Dongseongno Branch' },
+    region: { ko: '대구', en: 'Daegu' },
+    address: { ko: '대구 중구 동성로 30', en: '30 Dongseong-ro, Jung-gu, Daegu' },
+    leadTimeDays: 0,
+    phone: '053-1234-0006',
+    hours: { open: '10:00', close: '20:00' }, // 더미
+    rating: 0,
+    reviewCount: 0,
+    mapPos: { x: 66, y: 60 }, // 더미
+    lat: 35.8693,
+    lng: 128.5947,
+    currencies: ['USD', 'JPY', 'EUR', 'CNY'],
+  },
+  {
+    id: 'B007',
+    name: { ko: '창원 상남점', en: 'Changwon Sangnam Branch' },
+    region: { ko: '창원', en: 'Changwon' },
+    address: { ko: '경남 창원시 성산구 상남로 100', en: '100 Sangnam-ro, Seongsan-gu, Changwon' },
+    leadTimeDays: 0,
+    phone: '055-1234-0007',
+    hours: { open: '10:00', close: '20:00' }, // 더미
+    rating: 0,
+    reviewCount: 0,
+    mapPos: { x: 72, y: 80 }, // 더미
+    lat: 35.2281,
+    lng: 128.6811,
+    currencies: ['USD', 'JPY', 'CNY'],
+  },
+  {
+    id: 'B008',
+    name: { ko: '수원역점', en: 'Suwon Station Branch' },
+    region: { ko: '수원', en: 'Suwon' },
+    address: { ko: '경기 수원시 팔달구 덕영대로 924', en: '924 Deogyeong-daero, Paldal-gu, Suwon' },
+    leadTimeDays: 0,
+    phone: '031-1234-0008',
+    hours: { open: '10:00', close: '20:00' }, // 더미
+    rating: 0,
+    reviewCount: 0,
+    mapPos: { x: 46, y: 26 }, // 더미
+    lat: 37.2659,
+    lng: 127.0001,
+    currencies: ['USD', 'JPY', 'CNY', 'EUR'],
   },
 ]
 
