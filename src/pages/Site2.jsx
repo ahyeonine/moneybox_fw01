@@ -30,14 +30,14 @@ const ICON_PATHS = {
   check: 'M5 12.5 10 17.5 19.5 7',
 }
 
-// 최고가 보장(Best Rate Guarantee) 배너 — 회원가입 시 주변 시세보다 무조건 우대.
-function GuaranteeCTA({ t, onClick }) {
+// 최고가 보장 회원 유도 배너. quick=true(정보 입력 후)면 "비밀번호만 추가" 후킹으로 전환.
+function GuaranteeCTA({ t, onClick, quick = false }) {
   return (
     <button type="button" className="s2v-guar" onClick={onClick}>
       <span className="s2v-guar-seal"><Ic name="shield" /></span>
       <span className="s2v-guar-body">
-        <span className="s2v-guar-t">{t('s2v.coupon.cta.t')}</span>
-        <span className="s2v-guar-d">{t('s2v.coupon.cta.d')}</span>
+        <span className="s2v-guar-t">{t(quick ? 's2v.coupon.quick.t' : 's2v.coupon.cta.t')}</span>
+        <span className="s2v-guar-d">{t(quick ? 's2v.coupon.quick.d' : 's2v.coupon.cta.d')}</span>
         <span className="s2v-guar-fine">{t('s2v.coupon.fine')}</span>
       </span>
       <span className="s2v-guar-arrow" aria-hidden="true">→</span>
@@ -396,6 +396,17 @@ export default function Site2() {
     setShowSignup(false)
     setSuErr('')
   }
+
+  // 회원가입 모달 열기 — 이미 입력한 이름·이메일을 미리 채워 "비밀번호만 추가"하면 되게 한다.
+  function openSignup() {
+    setSuName((v) => v || custName)
+    setSuEmail((v) => v || custEmail)
+    setSuErr('')
+    setShowSignup(true)
+  }
+
+  // 정보 단계에서 이름·이메일을 이미 채웠으면 "비밀번호만 추가" 후킹
+  const nameEmailReady = isValidName(custName) && isValidEmail(custEmail)
 
   const infoValid =
     isValidName(custName) &&
@@ -928,7 +939,7 @@ export default function Site2() {
             {couponOn ? (
               <GuaranteeApplied t={t} />
             ) : (
-              <GuaranteeCTA t={t} onClick={() => setShowSignup(true)} />
+              <GuaranteeCTA t={t} onClick={openSignup} />
             )}
 
             <button
@@ -972,7 +983,9 @@ export default function Site2() {
             </div>
             <div className="s2v-sum-note">{t('s2v.rate.disclaimer')}</div>
 
-            {!couponOn && <GuaranteeCTA t={t} onClick={() => setShowSignup(true)} />}
+            {!couponOn && (
+              <GuaranteeCTA t={t} onClick={openSignup} quick={nameEmailReady} />
+            )}
 
             <div className="s2-field-label">{t('common.name')}</div>
             <input

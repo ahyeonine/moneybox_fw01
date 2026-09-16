@@ -793,10 +793,15 @@ export const STRINGS = {
     ko: '최고가 보장 회원 — 수령 시 현장에서 우대',
     en: 'Best Rate member — preferential rate at pickup',
   },
-  's2v.coupon.cta.t': { ko: '최고가 보장 받기', en: 'Get the Best Rate perk' },
+  's2v.coupon.cta.t': { ko: '지금 회원가입하고 혜택 받기', en: 'Sign up now for member perks' },
   's2v.coupon.cta.d': {
-    ko: '회원가입하면 수령 시 현장에서 상황에 맞춰 최대한 우대해 드려요.',
-    en: 'Sign up and the branch gives you the best rate they can at pickup.',
+    ko: '수령 시 현장 우대 환율 + 할인 쿠폰·환율 알림·회원 전용 서비스까지.',
+    en: 'Preferential rates at pickup, plus coupons, rate alerts and member services.',
+  },
+  's2v.coupon.quick.t': { ko: '비밀번호만 추가하면 회원가입 완료', en: 'Just add a password to join' },
+  's2v.coupon.quick.d': {
+    ko: '이름·이메일은 이미 입력하셨어요 — 우대 환율·쿠폰·알림 혜택까지.',
+    en: 'You already entered your name & email — get preferential rates, coupons & alerts.',
   },
   's2v.coupon.fine': {
     ko: '우대폭은 수령 시 현장 상황에 따라 적용돼요',
@@ -835,8 +840,8 @@ export const STRINGS = {
   's2v.signup.badge': { ko: '최고가 보장', en: 'Best Rate Guarantee' },
   's2v.signup.title': { ko: '최고가 보장 받기', en: 'Get the Best Rate perk' },
   's2v.signup.d': {
-    ko: '이름·이메일·비밀번호로 가입하면 최고가 보장 회원이 돼요. 수령 시 현장에서 상황에 맞춰 최대한 우대해 드립니다.',
-    en: 'Sign up with your name, email and a password to become a Best Rate member. At pickup, the branch gives you the best rate they can.',
+    ko: '이름·이메일·비밀번호로 가입하면 최고가 보장 회원이 돼요. 수령 시 현장 우대 환율에 더해 할인 쿠폰·환율 알림·회원 전용 서비스까지 받아보세요.',
+    en: 'Sign up with your name, email and a password to become a Best Rate member — preferential rates at pickup, plus coupons, rate alerts and member-only services.',
   },
   's2v.signup.pw': { ko: '비밀번호', en: 'Password' },
   's2v.signup.pw.ph': { ko: '6자 이상', en: 'At least 6 characters' },
