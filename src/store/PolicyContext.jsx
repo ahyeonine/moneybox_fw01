@@ -9,15 +9,14 @@ import { createContext, useContext, useState, useCallback } from 'react'
 const PolicyContext = createContext(null)
 
 const DEFAULT_MAX_WINDOW_DAYS = null // 기본 무제한(기간 제한 없음)
-const MIN_WINDOW = 1
-const MAX_WINDOW = 60
+const MIN_WINDOW = 1 // 일수 지정 시 최소 1일(상한 제한 없음)
 
 export function PolicyProvider({ children }) {
   const [maxWindowDays, setMax] = useState(DEFAULT_MAX_WINDOW_DAYS)
 
   // 본사에서만 호출.
-  //  · null/빈값/0/숫자 아님 → 무제한(null)
-  //  · 그 외 숫자 → 1~60일로 클램프
+  //  · null/빈값/0 이하/숫자 아님 → 무제한(null)
+  //  · 그 외 양수 → 그대로 사용(상한 제한 없음, 최소 1일)
   const setMaxWindowDays = useCallback((v) => {
     if (v == null || v === '') {
       setMax(null)
@@ -28,10 +27,10 @@ export function PolicyProvider({ children }) {
       setMax(null)
       return
     }
-    setMax(Math.min(MAX_WINDOW, Math.max(MIN_WINDOW, n)))
+    setMax(Math.max(MIN_WINDOW, n))
   }, [])
 
-  const value = { maxWindowDays, setMaxWindowDays, MIN_WINDOW, MAX_WINDOW }
+  const value = { maxWindowDays, setMaxWindowDays, MIN_WINDOW }
   return <PolicyContext.Provider value={value}>{children}</PolicyContext.Provider>
 }
 

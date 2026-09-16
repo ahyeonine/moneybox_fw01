@@ -8,14 +8,14 @@ import DevNote from '../../components/DevNote.jsx'
 // 설정값(maxWindowDays: null=무제한 | 숫자=N일)은 고객 사이트 수령일 선택 범위·예약조회 변경에 즉시 반영.
 
 export default function HqReservationPolicy() {
-  const { maxWindowDays, setMaxWindowDays, MIN_WINDOW, MAX_WINDOW } = usePolicy()
+  const { maxWindowDays, setMaxWindowDays, MIN_WINDOW } = usePolicy()
   // mode: 'unlimited' | 'limited'
   const [mode, setMode] = useState(maxWindowDays == null ? 'unlimited' : 'limited')
   const [winInput, setWinInput] = useState(String(maxWindowDays ?? 14))
   const [flash, setFlash] = useState(false)
 
   const parsed = Math.round(Number(winInput))
-  const limitInvalid = mode === 'limited' && (!Number.isFinite(parsed) || parsed < MIN_WINDOW || parsed > MAX_WINDOW)
+  const limitInvalid = mode === 'limited' && (!Number.isFinite(parsed) || parsed < MIN_WINDOW)
 
   function apply() {
     if (limitInvalid) return
@@ -30,7 +30,7 @@ export default function HqReservationPolicy() {
         items={[
           '예약 가능 기간(수령일 상한)은 본사에서만 설정 — 지점은 변경 불가',
           '기본은 "제한 없음(무제한)" — 고객은 오늘 이후 날짜를 자유롭게 선택. 필요 시 본사가 최대 N일 상한을 지정',
-          '설정값은 고객 사이트 수령일 선택 범위와 예약조회 변경에 즉시 반영(1~60일, 또는 무제한)',
+          '설정값은 고객 사이트 수령일 선택 범위와 예약조회 변경에 즉시 반영(무제한 또는 최소 1일 이상 일수 지정)',
           '자세히: 07_정책.md',
         ]}
       />
@@ -74,7 +74,6 @@ export default function HqReservationPolicy() {
               <input
                 type="number"
                 min={MIN_WINDOW}
-                max={MAX_WINDOW}
                 value={winInput}
                 onChange={(e) => setWinInput(e.target.value)}
                 onFocus={() => setMode('limited')}
@@ -94,7 +93,7 @@ export default function HqReservationPolicy() {
 
         {limitInvalid && (
           <div className="hq-policy-err">
-            {MIN_WINDOW}~{MAX_WINDOW}일 사이의 숫자를 입력해 주세요.
+            {MIN_WINDOW}일 이상의 숫자를 입력해 주세요.
           </div>
         )}
 
