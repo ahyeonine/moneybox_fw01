@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { useRates } from '../store/RatesContext.jsx'
 import { useReservations } from '../store/ReservationContext.jsx'
+import { useEmail } from '../store/EmailContext.jsx'
 import { CURRENCY_META, CURRENCY_ORDER } from '../data/rates.js'
 import { BRANCHES, getBranch, branchCurrencies, regionChips, branchMatchesRegion } from '../data/branches.js'
 import { formatKrw } from '../lib/format.js'
@@ -52,6 +53,79 @@ function GuaranteeApplied({ t }) {
         <span className="s2v-guar-t">{t('s2v.coupon.applied')}</span>
         <span className="s2v-guar-fine">{t('s2v.coupon.fine')}</span>
       </span>
+    </div>
+  )
+}
+// 이메일 인증(수신 가능 여부 확인) — 프로토타입: 인증번호를 생성해 이메일(mock)로 "발송"하고
+// 데모 편의를 위해 화면에 인증번호를 노출한다. 입력한 이메일이 바뀌면 인증은 자동으로 무효화된다.
+function EmailVerify({ email, verified, onVerify, sendEmail, t }) {
+  const [sentTo, setSentTo] = useState('') // 인증번호를 보낸 이메일
+  const [code, setCode] = useState('') // 발송된 인증번호(데모)
+  const [input, setInput] = useState('')
+  const [err, setErr] = useState('')
+
+  if (verified) {
+    return (
+      <div className="s2v-verify ok">
+        <Ic name="check" /> {t('s2v.verify.done')}
+      </div>
+    )
+  }
+
+  const emailOk = isValidEmail(email)
+  const showCode = !!sentTo && sentTo === email.trim()
+
+  function send() {
+    if (!emailOk) {
+      setErr(t('s2v.verify.err.email'))
+      return
+    }
+    const c = String(Math.floor(100000 + Math.random() * 900000))
+    setCode(c)
+    setSentTo(email.trim())
+    setInput('')
+    setErr('')
+    sendEmail('auth', email.trim(), { code: c }) // 이메일 Outbox에 기록
+  }
+  function confirm() {
+    if (input.trim() === code) {
+      setErr('')
+      onVerify(email.trim())
+    } else {
+      setErr(t('s2v.verify.err.code'))
+    }
+  }
+
+  return (
+    <div className="s2v-verify">
+      {!showCode ? (
+        <button type="button" className="s2v-verify-send" disabled={!emailOk} onClick={send}>
+          {t('s2v.verify.send')}
+        </button>
+      ) : (
+        <>
+          <div className="s2v-verify-row">
+            <input
+              className="s2v-verify-input"
+              type="text"
+              inputMode="numeric"
+              maxLength={6}
+              value={input}
+              onChange={(e) => setInput(e.target.value.replace(/[^\d]/g, ''))}
+              placeholder={t('s2v.verify.ph')}
+            />
+            <button type="button" className="s2v-verify-confirm" onClick={confirm}>
+              {t('s2v.verify.confirm')}
+            </button>
+          </div>
+          <div className="s2v-verify-sent">{t('s2v.verify.sent').replace('{email}', sentTo)}</div>
+          <div className="s2v-verify-demo">{t('s2v.verify.demo').replace('{code}', code)}</div>
+          <button type="button" className="s2v-verify-resend" onClick={send}>
+            {t('s2v.verify.resend')}
+          </button>
+        </>
+      )}
+      {err && <div className="err-text">{err}</div>}
     </div>
   )
 }
@@ -243,6 +317,7 @@ export default function Site2() {
   const { t, lang } = useI18n()
   const { getDisplayRates } = useRates()
   const { today, createReservation } = useReservations()
+  const { sendEmail } = useEmail() // 이메일 인증번호 발송(mock) → Outbox 기록
   const { maxWindowDays } = usePolicy() // 본사 설정 예약 가능 기간(수령일 최대 N일)
 
   const [view, setView] = useState('home') // home | flow | about
@@ -266,6 +341,8 @@ export default function Site2() {
   const [custName, setCustName] = useState('')
   const [custEmail, setCustEmail] = useState('')
   const [pickupDate, setPickupDate] = useState('')
+  const [verifiedEmail, setVerifiedEmail] = useState('') // 인증 완료된 이메일(수신 가능 확인)
+  const [marketingOptIn, setMarketingOptIn] = useState(false) // 마케팅 정보 수신 동의(선택)
   const [result, setResult] = useState(null)
 
   // 최고가 보장 회원가입 — couponMember != null = 회원(수령 시 현장 우대)
@@ -274,6 +351,8 @@ export default function Site2() {
   const [suName, setSuName] = useState('')
   const [suEmail, setSuEmail] = useState('')
   const [suPw, setSuPw] = useState('') // 비밀번호
+  const [suVerifiedEmail, setSuVerifiedEmail] = useState('') // 회원가입 이메일 인증 완료값
+  const [suMarketing, setSuMarketing] = useState(true) // 회원가입 마케팅 수신 동의(기본 동의)
   const [suErr, setSuErr] = useState('')
 
   const couponOn = !!couponMember // 최고가 보장 회원 여부(수령 시 현장 우대)
@@ -384,17 +463,27 @@ export default function Site2() {
   }
 
   // 회원가입 — 이름·이메일·비밀번호. 가입 즉시 최고가 보장 회원(수령 시 현장 우대).
+  // 이메일 인증(수신 가능 확인) 완료 필수. 회원은 예약 시 정보 단계를 건너뛰므로
+  // 여기서 확인한 인증·마케팅 동의를 예약 흐름(custEmail/verifiedEmail/marketingOptIn)에 넘겨준다.
   function claimCoupon() {
     if (!isValidName(suName) || !isValidEmail(suEmail) || suPw.length < 6) {
       setSuErr(t('s2v.signup.err'))
       return
     }
+    if (!suEmailVerified) {
+      setSuErr(t('s2v.signup.verifyerr'))
+      return
+    }
+    const em = suEmail.trim()
     setCouponMember({
       name: suName.trim(),
-      email: suEmail.trim(),
+      email: em,
+      marketing: suMarketing,
     })
     setCustName((v) => v || suName.trim())
-    setCustEmail((v) => v || suEmail.trim())
+    setCustEmail(em)
+    setVerifiedEmail(em) // 회원가입 시 인증한 이메일 → 예약 흐름에서도 인증됨으로 처리
+    setMarketingOptIn(suMarketing)
     setShowSignup(false)
     setSuErr('')
   }
@@ -410,12 +499,19 @@ export default function Site2() {
   // 정보 단계에서 이름·이메일을 이미 채웠으면 "비밀번호만 추가" 후킹
   const nameEmailReady = isValidName(custName) && isValidEmail(custEmail)
 
+  // 이메일 인증 완료 여부 — 인증한 이메일과 현재 입력값이 같아야 유효(이메일 바꾸면 재인증)
+  const emailVerified =
+    isValidEmail(custEmail) && !!verifiedEmail && verifiedEmail === custEmail.trim()
+  const suEmailVerified =
+    isValidEmail(suEmail) && !!suVerifiedEmail && suVerifiedEmail === suEmail.trim()
+
   // 수령 예정일이 예약 가능 기간(오늘~최대 N일) 안인지
   const dateValid = !!pickupDate && pickupDate >= range.minDate && pickupDate <= range.maxDate
   // 금액 단계 완료 조건: 금액 양수 + 수령일 유효
   const amountValid = Number(amount) > 0 && dateValid
 
-  const infoValid = isValidName(custName) && isValidEmail(custEmail) && dateValid
+  const infoValid =
+    isValidName(custName) && isValidEmail(custEmail) && emailVerified && dateValid
 
   // 예약 생성 — 환율 미고정(rate=null, rateMode='BOARD'). 쿠폰 여부 기록.
   function submitV2() {
@@ -432,6 +528,8 @@ export default function Site2() {
       customerName: custName.trim().toUpperCase(),
       birthDate: null, // 웹 예약은 생년월일 미수집(POS 신분증 대조 시 확인)
       email: custEmail.trim(),
+      emailVerified: true, // 인증 완료된 이메일(제출 조건에 포함)
+      marketingConsent: marketingOptIn, // 마케팅 정보 수신 동의(선택)
       pickupDate,
       pickupTime: '10:00',
     })
@@ -448,6 +546,9 @@ export default function Site2() {
     setLoc(null)
     setCustName(couponMember?.name || '')
     setCustEmail(couponMember?.email || '')
+    // 회원은 회원가입 시 인증한 이메일·마케팅 동의를 유지, 비회원은 초기화
+    setVerifiedEmail(couponMember?.email || '')
+    setMarketingOptIn(couponMember ? !!couponMember.marketing : false)
     setPickupDate('')
     setAmount('')
     setStep('region')
@@ -1025,6 +1126,27 @@ export default function Site2() {
               onChange={(e) => setCustEmail(e.target.value)}
               placeholder="you@example.com"
             />
+            <div className="s2v-hint">{t('s2v.verify.hint')}</div>
+            <EmailVerify
+              email={custEmail}
+              verified={emailVerified}
+              onVerify={setVerifiedEmail}
+              sendEmail={sendEmail}
+              t={t}
+            />
+
+            {/* 마케팅 정보 수신 동의(선택) */}
+            <label className="s2v-consent">
+              <input
+                type="checkbox"
+                checked={marketingOptIn}
+                onChange={(e) => setMarketingOptIn(e.target.checked)}
+              />
+              <span className="s2v-consent-body">
+                <span className="s2v-consent-t">{t('s2v.marketing.label')}</span>
+                <span className="s2v-consent-d">{t('s2v.marketing.desc')}</span>
+              </span>
+            </label>
 
             <button className="btn s2-primary block" disabled={!infoValid} onClick={submitV2}>
               {t('s2v.info.submit')}
@@ -1101,6 +1223,13 @@ export default function Site2() {
               onChange={(e) => setSuEmail(e.target.value)}
               placeholder="you@example.com"
             />
+            <EmailVerify
+              email={suEmail}
+              verified={suEmailVerified}
+              onVerify={setSuVerifiedEmail}
+              sendEmail={sendEmail}
+              t={t}
+            />
 
             <label className="signup-label">{t('s2v.signup.pw')}</label>
             <input
@@ -1110,6 +1239,20 @@ export default function Site2() {
               onChange={(e) => setSuPw(e.target.value)}
               placeholder={t('s2v.signup.pw.ph')}
             />
+
+            {/* 마케팅 정보 수신 동의(선택) — 회원 기본 동의 */}
+            <label className="s2v-consent">
+              <input
+                type="checkbox"
+                checked={suMarketing}
+                onChange={(e) => setSuMarketing(e.target.checked)}
+              />
+              <span className="s2v-consent-body">
+                <span className="s2v-consent-t">{t('s2v.marketing.label')}</span>
+                <span className="s2v-consent-d">{t('s2v.marketing.desc')}</span>
+              </span>
+            </label>
+
             {suErr && <div className="err-text">{suErr}</div>}
             <button className="btn primary block" onClick={claimCoupon}>
               {t('s2v.signup.cta')}

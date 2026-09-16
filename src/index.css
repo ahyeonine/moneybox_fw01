@@ -1626,6 +1626,85 @@ th.num {
   font-weight: 800;
   color: #0a7d3c;
 }
+
+/* 본사 전용 예약 가능 기간 설정 화면 (전용 페이지) */
+.hq-policy {
+  max-width: 560px;
+}
+.hq-policy-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hq-policy-label {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}
+.hq-policy-desc {
+  font-size: 13px;
+  color: var(--text-3);
+  line-height: 1.5;
+}
+.hq-policy-current {
+  margin: 14px 0;
+  font-size: 14px;
+  color: var(--text-2);
+  background: var(--travel-soft, #eef4ff);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.hq-policy-current strong {
+  color: var(--brand-dark, #1f6bff);
+}
+.hq-policy-edit {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hq-policy-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.hq-policy-field > span:first-child {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-3);
+}
+.hq-policy-inputwrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hq-policy-input {
+  width: 96px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: right;
+}
+.hq-policy-flash {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0a7d3c;
+}
+.hq-policy-err {
+  margin-top: 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--danger, #d0342c);
+}
+.hq-policy-hint {
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--text-3);
+  line-height: 1.5;
+}
 .cems-empty {
   text-align: center;
   padding: 40px 20px;
@@ -6252,6 +6331,128 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 }
 .s2v-hint {
   margin: 6px 0 2px;
+  font-size: 12px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+
+/* 이메일 인증 */
+.s2v-verify {
+  margin: 8px 0 4px;
+}
+.s2v-verify.ok {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #1a8f4c;
+  background: #e9f8ef;
+  border: 1px solid #b9ecca;
+  border-radius: 10px;
+  padding: 9px 12px;
+}
+.s2v-verify.ok .ic {
+  width: 16px;
+  height: 16px;
+}
+.s2v-verify-send {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--travel);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--travel-dark);
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+}
+.s2v-verify-send:disabled {
+  border-color: var(--line, #e2e6ee);
+  color: var(--text-3);
+  cursor: not-allowed;
+}
+.s2v-verify-row {
+  display: flex;
+  gap: 8px;
+}
+.s2v-verify-input {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 14px;
+  border: 1px solid var(--line, #e2e6ee);
+  border-radius: 10px;
+  font-size: 15px;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+.s2v-verify-confirm {
+  flex: 0 0 auto;
+  padding: 11px 18px;
+  border: none;
+  border-radius: 10px;
+  background: var(--travel);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+}
+.s2v-verify-sent {
+  margin-top: 7px;
+  font-size: 12px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+.s2v-verify-demo {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+  border-radius: 8px;
+  padding: 6px 10px;
+  display: inline-block;
+}
+.s2v-verify-resend {
+  display: block;
+  margin-top: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--travel);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* 마케팅 정보 수신 동의(선택) */
+.s2v-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 14px 0 4px;
+  cursor: pointer;
+}
+.s2v-consent input[type='checkbox'] {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--travel);
+  cursor: pointer;
+}
+.s2v-consent-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.s2v-consent-t {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-1, #1a2233);
+}
+.s2v-consent-d {
   font-size: 12px;
   color: var(--text-3);
   font-weight: 600;

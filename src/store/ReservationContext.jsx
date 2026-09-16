@@ -62,6 +62,8 @@ export function ReservationProvider({ children }) {
         customerName: draft.customerName,
         birthDate: draft.birthDate ?? null, // 여권 OCR 생년월일(있으면)
         email: draft.email,
+        emailVerified: draft.emailVerified ?? false, // 이메일 인증(수신 가능 확인) 완료 여부
+        marketingConsent: draft.marketingConsent ?? false, // 마케팅 정보 수신 동의(선택)
         pickupDate: draft.pickupDate,
         pickupTime: draft.pickupTime ?? '10:00',
         createdAt: `${today}T00:00:00+09:00`, // 프로토타입: 시각은 기준일 자정(KST)으로 기록

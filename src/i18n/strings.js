@@ -848,6 +848,33 @@ export const STRINGS = {
   's2v.signup.cta': { ko: '가입하고 최고가 보장 받기', en: 'Sign up & get the perk' },
   's2v.signup.skip': { ko: '가입 없이 예약 계속', en: 'Continue without signing up' },
   's2v.signup.err': { ko: '이름·이메일·비밀번호(6자 이상)를 모두 입력해 주세요.', en: 'Enter your name, a valid email and a password (6+ characters).' },
+  's2v.signup.verifyerr': { ko: '이메일 인증을 완료해 주세요.', en: 'Please verify your email first.' },
+
+  // 이메일 인증(수신 가능 여부 확인) — 프로토타입 시뮬레이션
+  's2v.verify.label': { ko: '이메일 인증', en: 'Verify email' },
+  's2v.verify.hint': {
+    ko: '실제 받아볼 수 있는 이메일인지 인증번호로 확인해요.',
+    en: 'Confirm your email is reachable with a one-time code.',
+  },
+  's2v.verify.send': { ko: '인증번호 받기', en: 'Send code' },
+  's2v.verify.resend': { ko: '인증번호 다시 받기', en: 'Resend code' },
+  's2v.verify.confirm': { ko: '확인', en: 'Verify' },
+  's2v.verify.ph': { ko: '인증번호 6자리', en: '6-digit code' },
+  's2v.verify.sent': {
+    ko: '{email} 주소로 인증번호를 보냈어요. 메일함을 확인해 주세요.',
+    en: 'We sent a code to {email}. Check your inbox.',
+  },
+  's2v.verify.demo': { ko: '데모: 인증번호는 {code} 입니다.', en: 'Demo: your code is {code}.' },
+  's2v.verify.done': { ko: '이메일 인증 완료', en: 'Email verified' },
+  's2v.verify.err.email': { ko: '올바른 이메일을 먼저 입력해 주세요.', en: 'Enter a valid email first.' },
+  's2v.verify.err.code': { ko: '인증번호가 올바르지 않아요.', en: "That code isn't correct." },
+
+  // 마케팅 정보 수신 동의(선택)
+  's2v.marketing.label': { ko: '마케팅 정보 수신 동의 (선택)', en: 'Marketing updates (optional)' },
+  's2v.marketing.desc': {
+    ko: '할인 쿠폰·환율 알림·이벤트 소식을 이메일로 받아볼게요.',
+    en: 'Get coupons, rate alerts and event news by email.',
+  },
 
   // 푸터
   'footer.company': { ko: '(주) 머니박스', en: 'MoneyBox Inc.' },
