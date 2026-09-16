@@ -5528,6 +5528,42 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   font-weight: 800;
   color: var(--text);
 }
+
+/* 지도 범례 (지점 vs 머니24h 무인환전기) */
+.s2-maplegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 8px;
+}
+.s2-maplegend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2, #46506b);
+}
+.s2-maplegend .s2-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.s2-maplegend .s2-dot.branch {
+  background: #1f6bff;
+  box-shadow: 0 0 0 2px rgba(31, 107, 255, 0.25);
+}
+.s2-maplegend .s2-dot.kiosk {
+  background: #14b8a6;
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.25);
+}
+.s2-kiosk-note {
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: var(--text-3);
+  line-height: 1.5;
+}
 .s2-search:focus {
   outline: none;
   border-color: var(--travel);
@@ -6206,7 +6242,7 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   font-weight: 600;
   line-height: 1.5;
 }
-/* 최고가 보장(Best Rate Guarantee) 배너 — 프리미엄 씰 + 딥블루 */
+/* 회원 우대(Member perk) 배너 — 프리미엄 씰 + 딥블루 */
 .s2v-guar {
   position: relative;
   overflow: hidden;
