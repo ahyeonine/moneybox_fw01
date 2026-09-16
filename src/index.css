@@ -1658,6 +1658,38 @@ th.num {
 .hq-policy-current strong {
   color: var(--brand-dark, #1f6bff);
 }
+.hq-policy-modes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 4px 0 14px;
+}
+.hq-policy-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--text-2, #46506b);
+  cursor: pointer;
+}
+.hq-policy-radio input[type='radio'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand-dark, #1f6bff);
+  flex: 0 0 auto;
+}
+.hq-policy-radio b {
+  color: var(--text);
+}
+.hq-policy-radio-limit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.hq-policy-radio-limit .hq-policy-input {
+  margin: 0 2px;
+}
 .hq-policy-edit {
   display: flex;
   align-items: flex-end;

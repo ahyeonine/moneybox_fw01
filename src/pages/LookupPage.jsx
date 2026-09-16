@@ -319,7 +319,9 @@ function ChangeForm({ rec, today, onSave, onCancel }) {
   const krw = amountValid ? toKrw(Number(amount), rate) : 0
 
   // 재고 재확인(목데이터): 항상 가능하다고 간주. TODO: 실제 재고 API
-  const dateOk = pickupDate >= range.minDate && pickupDate <= range.maxDate
+  // 상한(range.maxDate)이 null이면 기간 제한 없음(무제한) → 하한만 확인
+  const dateOk =
+    pickupDate >= range.minDate && (range.maxDate == null || pickupDate <= range.maxDate)
   const canSave = amountValid && dateOk && effectiveCurrency
 
   function save() {
@@ -373,7 +375,7 @@ function ChangeForm({ rec, today, onSave, onCancel }) {
           type="date"
           value={pickupDate}
           min={range.minDate}
-          max={range.maxDate}
+          max={range.maxDate || undefined}
           onChange={(e) => setPickupDate(e.target.value)}
         />
       </label>
