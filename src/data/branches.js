@@ -2,7 +2,7 @@
 // (지점 상세 정보 hours/phone/rating/mapPos 등은 프로토타입 표시용 더미)
 
 /**
- * region: 지역(서울/인천/부산/제주 …) — 예약 플로우에서 지역 먼저 선택 후 지점 필터링.
+ * region: 지역(서울/부산 …) — 예약 플로우에서 지역 먼저 선택 후 지점 필터링.
  * currencies: 지점이 취급하는 통화 코드 목록. (금액 한도 정책은 제거됨)
  * leadTimeDays: 준비일수(리드타임). 정책상 제한 없음 → 0 (예약일 당일부터 수령 가능).
  *   수령 가능 범위는 예약일 ~ 최대 2주(14일). pickupRange(today, leadTimeDays, 14).
@@ -53,21 +53,6 @@ export const BRANCHES = [
     lng: 129.0594,
     currencies: ['USD', 'JPY'],
   },
-  {
-    id: 'B005',
-    name: { ko: '제주공항점', en: 'Jeju Airport Branch' },
-    region: { ko: '제주', en: 'Jeju' },
-    address: { ko: '제주 제주시 공항로 2', en: '2 Gonghang-ro, Jeju-si, Jeju' },
-    leadTimeDays: 0,
-    phone: '064-1234-0005',
-    hours: { open: '08:00', close: '21:00' }, // 더미
-    rating: 0,
-    reviewCount: 0,
-    mapPos: { x: 30, y: 92 }, // 더미
-    lat: 33.5104,
-    lng: 126.4914,
-    currencies: ['USD', 'JPY', 'CNY'],
-  },
 ]
 
 export function getBranch(branchId) {
@@ -93,7 +78,7 @@ export function regionList() {
   return out
 }
 
-// 대표 지역만 개별 노출하고 나머지는 "그 외"로 묶는다. (칩 개수를 줄여 4개→3개)
+// 대표 지역만 개별 노출하고 나머지는 "그 외"로 묶는다. (비대표 지점이 없으면 "그 외" 칩은 표시 안 함)
 export const PRIMARY_REGIONS = ['서울', '부산']
 // "그 외" 가상 지역 — 대표 지역이 아닌 모든 지점을 포함.
 export const OTHER_REGION = { ko: '그 외', en: 'Other areas', other: true }
