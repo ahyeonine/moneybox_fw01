@@ -3,20 +3,23 @@ import { usePolicy } from '../../store/PolicyContext.jsx'
 import DevNote from '../../components/DevNote.jsx'
 
 // 본사관리자 전용 · 예약 가능 기간 설정 화면.
-// 고객이 수령 예정일을 오늘부터 최대 며칠 뒤까지 선택할 수 있는지(maxWindowDays)를 설정한다.
-// 지점은 변경할 수 없고, 설정값은 고객 사이트 수령일 선택 범위·예약조회 변경에 즉시 반영된다.
+// 기본은 "제한 없음(무제한)" — 고객은 오늘 이후 수령 예정일을 자유롭게 선택한다.
+// 필요 시 본사가 상한(오늘부터 최대 N일)을 지정할 수 있다. 지점은 변경 불가.
+// 설정값(maxWindowDays: null=무제한 | 숫자=N일)은 고객 사이트 수령일 선택 범위·예약조회 변경에 즉시 반영.
 
 export default function HqReservationPolicy() {
   const { maxWindowDays, setMaxWindowDays, MIN_WINDOW, MAX_WINDOW } = usePolicy()
-  const [winInput, setWinInput] = useState(String(maxWindowDays))
+  // mode: 'unlimited' | 'limited'
+  const [mode, setMode] = useState(maxWindowDays == null ? 'unlimited' : 'limited')
+  const [winInput, setWinInput] = useState(String(maxWindowDays ?? 14))
   const [flash, setFlash] = useState(false)
 
   const parsed = Math.round(Number(winInput))
-  const invalid = !Number.isFinite(parsed) || parsed < MIN_WINDOW || parsed > MAX_WINDOW
+  const limitInvalid = mode === 'limited' && (!Number.isFinite(parsed) || parsed < MIN_WINDOW || parsed > MAX_WINDOW)
 
   function apply() {
-    if (invalid) return
-    setMaxWindowDays(winInput)
+    if (limitInvalid) return
+    setMaxWindowDays(mode === 'unlimited' ? null : winInput)
     setFlash(true)
     setTimeout(() => setFlash(false), 2000)
   }
@@ -25,8 +28,9 @@ export default function HqReservationPolicy() {
     <div>
       <DevNote
         items={[
-          '예약 가능 기간(수령일 최대 N일)은 본사에서만 설정 — 지점은 변경 불가',
-          '설정값은 고객 사이트 수령일 선택 범위(오늘~N일)와 예약조회 변경에 즉시 반영(1~60일)',
+          '예약 가능 기간(수령일 상한)은 본사에서만 설정 — 지점은 변경 불가',
+          '기본은 "제한 없음(무제한)" — 고객은 오늘 이후 날짜를 자유롭게 선택. 필요 시 본사가 최대 N일 상한을 지정',
+          '설정값은 고객 사이트 수령일 선택 범위와 예약조회 변경에 즉시 반영(1~60일, 또는 무제한)',
           '자세히: 07_정책.md',
         ]}
       />
@@ -36,44 +40,66 @@ export default function HqReservationPolicy() {
         <div className="hq-policy-head">
           <span className="hq-policy-label">예약 가능 기간</span>
           <span className="hq-policy-desc">
-            고객이 수령 예정일을 <b>오늘부터 최대 며칠 뒤</b>까지 선택할 수 있는지 설정합니다.
+            고객이 수령 예정일을 <b>오늘부터 언제까지</b> 선택할 수 있는지 설정합니다.
             지점은 이 값을 변경할 수 없습니다.
           </span>
         </div>
 
         <div className="hq-policy-current">
-          현재 설정: <strong>오늘부터 최대 {maxWindowDays}일</strong>
+          현재 설정:{' '}
+          <strong>{maxWindowDays == null ? '제한 없음 (무제한)' : `오늘부터 최대 ${maxWindowDays}일`}</strong>
         </div>
 
-        <div className="hq-policy-edit">
-          <label className="hq-policy-field">
-            <span>수령일 최대 일수</span>
-            <span className="hq-policy-inputwrap">
+        <div className="hq-policy-modes" role="radiogroup" aria-label="예약 가능 기간 방식">
+          <label className="hq-policy-radio">
+            <input
+              type="radio"
+              name="winmode"
+              checked={mode === 'unlimited'}
+              onChange={() => setMode('unlimited')}
+            />
+            <span>
+              <b>제한 없음 (무제한)</b> — 오늘 이후 날짜를 자유롭게 선택
+            </span>
+          </label>
+          <label className="hq-policy-radio">
+            <input
+              type="radio"
+              name="winmode"
+              checked={mode === 'limited'}
+              onChange={() => setMode('limited')}
+            />
+            <span className="hq-policy-radio-limit">
+              <b>일수 지정</b> — 오늘부터 최대
               <input
                 type="number"
                 min={MIN_WINDOW}
                 max={MAX_WINDOW}
                 value={winInput}
                 onChange={(e) => setWinInput(e.target.value)}
+                onFocus={() => setMode('limited')}
                 className="hq-policy-input"
               />
               <span className="tiny">일</span>
             </span>
           </label>
-          <button className="cems-btn primary" onClick={apply} disabled={invalid}>
+        </div>
+
+        <div className="hq-policy-edit">
+          <button className="cems-btn primary" onClick={apply} disabled={limitInvalid}>
             저장
           </button>
           {flash && <span className="hq-policy-flash">✓ 저장됨</span>}
         </div>
 
-        {invalid && (
+        {limitInvalid && (
           <div className="hq-policy-err">
             {MIN_WINDOW}~{MAX_WINDOW}일 사이의 숫자를 입력해 주세요.
           </div>
         )}
 
         <div className="hq-policy-hint">
-          예) 14일로 설정하면 고객은 오늘부터 2주 이내의 날짜만 수령일로 선택할 수 있습니다.
+          예) "제한 없음"이면 고객이 먼 미래 날짜도 선택할 수 있고, "일수 지정 14일"이면 오늘부터 2주 이내만 선택할 수 있습니다.
         </div>
       </div>
     </div>

@@ -544,8 +544,11 @@ export default function Site2() {
   const suEmailVerified =
     isValidEmail(suEmail) && !!suVerifiedEmail && suVerifiedEmail === suEmail.trim()
 
-  // 수령 예정일이 예약 가능 기간(오늘~최대 N일) 안인지
-  const dateValid = !!pickupDate && pickupDate >= range.minDate && pickupDate <= range.maxDate
+  // 수령 예정일이 예약 가능 기간(오늘~ · 상한 없으면 무제한) 안인지
+  const dateValid =
+    !!pickupDate &&
+    pickupDate >= range.minDate &&
+    (range.maxDate == null || pickupDate <= range.maxDate)
   // 금액 단계 완료 조건: 금액 양수 + 수령일 유효
   const amountValid = Number(amount) > 0 && dateValid
 
@@ -1100,18 +1103,20 @@ export default function Site2() {
               {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}
             </div>
 
-            {/* 수령 예정일 — 예약 가능 기간(오늘~본사 설정 N일) 내 선택 */}
+            {/* 수령 예정일 — 오늘 이후 자유 선택(본사가 상한을 지정한 경우에만 제한) */}
             <div className="s2-field-label">{t('s2v.info.pickup')}</div>
             <input
               className="s2-search"
               type="date"
               value={pickupDate}
               min={range.minDate}
-              max={range.maxDate}
+              max={range.maxDate || undefined}
               onChange={(e) => setPickupDate(e.target.value)}
             />
             <div className="s2v-hint">
-              {t('s2v.info.pickuphint').replace('{days}', maxWindowDays)}
+              {range.maxDate == null
+                ? t('s2v.info.pickuphint.unlimited')
+                : t('s2v.info.pickuphint').replace('{days}', maxWindowDays)}
             </div>
 
             {/* 회원 우대 배너 — 회원가입 시 수령 현장에서 우대 */}

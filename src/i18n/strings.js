@@ -825,6 +825,10 @@ export const STRINGS = {
     ko: '오늘부터 최대 {days}일 이내에서 선택하세요.',
     en: 'Choose any day within {days} days from today.',
   },
+  's2v.info.pickuphint.unlimited': {
+    ko: '오늘 이후 원하는 날짜를 선택하세요.',
+    en: 'Choose any date from today onward.',
+  },
   's2v.info.submit': { ko: '예약하기', en: 'Reserve' },
   's2v.sum.branch': { ko: '수령 지점', en: 'Branch' },
   's2v.sum.direction': { ko: '환전 방향', en: 'Direction' },

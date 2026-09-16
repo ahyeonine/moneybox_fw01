@@ -2,22 +2,32 @@ import { createContext, useContext, useState, useCallback } from 'react'
 
 // 운영 정책 공유 상태(프로토타입).
 // - maxWindowDays: 예약 가능 기간 = 수령 예정일을 오늘부터 최대 며칠 뒤까지 선택할 수 있는지.
+//   `null`이면 기간 제한 없음(무제한 · 기본값) — 오늘 이후 날짜를 자유롭게 선택할 수 있다.
 //   본사(CEMS 본사관리자)에서만 설정한다. 지점은 변경 불가.
 //   고객 사이트 수령일 선택 범위(pickupRange)와 예약조회 변경에 반영된다.
 
 const PolicyContext = createContext(null)
 
-const DEFAULT_MAX_WINDOW_DAYS = 14 // 기본 2주
+const DEFAULT_MAX_WINDOW_DAYS = null // 기본 무제한(기간 제한 없음)
 const MIN_WINDOW = 1
 const MAX_WINDOW = 60
 
 export function PolicyProvider({ children }) {
   const [maxWindowDays, setMax] = useState(DEFAULT_MAX_WINDOW_DAYS)
 
-  // 본사에서만 호출(값은 1~60일로 클램프)
+  // 본사에서만 호출.
+  //  · null/빈값/0/숫자 아님 → 무제한(null)
+  //  · 그 외 숫자 → 1~60일로 클램프
   const setMaxWindowDays = useCallback((v) => {
+    if (v == null || v === '') {
+      setMax(null)
+      return
+    }
     const n = Math.round(Number(v))
-    if (!Number.isFinite(n)) return
+    if (!Number.isFinite(n) || n <= 0) {
+      setMax(null)
+      return
+    }
     setMax(Math.min(MAX_WINDOW, Math.max(MIN_WINDOW, n)))
   }, [])
 
