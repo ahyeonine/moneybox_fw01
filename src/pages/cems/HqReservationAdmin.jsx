@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react'
 import { useReservations } from '../../store/ReservationContext.jsx'
-import { usePolicy } from '../../store/PolicyContext.jsx'
 import { useEmail, BRANCH_CANCEL_REASON } from '../../store/EmailContext.jsx'
 import { CURRENCY_META } from '../../data/rates.js'
 import { BRANCHES, getBranch } from '../../data/branches.js'
@@ -28,14 +27,6 @@ const emptyFilter = {
 export default function HqReservationAdmin() {
   const { reservations, today, cancelByBranch } = useReservations()
   const { sendEmail } = useEmail()
-  const { maxWindowDays, setMaxWindowDays, MIN_WINDOW, MAX_WINDOW } = usePolicy()
-  const [winInput, setWinInput] = useState(String(maxWindowDays))
-  const [winFlash, setWinFlash] = useState(false)
-  function applyWindow() {
-    setMaxWindowDays(winInput)
-    setWinFlash(true)
-    setTimeout(() => setWinFlash(false), 2000)
-  }
 
   // 본사 기본값: 전 지점 + 전체 기간(날짜 제한 없음)으로 한번에 조회
   const defaultFilter = { ...emptyFilter }
@@ -111,38 +102,12 @@ export default function HqReservationAdmin() {
       <DevNote
         items={[
           '본사관리자 화면: 전 지점의 외국인 환전예약을 한 화면에서 조회. 검색 필터에 지점 선택 포함',
-          '예약 가능 기간(수령일 최대 N일)은 본사에서만 설정 — 고객 사이트 수령일 선택 범위에 즉시 반영',
+          '예약 가능 기간(수령일 최대 N일) 설정은 좌측 [예약 가능 기간 설정 (본사)] 화면에서',
           '행 클릭 → 예약 상세 모달. 예약취소(지점·직원 취소) 가능: 상태→취소, 재고 복구, 지점 취소 안내 이메일 발송',
           '자세히: 01_IA.md',
         ]}
       />
       <h1 className="cems-h1">본사관리자 · 전 지점 외국인 환전예약</h1>
-
-      {/* 예약 가능 기간 설정 (본사 전용) */}
-      <div className="cems-panel hq-window">
-        <div className="hq-window-main">
-          <span className="hq-window-label">예약 가능 기간 (본사 전용)</span>
-          <span className="hq-window-desc">
-            고객이 수령 예정일을 <b>오늘부터 최대 며칠 뒤</b>까지 선택할 수 있는지 설정합니다.
-          </span>
-        </div>
-        <div className="hq-window-edit">
-          <span className="hq-window-cur">현재: 최대 {maxWindowDays}일</span>
-          <input
-            type="number"
-            min={MIN_WINDOW}
-            max={MAX_WINDOW}
-            value={winInput}
-            onChange={(e) => setWinInput(e.target.value)}
-            className="hq-window-input"
-          />
-          <span className="tiny">일</span>
-          <button className="cems-btn primary" onClick={applyWindow}>
-            적용
-          </button>
-          {winFlash && <span className="hq-window-flash">✓ 저장됨</span>}
-        </div>
-      </div>
 
       {/* 필터 행 */}
       <div className="cems-filter">
