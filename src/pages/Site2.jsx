@@ -10,6 +10,7 @@ import { isValidName, isValidEmail } from '../lib/validation.js'
 import { pickupRange } from '../lib/date.js'
 import { usePolicy } from '../store/PolicyContext.jsx'
 import LanguageDropdown from '../components/LanguageDropdown.jsx'
+import DevNote from '../components/DevNote.jsx'
 import AboutPage from './AboutPage.jsx'
 import LookupPage from './LookupPage.jsx'
 
@@ -615,6 +616,13 @@ export default function Site2() {
 
   return (
     <div className="s2">
+      <DevNote
+        items={[
+          '외국인 전용 페이지(외국인 웹사이트). 통합웹(m-box.com)에서 언어를 외국어(EN·中文·日本語 등)로 선택하면 이 페이지로 자동 이동한다 — 국내 고객은 통합웹, 외국인은 이 페이지로 분기.',
+          '이 프로토타입의 [Customer Website] 탭이 그 외국인 페이지에 해당한다. (통합웹 화면 자체는 프로토타입 범위 밖 — 진입 경로 설명용 메모)',
+          '자세히: 01_IA.md',
+        ]}
+      />
       <header className="s2-header">
         <div className="s2-header-inner">
           <button type="button" className="s2-logo" onClick={() => setView('home')}>
