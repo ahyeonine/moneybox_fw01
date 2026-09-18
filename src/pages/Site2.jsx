@@ -197,13 +197,13 @@ const POPULAR = [
 // 머니24h 무인환전기(24시간·예약 없이 이용) 위치 — 위치 안내용 목데이터.
 // 예약·수령은 지점에서만. 무인기는 지도에 "어디에 있다" 정도만 표시한다.
 const MONEY24H = [
-  { id: 'k-mdong', name: { ko: '명동 눈스퀘어', en: 'Myeongdong Noon Square' }, lat: 37.5638, lng: 126.9827 },
-  { id: 'k-hongdae', name: { ko: '홍대입구역 9번 출구', en: 'Hongdae Stn Exit 9' }, lat: 37.5571, lng: 126.9235 },
-  { id: 'k-gangnam', name: { ko: '강남역 지하상가', en: 'Gangnam Stn Mall' }, lat: 37.4972, lng: 127.0286 },
-  { id: 'k-dongdaemun', name: { ko: '동대문 DDP', en: 'Dongdaemun DDP' }, lat: 37.5663, lng: 127.0092 },
-  { id: 'k-icn', name: { ko: '인천공항 T1 입국장', en: 'Incheon Airport T1 Arrivals' }, lat: 37.4487, lng: 126.4526 },
-  { id: 'k-seomyeon', name: { ko: '부산 서면역', en: 'Busan Seomyeon Stn' }, lat: 35.1578, lng: 129.0596 },
-  { id: 'k-haeundae', name: { ko: '해운대 해수욕장', en: 'Haeundae Beach' }, lat: 35.1587, lng: 129.1604 },
+  { id: 'k-mdong', name: { ko: '명동 눈스퀘어', en: 'Myeongdong Noon Square' }, addr: { ko: '서울 중구 명동8길 27', en: '27 Myeongdong 8-gil, Jung-gu, Seoul' }, lat: 37.5638, lng: 126.9827 },
+  { id: 'k-hongdae', name: { ko: '홍대입구역 9번 출구', en: 'Hongdae Stn Exit 9' }, addr: { ko: '서울 마포구 양화로 지하 160', en: 'B160 Yanghwa-ro, Mapo-gu, Seoul' }, lat: 37.5571, lng: 126.9235 },
+  { id: 'k-gangnam', name: { ko: '강남역 지하상가', en: 'Gangnam Stn Mall' }, addr: { ko: '서울 강남구 강남대로 지하 396', en: 'B396 Gangnam-daero, Gangnam-gu, Seoul' }, lat: 37.4972, lng: 127.0286 },
+  { id: 'k-dongdaemun', name: { ko: '동대문 DDP', en: 'Dongdaemun DDP' }, addr: { ko: '서울 중구 을지로 281', en: '281 Eulji-ro, Jung-gu, Seoul' }, lat: 37.5663, lng: 127.0092 },
+  { id: 'k-icn', name: { ko: '인천공항 T1 입국장', en: 'Incheon Airport T1 Arrivals' }, addr: { ko: '인천 중구 공항로 272 T1 입국장', en: 'T1 Arrivals, 272 Gonghang-ro, Jung-gu, Incheon' }, lat: 37.4487, lng: 126.4526 },
+  { id: 'k-seomyeon', name: { ko: '부산 서면역', en: 'Busan Seomyeon Stn' }, addr: { ko: '부산 부산진구 중앙대로 지하 730', en: 'B730 Jungang-daero, Busanjin-gu, Busan' }, lat: 35.1578, lng: 129.0596 },
+  { id: 'k-haeundae', name: { ko: '해운대 해수욕장', en: 'Haeundae Beach' }, addr: { ko: '부산 해운대구 해운대해변로 264', en: '264 Haeundaehaebyeon-ro, Haeundae-gu, Busan' }, lat: 35.1587, lng: 129.1604 },
 ]
 
 function distanceKm(a, b) {
@@ -472,13 +472,25 @@ export default function Site2() {
   )
 
   // 지도에 함께 표시할 머니24h 무인환전기 — 현재 지역 지점 주변(50km 내). 위치 안내용(예약 불가).
+  // 마커 클릭 시 위치정보 팝업(이름·유형·주소·24시간/예약 불가)을 HTML로 표시.
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
   const mapKiosks = useMemo(() => {
     const bs = branches.map((x) => x.b)
     if (!bs.length) return []
-    const suffix = t('s2.kiosk.pin')
     const near = MONEY24H.filter((k) => bs.some((b) => distanceKm(k, b) <= 50))
     const list = near.length ? near : MONEY24H
-    return list.map((k) => ({ lat: k.lat, lng: k.lng, label: `${k.name[lang] || k.name.ko} · ${suffix}` }))
+    return list.map((k) => {
+      const nm = esc(k.name[lang] || k.name.ko)
+      const ad = esc(k.addr[lang] || k.addr.ko)
+      const label =
+        `<div class="s2-kpop">` +
+        `<b class="s2-kpop-t">${nm}</b>` +
+        `<span class="s2-kpop-type">${esc(t('s2.kiosk.pop.type'))}</span>` +
+        `<span class="s2-kpop-addr">📍 ${ad}</span>` +
+        `<span class="s2-kpop-hours">${esc(t('s2.kiosk.pop.hours'))}</span>` +
+        `</div>`
+      return { lat: k.lat, lng: k.lng, label }
+    })
   }, [branches, lang, t])
 
   const REGIONS = regionChips()
