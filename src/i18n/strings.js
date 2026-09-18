@@ -650,6 +650,8 @@ export const STRINGS = {
   's2.kiosk.legend.branch': { ko: '지점 (예약·수령)', en: 'Branch (reserve & pick up)' },
   's2.kiosk.legend.kiosk': { ko: '머니24h 무인환전기 (24시간)', en: 'MONEY24h self-service (24/7)' },
   's2.kiosk.pin': { ko: '머니24h · 24시간', en: 'MONEY24h · 24/7' },
+  's2.kiosk.pop.type': { ko: '머니24h 무인환전기', en: 'MONEY24h self-service kiosk' },
+  's2.kiosk.pop.hours': { ko: '24시간 운영 · 예약 없이 이용 (환전 예약·수령은 지점에서만)', en: 'Open 24/7 · no reservation (exchange booking & pickup at branches only)' },
   's2.kiosk.note': {
     ko: '※ 무인환전기는 위치 안내용이에요. 예약·수령은 지점에서만 진행돼요.',
     en: '* Self-service machines are shown for location only. Reservation and pickup are at branches.',

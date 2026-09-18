@@ -5556,6 +5556,33 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: var(--travel-dark, #1846b8);
 }
 
+/* 무인기(머니24h) 위치정보 팝업 */
+.s2-kpop {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 180px;
+  line-height: 1.45;
+}
+.s2-kpop-t {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.s2-kpop-type {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #0d9488;
+}
+.s2-kpop-addr {
+  font-size: 12px;
+  color: #334155;
+}
+.s2-kpop-hours {
+  font-size: 11px;
+  color: #64748b;
+}
+
 /* 지점 선택 2단 레이아웃: 좌측 검색+리스트(좁게) / 우측 지도(항상) */
 .s2-branch-cols {
   display: flex;
