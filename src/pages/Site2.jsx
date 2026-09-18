@@ -253,10 +253,12 @@ function CompareMini({ t, amount, board, direction = 'BUY' }) {
 
 // Leaflet 지도 (실제 OpenStreetMap). 라이브러리/타일 로드 실패해도 앱은 계속 동작.
 // kiosks: 머니24h 무인환전기 위치(위치 안내용 · 예약 불가) — 지점(파랑)과 다른 색으로 표시.
-function Site2Map({ center, points, kiosks = [] }) {
+function Site2Map({ center, points, kiosks = [], onPick }) {
   const elRef = useRef(null)
   const mapRef = useRef(null)
   const layerRef = useRef(null)
+  const pickRef = useRef(onPick) // 최신 onPick을 이펙트 재실행 없이 참조
+  pickRef.current = onPick
 
   useEffect(() => {
     let cancelled = false
@@ -297,15 +299,22 @@ function Site2Map({ center, points, kiosks = [] }) {
           bounds.push([center.lat, center.lng])
         }
         points.forEach((p) => {
-          L.circleMarker([p.lat, p.lng], {
+          const m = L.circleMarker([p.lat, p.lng], {
             radius: 8,
             color: '#1f6bff',
             fillColor: '#1f6bff',
             fillOpacity: 0.85,
             weight: 2,
-          })
-            .addTo(layer)
-            .bindPopup(p.label)
+          }).addTo(layer)
+          // 지점 마커: 클릭하면 바로 선택(예약 단계로). 호버 시 지점명 툴팁.
+          if (p.id && pickRef.current) {
+            m.bindTooltip(p.label)
+            m.on('click', () => pickRef.current(p.id))
+            const el = m.getElement && m.getElement()
+            if (el) el.style.cursor = 'pointer'
+          } else {
+            m.bindPopup(p.label)
+          }
           bounds.push([p.lat, p.lng])
         })
         // 머니24h 무인환전기 — 위치 안내용(예약 불가). 지점과 구분되는 청록색 마커.
@@ -458,7 +467,7 @@ export default function Site2() {
   }, [loc, region])
 
   const mapPoints = useMemo(
-    () => branches.map(({ b }) => ({ lat: b.lat, lng: b.lng, label: b.name[lang] || b.name.ko })),
+    () => branches.map(({ b }) => ({ id: b.id, lat: b.lat, lng: b.lng, label: b.name[lang] || b.name.ko })),
     [branches, lang]
   )
 
@@ -1007,7 +1016,9 @@ export default function Site2() {
                 center={loc ? { lat: loc.lat, lng: loc.lng, label: loc.name } : null}
                 points={mapPoints}
                 kiosks={mapKiosks}
+                onPick={reserveAt}
               />
+              <div className="s2-map-help">{t('s2.map.pickhint')}</div>
               <div className="s2-map-attr">{t('s2.mapattr')}</div>
               <div className="s2-maplegend">
                 <span className="s2-maplegend-item"><span className="s2-dot branch" aria-hidden="true" /> {t('s2.kiosk.legend.branch')}</span>

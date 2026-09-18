@@ -5549,6 +5549,13 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   z-index: 0;
 }
 
+.s2-map-help {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--travel-dark, #1846b8);
+}
+
 /* 지점 선택 2단 레이아웃: 좌측 검색+리스트(좁게) / 우측 지도(항상) */
 .s2-branch-cols {
   display: flex;
