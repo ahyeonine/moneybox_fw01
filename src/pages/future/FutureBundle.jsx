@@ -93,8 +93,10 @@ export default function FutureBundle() {
   const [confirmed, setConfirmed] = useState(false)
 
   // ── 계산 ──
-  const nights = arrival && departure ? Math.max(1, diffDays(departure, arrival)) : 1
-  const simDays = arrival && departure ? Math.max(1, diffDays(departure, arrival) + 1) : 1
+  // 입국~출국 간격(일). 예: 09-18~09-25 = 7일 → 체류 7일 · 6박
+  const span = arrival && departure ? diffDays(departure, arrival) : 1
+  const simDays = Math.max(1, span) // 체류일수(유심/이심 요금 기준)
+  const nights = Math.max(1, span - 1) // 숙박일수(박)
 
   const rate = getDisplayRates(currency)?.base || 0
   const fxKrw = Number(fxAmount) > 0 && rate > 0 ? Math.round(Number(fxAmount) * rate) : 0
