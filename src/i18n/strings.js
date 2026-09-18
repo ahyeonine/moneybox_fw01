@@ -642,6 +642,10 @@ export const STRINGS = {
   's2.all.title': { ko: '전체 지점에서 선택', en: 'Or pick any branch' },
   's2.reco.title': { ko: '가까운 지점을 찾았어요', en: 'Nearest branches for you' },
   's2.mapattr': { ko: '지도 · © OpenStreetMap', en: 'Map · © OpenStreetMap' },
+  's2.map.pickhint': {
+    ko: '지도에서 파란 지점 마커를 누르면 바로 선택돼요.',
+    en: 'Tap a blue branch marker on the map to select it.',
+  },
   // 지도 범례 · 머니24h 무인환전기(위치 안내용 · 예약 불가)
   's2.kiosk.legend.branch': { ko: '지점 (예약·수령)', en: 'Branch (reserve & pick up)' },
   's2.kiosk.legend.kiosk': { ko: '머니24h 무인환전기 (24시간)', en: 'MONEY24h self-service (24/7)' },
