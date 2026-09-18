@@ -14,6 +14,7 @@ import HqReservationPolicy from './pages/cems/HqReservationPolicy.jsx'
 import CemsSettings from './pages/cems/CemsSettings.jsx'
 import DocsViewer from './pages/DocsViewer.jsx'
 import EmailAdmin from './pages/email/EmailAdmin.jsx'
+import FutureBundle from './pages/future/FutureBundle.jsx'
 
 export default function App() {
   return (
@@ -45,6 +46,9 @@ export default function App() {
           <Route path="reservation/flow" element={<FxFlowPlaceholder />} />
           <Route path="transaction" element={<PosTransaction />} />
         </Route>
+
+        {/* 탭 4 · 미래형 통합예약 (컨셉 프로토타입 — 기존과 분리) */}
+        <Route path="future" element={<FutureBundle />} />
 
         {/* 기획문서 뷰어 (내부 검토용) */}
         <Route path="docs" element={<DocsViewer />} />
