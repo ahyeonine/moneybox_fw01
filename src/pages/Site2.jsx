@@ -285,27 +285,27 @@ function Site2Map({ center, points, kiosks = [], onPick }) {
         const layer = layerRef.current
         layer.clearLayers()
         const bounds = []
-        // 내 위치(선택 시)만 빨간 마커로 표시. 없으면 지점·무인기만 표시.
+        // 예쁜 핀(divIcon): 색 + 아이콘. 지점=파란 핀(💱), 무인기=청록 핀(🏧).
+        const pin = (cls, glyph) =>
+          L.divIcon({
+            className: 's2mk-wrap',
+            html: `<div class="s2mk ${cls}"><i>${glyph}</i></div>`,
+            iconSize: [34, 42],
+            iconAnchor: [17, 36],
+            popupAnchor: [0, -32],
+            tooltipAnchor: [0, -28],
+          })
+        // 내 위치(선택 시)만 펄스 도트로 표시. 없으면 지점·무인기만 표시.
         if (center) {
-          L.circleMarker([center.lat, center.lng], {
-            radius: 9,
-            color: '#ef4444',
-            fillColor: '#ef4444',
-            fillOpacity: 0.9,
-            weight: 2,
+          L.marker([center.lat, center.lng], {
+            icon: L.divIcon({ className: 's2mk-wrap', html: '<div class="s2mk-me"></div>', iconSize: [18, 18], iconAnchor: [9, 9], popupAnchor: [0, -10] }),
           })
             .addTo(layer)
             .bindPopup(center.label)
           bounds.push([center.lat, center.lng])
         }
         points.forEach((p) => {
-          const m = L.circleMarker([p.lat, p.lng], {
-            radius: 8,
-            color: '#1f6bff',
-            fillColor: '#1f6bff',
-            fillOpacity: 0.85,
-            weight: 2,
-          }).addTo(layer)
+          const m = L.marker([p.lat, p.lng], { icon: pin('s2mk-branch', '💱') }).addTo(layer)
           // 지점 마커: 클릭하면 바로 선택(예약 단계로). 호버 시 지점명 툴팁.
           if (p.id && pickRef.current) {
             m.bindTooltip(p.label)
@@ -317,15 +317,9 @@ function Site2Map({ center, points, kiosks = [], onPick }) {
           }
           bounds.push([p.lat, p.lng])
         })
-        // 머니24h 무인환전기 — 위치 안내용(예약 불가). 지점과 구분되는 청록색 마커.
+        // 머니24h 무인환전기 — 위치 안내용(예약 불가). 청록 핀(🏧).
         kiosks.forEach((k) => {
-          L.circleMarker([k.lat, k.lng], {
-            radius: 6,
-            color: '#0d9488',
-            fillColor: '#14b8a6',
-            fillOpacity: 0.9,
-            weight: 2,
-          })
+          L.marker([k.lat, k.lng], { icon: pin('s2mk-kiosk', '🏧') })
             .addTo(layer)
             .bindPopup(k.label)
           bounds.push([k.lat, k.lng])

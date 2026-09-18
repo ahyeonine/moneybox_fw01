@@ -5598,6 +5598,38 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: #64748b;
 }
 
+/* 지도 커스텀 핀 마커 */
+.s2mk-wrap { background: none; border: none; }
+.s2mk {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2.5px solid #fff;
+  box-shadow: 0 5px 12px rgba(16, 32, 74, 0.38);
+}
+.s2mk > i {
+  transform: rotate(45deg);
+  font-size: 15px;
+  font-style: normal;
+  line-height: 1;
+}
+.s2mk-branch { background: linear-gradient(140deg, #4b93ff, #1f6bff 70%); }
+.s2mk-kiosk { background: linear-gradient(140deg, #2dd4bf, #0d9488 70%); }
+.s2mk-branch:hover { filter: brightness(1.06); }
+/* 내 위치 — 펄스 도트 */
+.s2mk-me {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.28);
+}
+
 /* 지점 선택 2단 레이아웃: 좌측 검색+리스트(좁게) / 우측 지도(항상) */
 .s2-branch-cols {
   display: flex;
