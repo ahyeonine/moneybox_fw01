@@ -266,9 +266,11 @@ function Site2Map({ center, points, kiosks = [] }) {
         await import('leaflet/dist/leaflet.css')
         const L = mod.default || mod
         if (cancelled || !elRef.current) return
+        // 초기/폴백 중심점: 내 위치 → 첫 지점 → 첫 무인기 → 서울 시청
+        const fb = center || points[0] || kiosks[0] || { lat: 37.5665, lng: 126.978 }
         if (!mapRef.current) {
           mapRef.current = L.map(elRef.current, { scrollWheelZoom: false }).setView(
-            [center.lat, center.lng],
+            [fb.lat, fb.lng],
             12
           )
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -281,16 +283,19 @@ function Site2Map({ center, points, kiosks = [] }) {
         const layer = layerRef.current
         layer.clearLayers()
         const bounds = []
-        L.circleMarker([center.lat, center.lng], {
-          radius: 9,
-          color: '#ef4444',
-          fillColor: '#ef4444',
-          fillOpacity: 0.9,
-          weight: 2,
-        })
-          .addTo(layer)
-          .bindPopup(center.label)
-        bounds.push([center.lat, center.lng])
+        // 내 위치(선택 시)만 빨간 마커로 표시. 없으면 지점·무인기만 표시.
+        if (center) {
+          L.circleMarker([center.lat, center.lng], {
+            radius: 9,
+            color: '#ef4444',
+            fillColor: '#ef4444',
+            fillOpacity: 0.9,
+            weight: 2,
+          })
+            .addTo(layer)
+            .bindPopup(center.label)
+          bounds.push([center.lat, center.lng])
+        }
         points.forEach((p) => {
           L.circleMarker([p.lat, p.lng], {
             radius: 8,
@@ -317,7 +322,7 @@ function Site2Map({ center, points, kiosks = [] }) {
           bounds.push([k.lat, k.lng])
         })
         if (bounds.length > 1) map.fitBounds(bounds, { padding: [36, 36], maxZoom: 13 })
-        else map.setView([center.lat, center.lng], 13)
+        else map.setView([fb.lat, fb.lng], 13)
         setTimeout(() => map && map.invalidateSize(), 120)
       } catch (e) {
         /* 지도 로드 실패 → 조용히 무시(리스트/추천은 정상 동작) */
@@ -457,15 +462,15 @@ export default function Site2() {
     [branches, lang]
   )
 
-  // 선택 위치 주변 머니24h 무인환전기(가까운 3곳) — 지도에 위치 안내용으로만 표시(예약 불가)
-  const nearestKiosks = useMemo(() => {
-    if (!loc) return []
+  // 지도에 함께 표시할 머니24h 무인환전기 — 현재 지역 지점 주변(50km 내). 위치 안내용(예약 불가).
+  const mapKiosks = useMemo(() => {
+    const bs = branches.map((x) => x.b)
+    if (!bs.length) return []
     const suffix = t('s2.kiosk.pin')
-    return MONEY24H.map((k) => ({ k, km: distanceKm(loc, k) }))
-      .sort((a, b) => a.km - b.km)
-      .slice(0, 3)
-      .map(({ k }) => ({ lat: k.lat, lng: k.lng, label: `${k.name[lang] || k.name.ko} · ${suffix}` }))
-  }, [loc, lang, t])
+    const near = MONEY24H.filter((k) => bs.some((b) => distanceKm(k, b) <= 50))
+    const list = near.length ? near : MONEY24H
+    return list.map((k) => ({ lat: k.lat, lng: k.lng, label: `${k.name[lang] || k.name.ko} · ${suffix}` }))
+  }, [branches, lang, t])
 
   const REGIONS = regionChips()
   const stepIdx = ['region', 'branch', 'amount', 'info'].indexOf(step)
@@ -878,6 +883,9 @@ export default function Site2() {
             <h2 className="s2-card-t">{t('s2.br2.title')}</h2>
             <p className="s2-card-sub">{t('s2.br2.sub')}</p>
 
+            <div className="s2-branch-cols">
+            {/* 좌측: 검색 + 지점 리스트 (검색은 좁게) */}
+            <div className="s2-branch-left">
             {/* 검색 */}
             <input
               className="s2-search"
@@ -931,36 +939,8 @@ export default function Site2() {
               </>
             )}
 
-            {/* 지도 + 추천 지점 (위치 선택 시) */}
-            {loc && (
-              <div className="s2-reco">
-                <div className="s2-picked">
-                  <span aria-hidden="true">📍</span> {loc.name}
-                </div>
-                <Site2Map
-                  center={{ lat: loc.lat, lng: loc.lng, label: loc.name }}
-                  points={mapPoints}
-                  kiosks={nearestKiosks}
-                />
-                <div className="s2-map-attr">{t('s2.mapattr')}</div>
-
-                {/* 지도 범례 — 지점(예약)과 머니24h 무인환전기(위치 안내) 구분 */}
-                <div className="s2-maplegend">
-                  <span className="s2-maplegend-item">
-                    <span className="s2-dot branch" aria-hidden="true" /> {t('s2.kiosk.legend.branch')}
-                  </span>
-                  <span className="s2-maplegend-item">
-                    <span className="s2-dot kiosk" aria-hidden="true" /> {t('s2.kiosk.legend.kiosk')}
-                  </span>
-                </div>
-                <div className="s2-kiosk-note">{t('s2.kiosk.note')}</div>
-
-                <div className="s2-reco-title">{t('s2.reco.title')}</div>
-              </div>
-            )}
-
             {/* 지점 리스트 (위치 있으면 가까운 순, 없으면 전체) */}
-            {!loc && <div className="s2-field-label">{t('s2.all.title')}</div>}
+            <div className="s2-field-label">{loc ? t('s2.reco.title') : t('s2.all.title')}</div>
             <div className="s2-branch-list">
               {branches.length === 0 && <div className="s2-empty">{t('s2.br.none')}</div>}
               {branches.map(({ b, km }, i) => (
@@ -1016,6 +996,26 @@ export default function Site2() {
                 </div>
               ))}
             </div>
+            </div>{/* /s2-branch-left */}
+
+            {/* 우측: 지도 — 지점 + 무인기(머니24h) 항상 표시 */}
+            <div className="s2-branch-right">
+              {loc && (
+                <div className="s2-picked"><span aria-hidden="true">📍</span> {loc.name}</div>
+              )}
+              <Site2Map
+                center={loc ? { lat: loc.lat, lng: loc.lng, label: loc.name } : null}
+                points={mapPoints}
+                kiosks={mapKiosks}
+              />
+              <div className="s2-map-attr">{t('s2.mapattr')}</div>
+              <div className="s2-maplegend">
+                <span className="s2-maplegend-item"><span className="s2-dot branch" aria-hidden="true" /> {t('s2.kiosk.legend.branch')}</span>
+                <span className="s2-maplegend-item"><span className="s2-dot kiosk" aria-hidden="true" /> {t('s2.kiosk.legend.kiosk')}</span>
+              </div>
+              <div className="s2-kiosk-note">{t('s2.kiosk.note')}</div>
+            </div>
+            </div>{/* /s2-branch-cols */}
 
             <button className="btn s2-ghost block" onClick={() => setStep('region')}>
               {t('s2.back')}
