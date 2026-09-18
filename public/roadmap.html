@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>머니박스 통합예약 로드맵</title>
+<meta name="description" content="머니박스 외국인 서비스의 4단계 확장 로드맵 (환전예약 → 통합예약)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Sora:wght@600;700;800&display=swap">
+<style>
+  :root {
+    --blue: #1f6bff;
+    --blue-dk: #1846b8;
+    --blue-soft: #eaf1ff;
+    --bg: #eef3fb;
+    --surface: #ffffff;
+    --ink: #16204a;
+    --muted: #6b7690;
+    --line: #dfe6f3;
+    --rail: #cdd9f0;
+    --soon: #8a93a8;
+    --shadow: 0 10px 30px rgba(31, 107, 255, 0.10);
+    --kr: 'Noto Sans KR', system-ui, sans-serif;
+    --disp: 'Sora', 'Noto Sans KR', sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --blue: #5c8dff;
+      --blue-dk: #a9c4ff;
+      --blue-soft: #1a2947;
+      --bg: #0c1020;
+      --surface: #121933;
+      --ink: #eaf0ff;
+      --muted: #97a1bd;
+      --line: #263355;
+      --rail: #35446e;
+      --soon: #8891ad;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --blue: #5c8dff;
+    --blue-dk: #a9c4ff;
+    --blue-soft: #1a2947;
+    --bg: #0c1020;
+    --surface: #121933;
+    --ink: #eaf0ff;
+    --muted: #97a1bd;
+    --line: #263355;
+    --rail: #35446e;
+    --soon: #8891ad;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--kr);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 20px 72px;
+  }
+
+  /* 헤더 */
+  .head {
+    background: linear-gradient(135deg, #3a86ff 0%, var(--blue) 55%, var(--blue-dk) 100%);
+    border-radius: 24px;
+    padding: 34px 30px;
+    color: #fff;
+    box-shadow: var(--shadow);
+  }
+  .eyebrow {
+    font-family: var(--disp);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0 0 12px;
+  }
+  .head h1 {
+    font-size: clamp(26px, 6vw, 36px);
+    line-height: 1.18;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  .head p {
+    font-size: 14.5px;
+    color: rgba(255, 255, 255, 0.92);
+    margin: 0;
+    max-width: 46ch;
+  }
+  .legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+  }
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+  .dot.now { background: #fff; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35); }
+  .dot.next { background: rgba(255, 255, 255, 0.35); }
+
+  /* 타임라인 */
+  .timeline {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .phase {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    column-gap: 4px;
+  }
+  .rail {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .rail::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    bottom: -20px;
+    width: 2px;
+    background: var(--rail);
+  }
+  .phase:last-child .rail::before { display: none; }
+  .node {
+    position: relative;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--disp);
+    font-size: 15px;
+    font-weight: 800;
+    background: var(--surface);
+    color: var(--muted);
+    border: 2px solid var(--rail);
+  }
+  .phase.current .node {
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 5px var(--blue-soft);
+  }
+
+  /* 카드 */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+  }
+  .phase.current .card { border-color: var(--blue); }
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .ph-label {
+    font-family: var(--disp);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--blue-dk);
+  }
+  .chip {
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 4px 11px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .chip.now { color: #fff; background: var(--blue); }
+  .chip.soon { color: var(--soon); background: var(--blue-soft); }
+  .card h2 {
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    margin: 2px 0 14px;
+    text-wrap: balance;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+  .ico {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--blue-soft);
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    margin-top: 1px;
+  }
+  li b { font-weight: 700; }
+  li em {
+    font-style: normal;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .foot {
+    margin-top: 28px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .foot b { color: var(--ink); font-weight: 700; }
+
+  @media (max-width: 480px) {
+    .phase { grid-template-columns: 44px 1fr; }
+    .node { width: 34px; height: 34px; font-size: 13px; }
+    .card { padding: 17px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <p class="eyebrow">MoneyBox · Foreign Service</p>
+    <h1>외국인 서비스 통합예약 로드맵</h1>
+    <p>1차는 환전예약만 오픈하고, 이후 한국 여행 준비물을 하나로 묶는 통합예약으로 확장합니다.</p>
+    <div class="legend">
+      <span><span class="dot now"></span> 현재 (운영)</span>
+      <span><span class="dot next"></span> 예정 (확장)</span>
+    </div>
+  </header>
+
+  <div class="timeline">
+
+    <section class="phase current">
+      <div class="rail"><div class="node">01</div></div>
+      <div class="card">
+        <div class="card-top">
+          <span class="ph-label">Phase 01</span>
+          <span class="chip now">현재</span>
+        </div>
+        <h2>외국인 환전예약</h2>
+        <ul>
+          <li><span class="ico">💱</span><span><b>지역·지점 선택 → 환전 예약</b> <em>· 환율 미고정, 수령일 전광판 환율</em></span></li>
+          <li><span class="ico">🏅</span><span>회원 우대(현장 재량) · 이메일 인증</span></li>
+          <li><span class="ico">🔎</span><span>무로그인 예약조회 (예약번호 + 이메일)</span></li>
+          <li><span class="ico">🗺️</span><span>무인환전기(머니24h) 위치 안내</span></li>
+          <li><span class="ico">📲</span><span><b>이심(eSIM) 즉시 발급</b> <em>· 기존 머니박스 eSIM 서비스 연결</em></span></li>
+          <li><span class="ico">🌐</span><span><b>다국어</b> 한국어 · 영어 · 중국어(간체·번체) · 일본어</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="phase">
+      <div class="rail"><div class="node">02</div></div>
+      <div class="card">
+        <div class="card-top">
+          <span class="ph-label">Phase 02</span>
+          <span class="chip soon">예정</span>
+        </div>
+        <h2>교통카드 · 유심 · 공항 수령</h2>
+        <ul>
+          <li><span class="ico">🚇</span><span>교통 선불카드 미리 예약·충전</span></li>
+          <li><span class="ico">📱</span><span>유심(USIM) 판매 <em>· 체류일수 기준 요금</em></span></li>
+          <li><span class="ico">🛬</span><span>공항 수령·픽업 <em>· 송금업체 연계</em> · CU 스마트캐비넷 무인 수령</span></li>
+          <li><span class="ico">💳</span><span>신용카드 선결제 → 확인 메일 → 확인 시 시재 차감</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="phase">
+      <div class="rail"><div class="node">03</div></div>
+      <div class="card">
+        <div class="card-top">
+          <span class="ph-label">Phase 03</span>
+          <span class="chip soon">예정</span>
+        </div>
+        <h2>숙박 · 쇼핑 · 투어 연동</h2>
+        <ul>
+          <li><span class="ico">🏨</span><span>숙박 예약 연동 <em>· 야놀자 · 여기어때</em></span></li>
+          <li><span class="ico">🎫</span><span>쇼핑 · 투어 · 티켓 예약</span></li>
+          <li><span class="ico">🧳</span><span>입출국 일정 기반 상품 추천 (통합 여행 지갑)</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="phase">
+      <div class="rail"><div class="node">04</div></div>
+      <div class="card">
+        <div class="card-top">
+          <span class="ph-label">Phase 04</span>
+          <span class="chip soon">예정</span>
+        </div>
+        <h2>외부 연계 · 통합 플랫폼</h2>
+        <ul>
+          <li><span class="ico">🔗</span><span>OTA(트립닷컴 등) API 연계</span></li>
+          <li><span class="ico">🚀</span><span>환전 + 여행 준비를 아우르는 통합 여행 플랫폼</span></li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+
+  <p class="foot"><b>머니박스(Moneybox)</b> · 외국인 서비스 로드맵 · 시점은 목표이며 변동될 수 있습니다.</p>
+</div>
+</body>
+</html>
