@@ -177,11 +177,16 @@ export default function FutureBundle() {
 
       <div className="nx-wrap">
         <header className="nx-head">
-          <div className="nx-badge">CONCEPT · 미래형 통합예약</div>
+          <div className="nx-badge">CONCEPT · ALL-IN-ONE TRAVEL</div>
           <h1 className="nx-title">한 번에 준비하는 한국 여행 지갑</h1>
           <p className="nx-sub">
             환전 · 교통카드 · 유심/이심 · 숙박 · 쇼핑까지 입국 전에 미리 담고 결제하세요. 도착하면 받기만 하면 돼요.
           </p>
+          <div className="nx-trust">
+            <span>⚡ 즉시 확정</span>
+            <span>🔒 안전 결제</span>
+            <span>🎫 QR·무인 수령</span>
+          </div>
         </header>
 
         <ol className="nx-steps">
