@@ -7403,3 +7403,92 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 .nx-status-wait {
   font-weight: 800;
 }
+
+/* ── 미래형 통합예약 · 확장(디자인 추가) ───────────────────────── */
+.nx-head {
+  background: linear-gradient(135deg, var(--travel, #1f6bff), var(--travel-dark, #1846b8));
+  color: #fff;
+  border-radius: 18px;
+  padding: 26px 20px;
+  box-shadow: 0 10px 30px rgba(24, 70, 184, 0.28);
+}
+.nx-head .nx-badge {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+}
+.nx-head .nx-title {
+  color: #fff;
+}
+.nx-head .nx-sub {
+  color: rgba(255, 255, 255, 0.9);
+}
+/* 상품 썸네일(이모지 원형) */
+.nx-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: inline-grid;
+  place-items: center;
+  font-size: 17px;
+  background: var(--travel-soft, #eef4ff);
+  flex: 0 0 auto;
+}
+/* 가격 태그 */
+.nx-price {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--travel-dark, #1846b8);
+  margin-left: 4px;
+}
+/* 제공사 배지(야놀자/여기어때) */
+.nx-prov {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #6b3fd4;
+  background: #efe9fb;
+  border-radius: 6px;
+  padding: 1px 6px;
+  margin-right: 4px;
+}
+/* 다중 선택 카드 체크 */
+.nx-pick.multi {
+  align-items: center;
+}
+.nx-check {
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 900;
+  background: #eef1f7;
+  color: var(--text-3, #5b667e);
+  flex: 0 0 auto;
+}
+.nx-pick.multi.on .nx-check {
+  background: var(--travel, #1f6bff);
+  color: #fff;
+}
+/* 담긴 금액 바 */
+.nx-cart {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--travel-soft, #eef4ff);
+  border: 1px solid var(--travel, #1f6bff);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 4px 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-2, #38445e);
+}
+.nx-cart b {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--travel-dark, #1846b8);
+}
