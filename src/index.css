@@ -7033,214 +7033,218 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   }
 }
 
-/* ── 미래형 통합예약 (컨셉 프로토타입) ───────────────────────── */
+
+/* ── 미래형 통합예약 (컨셉) · 프리미엄 · 미니멀 디자인 ───────────── */
 .nx {
+  --nx-bg: #f4f3ef;
+  --nx-surface: #ffffff;
+  --nx-ink: #16171c;
+  --nx-muted: #7a7d85;
+  --nx-line: #e7e5df;
+  --nx-tint: #f6f5f1;
   min-height: 100vh;
-  background: var(--travel-soft, #eef4ff);
-  padding: 24px 16px 60px;
+  background: var(--nx-bg);
+  padding: 40px 16px 72px;
+  color: var(--nx-ink);
+  font-feature-settings: 'ss01';
 }
 .nx-wrap {
-  max-width: 640px;
+  max-width: 600px;
   margin: 0 auto;
 }
+/* 히어로 — 조용하고 여백 있는 미니멀 */
 .nx-head {
   text-align: center;
-  margin-bottom: 20px;
+  padding: 8px 4px 34px;
+  margin-bottom: 8px;
 }
 .nx-badge {
   display: inline-block;
   font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: var(--travel-dark, #1846b8);
-  background: #fff;
-  border: 1px solid var(--travel, #1f6bff);
-  border-radius: 999px;
-  padding: 5px 12px;
-  margin-bottom: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--nx-muted);
+  margin-bottom: 18px;
 }
 .nx-title {
-  font-size: 24px;
-  font-weight: 900;
-  color: var(--text, #12203c);
-  margin: 0 0 6px;
+  font-size: 32px;
+  line-height: 1.18;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--nx-ink);
+  margin: 0 0 14px;
 }
 .nx-sub {
   font-size: 14px;
-  color: var(--text-3, #5b667e);
-  margin: 0;
-  line-height: 1.5;
+  line-height: 1.65;
+  color: var(--nx-muted);
+  max-width: 30em;
+  margin: 0 auto;
 }
-/* 진행 표시 */
+/* 진행 표시 — 얇고 절제 */
 .nx-steps {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 22px;
   list-style: none;
   padding: 0;
-  margin: 0 0 18px;
-  gap: 4px;
+  margin: 0 0 26px;
 }
 .nx-step {
-  flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  position: relative;
+  gap: 7px;
+  opacity: 0.4;
+}
+.nx-step.on,
+.nx-step.done {
+  opacity: 1;
 }
 .nx-step-n {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 12px;
-  font-weight: 800;
-  background: #fff;
-  color: var(--text-3, #5b667e);
-  border: 1.5px solid var(--border, #dbe1ec);
-}
-.nx-step.on .nx-step-n {
-  background: var(--travel, #1f6bff);
-  color: #fff;
-  border-color: var(--travel, #1f6bff);
-}
-.nx-step.done .nx-step-n {
-  background: #1a8f4c;
-  color: #fff;
-  border-color: #1a8f4c;
-}
-.nx-step-l {
   font-size: 11px;
   font-weight: 700;
-  color: var(--text-3, #5b667e);
+  border: 1px solid var(--nx-line);
+  color: var(--nx-muted);
+  background: var(--nx-surface);
 }
-.nx-step.on .nx-step-l {
-  color: var(--travel-dark, #1846b8);
+.nx-step.on .nx-step-n {
+  background: var(--nx-ink);
+  color: #fff;
+  border-color: var(--nx-ink);
+}
+.nx-step.done .nx-step-n {
+  border-color: var(--nx-ink);
+  color: var(--nx-ink);
+}
+.nx-step-l {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nx-ink);
+}
+@media (max-width: 480px) {
+  .nx-step-l { display: none; }
+  .nx-steps { gap: 12px; }
 }
 /* 카드 */
 .nx-card {
-  background: #fff;
-  border: 1px solid var(--border, #dbe1ec);
+  background: var(--nx-surface);
+  border: 1px solid var(--nx-line);
   border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 6px 24px rgba(20, 40, 90, 0.06);
+  padding: 30px 26px;
 }
 .nx-card-t {
-  font-size: 19px;
-  font-weight: 900;
-  color: var(--text, #12203c);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   margin: 0 0 6px;
 }
 .nx-card-d {
   font-size: 13.5px;
-  color: var(--text-3, #5b667e);
-  margin: 0 0 16px;
-  line-height: 1.5;
+  line-height: 1.6;
+  color: var(--nx-muted);
+  margin: 0 0 22px;
 }
+/* 필드 */
 .nx-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 14px;
+  gap: 7px;
+  margin-bottom: 16px;
 }
 .nx-field > span {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--text-2, #38445e);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nx-muted);
 }
 .nx-field input,
 .nx-field select {
-  padding: 12px 14px;
-  border: 1px solid var(--border, #dbe1ec);
-  border-radius: 10px;
+  padding: 13px 14px;
+  border: 1px solid var(--nx-line);
+  border-radius: 11px;
   font-size: 15px;
-  font-weight: 600;
-  background: #fff;
-  color: var(--text, #12203c);
+  font-weight: 500;
+  background: var(--nx-surface);
+  color: var(--nx-ink);
+  transition: border-color 0.15s;
 }
 .nx-field input:focus,
 .nx-field select:focus {
   outline: none;
-  border-color: var(--travel, #1f6bff);
-  box-shadow: 0 0 0 3px var(--travel-soft, #eef4ff);
+  border-color: var(--nx-ink);
 }
-/* 모듈(번들 섹션) */
+/* 상품 모듈 — 박스 대신 얇은 구분선으로 정돈 */
 .nx-mod {
-  border: 1px solid var(--border, #dbe1ec);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 14px;
+  padding: 22px 0;
+  border-top: 1px solid var(--nx-line);
 }
-.nx-mod.muted {
-  background: #fafbfe;
+.nx-mod:first-of-type {
+  border-top: none;
+  padding-top: 4px;
 }
 .nx-mod-h {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 15px;
-  font-weight: 800;
-  color: var(--text, #12203c);
-  margin-bottom: 12px;
+  font-weight: 700;
+  margin-bottom: 14px;
 }
-.nx-mod-tag {
-  font-size: 11px;
-  font-weight: 800;
-  color: #1a8f4c;
-  background: #e9f8ef;
-  border-radius: 6px;
-  padding: 2px 8px;
-}
-.nx-mod-tag.soon {
-  color: #9a6a00;
-  background: #fff3d6;
+.nx-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: inline-grid;
+  place-items: center;
+  font-size: 17px;
+  background: var(--nx-tint);
+  flex: 0 0 auto;
 }
 .nx-toggle {
   margin-left: auto;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   font-size: 12.5px;
-  font-weight: 700;
-  color: var(--text-3, #5b667e);
+  font-weight: 600;
+  color: var(--nx-muted);
   cursor: pointer;
 }
 .nx-toggle input {
   width: 16px;
   height: 16px;
-  accent-color: var(--travel, #1f6bff);
+  accent-color: var(--nx-ink);
 }
 .nx-note {
   font-size: 12.5px;
-  font-weight: 700;
-  color: var(--travel-dark, #1846b8);
-}
-.nx-soon {
-  font-size: 13px;
-  color: var(--text-3, #5b667e);
-  line-height: 1.5;
+  color: var(--nx-muted);
 }
 /* 칩 */
 .nx-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 7px;
+  margin-bottom: 14px;
 }
 .nx-chip {
-  padding: 8px 14px;
-  border: 1px solid var(--border, #dbe1ec);
+  padding: 8px 15px;
+  border: 1px solid var(--nx-line);
   border-radius: 999px;
-  background: #fff;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--text-2, #38445e);
+  background: var(--nx-surface);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nx-ink);
   cursor: pointer;
+  transition: all 0.12s;
 }
 .nx-chip.on {
-  border-color: var(--travel, #1f6bff);
-  background: var(--travel, #1f6bff);
+  border-color: var(--nx-ink);
+  background: var(--nx-ink);
   color: #fff;
 }
 /* 선택 카드 */
@@ -7248,211 +7252,75 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 14px;
+  margin-bottom: 6px;
 }
 .nx-pick {
   text-align: left;
-  border: 1.5px solid var(--border, #dbe1ec);
+  border: 1px solid var(--nx-line);
   border-radius: 12px;
-  padding: 12px 14px;
-  background: #fff;
+  padding: 14px 15px;
+  background: var(--nx-surface);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 3px;
+  transition: border-color 0.12s, background 0.12s;
 }
 .nx-pick b {
   font-size: 14px;
-  font-weight: 800;
-  color: var(--text, #12203c);
+  font-weight: 700;
 }
 .nx-pick span {
   font-size: 12.5px;
-  color: var(--text-3, #5b667e);
+  color: var(--nx-muted);
+}
+.nx-pick:hover {
+  border-color: #cfccc4;
 }
 .nx-pick.on {
-  border-color: var(--travel, #1f6bff);
-  background: var(--travel-soft, #eef4ff);
+  border-color: var(--nx-ink);
+  background: var(--nx-tint);
 }
 .nx-pick.wide {
   flex-direction: row;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
 }
 .nx-pick-ic {
-  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--nx-tint);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
   flex: 0 0 auto;
+}
+.nx-pick.on .nx-pick-ic {
+  background: #ecebe4;
 }
 .nx-pick-body {
   display: flex;
   flex-direction: column;
   gap: 3px;
+  min-width: 0;
 }
-/* 요약 */
-.nx-summary {
-  background: #fafbfe;
-  border: 1px solid var(--border, #dbe1ec);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 16px;
-}
-.nx-sum-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 6px 0;
-  font-size: 13.5px;
-  color: var(--text-2, #38445e);
-}
-.nx-sum-row b {
-  font-weight: 800;
-  color: var(--text, #12203c);
-}
-.nx-sum-row.total {
-  border-top: 1px dashed var(--border, #dbe1ec);
-  margin-top: 4px;
-  padding-top: 12px;
-  font-size: 15px;
-}
-.nx-sum-row.total b {
-  color: var(--travel-dark, #1846b8);
-}
-/* 버튼 */
-.nx-btn {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-  border: none;
-  margin-top: 4px;
-}
-.nx-btn.primary {
-  background: var(--travel, #1f6bff);
-  color: #fff;
-}
-.nx-btn.primary:disabled {
-  background: #b9c6e0;
-  cursor: not-allowed;
-}
-.nx-btn.ghost {
-  background: #fff;
-  border: 1px solid var(--border, #dbe1ec);
-  color: var(--text-2, #38445e);
-  margin-top: 8px;
-}
-.nx-err {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--danger, #d0342c);
-  margin-bottom: 10px;
-}
-.nx-warn {
-  font-size: 12.5px;
-  line-height: 1.5;
-  color: #9a6a00;
-  background: #fff3d6;
-  border: 1px solid #ffe4a3;
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 14px;
-}
-.nx-fine {
-  font-size: 11.5px;
-  color: var(--text-3, #5b667e);
-  text-align: center;
-  margin-top: 10px;
-}
-/* 완료 */
-.nx-done {
-  text-align: center;
-}
-.nx-done-ic {
-  font-size: 44px;
-}
-.nx-resno {
-  display: inline-block;
-  margin: 8px auto 16px;
-  font-size: 18px;
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  color: var(--travel-dark, #1846b8);
-  background: var(--travel-soft, #eef4ff);
-  padding: 8px 18px;
-  border-radius: 10px;
-}
-.nx-done .nx-summary {
-  text-align: left;
-}
-.nx-status {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #9a6a00;
-  background: #fff3d6;
-  border: 1px solid #ffe4a3;
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-.nx-status.ok {
-  color: #1a8f4c;
-  background: #e9f8ef;
-  border-color: #b9ecca;
-}
-.nx-status-wait {
-  font-weight: 800;
-}
-
-/* ── 미래형 통합예약 · 확장(디자인 추가) ───────────────────────── */
-.nx-head {
-  background: linear-gradient(135deg, var(--travel, #1f6bff), var(--travel-dark, #1846b8));
-  color: #fff;
-  border-radius: 18px;
-  padding: 26px 20px;
-  box-shadow: 0 10px 30px rgba(24, 70, 184, 0.28);
-}
-.nx-head .nx-badge {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.5);
-  color: #fff;
-}
-.nx-head .nx-title {
-  color: #fff;
-}
-.nx-head .nx-sub {
-  color: rgba(255, 255, 255, 0.9);
-}
-/* 상품 썸네일(이모지 원형) */
-.nx-thumb {
-  width: 30px;
-  height: 30px;
-  border-radius: 9px;
-  display: inline-grid;
-  place-items: center;
-  font-size: 17px;
-  background: var(--travel-soft, #eef4ff);
-  flex: 0 0 auto;
-}
-/* 가격 태그 */
 .nx-price {
-  font-size: 12.5px;
-  font-weight: 800;
-  color: var(--travel-dark, #1846b8);
-  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nx-ink);
+  margin-left: 2px;
 }
-/* 제공사 배지(야놀자/여기어때) */
 .nx-prov {
   display: inline-block;
   font-size: 11px;
-  font-weight: 800;
-  color: #6b3fd4;
-  background: #efe9fb;
-  border-radius: 6px;
+  font-weight: 700;
+  color: var(--nx-muted);
+  background: var(--nx-tint);
+  border-radius: 5px;
   padding: 1px 6px;
   margin-right: 4px;
 }
-/* 다중 선택 카드 체크 */
 .nx-pick.multi {
   align-items: center;
 }
@@ -7464,31 +7332,149 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   display: grid;
   place-items: center;
   font-size: 13px;
-  font-weight: 900;
-  background: #eef1f7;
-  color: var(--text-3, #5b667e);
+  font-weight: 700;
+  border: 1px solid var(--nx-line);
+  color: var(--nx-muted);
+  background: var(--nx-surface);
   flex: 0 0 auto;
 }
 .nx-pick.multi.on .nx-check {
-  background: var(--travel, #1f6bff);
+  background: var(--nx-ink);
   color: #fff;
+  border-color: var(--nx-ink);
 }
-/* 담긴 금액 바 */
+/* 담긴 금액 */
 .nx-cart {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--travel-soft, #eef4ff);
-  border: 1px solid var(--travel, #1f6bff);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin: 4px 0 12px;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-2, #38445e);
+  border-top: 1px solid var(--nx-line);
+  padding: 20px 2px 8px;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nx-muted);
 }
 .nx-cart b {
-  font-size: 18px;
-  font-weight: 900;
-  color: var(--travel-dark, #1846b8);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--nx-ink);
+}
+/* 요약 */
+.nx-summary {
+  border: 1px solid var(--nx-line);
+  border-radius: 12px;
+  padding: 8px 16px;
+  margin-bottom: 18px;
+}
+.nx-sum-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+  font-size: 13.5px;
+  color: var(--nx-muted);
+  border-top: 1px solid var(--nx-line);
+}
+.nx-sum-row:first-child {
+  border-top: none;
+}
+.nx-sum-row b {
+  font-weight: 700;
+  color: var(--nx-ink);
+  text-align: right;
+}
+.nx-sum-row.total {
+  font-size: 15px;
+  color: var(--nx-ink);
+  font-weight: 700;
+}
+.nx-sum-row.total b {
+  font-size: 17px;
+}
+/* 버튼 */
+.nx-btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+  margin-top: 6px;
+  transition: opacity 0.12s;
+}
+.nx-btn.primary {
+  background: var(--nx-ink);
+  color: #fff;
+}
+.nx-btn.primary:hover {
+  opacity: 0.9;
+}
+.nx-btn.primary:disabled {
+  background: #d4d2ca;
+  color: #fff;
+  cursor: not-allowed;
+}
+.nx-btn.ghost {
+  background: transparent;
+  border-color: var(--nx-line);
+  color: var(--nx-ink);
+}
+.nx-btn.ghost:hover {
+  border-color: var(--nx-ink);
+}
+.nx-err {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #b4453a;
+  margin-bottom: 12px;
+}
+.nx-fine {
+  font-size: 11.5px;
+  color: var(--nx-muted);
+  text-align: center;
+  margin-top: 12px;
+}
+/* 완료 */
+.nx-done {
+  text-align: center;
+}
+.nx-done-ic {
+  font-size: 40px;
+}
+.nx-resno {
+  display: inline-block;
+  margin: 10px auto 20px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--nx-ink);
+  background: var(--nx-tint);
+  padding: 8px 16px;
+  border-radius: 999px;
+}
+.nx-done .nx-summary {
+  text-align: left;
+}
+.nx-status {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--nx-muted);
+  background: var(--nx-tint);
+  border: 1px solid var(--nx-line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  text-align: left;
+}
+.nx-status.ok {
+  color: #1f7a4d;
+  background: #f1f7f3;
+  border-color: #d7e9de;
+}
+.nx-status-wait {
+  font-weight: 700;
+  color: var(--nx-ink);
 }
