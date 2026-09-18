@@ -7032,3 +7032,374 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
     row-gap: 4px;
   }
 }
+
+/* ── 미래형 통합예약 (컨셉 프로토타입) ───────────────────────── */
+.nx {
+  min-height: 100vh;
+  background: var(--travel-soft, #eef4ff);
+  padding: 24px 16px 60px;
+}
+.nx-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.nx-head {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.nx-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--travel-dark, #1846b8);
+  background: #fff;
+  border: 1px solid var(--travel, #1f6bff);
+  border-radius: 999px;
+  padding: 5px 12px;
+  margin-bottom: 12px;
+}
+.nx-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text, #12203c);
+  margin: 0 0 6px;
+}
+.nx-sub {
+  font-size: 14px;
+  color: var(--text-3, #5b667e);
+  margin: 0;
+  line-height: 1.5;
+}
+/* 진행 표시 */
+.nx-steps {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+  gap: 4px;
+}
+.nx-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+.nx-step-n {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  background: #fff;
+  color: var(--text-3, #5b667e);
+  border: 1.5px solid var(--border, #dbe1ec);
+}
+.nx-step.on .nx-step-n {
+  background: var(--travel, #1f6bff);
+  color: #fff;
+  border-color: var(--travel, #1f6bff);
+}
+.nx-step.done .nx-step-n {
+  background: #1a8f4c;
+  color: #fff;
+  border-color: #1a8f4c;
+}
+.nx-step-l {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-3, #5b667e);
+}
+.nx-step.on .nx-step-l {
+  color: var(--travel-dark, #1846b8);
+}
+/* 카드 */
+.nx-card {
+  background: #fff;
+  border: 1px solid var(--border, #dbe1ec);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 6px 24px rgba(20, 40, 90, 0.06);
+}
+.nx-card-t {
+  font-size: 19px;
+  font-weight: 900;
+  color: var(--text, #12203c);
+  margin: 0 0 6px;
+}
+.nx-card-d {
+  font-size: 13.5px;
+  color: var(--text-3, #5b667e);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+.nx-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.nx-field > span {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-2, #38445e);
+}
+.nx-field input,
+.nx-field select {
+  padding: 12px 14px;
+  border: 1px solid var(--border, #dbe1ec);
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #fff;
+  color: var(--text, #12203c);
+}
+.nx-field input:focus,
+.nx-field select:focus {
+  outline: none;
+  border-color: var(--travel, #1f6bff);
+  box-shadow: 0 0 0 3px var(--travel-soft, #eef4ff);
+}
+/* 모듈(번들 섹션) */
+.nx-mod {
+  border: 1px solid var(--border, #dbe1ec);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.nx-mod.muted {
+  background: #fafbfe;
+}
+.nx-mod-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text, #12203c);
+  margin-bottom: 12px;
+}
+.nx-mod-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: #1a8f4c;
+  background: #e9f8ef;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.nx-mod-tag.soon {
+  color: #9a6a00;
+  background: #fff3d6;
+}
+.nx-toggle {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-3, #5b667e);
+  cursor: pointer;
+}
+.nx-toggle input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--travel, #1f6bff);
+}
+.nx-note {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--travel-dark, #1846b8);
+}
+.nx-soon {
+  font-size: 13px;
+  color: var(--text-3, #5b667e);
+  line-height: 1.5;
+}
+/* 칩 */
+.nx-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.nx-chip {
+  padding: 8px 14px;
+  border: 1px solid var(--border, #dbe1ec);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-2, #38445e);
+  cursor: pointer;
+}
+.nx-chip.on {
+  border-color: var(--travel, #1f6bff);
+  background: var(--travel, #1f6bff);
+  color: #fff;
+}
+/* 선택 카드 */
+.nx-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.nx-pick {
+  text-align: left;
+  border: 1.5px solid var(--border, #dbe1ec);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.nx-pick b {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text, #12203c);
+}
+.nx-pick span {
+  font-size: 12.5px;
+  color: var(--text-3, #5b667e);
+}
+.nx-pick.on {
+  border-color: var(--travel, #1f6bff);
+  background: var(--travel-soft, #eef4ff);
+}
+.nx-pick.wide {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+.nx-pick-ic {
+  font-size: 24px;
+  flex: 0 0 auto;
+}
+.nx-pick-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+/* 요약 */
+.nx-summary {
+  background: #fafbfe;
+  border: 1px solid var(--border, #dbe1ec);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.nx-sum-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  font-size: 13.5px;
+  color: var(--text-2, #38445e);
+}
+.nx-sum-row b {
+  font-weight: 800;
+  color: var(--text, #12203c);
+}
+.nx-sum-row.total {
+  border-top: 1px dashed var(--border, #dbe1ec);
+  margin-top: 4px;
+  padding-top: 12px;
+  font-size: 15px;
+}
+.nx-sum-row.total b {
+  color: var(--travel-dark, #1846b8);
+}
+/* 버튼 */
+.nx-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+  margin-top: 4px;
+}
+.nx-btn.primary {
+  background: var(--travel, #1f6bff);
+  color: #fff;
+}
+.nx-btn.primary:disabled {
+  background: #b9c6e0;
+  cursor: not-allowed;
+}
+.nx-btn.ghost {
+  background: #fff;
+  border: 1px solid var(--border, #dbe1ec);
+  color: var(--text-2, #38445e);
+  margin-top: 8px;
+}
+.nx-err {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--danger, #d0342c);
+  margin-bottom: 10px;
+}
+.nx-warn {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #9a6a00;
+  background: #fff3d6;
+  border: 1px solid #ffe4a3;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 14px;
+}
+.nx-fine {
+  font-size: 11.5px;
+  color: var(--text-3, #5b667e);
+  text-align: center;
+  margin-top: 10px;
+}
+/* 완료 */
+.nx-done {
+  text-align: center;
+}
+.nx-done-ic {
+  font-size: 44px;
+}
+.nx-resno {
+  display: inline-block;
+  margin: 8px auto 16px;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: var(--travel-dark, #1846b8);
+  background: var(--travel-soft, #eef4ff);
+  padding: 8px 18px;
+  border-radius: 10px;
+}
+.nx-done .nx-summary {
+  text-align: left;
+}
+.nx-status {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #9a6a00;
+  background: #fff3d6;
+  border: 1px solid #ffe4a3;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.nx-status.ok {
+  color: #1a8f4c;
+  background: #e9f8ef;
+  border-color: #b9ecca;
+}
+.nx-status-wait {
+  font-weight: 800;
+}
