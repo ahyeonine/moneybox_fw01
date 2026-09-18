@@ -10,7 +10,6 @@ export default function TopTabs() {
     { base: '/site', to: '/site', label: t('top.site') },
     { base: '/cems', to: '/cems', label: t('top.cems') },
     { base: '/pos', to: '/pos', label: t('top.pos') },
-    { base: '/future', to: '/future', label: '🧳 통합예약(컨셉)' },
   ]
   return (
     <div className="toptabs">
