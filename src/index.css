@@ -5241,6 +5241,21 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 .s2-main.s2-main-wide {
   max-width: 880px;
 }
+/* 신청(예약) 플로우 — 데스크톱에서 넓게. 폼 단계는 읽기 좋은 폭으로 가운데,
+   지점 선택(지도) 단계는 전체 폭 사용. */
+.s2-main.s2-main-flow {
+  max-width: 1080px;
+}
+.s2-main-flow > .s2-hero,
+.s2-main-flow > .s2-steps,
+.s2-main-flow > .s2-card {
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.s2-main-flow > .s2-card.s2-card-wide {
+  max-width: 100%;
+}
 /* 히어로 */
 .s2-hero {
   text-align: center;
