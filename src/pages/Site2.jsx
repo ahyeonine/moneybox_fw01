@@ -683,7 +683,7 @@ export default function Site2() {
       <main
         className={`s2-main${view === 'about' || view === 'lookup' ? ' s2-main-wide' : ''}${
           view === 'home' ? ' s2-main-home' : ''
-        }`}
+        }${view === 'flow' ? ' s2-main-flow' : ''}`}
       >
         {view === 'about' ? (
           <AboutPage />
@@ -900,7 +900,7 @@ export default function Site2() {
 
         {/* STEP 2 · 지점 선택 (검색 + 찾아드릴게요) */}
         {step === 'branch' && (
-          <section className="s2-card">
+          <section className="s2-card s2-card-wide">
             <h2 className="s2-card-t">{t('s2.br2.title')}</h2>
             <p className="s2-card-sub">{t('s2.br2.sub')}</p>
 
