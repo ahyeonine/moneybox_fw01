@@ -49,6 +49,26 @@ const PICKUPS = [
 const STEPS = ['trip', 'bundle', 'pickup', 'pay', 'done']
 const STEP_LABEL = { trip: '여정', bundle: '상품', pickup: '수령', pay: '결제', done: '완료' }
 
+// 랜딩 — 카테고리 타일 & 인기 상품(해외 여행 커머스 스타일)
+const CATEGORIES = [
+  { emoji: '💱', label: '환전' },
+  { emoji: '🚇', label: '교통카드' },
+  { emoji: '📱', label: '유심 · 이심' },
+  { emoji: '🏨', label: '숙박' },
+  { emoji: '🎫', label: '투어 · 티켓' },
+]
+const FEATURED = [
+  { emoji: '🎢', name: '롯데월드 자유이용권', rating: 4.8, reviews: '12,340', price: 62000, unit: '' },
+  { emoji: '📲', name: '무제한 데이터 eSIM', rating: 4.9, reviews: '8,215', price: 2500, unit: ' / 일' },
+  { emoji: '🏨', name: '명동 시티 호텔', rating: 4.7, reviews: '3,102', price: 120000, unit: ' / 박' },
+  { emoji: '👘', name: '경복궁 한복 체험', rating: 4.9, reviews: '5,880', price: 25000, unit: '' },
+]
+const BENEFITS = [
+  { emoji: '🧳', t: '한 번에 준비', d: '환전부터 숙박까지 한 예약으로' },
+  { emoji: '⚡', t: '즉시 확정', d: '입국 전 미리 결제·확정' },
+  { emoji: '🎫', t: '무인 수령', d: '공항·CU 캐비넷에서 바로' },
+]
+
 function genNo() {
   const d = new Date()
   const ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`
@@ -57,7 +77,7 @@ function genNo() {
 
 export default function FutureBundle() {
   const { getDisplayRates } = useRates()
-  const [step, setStep] = useState('trip')
+  const [step, setStep] = useState('home')
 
   // 여정
   const [arrival, setArrival] = useState('')
@@ -141,6 +161,10 @@ export default function FutureBundle() {
     go('done')
   }
 
+  function startFlow() {
+    go(tripValid ? 'bundle' : 'trip')
+  }
+
   function reset() {
     setResult(null)
     setConfirmed(false)
@@ -154,7 +178,7 @@ export default function FutureBundle() {
     setShopSel([])
     setPickup('branch')
     setPickupDate('')
-    go('trip')
+    go('home')
   }
 
   const branchName = (id) => BRANCHES.find((b) => b.id === id)?.name.ko || id
@@ -176,27 +200,84 @@ export default function FutureBundle() {
       />
 
       <div className="nx-wrap">
-        <header className="nx-head">
-          <div className="nx-badge">CONCEPT · ALL-IN-ONE TRAVEL</div>
-          <h1 className="nx-title">한 번에 준비하는 한국 여행 지갑</h1>
-          <p className="nx-sub">
-            환전 · 교통카드 · 유심/이심 · 숙박 · 쇼핑까지 입국 전에 미리 담고 결제하세요. 도착하면 받기만 하면 돼요.
-          </p>
-          <div className="nx-trust">
-            <span>⚡ 즉시 확정</span>
-            <span>🔒 안전 결제</span>
-            <span>🎫 QR·무인 수령</span>
-          </div>
-        </header>
+        {/* ── 랜딩(첫 화면) — 해외 여행 커머스 스타일 ── */}
+        {step === 'home' && (
+          <div className="nx-home">
+            <section className="nx-hero">
+              <div className="nx-badge">ALL-IN-ONE TRAVEL · KOREA</div>
+              <h1 className="nx-hero-t">한국 여행, 하나로 끝내세요</h1>
+              <p className="nx-hero-d">환전 · 교통카드 · 유심 · 숙박 · 투어까지 입국 전에 미리 담고 결제. 도착하면 받기만 하면 돼요.</p>
+              <div className="nx-search">
+                <label>
+                  <span>입국일</span>
+                  <input type="date" value={arrival} onChange={(e) => setArrival(e.target.value)} />
+                </label>
+                <label>
+                  <span>출국일</span>
+                  <input type="date" value={departure} min={arrival} onChange={(e) => setDeparture(e.target.value)} />
+                </label>
+                <button className="nx-search-btn" onClick={startFlow}>여행 준비 시작</button>
+              </div>
+            </section>
 
-        <ol className="nx-steps">
-          {STEPS.map((s, i) => (
-            <li key={s} className={`nx-step${i === stepIdx ? ' on' : ''}${i < stepIdx ? ' done' : ''}`}>
-              <span className="nx-step-n">{i < stepIdx ? '✓' : i + 1}</span>
-              <span className="nx-step-l">{STEP_LABEL[s]}</span>
-            </li>
-          ))}
-        </ol>
+            {/* 카테고리 타일 */}
+            <div className="nx-cats">
+              {CATEGORIES.map((c) => (
+                <button key={c.label} type="button" className="nx-cat" onClick={startFlow}>
+                  <span className="nx-cat-ic">{c.emoji}</span>
+                  <span className="nx-cat-l">{c.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* 인기 상품 */}
+            <div className="nx-sec-h">
+              <h2>인기 상품</h2>
+              <button type="button" className="nx-sec-more" onClick={startFlow}>전체 보기 →</button>
+            </div>
+            <div className="nx-feat">
+              {FEATURED.map((f) => (
+                <button key={f.name} type="button" className="nx-featcard" onClick={startFlow}>
+                  <span className="nx-featimg">{f.emoji}</span>
+                  <span className="nx-featname">{f.name}</span>
+                  <span className="nx-featrate">★ {f.rating} <em>({f.reviews})</em></span>
+                  <span className="nx-featprice">{formatKrw(f.price)}<small>{f.unit}</small></span>
+                </button>
+              ))}
+            </div>
+
+            {/* 혜택 */}
+            <div className="nx-benefits">
+              {BENEFITS.map((b) => (
+                <div key={b.t} className="nx-benefit">
+                  <span className="nx-benefit-ic">{b.emoji}</span>
+                  <b>{b.t}</b>
+                  <span>{b.d}</span>
+                </div>
+              ))}
+            </div>
+
+            <button className="nx-btn primary" onClick={startFlow}>여행 준비 시작하기</button>
+          </div>
+        )}
+
+        {/* ── 예약 위저드(상품~완료) ── */}
+        {step !== 'home' && (
+          <>
+            <header className="nx-head compact">
+              <button type="button" className="nx-home-link" onClick={() => go('home')}>← 홈</button>
+              <div className="nx-head-title">통합예약</div>
+            </header>
+            <ol className="nx-steps">
+              {STEPS.map((s, i) => (
+                <li key={s} className={`nx-step${i === stepIdx ? ' on' : ''}${i < stepIdx ? ' done' : ''}`}>
+                  <span className="nx-step-n">{i < stepIdx ? '✓' : i + 1}</span>
+                  <span className="nx-step-l">{STEP_LABEL[s]}</span>
+                </li>
+              ))}
+            </ol>
+          </>
+        )}
 
         {/* STEP 1 · 여정 */}
         {step === 'trip' && (

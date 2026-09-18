@@ -7503,3 +7503,261 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 .nx-status-wait {
   font-weight: 800;
 }
+
+/* ── 랜딩(첫 화면) · 해외 여행 커머스 스타일 ─────────────────── */
+.nx-home {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+/* 히어로 + 검색 위젯 */
+.nx-hero {
+  background: linear-gradient(135deg, #3a86ff 0%, var(--nx-blue) 55%, var(--nx-blue-dk) 100%);
+  border-radius: 22px;
+  padding: 30px 24px 26px;
+  color: #fff;
+  box-shadow: var(--nx-shadow);
+}
+.nx-hero .nx-badge {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  margin-bottom: 14px;
+}
+.nx-hero-t {
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+.nx-hero-d {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0 0 18px;
+}
+.nx-search {
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  box-shadow: 0 10px 24px rgba(10, 30, 80, 0.18);
+}
+.nx-search label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.nx-search label span {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--nx-muted);
+}
+.nx-search input {
+  padding: 11px 12px;
+  border: 1.5px solid var(--nx-line);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nx-ink);
+}
+.nx-search input:focus {
+  outline: none;
+  border-color: var(--nx-blue);
+}
+.nx-search-btn {
+  grid-column: 1 / -1;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--nx-blue);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(31, 107, 255, 0.28);
+}
+.nx-search-btn:hover {
+  background: #155ae0;
+}
+/* 카테고리 타일 */
+.nx-cats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.nx-cat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  background: var(--nx-surface);
+  border: 1px solid var(--nx-line);
+  border-radius: 14px;
+  padding: 14px 4px;
+  cursor: pointer;
+  transition: border-color 0.12s, transform 0.12s;
+}
+.nx-cat:hover {
+  border-color: var(--nx-blue);
+  transform: translateY(-2px);
+}
+.nx-cat-ic {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #eaf1ff, #dbe8ff);
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+}
+.nx-cat-l {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--nx-ink);
+  text-align: center;
+  line-height: 1.2;
+}
+@media (max-width: 480px) {
+  .nx-cat-l { font-size: 10.5px; }
+  .nx-cat { padding: 12px 2px; }
+}
+/* 섹션 헤더 */
+.nx-sec-h {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.nx-sec-h h2 {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--nx-ink);
+}
+.nx-sec-more {
+  background: none;
+  border: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--nx-blue);
+  cursor: pointer;
+}
+/* 인기 상품 카드 그리드 */
+.nx-feat {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.nx-featcard {
+  text-align: left;
+  background: var(--nx-surface);
+  border: 1px solid var(--nx-line);
+  border-radius: 16px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  box-shadow: 0 4px 14px rgba(22, 32, 74, 0.05);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.nx-featcard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--nx-shadow);
+}
+.nx-featimg {
+  height: 96px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #dbe8ff, #eef4ff);
+  display: grid;
+  place-items: center;
+  font-size: 40px;
+  margin-bottom: 6px;
+}
+.nx-featname {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--nx-ink);
+  line-height: 1.35;
+}
+.nx-featrate {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #f59e0b;
+}
+.nx-featrate em {
+  color: var(--nx-muted);
+  font-style: normal;
+  font-weight: 600;
+}
+.nx-featprice {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--nx-blue-dk);
+  margin-top: 2px;
+}
+.nx-featprice small {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--nx-muted);
+}
+/* 혜택 */
+.nx-benefits {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background: var(--nx-surface);
+  border: 1px solid var(--nx-line);
+  border-radius: 16px;
+  padding: 18px 12px;
+}
+.nx-benefit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+.nx-benefit-ic {
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+.nx-benefit b {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--nx-ink);
+}
+.nx-benefit span {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--nx-muted);
+}
+/* 위저드 상단 컴팩트 바(홈 링크 + 타이틀) */
+.nx-head.compact {
+  background: none;
+  box-shadow: none;
+  padding: 4px 2px 10px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+.nx-home-link {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--nx-blue);
+  cursor: pointer;
+  padding: 4px 2px;
+}
+.nx-head-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--nx-ink);
+}
