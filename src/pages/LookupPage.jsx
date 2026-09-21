@@ -15,12 +15,14 @@ import DevNote from '../components/DevNote.jsx'
 
 export default function LookupPage() {
   const { t } = useI18n()
-  const { findReservationsByNameEmail, getByNo, cancelReservation, updateReservation, confirmVisit, today } =
+  const { findReservationsByNameEmail, findReservationsByEmail, getByNo, cancelReservation, updateReservation, confirmVisit, today } =
     useReservations()
   const { sendEmail } = useEmail()
   const [params] = useSearchParams()
 
-  const [form, setForm] = useState({ name: params.get('name') || '', email: params.get('email') || '' })
+  // 조회 방식: 회원(이메일+비밀번호) / 비회원(여권 영문명+이메일)
+  const [mode, setMode] = useState('guest')
+  const [form, setForm] = useState({ name: params.get('name') || '', email: params.get('email') || '', password: '' })
   const [searched, setSearched] = useState(false)
   const [results, setResults] = useState([]) // 조회 결과 리스트 (같은 이름+이메일 다건)
   const [detailNo, setDetailNo] = useState(null) // 상세 보기 대상 예약번호
@@ -28,8 +30,7 @@ export default function LookupPage() {
   const [editing, setEditing] = useState(false)
   const [flash, setFlash] = useState(null)
 
-  function runSearch(name, email, autoSelectNo) {
-    const list = findReservationsByNameEmail(name, email)
+  function applyResults(list, autoSelectNo) {
     setResults(list)
     setSearched(true)
     setEditing(false)
@@ -39,10 +40,23 @@ export default function LookupPage() {
     setDetailNo(hit ? hit.reservationNo : null)
   }
 
+  // 비회원: 여권 영문명 + 이메일
+  function runSearch(name, email, autoSelectNo) {
+    applyResults(findReservationsByNameEmail(name, email), autoSelectNo)
+  }
+
   function doSearch(e) {
     e?.preventDefault()
-    runSearch(form.name, form.email, null)
+    if (mode === 'member') {
+      // 회원: 이메일 + 비밀번호(프로토타입 — 비밀번호는 확인만, 실제 계정 미연동)
+      applyResults(findReservationsByEmail(form.email), null)
+    } else {
+      runSearch(form.name, form.email, null)
+    }
   }
+
+  const searchDisabled =
+    mode === 'member' ? !form.email || !form.password : !form.name || !form.email
 
   // 딥링크(예약완료·이메일 → 신청내역조회): 이름+이메일 자동 조회, no 있으면 해당 예약 상세로 바로 진입
   useEffect(() => {
@@ -90,7 +104,8 @@ export default function LookupPage() {
     <div>
       <DevNote
         items={[
-          '조회 조건: 이름 + 이메일 (같은 이메일의 신청내역 전체 조회)',
+          '조회 방식: 회원=이메일+비밀번호 / 비회원=여권 영문명+이메일 (같은 이메일의 신청내역 전체 조회)',
+          '프로토타입: 회원 비밀번호는 확인만(실계정 미연동), 조회는 이메일 일치로 처리',
           '"예약" 상태일 때만 취소/변경 가능',
           '가용시재 차감(예약시재 반영)은 예약완료가 아니라 "방문 예정 확인" 시점에 발생 — 이 시점에 재고 재확인(동시성)',
           '자세히: 03_플로우.mermaid',
@@ -100,15 +115,36 @@ export default function LookupPage() {
       <p className="muted">{t('lookup.sub')}</p>
 
       <form className="card" onSubmit={doSearch}>
-        <label className="field">
-          <span className="lbl">{t('common.name')}</span>
-          <input
-            type="text"
-            value={form.name}
-            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-            placeholder="HONG GILDONG"
-          />
-        </label>
+        {/* 조회 방식 토글 */}
+        <div className="lookup-mode" role="group" aria-label={t('lookup.mode.label')}>
+          <button
+            type="button"
+            className={`lookup-mode-btn${mode === 'member' ? ' on' : ''}`}
+            onClick={() => { setMode('member'); setSearched(false) }}
+          >
+            {t('lookup.mode.member')}
+          </button>
+          <button
+            type="button"
+            className={`lookup-mode-btn${mode === 'guest' ? ' on' : ''}`}
+            onClick={() => { setMode('guest'); setSearched(false) }}
+          >
+            {t('lookup.mode.guest')}
+          </button>
+        </div>
+
+        {mode === 'guest' && (
+          <label className="field">
+            <span className="lbl">{t('lookup.passport')}</span>
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+              placeholder="HONG GILDONG"
+            />
+          </label>
+        )}
+
         <label className="field">
           <span className="lbl">{t('common.email')}</span>
           <input
@@ -118,11 +154,24 @@ export default function LookupPage() {
             placeholder="you@example.com"
           />
         </label>
-        <button className="btn primary block" type="submit" disabled={!form.name || !form.email}>
+
+        {mode === 'member' && (
+          <label className="field">
+            <span className="lbl">{t('lookup.password')}</span>
+            <input
+              type="password"
+              value={form.password}
+              onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+              placeholder={t('s2v.signup.pw.ph')}
+            />
+          </label>
+        )}
+
+        <button className="btn primary block" type="submit" disabled={searchDisabled}>
           {t('common.search')}
         </button>
         <div className="tiny" style={{ marginTop: 10 }}>
-          {t('lookup.demohint')}
+          {mode === 'member' ? t('lookup.member.hint') : t('lookup.guest.hint')}
         </div>
       </form>
 
