@@ -6641,6 +6641,115 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   cursor: pointer;
 }
 
+/* 인라인 회원가입 유도 (정보 단계) — 이름·이메일 인증 후 비밀번호만 추가 */
+.s2v-join {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1.5px solid #cdddfb;
+  background: linear-gradient(180deg, #f4f8ff 0%, #eaf1ff 100%);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.s2v-join.ready {
+  border-color: var(--travel);
+  box-shadow: 0 10px 26px -14px rgba(12, 40, 100, 0.45);
+}
+.s2v-join-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.s2v-join-seal {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: linear-gradient(135deg, #0b1f4d 0%, var(--travel-dark) 55%, var(--travel) 100%);
+}
+.s2v-join-seal .ic {
+  width: 21px;
+  height: 21px;
+  color: #fff;
+}
+.s2v-join-htext {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.s2v-join-badge {
+  align-self: flex-start;
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--travel-dark);
+  background: #dbe7ff;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.s2v-join-t {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--travel-dark);
+}
+.s2v-join-d {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.s2v-join-benes {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.s2v-join-benes li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-1, #1a2233);
+}
+.s2v-join-benes .ic {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--travel);
+}
+.s2v-join .s2-search {
+  margin-top: 2px;
+}
+.s2v-hint.ok {
+  color: #0f9d58;
+  font-weight: 700;
+}
+.s2v-done-member {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 8px auto 2px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--travel-dark);
+  background: var(--travel-soft);
+}
+.s2v-done-member .ic {
+  width: 16px;
+  height: 16px;
+  color: var(--travel);
+}
+
 /* 마케팅 정보 수신 동의(선택) */
 .s2v-consent {
   display: flex;

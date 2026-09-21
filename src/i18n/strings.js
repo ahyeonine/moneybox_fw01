@@ -845,6 +845,39 @@ export const STRINGS = {
     en: 'Choose any date from today onward.',
   },
   's2v.info.submit': { ko: '예약하기', en: 'Reserve' },
+  // 정보 단계 인라인 회원가입 유도 — 이름·이메일·인증을 이미 마쳤으니 비밀번호만 추가
+  's2v.join.badge': { ko: '회원 혜택', en: 'Member perks' },
+  's2v.join.title': {
+    ko: '비밀번호만 설정하면 회원가입 완료',
+    en: 'Just set a password to become a member',
+  },
+  's2v.join.desc': {
+    ko: '이름·이메일 인증까지 이미 끝났어요. 비밀번호만 추가하면 이번 예약과 함께 회원이 됩니다.',
+    en: 'Your name & email are already verified. Add a password and you become a member with this reservation.',
+  },
+  's2v.join.b1': {
+    ko: '회원 우대 환율 (수령 시 현장 우대)',
+    en: 'Member preferential rate (applied at pickup)',
+  },
+  's2v.join.b2': { ko: '할인 쿠폰 · 환율 알림', en: 'Discount coupons · rate alerts' },
+  's2v.join.b3': {
+    ko: '다음부터 정보 입력 없이 바로 예약',
+    en: 'Skip this step on your next reservation',
+  },
+  's2v.join.pw.ph': { ko: '회원 비밀번호 설정 (6자 이상)', en: 'Set a password (6+ characters)' },
+  's2v.join.hint': {
+    ko: '선택 사항이에요. 비워두면 비회원으로 예약됩니다.',
+    en: 'Optional — leave blank to reserve as a guest.',
+  },
+  's2v.join.ready': {
+    ko: '회원가입 준비 완료! 예약과 함께 가입돼요.',
+    en: "You're set — you'll join when you reserve.",
+  },
+  's2v.join.submit': { ko: '회원가입하고 예약하기', en: 'Join & reserve' },
+  's2v.join.done': {
+    ko: '회원가입도 완료됐어요 — 다음부터 이메일·비밀번호로 로그인하세요.',
+    en: "You're now a member — sign in with your email & password next time.",
+  },
   's2v.sum.branch': { ko: '수령 지점', en: 'Branch' },
   's2v.sum.direction': { ko: '환전 방향', en: 'Direction' },
   's2v.sum.amount': { ko: '환전 금액', en: 'Amount' },
