@@ -991,8 +991,8 @@ export default function Site2() {
                         <b><a href={`tel:${b.phone}`}>{b.phone}</a></b>
                       </div>
                       <Site2Map
-                        center={{ lat: b.lat, lng: b.lng, label: b.name[lang] || b.name.ko }}
-                        points={[]}
+                        center={null}
+                        points={[{ lat: b.lat, lng: b.lng, label: b.name[lang] || b.name.ko }]}
                       />
                       <div className="s2-map-attr">{t('s2.mapattr')}</div>
                     </div>
