@@ -128,10 +128,19 @@ export const STRINGS = {
 
   // 예약조회
   'lookup.title': { ko: '신청내역조회', en: 'My reservations' },
-  'lookup.sub': { ko: '이름과 이메일로 신청내역을 조회하세요.', en: 'Look up your reservations with your name and email.' },
-  'lookup.demohint': {
-    ko: '데모: JOHN SMITH / john@example.com (같은 이메일 3건) · AKIRA SATO / akira@example.com',
-    en: 'Demo: JOHN SMITH / john@example.com (3 under same email) · AKIRA SATO / akira@example.com',
+  'lookup.sub': { ko: '회원은 이메일·비밀번호, 비회원은 여권 영문명·이메일로 조회하세요.', en: 'Members look up with email and password; guests with passport name and email.' },
+  'lookup.mode.label': { ko: '조회 방식', en: 'Lookup method' },
+  'lookup.mode.member': { ko: '회원', en: 'Member' },
+  'lookup.mode.guest': { ko: '비회원', en: 'Guest' },
+  'lookup.passport': { ko: '여권 영문명', en: 'Passport name (English)' },
+  'lookup.password': { ko: '비밀번호', en: 'Password' },
+  'lookup.member.hint': {
+    ko: '가입 시 사용한 이메일·비밀번호로 조회하세요. ※ 데모 — 비밀번호는 확인만(실계정 미연동). 예: john@example.com',
+    en: 'Look up with the email and password you signed up with. * Demo — password is not verified (no real accounts). e.g. john@example.com',
+  },
+  'lookup.guest.hint': {
+    ko: '예약 시 입력한 여권 영문명·이메일로 조회하세요. 예: JOHN SMITH / john@example.com',
+    en: 'Look up with the passport name and email used at booking. e.g. JOHN SMITH / john@example.com',
   },
   'footer.copy': {
     ko: '© 2026 (주)머니박스 · 프로토타입 (예시 데이터)',

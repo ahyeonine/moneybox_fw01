@@ -129,6 +129,18 @@ export function ReservationProvider({ children }) {
     [reservations]
   )
 
+  // 회원 예약조회: 이메일로 같은 이메일의 전체 신청내역 반환(비밀번호는 프로토타입에서 미검증).
+  const findReservationsByEmail = useCallback(
+    (email) => {
+      const em = (email || '').trim().toLowerCase()
+      if (!em) return []
+      return reservations
+        .filter((r) => r.email.toLowerCase() === em)
+        .sort((a, b) => (a.pickupDate < b.pickupDate ? -1 : a.pickupDate > b.pickupDate ? 1 : 0))
+    },
+    [reservations]
+  )
+
   // 노쇼(자동취소) 누적 횟수 — 이메일 기준. 통계·안내용(신규예약 차단에는 미사용).
   const countNoShow = useCallback(
     (email) => {
@@ -286,6 +298,7 @@ export function ReservationProvider({ children }) {
     findReservation,
     findReservationsForLookup,
     findReservationsByNameEmail,
+    findReservationsByEmail,
     getByNo,
     countNoShow,
     updateReservation,

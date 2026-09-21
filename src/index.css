@@ -2422,6 +2422,32 @@ th.num {
   color: var(--text);
 }
 
+/* 예약조회 방식 토글 (회원 / 비회원) */
+.lookup-mode {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  background: var(--bg-2, #eef1f6);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.lookup-mode-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-2, #46506b);
+  cursor: pointer;
+}
+.lookup-mode-btn.on {
+  background: #fff;
+  color: var(--brand-dark, #1f6bff);
+  box-shadow: 0 1px 4px rgba(16, 32, 74, 0.12);
+}
+
 /* 예약조회 결과 리스트 (리스트 → 상세) */
 .lookup-list {
   display: flex;
