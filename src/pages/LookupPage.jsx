@@ -15,14 +15,19 @@ import DevNote from '../components/DevNote.jsx'
 
 export default function LookupPage() {
   const { t } = useI18n()
-  const { findReservationsByNameEmail, findReservationsByEmail, getByNo, cancelReservation, updateReservation, confirmVisit, today } =
+  const { findReservationsForLookup, findReservationsByNameEmail, findReservationsByEmail, getByNo, cancelReservation, updateReservation, confirmVisit, today } =
     useReservations()
   const { sendEmail } = useEmail()
   const [params] = useSearchParams()
 
-  // 조회 방식: 회원(이메일+비밀번호) / 비회원(여권 영문명+이메일)
+  // 조회 방식: 회원(이메일+비밀번호) / 비회원(예약번호+이메일)
   const [mode, setMode] = useState('guest')
-  const [form, setForm] = useState({ name: params.get('name') || '', email: params.get('email') || '', password: '' })
+  const [form, setForm] = useState({
+    resNo: params.get('no') || '',
+    name: params.get('name') || '',
+    email: params.get('email') || '',
+    password: '',
+  })
   const [searched, setSearched] = useState(false)
   const [results, setResults] = useState([]) // 조회 결과 리스트 (같은 이름+이메일 다건)
   const [detailNo, setDetailNo] = useState(null) // 상세 보기 대상 예약번호
@@ -51,18 +56,21 @@ export default function LookupPage() {
       // 회원: 이메일 + 비밀번호(프로토타입 — 비밀번호는 확인만, 실제 계정 미연동)
       applyResults(findReservationsByEmail(form.email), null)
     } else {
-      runSearch(form.name, form.email, null)
+      // 비회원: 예약번호 + 이메일
+      applyResults(findReservationsForLookup(form.resNo, form.email), form.resNo)
     }
   }
 
   const searchDisabled =
-    mode === 'member' ? !form.email || !form.password : !form.name || !form.email
+    mode === 'member' ? !form.email || !form.password : !form.resNo || !form.email
 
-  // 딥링크(예약완료·이메일 → 신청내역조회): 이름+이메일 자동 조회, no 있으면 해당 예약 상세로 바로 진입
+  // 딥링크(예약완료·이메일 → 신청내역조회): 예약번호+이메일 우선, 없으면 이름+이메일로 자동 조회
   useEffect(() => {
+    const no = params.get('no')
     const name = params.get('name')
     const email = params.get('email')
-    if (name && email) runSearch(name, email, params.get('no'))
+    if (no && email) applyResults(findReservationsForLookup(no, email), no)
+    else if (name && email) runSearch(name, email, null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -104,7 +112,7 @@ export default function LookupPage() {
     <div>
       <DevNote
         items={[
-          '조회 방식: 회원=이메일+비밀번호 / 비회원=여권 영문명+이메일 (같은 이메일의 신청내역 전체 조회)',
+          '조회 방식: 회원=이메일+비밀번호 / 비회원=예약번호+이메일 (같은 이메일의 신청내역 전체 조회)',
           '프로토타입: 회원 비밀번호는 확인만(실계정 미연동), 조회는 이메일 일치로 처리',
           '"예약" 상태일 때만 취소/변경 가능',
           '가용시재 차감(예약시재 반영)은 예약완료가 아니라 "방문 예정 확인" 시점에 발생 — 이 시점에 재고 재확인(동시성)',
@@ -135,12 +143,12 @@ export default function LookupPage() {
 
         {mode === 'guest' && (
           <label className="field">
-            <span className="lbl">{t('lookup.passport')}</span>
+            <span className="lbl">{t('lookup.resno')}</span>
             <input
               type="text"
-              value={form.name}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-              placeholder="HONG GILDONG"
+              value={form.resNo}
+              onChange={(e) => setForm((f) => ({ ...f, resNo: e.target.value }))}
+              placeholder="RSV-20260728-0001"
             />
           </label>
         )}
