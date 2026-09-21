@@ -210,6 +210,7 @@ export default function HqReservationAdmin() {
               <th>상태</th>
               <th>수령일자</th>
               <th>예약자명</th>
+              <th>생년월일</th>
               <th>이메일</th>
               <th>통화</th>
               <th className="num">환율</th>
@@ -221,7 +222,7 @@ export default function HqReservationAdmin() {
           <tbody>
             {pageRows.length === 0 ? (
               <tr>
-                <td colSpan={11} style={{ textAlign: 'center', padding: 24, color: 'var(--text-3)' }}>
+                <td colSpan={12} style={{ textAlign: 'center', padding: 24, color: 'var(--text-3)' }}>
                   조회된 예약이 없습니다.
                 </td>
               </tr>
@@ -240,6 +241,7 @@ export default function HqReservationAdmin() {
                   </td>
                   <td>{formatDate(r.pickupDate, 'ko')}</td>
                   <td>{r.customerName}</td>
+                  <td>{r.birthDate || '—'}</td>
                   <td>{r.email}</td>
                   <td>
                     {CURRENCY_META[r.currency]?.flag} {r.currency}
@@ -281,6 +283,10 @@ export default function HqReservationAdmin() {
             <div className="row">
               <span className="k">예약자명</span>
               <span className="v">{selected.customerName}</span>
+            </div>
+            <div className="row">
+              <span className="k">생년월일</span>
+              <span className="v">{selected.birthDate || '— (수령 시 신분증 확인)'}</span>
             </div>
             <div className="row">
               <span className="k">이메일</span>

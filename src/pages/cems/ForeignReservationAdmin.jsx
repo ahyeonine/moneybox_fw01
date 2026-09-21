@@ -9,8 +9,9 @@ import Modal from '../../components/Modal.jsx'
 import DevNote from '../../components/DevNote.jsx'
 
 // 화면 1 · 외국인 환전예약관리 — 기존 신규예약 리스트를 CEMS 레이아웃/컬럼으로 재구성.
-// 컬럼: No | 상태 | 수령일자 | 예약자명 | 이메일 | 환전구분 | 통화 | 환율 | 거래금액 | 원화금액 | 신청일시
-// (레퍼런스의 생년월일·휴대전화·입금상태·예약금 컬럼은 우리 서비스에 없어 제외)
+// 컬럼: No | 상태 | 수령일자 | 예약자명 | 생년월일 | 이메일 | 통화 | 환율 | 거래금액 | 원화금액 | 신청일시
+// 생년월일: 웹 예약은 미수집(수령 시 신분증 확인)이라 없으면 '—' 표기.
+// (레퍼런스의 휴대전화·입금상태·예약금 컬럼은 우리 서비스에 없어 제외)
 
 const PAGE_SIZE = 10
 
@@ -222,6 +223,7 @@ export default function ForeignReservationAdmin() {
               <th>상태</th>
               <th>수령일자</th>
               <th>예약자명</th>
+              <th>생년월일</th>
               <th>이메일</th>
               <th>통화</th>
               <th className="num">환율</th>
@@ -233,7 +235,7 @@ export default function ForeignReservationAdmin() {
           <tbody>
             {pageRows.length === 0 ? (
               <tr>
-                <td colSpan={10} style={{ textAlign: 'center', padding: 24, color: 'var(--text-3)' }}>
+                <td colSpan={11} style={{ textAlign: 'center', padding: 24, color: 'var(--text-3)' }}>
                   조회된 예약이 없습니다.
                 </td>
               </tr>
@@ -251,6 +253,7 @@ export default function ForeignReservationAdmin() {
                   </td>
                   <td>{formatDate(r.pickupDate, 'ko')}</td>
                   <td>{r.customerName}</td>
+                  <td>{r.birthDate || '—'}</td>
                   <td>{r.email}</td>
                   <td>
                     {CURRENCY_META[r.currency]?.flag} {r.currency}
@@ -296,6 +299,10 @@ export default function ForeignReservationAdmin() {
             <div className="row">
               <span className="k">예약자명</span>
               <span className="v">{selected.customerName}</span>
+            </div>
+            <div className="row">
+              <span className="k">생년월일</span>
+              <span className="v">{selected.birthDate || '— (수령 시 신분증 확인)'}</span>
             </div>
             <div className="row">
               <span className="k">이메일</span>
