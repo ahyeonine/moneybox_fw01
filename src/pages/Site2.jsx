@@ -380,6 +380,8 @@ export default function Site2() {
   const [pickupDate, setPickupDate] = useState('')
   const [verifiedEmail, setVerifiedEmail] = useState('') // 인증 완료된 이메일(수신 가능 확인)
   const [marketingOptIn, setMarketingOptIn] = useState(false) // 마케팅 정보 수신 동의(선택)
+  const [custPw, setCustPw] = useState('') // 정보 단계 인라인 회원가입 비밀번호(선택)
+  const [joinedNow, setJoinedNow] = useState(false) // 이번 예약과 함께 회원가입했는지
   const [result, setResult] = useState(null)
 
   // 회원가입 — couponMember != null = 회원(수령 시 현장 우대)
@@ -555,9 +557,6 @@ export default function Site2() {
     setShowSignup(true)
   }
 
-  // 정보 단계에서 이름·이메일을 이미 채웠으면 "비밀번호만 추가" 후킹
-  const nameEmailReady = isValidName(custName) && isValidEmail(custEmail)
-
   // 이메일 인증 완료 여부 — 인증한 이메일과 현재 입력값이 같아야 유효(이메일 바꾸면 재인증)
   const emailVerified =
     isValidEmail(custEmail) && !!verifiedEmail && verifiedEmail === custEmail.trim()
@@ -575,16 +574,27 @@ export default function Site2() {
   const infoValid =
     isValidName(custName) && isValidEmail(custEmail) && emailVerified && dateValid
 
+  // 정보 단계 인라인 회원가입: 이름·이메일 인증을 이미 마쳤으므로 비밀번호(6자+)만 추가하면 가입
+  const joinPwOk = custPw.length >= 6
+  const willJoin = !couponMember && joinPwOk && emailVerified
+
   // 예약 생성 — 환율 미고정(rate=null, rateMode='BOARD'). 쿠폰 여부 기록.
   function submitV2() {
     if (!infoValid || !pickedBranch) return
+    // 비회원이 비밀번호를 설정했으면 이번 예약과 함께 회원가입 처리(가입 즉시 회원 우대 대상)
+    const joining = willJoin
+    const isMember = couponOn || joining
+    if (joining) {
+      setCouponMember({ name: custName.trim(), email: custEmail.trim(), marketing: marketingOptIn })
+    }
+    setJoinedNow(joining)
     const rec = createReservation({
       transactionType: direction, // BUY(외화→원화) | SELL(원화→외화)
       branchId: pickedBranch,
       currency,
       rate: null, // 환율 고정 없음 → 수령일 전광판 환율 적용
       rateMode: 'BOARD',
-      coupon: couponOn,
+      coupon: isMember, // 회원(기존/이번 가입)이면 회원 우대 대상
       foreignAmount: Number(amount),
       krwAmount: null,
       customerName: custName.trim().toUpperCase(),
@@ -611,6 +621,8 @@ export default function Site2() {
     // 회원은 회원가입 시 인증한 이메일·마케팅 동의를 유지, 비회원은 초기화
     setVerifiedEmail(couponMember?.email || '')
     setMarketingOptIn(couponMember ? !!couponMember.marketing : false)
+    setCustPw('')
+    setJoinedNow(false)
     setPickupDate('')
     setAmount('')
     setStep('region')
@@ -1188,10 +1200,6 @@ export default function Site2() {
             </div>
             <div className="s2v-sum-note">{t('s2v.rate.disclaimer')}</div>
 
-            {!couponOn && (
-              <GuaranteeCTA t={t} onClick={openSignup} quick={nameEmailReady} />
-            )}
-
             <div className="s2-field-label">{t('common.name')}</div>
             <input
               className="s2-search"
@@ -1219,6 +1227,34 @@ export default function Site2() {
               t={t}
             />
 
+            {/* 인라인 회원가입 유도 — 이름·이메일 인증을 이미 마쳤으니 비밀번호만 추가하면 가입 */}
+            <div className={`s2v-join${joinPwOk ? ' ready' : ''}`}>
+              <div className="s2v-join-head">
+                <span className="s2v-join-seal"><Ic name="shield" /></span>
+                <span className="s2v-join-htext">
+                  <span className="s2v-join-badge">{t('s2v.join.badge')}</span>
+                  <span className="s2v-join-t">{t('s2v.join.title')}</span>
+                  <span className="s2v-join-d">{t('s2v.join.desc')}</span>
+                </span>
+              </div>
+              <ul className="s2v-join-benes">
+                <li><Ic name="check" /> {t('s2v.join.b1')}</li>
+                <li><Ic name="check" /> {t('s2v.join.b2')}</li>
+                <li><Ic name="check" /> {t('s2v.join.b3')}</li>
+              </ul>
+              <input
+                className="s2-search"
+                type="password"
+                value={custPw}
+                onChange={(e) => setCustPw(e.target.value)}
+                placeholder={t('s2v.join.pw.ph')}
+                autoComplete="new-password"
+              />
+              <div className={`s2v-hint${joinPwOk ? ' ok' : ''}`}>
+                {joinPwOk ? `✓ ${t('s2v.join.ready')}` : t('s2v.join.hint')}
+              </div>
+            </div>
+
             {/* 마케팅 정보 수신 동의(선택) */}
             <label className="s2v-consent">
               <input
@@ -1233,7 +1269,7 @@ export default function Site2() {
             </label>
 
             <button className="btn s2-primary block" disabled={!infoValid} onClick={submitV2}>
-              {t('s2v.info.submit')}
+              {willJoin ? t('s2v.join.submit') : t('s2v.info.submit')}
             </button>
             <button className="btn s2-ghost block" onClick={() => setStep('amount')}>
               {t('s2.back')}
@@ -1246,6 +1282,9 @@ export default function Site2() {
           <section className="s2-card s2v-done">
             <div className="s2v-done-ic" aria-hidden="true">🎉</div>
             <h2 className="s2-card-t">{t('s2v.done.title')}</h2>
+            {joinedNow && (
+              <div className="s2v-done-member"><Ic name="shield" /> {t('s2v.join.done')}</div>
+            )}
             <div className="s2v-resno">{result.reservationNo}</div>
             <div className="s2v-summary">
               <div className="s2v-sum-row">
