@@ -2,35 +2,24 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import Logo from '../../components/Logo.jsx'
 
 // 탭 2 · CEMS (어드민) 셸: 실제 운영 CEMS 화면 골격 재현.
-// 파란 헤더(로고+시스템 타이틀) / 상단 5탭(환전예약·설정만 동작) / 좌측 사이드바 / 본문 Outlet.
+// 파란 헤더 / 상단 탭 / 좌측 사이드바 / 본문 Outlet.
+// 프로토타입에서 실제 동작하는 화면만 노출한다(동작하지 않는 데모용 메뉴는 제거).
 // 어드민 화면은 실제 CEMS와 동일하게 한국어 라벨을 고정 사용한다.
 
 const TOP_TABS = [
-  { key: 'exchange', label: '머니 익스체인지', enabled: false },
-  { key: 'money24', label: '머니 24h', enabled: false },
   { key: 'reservation', label: '환전예약', enabled: true, to: '/cems/reservations' },
-  { key: 'online', label: '온라인환전', enabled: false },
-  { key: 'settings', label: '설정', enabled: false }, // 환율관리 제거로 비활성(클릭 불가)
+  { key: 'settings', label: '설정', enabled: true, to: '/cems/settings/policy' },
 ]
 
-// 환전예약 탭 사이드바
+// 환전예약 탭 사이드바 — 동작하는 화면만
 const RESV_MENU = [
   { label: '외국인 환전예약관리', to: '/cems/reservations', enabled: true },
   { label: '본사관리자 (전 지점)', to: '/cems/hq', enabled: true },
-  { label: '예약 가능 기간 설정 (본사)', to: '/cems/policy', enabled: true },
-  { label: '가상계좌입금조회', enabled: false },
-  { label: '가상계좌설정', enabled: false },
-  { label: '휴일관리', enabled: false },
-  { label: '환전율관리', enabled: false }, // (설정 탭의 환전율관리와 이름만 같은 다른 화면)
-  { label: '기간별매출조회', enabled: false },
 ]
 
-// 설정 탭 사이드바
-// 환전율관리는 예약 시 환율 미고정(수령일 전광판 환율) 모델 전환으로 제거됨.
+// 설정 탭 사이드바 — 예약 가능 기간 설정(본사)
 const SETTINGS_MENU = [
-  { label: '환전율관리 (미사용)', enabled: false },
-  { label: '휴일관리', enabled: false },
-  { label: '가상계좌설정', enabled: false },
+  { label: '예약 가능 기간 설정 (본사)', to: '/cems/settings/policy', enabled: true },
 ]
 
 export default function CemsShell() {
@@ -56,7 +45,7 @@ export default function CemsShell() {
         </div>
       </header>
 
-      {/* 상단 5탭 */}
+      {/* 상단 탭 */}
       <nav className="cems-toptabs">
         <div className="cems-toptabs-inner">
           {TOP_TABS.map((tab) =>
