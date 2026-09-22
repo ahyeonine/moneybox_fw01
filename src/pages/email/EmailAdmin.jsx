@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Logo from '../../components/Logo.jsx'
 import DevNote from '../../components/DevNote.jsx'
 import Modal from '../../components/Modal.jsx'
-import { useEmail, EMAIL_TYPES } from '../../store/EmailContext.jsx'
+import { useEmail, EMAIL_TYPES, SIGNUP_HOOK } from '../../store/EmailContext.jsx'
 import { useReservations } from '../../store/ReservationContext.jsx'
 import { getBranch } from '../../data/branches.js'
 import { formatNumber, formatKrw } from '../../lib/format.js'
@@ -43,6 +43,8 @@ export default function EmailAdmin() {
       amount: formatNumber(rec.foreignAmount),
       rate: formatNumber(rec.rate),
       krw: formatKrw(rec.krwAmount),
+      // 회원가입 유도 문구 — 비회원 예약(coupon=false)에만 노출, 회원은 빈 값
+      signupHook: rec.coupon ? '' : SIGNUP_HOOK,
     }
     if (type === 'auth') v.code = String(Math.floor(100000 + Math.random() * 900000))
     return v
