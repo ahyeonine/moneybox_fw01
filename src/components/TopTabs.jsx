@@ -23,10 +23,10 @@ export default function TopTabs() {
           )
         })}
         <NavLink to="/email" className={({ isActive }) => `toptabs-docs ${isActive ? 'active' : ''}`}>
-          ✉️ 이메일
+          이메일
         </NavLink>
         <NavLink to="/docs" className={({ isActive }) => `toptabs-docs ${isActive ? 'active' : ''}`}>
-          📄 기획문서
+          기획문서
         </NavLink>
         <span className="toptabs-hint">{t('top.hint')}</span>
       </div>

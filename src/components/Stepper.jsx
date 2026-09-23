@@ -7,7 +7,7 @@ export default function Stepper({ steps, current }) {
         return (
           <div key={n} style={{ display: 'flex', alignItems: 'center' }}>
             <div className={`st ${n === current ? 'active' : ''} ${n < current ? 'done' : ''}`}>
-              <span className="num">{n < current ? '✓' : n}</span>
+              <span className="num">{n < current ? '' : n}</span>
               <span className="lb">{label}</span>
             </div>
             {i < steps.length - 1 && <span className="bar" />}

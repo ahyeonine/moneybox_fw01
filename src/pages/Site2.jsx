@@ -277,7 +277,7 @@ function Site2Map({ center, points, kiosks = [], onPick }) {
           )
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
-            attribution: '© OpenStreetMap contributors',
+            attribution: 'OpenStreetMap contributors',
           }).addTo(mapRef.current)
           layerRef.current = L.layerGroup().addTo(mapRef.current)
         }
@@ -285,7 +285,7 @@ function Site2Map({ center, points, kiosks = [], onPick }) {
         const layer = layerRef.current
         layer.clearLayers()
         const bounds = []
-        // 예쁜 핀(divIcon): 색 + 아이콘. 지점=파란 핀(💱), 무인기=청록 핀(🏧).
+        // 예쁜 핀(divIcon): 색 + 아이콘. 지점=파란 핀(), 무인기=청록 핀().
         const pin = (cls, glyph) =>
           L.divIcon({
             className: 's2mk-wrap',
@@ -305,7 +305,7 @@ function Site2Map({ center, points, kiosks = [], onPick }) {
           bounds.push([center.lat, center.lng])
         }
         points.forEach((p) => {
-          const m = L.marker([p.lat, p.lng], { icon: pin('s2mk-branch', '💱') }).addTo(layer)
+          const m = L.marker([p.lat, p.lng], { icon: pin('s2mk-branch', '') }).addTo(layer)
           // 지점 마커: 클릭하면 바로 선택(예약 단계로). 호버 시 지점명 툴팁.
           if (p.id && pickRef.current) {
             m.bindTooltip(p.label)
@@ -317,9 +317,9 @@ function Site2Map({ center, points, kiosks = [], onPick }) {
           }
           bounds.push([p.lat, p.lng])
         })
-        // 머니24h 무인환전기 — 위치 안내용(예약 불가). 청록 핀(🏧).
+        // 머니24h 무인환전기 — 위치 안내용(예약 불가). 청록 핀().
         kiosks.forEach((k) => {
-          L.marker([k.lat, k.lng], { icon: pin('s2mk-kiosk', '🏧') })
+          L.marker([k.lat, k.lng], { icon: pin('s2mk-kiosk', '') })
             .addTo(layer)
             .bindPopup(k.label)
           bounds.push([k.lat, k.lng])
@@ -482,7 +482,7 @@ export default function Site2() {
         `<div class="s2-kpop">` +
         `<b class="s2-kpop-t">${nm}</b>` +
         `<span class="s2-kpop-type">${esc(t('s2.kiosk.pop.type'))}</span>` +
-        `<span class="s2-kpop-addr">📍 ${ad}</span>` +
+        `<span class="s2-kpop-addr">${ad}</span>` +
         `<span class="s2-kpop-hours">${esc(t('s2.kiosk.pop.hours'))}</span>` +
         `</div>`
       return { lat: k.lat, lng: k.lng, label }
@@ -664,7 +664,7 @@ export default function Site2() {
             MONEY<span>BOX</span>
           </button>
           <nav className="s2-nav">
-            <span className="s2-nav-langs">🌏 EN · 中文 · 日本語 · 한국어</span>
+            <span className="s2-nav-langs">EN · 中文 · 日本語 · 한국어</span>
           </nav>
           <div className="s2-header-right">
             <button
@@ -714,9 +714,9 @@ export default function Site2() {
                   </button>
                 </div>
                 <ul className="s2-lp-trust">
-                  <li>✓ {t('s2.home.trust.rate')}</li>
-                  <li>✓ {t('s2.home.trust.pay')}</li>
-                  <li>✓ {t('s2.home.trust.branch')}</li>
+                  <li>{t('s2.home.trust.rate')}</li>
+                  <li>{t('s2.home.trust.pay')}</li>
+                  <li>{t('s2.home.trust.branch')}</li>
                 </ul>
               </div>
 
@@ -866,7 +866,7 @@ export default function Site2() {
               key={s.key}
               className={`s2-step${i === stepIdx ? ' on' : ''}${i < stepIdx ? ' done' : ''}`}
             >
-              <span className="s2-step-num">{i < stepIdx ? '✓' : i + 1}</span>
+              <span className="s2-step-num">{i < stepIdx ? '' : i + 1}</span>
               <span className="s2-step-label">{s.label}</span>
             </div>
           ))}
@@ -942,7 +942,7 @@ export default function Site2() {
                     className={`s2-loc-item${loc && loc.lat === r.lat && loc.lng === r.lng ? ' on' : ''}`}
                     onClick={() => setLoc({ name: r.name, lat: r.lat, lng: r.lng })}
                   >
-                    <span className="s2-loc-kind" aria-hidden="true">📍</span>
+                    <span className="s2-loc-kind" aria-hidden="true"></span>
                     <span className="s2-loc-name">{r.name}</span>
                     <span className="s2-loc-go">→</span>
                   </button>
@@ -1014,7 +1014,7 @@ export default function Site2() {
                     <span className="s2-branch-km">
                       {km == null
                         ? b.address[lang]?.split(',').pop()?.trim() || ''
-                        : `📍 ${km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(1)} km`} ${t('s2.br.away')}`}
+                        : `${km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(1)} km`} ${t('s2.br.away')}`}
                     </span>
                     <button className="btn s2-primary s2-branch-pick" onClick={() => reserveAt(b.id)}>
                       {t('s2.br.pick')}
@@ -1028,7 +1028,7 @@ export default function Site2() {
             {/* 우측: 지도 — 지점 + 무인기(머니24h) 항상 표시 */}
             <div className="s2-branch-right">
               {loc && (
-                <div className="s2-picked"><span aria-hidden="true">📍</span> {loc.name}</div>
+                <div className="s2-picked"><span aria-hidden="true"></span> {loc.name}</div>
               )}
               <Site2Map
                 center={loc ? { lat: loc.lat, lng: loc.lng, label: loc.name } : null}
@@ -1251,7 +1251,7 @@ export default function Site2() {
                 autoComplete="new-password"
               />
               <div className={`s2v-hint${joinPwOk ? ' ok' : ''}`}>
-                {joinPwOk ? `✓ ${t('s2v.join.ready')}` : t('s2v.join.hint')}
+                {joinPwOk ? `${t('s2v.join.ready')}` : t('s2v.join.hint')}
               </div>
             </div>
 
@@ -1280,7 +1280,7 @@ export default function Site2() {
         {/* STEP 4 · 완료 */}
         {step === 'done' && result && (
           <section className="s2-card s2v-done">
-            <div className="s2v-done-ic" aria-hidden="true">🎉</div>
+            <div className="s2v-done-ic" aria-hidden="true"></div>
             <h2 className="s2-card-t">{t('s2v.done.title')}</h2>
             {joinedNow && (
               <div className="s2v-done-member"><Ic name="shield" /> {t('s2v.join.done')}</div>
@@ -1400,7 +1400,7 @@ export default function Site2() {
               <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.terms')}</a>
               <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.privacy')}</a>
               <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.l.faq')}</a>
-              <a href={ESIM_URL} target="_blank" rel="noreferrer noopener">eSIM ↗</a>
+              <a href={ESIM_URL} target="_blank" rel="noreferrer noopener">eSIM</a>
             </div>
           </div>
           <div className="s2-footer-right">
@@ -1410,9 +1410,9 @@ export default function Site2() {
             <div className="s2-footer-addr">{t('s2.foot.addr')}</div>
             <div className="s2-footer-social">
               <LanguageDropdown />
-              <span className="s2-social-ic" aria-hidden="true">📷</span>
-              <span className="s2-social-ic" aria-hidden="true">🧵</span>
-              <span className="s2-social-ic" aria-hidden="true">✖️</span>
+              <span className="s2-social-ic" aria-hidden="true"></span>
+              <span className="s2-social-ic" aria-hidden="true"></span>
+              <span className="s2-social-ic" aria-hidden="true"></span>
             </div>
           </div>
         </div>

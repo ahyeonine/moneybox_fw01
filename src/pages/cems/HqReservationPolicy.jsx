@@ -88,7 +88,7 @@ export default function HqReservationPolicy() {
           <button className="cems-btn primary" onClick={apply} disabled={limitInvalid}>
             저장
           </button>
-          {flash && <span className="hq-policy-flash">✓ 저장됨</span>}
+          {flash && <span className="hq-policy-flash">저장됨</span>}
         </div>
 
         {limitInvalid && (
