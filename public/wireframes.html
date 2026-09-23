@@ -109,6 +109,27 @@
   .radio{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink);margin:8px 0;}
   .radio .rc{width:14px;height:14px;border-radius:50%;border:2px solid var(--wire);} .radio.on .rc{border-color:var(--blue);background:radial-gradient(circle,var(--blue) 40%,transparent 45%);}
 
+  /* 이메일 시안 6종 그리드 */
+  .mailgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:720px){.mailgrid{grid-template-columns:1fr;}}
+  .mailcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);}
+  .mailcard-top{background:var(--dark);color:#fff;font-size:11px;padding:6px 12px;display:flex;gap:8px;align-items:center;}
+  .mailcard-top .n{font-family:var(--disp);font-weight:800;color:#9ec1ff;}
+  .mailcard-top .tag2{margin-left:auto;background:rgba(255,255,255,.14);border-radius:999px;padding:1px 8px;font-size:9.5px;}
+  .mailcard-subj{padding:10px 14px 4px;font-size:12.5px;font-weight:800;color:var(--ink);}
+  .mailcard-body{padding:2px 14px 12px;font-size:11.5px;color:var(--muted);line-height:1.55;white-space:pre-line;}
+  .mailcard-body b{color:var(--ink);}
+  .mailcard-cta{display:inline-block;margin-top:6px;font-size:10.5px;font-weight:800;color:#fff;background:var(--blue);border-radius:7px;padding:3px 10px;}
+  .mailcard-when{padding:0 14px 12px;font-size:10.5px;color:var(--blue-dk);font-weight:700;}
+  /* 금액 입력 시 지점별 원화 이득 비교 */
+  .s2cmp{margin:8px 0;padding:12px;border-radius:12px;background:linear-gradient(180deg,#f2f7ff 0%,#eaf1ff 100%);border:1px solid #d7e4fb;}
+  .s2cmp-h{font-size:12px;font-weight:800;color:var(--blue-dk);margin-bottom:8px;}
+  .s2cmp-row{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);margin:5px 0;}
+  .s2cmp-row span:first-child{width:78px;flex:0 0 auto;}
+  .s2cmp-row .bar{flex:1;height:9px;border-radius:6px;background:#dbe7ff;overflow:hidden;}
+  .s2cmp-row .bar i{display:block;height:100%;background:var(--blue);border-radius:6px;}
+  .s2cmp-row b{color:var(--blue-dk);white-space:nowrap;font-size:11.5px;}
+
   .notes{display:flex;flex-direction:column;gap:10px;}
   .note{background:var(--note);border:1px solid var(--note-line);border-left:4px solid var(--note-line);border-radius:10px;padding:9px 12px;font-size:12.5px;color:var(--ink);}
   .note b{color:var(--note-ink);}
@@ -140,16 +161,18 @@
       <div class="wf"><div class="wf-phone">
         <div class="wf-bar"><b style="color:var(--ink)">MONEY BOX</b><span class="wf-legend" style="margin:0 0 0 auto;">EN·中文·日本語·한국어</span></div>
         <div class="wf-title" style="margin-top:12px;font-size:18px;">A simple way to exchange money in Korea</div>
-        <div class="wf-sub">예약 후 지점 방문·현금 결제 — 평균 더 나은 환율</div>
+        <div class="wf-sub">가까운 지점 어디서나, 여권만 보여주면 끝 — 환율도 좋아요</div>
+        <div class="wf-legend" style="margin:6px 0 4px;"><span>가까운 곳 어디서나</span> · <span>온라인 선결제 없음</span> · <span>40+ 지점·공항</span></div>
         <div class="wf-label">어디서 받으실래요?</div>
         <div class="wf-row"><div class="wf-chip">서울</div><div class="wf-chip">부산</div><div class="wf-chip">그 외</div></div>
         <div class="wf-bar blue tall" style="margin-top:8px;">예약 시작 →</div>
-        <div class="summary" style="margin-top:12px;"><div class="sr" style="border:0;"><span>더 나은 환율로 예약</span><span>· 현장 우대</span></div></div>
+        <div class="wf-bar" style="margin-top:8px;justify-content:center;">예약 조회하기</div>
       </div></div>
       <div class="notes">
+        <div class="note"><span class="tag">메시징</span> <b>비교(평균 %) 제거</b> — 금액/우대율 혼동 우려. 핵심은 <b>가까움·간편·신뢰</b>, 환율은 보조.</div>
         <div class="note"><span class="tag">진입</span> 통합웹(m-box.com)에서 <b>외국어 선택 시 이 페이지로 자동 이동</b>. 국내 고객은 통합웹.</div>
-        <div class="note"><span class="tag">전환</span> 상단에서 지역을 바로 고르면 지점 선택으로 진입(퍼널 단축).</div>
-        <div class="note warn"><span class="tag">카피 주의</span> "최저가·무조건" 등 <b>과장·최상급 표현 금지</b>. 비교는 특정 업권(은행) 미지목·예시 수치 명시.</div>
+        <div class="note"><span class="tag">조회</span> 상단 "예약 조회하기"로 <b>이메일 없이도</b> 예약 확인 가능.</div>
+        <div class="note warn"><span class="tag">카피 주의</span> "최저가·무조건" 등 <b>과장·최상급 표현 금지</b>. 비교는 특정 업권(은행) 미지목.</div>
       </div>
     </div>
   </section>
@@ -195,19 +218,28 @@
     <div class="screen-h"><span class="screen-no">A4</span><h2 class="screen-t">금액 · 수령일</h2><span class="screen-flow">지점 → <b>금액</b> → 정보</span></div>
     <div class="cols">
       <div class="wf"><div class="wf-phone">
-        <div class="wf-bar">← 금액 입력</div>
+        <div class="wf-bar">← 금액 입력 · 명동점</div>
         <div class="seg"><div class="on">외화 → 원화</div><div>원화 → 외화</div></div>
         <div class="wf-label">통화 / 금액</div>
-        <div class="wf-input">USD ▾ &nbsp;|&nbsp; 500</div>
-        <div class="summary"><div class="sr" style="border:0;"><span>적용 환율</span><span>수령일 전광판 (미고정)</span></div></div>
+        <div class="wf-input">USD ▾ &nbsp;|&nbsp; 1,000</div>
+        <div class="wf-sub" style="margin:6px 2px 2px;">예약 시 환율 미고정 · 수령일 지점 환율 적용</div>
+        <!-- 금액 입력 시: 이 지점 기준 원화 이득 비교 (미입력 시 숨김) -->
+        <div class="s2cmp">
+          <div class="s2cmp-h">명동점 · 이 지점 기준 · 이만큼 더 받아요</div>
+          <div class="s2cmp-row"><span>타 환전 채널</span><span class="bar"><i style="width:97%"></i></span><b>≈ ₩28,969 더</b></div>
+          <div class="s2cmp-row"><span>무인 키오스크</span><span class="bar"><i style="width:96%"></i></span><b>≈ ₩56,558 더</b></div>
+          <div class="s2cmp-row"><span>공항</span><span class="bar"><i style="width:91%"></i></span><b>≈ ₩128,290 더</b></div>
+        </div>
+        <div class="wf-bar" style="margin-top:8px;justify-content:flex-start;color:var(--blue-dk);border-style:dashed;border-color:var(--blue);background:transparent;">현재 환율 참고로 보기 ▾</div>
         <div class="wf-label">수령 예정일</div>
         <div class="wf-input">2026-09-30 ▾</div>
         <div class="wf-bar blue tall" style="margin-top:12px;">다음</div>
       </div></div>
       <div class="notes">
-        <div class="note"><span class="tag">환율</span> <b>예약 시 환율 미고정</b> — 수령일 지점 전광판 환율. 현재 환율은 참고용(하단 명시).</div>
-        <div class="note"><span class="tag">방향</span> 기본 외화→원화(매입). 토글로 매각.</div>
-        <div class="note"><span class="tag">한도</span> 최소·최대 한도 없음(양수면 신청).</div>
+        <div class="note"><span class="tag">환율</span> <b>예약 시 미고정</b> — 수령일 지점 환율 적용. 현재 환율(시세) 숫자는 기본 숨김.</div>
+        <div class="note"><span class="tag">비교</span> <b>금액 입력 시</b> "타 채널 대비 원화로 얼마 더 받는지"를 <b>이 지점 환율 기준</b>으로 노출(미입력 시 숨김). 지점마다 환율이 달라 금액도 달라짐.</div>
+        <div class="note"><span class="tag">현재환율</span> "현재 환율 참고로 보기"를 눌러야 노출 — <b>예약 진행 중에만</b>, 최종(완료) 화면엔 미노출.</div>
+        <div class="note"><span class="tag">방향/한도</span> 기본 외화→원화(매입)·토글로 매각. 최소·최대 한도 없음.</div>
         <div class="note"><span class="tag">수령일</span> 오늘 이후 자유 선택. 본사 상한(최대 N일) 지정 시만 제한.</div>
       </div>
     </div>
@@ -240,10 +272,14 @@
       <div class="wf"><div class="wf-phone">
         <div class="wf-title" style="text-align:center;">예약이 완료됐어요</div>
         <div class="wf-bar" style="justify-content:center;font-weight:800;color:var(--blue-dk);background:var(--blue-soft);border-color:var(--blue-soft);">RSV-20260930-0001</div>
-        <div class="summary" style="margin-top:10px;"><div class="sr"><span>수령 지점</span><span>명동점</span></div><div class="sr"><span>금액</span><span>500 USD</span></div><div class="sr"><span>수령 예정일</span><span>2026-09-30</span></div><div class="sr"><span>적용 환율</span><span>수령일 전광판</span></div></div>
-        <div class="wf-sub" style="text-align:center;">수령일에 지점 방문 → 여권 확인 → 현금 수령</div>
+        <div class="summary" style="margin-top:10px;"><div class="sr"><span>수령 지점</span><span>명동점</span></div><div class="sr"><span>금액</span><span>1,000 USD</span></div><div class="sr"><span>수령 예정일</span><span>2026-09-30</span></div><div class="sr"><span>적용 환율</span><span>수령일 환율</span></div></div>
+        <div class="wf-sub" style="text-align:center;">수령일에 지점 방문 → 여권 확인 → 현금 환전</div>
+        <div class="wf-bar blue" style="margin-top:10px;">예약 조회하기</div>
+        <div class="wf-bar" style="margin-top:8px;justify-content:center;">새 예약 하기</div>
       </div></div>
       <div class="notes">
+        <div class="note"><span class="tag">조회</span> 완료 화면에 <b>"예약 조회하기"</b> 버튼 — 이메일 없이도 예약 페이지에서 바로 확인/변경/취소로 이동.</div>
+        <div class="note"><span class="tag">환율</span> 최종 화면엔 환율 수치 없음 — "수령일 환율"만 표기(현재 환율은 예약 중에만 리빙).</div>
         <div class="note"><span class="tag">이메일</span> 예약 완료 메일 발송. <b>비회원에게는 회원가입 유도 문구 포함</b>(회원 미노출).</div>
         <div class="note"><span class="tag">안내</span> 수령 전일 방문 예정 확인 메일. 미방문 시 수령기한 경과로 자동 취소.</div>
         <div class="note"><span class="tag">취소</span> 수령기한 전 취소 가능, <b>취소 수수료 없음</b>.</div>
@@ -424,13 +460,13 @@
       <div class="wf"><div class="wf-phone" style="max-width:420px;">
         <div class="wf-title" style="font-size:14px;">거래 처리</div>
         <div class="wf-input">예약번호로 조회 (RSV-…)</div>
-        <div class="summary" style="margin-top:8px;"><div class="sr"><span>예약자</span><span>홍길동 · 1985-05-16</span></div><div class="sr"><span>지점 / 수령일</span><span>명동점 / 07.31</span></div><div class="sr"><span>통화 / 금액</span><span>USD 1,000</span></div><div class="sr"><span>적용 환율</span><span>수령일 전광판 · 회원 우대(현장)</span></div></div>
+        <div class="summary" style="margin-top:8px;"><div class="sr"><span>예약자</span><span>홍길동 · 1985-05-16</span></div><div class="sr"><span>지점 / 수령일</span><span>명동점 / 07.31</span></div><div class="sr"><span>통화 / 금액</span><span>USD 1,000</span></div><div class="sr"><span>적용 환율</span><span>수령일 환율 · 회원 우대(현장)</span></div></div>
         <div class="wf-list-item" style="border-style:dashed;">☑ 신분증 대조 완료 (현장 여권 확인)</div>
         <div class="wf-bar blue tall">거래 완료</div>
       </div></div>
       <div class="notes">
         <div class="note"><span class="tag">조회</span> <b>예약번호로 조회</b> → 예약 상세·정산 표시. (스캔 없음)</div>
-        <div class="note"><span class="tag">정산</span> 수령일 전광판 환율 적용, 회원 우대 대상은 현장 우대.</div>
+        <div class="note"><span class="tag">정산</span> 수령일 환율 적용, 회원 우대 대상은 현장 우대(환율 수치 미표시).</div>
         <div class="note"><span class="tag">본인확인</span> 수령 시 <b>지점에서 여권 육안 확인</b>(온라인 사전 수집 없음). 예약자·수령자 달라도 가능.</div>
       </div>
     </div>
@@ -459,6 +495,74 @@
         <div class="note"><span class="tag">치환</span> {{name}}·{{reservationNo}}·{{signupHook}} 등 토큰 치환. <b>{{signupHook}}=비회원에게만 회원가입 유도</b>.</div>
         <div class="note"><span class="tag">시뮬레이션</span> 실제 발송 없이 Outbox 기록. 신청완료·리마인더 메일엔 지점 지도 포함.</div>
       </div>
+    </div>
+  </section>
+
+  <section class="screen">
+    <div class="screen-h"><span class="screen-no">D2</span><h2 class="screen-t">이메일 시안 — 총 6종</h2><span class="screen-flow">고객 발송 메일</span></div>
+    <div class="mailgrid">
+
+      <div class="mailcard">
+        <div class="mailcard-top"><span class="n">1</span> 인증번호 발송 <span class="tag2">auth</span></div>
+        <div class="mailcard-subj">[MONEY BOX] 이메일 인증번호입니다</div>
+        <div class="mailcard-body"><b>인증번호: 000000</b>
+5분 이내에 입력해 주세요.
+본인이 요청하지 않았다면 무시하셔도 됩니다.</div>
+        <div class="mailcard-when">발송 시점: 예약·회원가입 중 이메일 인증 요청 시</div>
+      </div>
+
+      <div class="mailcard">
+        <div class="mailcard-top"><span class="n">2</span> 신청 완료 <span class="tag2">applied</span></div>
+        <div class="mailcard-subj">[MONEY BOX] 환전 예약이 완료되었습니다 (예약번호: RSV-…)</div>
+        <div class="mailcard-body">OOO님, 환전 예약이 완료되었습니다.
+- 예약번호 / 지점 / 통화·금액 / 수령 예정일
+- <b>적용 환율: 수령일 지점 환율(예약 시 미고정)</b>
+수령 시 여권 지참 · (지점 위치 지도 포함)
+<span class="mailcard-cta">신청내역 조회</span>
+<b>[비회원] 지금 회원가입하면 우대·쿠폰 혜택</b></div>
+        <div class="mailcard-when">발송 시점: 예약 완료 직후</div>
+      </div>
+
+      <div class="mailcard">
+        <div class="mailcard-top"><span class="n">3</span> 수령 전일 리마인더 <span class="tag2">reminder</span></div>
+        <div class="mailcard-subj">[MONEY BOX] 내일 환전 수령 예정이에요 (예약번호: RSV-…)</div>
+        <div class="mailcard-body">내일 OO점에서 환전 수령 예정입니다.
+수령 시 여권 지참 · (지점 지도 포함)
+<span class="mailcard-cta">방문 예정</span> <span class="mailcard-cta" style="background:#8a93a8;">예약 취소</span>
+당일까지 무응답 시 자동 취소됩니다.</div>
+        <div class="mailcard-when">발송 시점: 수령 예정일 하루 전</div>
+      </div>
+
+      <div class="mailcard">
+        <div class="mailcard-top"><span class="n">4</span> 자동취소 안내 <span class="tag2">autoCancel</span></div>
+        <div class="mailcard-subj">[MONEY BOX] 예약이 자동 취소되었습니다 (예약번호: RSV-…)</div>
+        <div class="mailcard-body">예약이 <b>수령 예정일 경과</b>로 자동 취소되었습니다.
+다시 예약하시려면 예약 화면을 이용해 주세요.</div>
+        <div class="mailcard-when">발송 시점: 수령기한 경과(미방문) 시</div>
+      </div>
+
+      <div class="mailcard">
+        <div class="mailcard-top"><span class="n">5</span> 지점 취소 안내 <span class="tag2">branchCancel</span></div>
+        <div class="mailcard-subj">[MONEY BOX] 예약이 취소되었습니다 (예약번호: RSV-…)</div>
+        <div class="mailcard-body">죄송합니다. 예약이 취소되었습니다.
+- 취소 사유: 지점 사정
+이용에 불편을 드려 죄송합니다.</div>
+        <div class="mailcard-when">발송 시점: 지점(직원) 취소 시</div>
+      </div>
+
+      <div class="mailcard">
+        <div class="mailcard-top"><span class="n">6</span> 고객 취소완료 <span class="tag2">customerCancel</span></div>
+        <div class="mailcard-subj">[MONEY BOX] 취소가 완료되었습니다 (예약번호: RSV-…)</div>
+        <div class="mailcard-body">예약이 정상적으로 취소되었습니다.
+언제든 다시 예약해 주세요.</div>
+        <div class="mailcard-when">발송 시점: 고객이 직접 취소 시</div>
+      </div>
+
+    </div>
+    <div class="notes" style="margin-top:12px;">
+      <div class="note"><span class="tag">개수</span> 고객 발송 메일 <b>총 6종</b>. 관리자(이메일 관리)에서 제목·본문 편집 가능.</div>
+      <div class="note"><span class="tag">치환</span> {{name}} · {{reservationNo}} · {{branch}} · {{pickupDate}} 등 토큰. <b>{{signupHook}}=비회원에게만</b> 회원가입 유도.</div>
+      <div class="note"><span class="tag">지도</span> 신청완료·리마인더 메일엔 지점 위치 지도·주소 포함. <b>환율 수치는 미표기</b>(수령일 환율로 안내).</div>
     </div>
   </section>
 

@@ -905,6 +905,7 @@ export const STRINGS = {
     en: 'Visit the branch on your pickup day, show your passport, and exchange in cash. The rate on that day applies.',
   },
   's2v.done.again': { ko: '새 예약 하기', en: 'New reservation' },
+  's2v.done.lookup': { ko: '예약 조회하기', en: 'Look up my reservation' },
   's2v.signup.badge': { ko: '회원 우대', en: 'Member perk' },
   's2v.signup.title': { ko: '회원 우대 받기', en: 'Get the member perk' },
   's2v.signup.d': {
