@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>외국인서비스 와이어프레임</title>
+<meta name="description" content="외국인 환전예약 서비스 주요 화면 와이어프레임 + 특이사항 라벨">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Sora:wght@600;700;800&display=swap">
+<style>
+  :root {
+    --blue:#1f6bff; --blue-dk:#1846b8; --blue-soft:#eaf1ff;
+    --bg:#eef3fb; --surface:#ffffff; --ink:#16204a; --muted:#6b7690;
+    --line:#dfe6f3; --wire:#c3ccde; --wirefill:#eef2f8;
+    --note:#fff6e6; --note-line:#f4d79a; --note-ink:#7a5a12;
+    --shadow:0 10px 30px rgba(31,107,255,.10);
+    --kr:'Noto Sans KR',system-ui,sans-serif; --disp:'Sora','Noto Sans KR',sans-serif;
+  }
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+    --blue:#5c8dff; --blue-dk:#a9c4ff; --blue-soft:#1a2947;
+    --bg:#0c1020; --surface:#121933; --ink:#eaf0ff; --muted:#97a1bd;
+    --line:#263355; --wire:#35446e; --wirefill:#1a2340;
+    --note:#2a2410; --note-line:#5c4a1c; --note-ink:#e7cf92;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }}
+  :root[data-theme="dark"]{
+    --blue:#5c8dff; --blue-dk:#a9c4ff; --blue-soft:#1a2947;
+    --bg:#0c1020; --surface:#121933; --ink:#eaf0ff; --muted:#97a1bd;
+    --line:#263355; --wire:#35446e; --wirefill:#1a2340;
+    --note:#2a2410; --note-line:#5c4a1c; --note-ink:#e7cf92;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--kr);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1040px;margin:0 auto;padding:36px 16px 72px;}
+  .head{background:linear-gradient(135deg,#3a86ff 0%,var(--blue) 55%,var(--blue-dk) 100%);border-radius:22px;padding:30px 28px;color:#fff;box-shadow:var(--shadow);}
+  .eyebrow{font-family:var(--disp);font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.85);margin:0 0 10px;}
+  .head h1{font-size:clamp(24px,5vw,32px);font-weight:900;letter-spacing:-.02em;margin:0 0 8px;}
+  .head p{font-size:14px;color:rgba(255,255,255,.92);margin:0;max-width:60ch;}
+
+  .screen{margin-top:30px;}
+  .screen-h{display:flex;align-items:baseline;gap:10px;margin:0 0 12px;}
+  .screen-no{font-family:var(--disp);font-weight:800;font-size:13px;color:#fff;background:var(--blue);border-radius:8px;padding:3px 10px;}
+  .screen-t{font-size:19px;font-weight:900;letter-spacing:-.01em;margin:0;}
+  .screen-flow{font-size:12.5px;color:var(--muted);margin-left:auto;}
+
+  .cols{display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start;}
+  @media (max-width:820px){.cols{grid-template-columns:1fr;}}
+
+  /* 와이어프레임 목업 */
+  .wf{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);}
+  .wf-phone{max-width:420px;margin:0 auto;border:2px solid var(--wire);border-radius:18px;padding:14px;background:var(--surface);}
+  .wf-bar{height:34px;border-radius:8px;background:var(--wirefill);border:1px solid var(--wire);display:flex;align-items:center;padding:0 12px;font-size:12.5px;color:var(--muted);}
+  .wf-bar.blue{background:var(--blue);color:#fff;border-color:var(--blue);justify-content:center;font-weight:800;font-size:14px;}
+  .wf-bar.tall{height:46px;}
+  .wf-title{font-weight:800;font-size:15px;margin:2px 2px 10px;}
+  .wf-sub{font-size:12px;color:var(--muted);margin:0 2px 10px;}
+  .wf-row{display:flex;gap:8px;margin:8px 0;}
+  .wf-chip{flex:1;height:56px;border:1px dashed var(--wire);border-radius:10px;background:var(--wirefill);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);text-align:center;}
+  .wf-map{height:200px;border:1px solid var(--wire);border-radius:12px;background:
+      repeating-linear-gradient(0deg,transparent 0 22px,rgba(0,0,0,.04) 22px 23px),
+      repeating-linear-gradient(90deg,transparent 0 22px,rgba(0,0,0,.04) 22px 23px),
+      var(--wirefill);position:relative;overflow:hidden;}
+  .pin{position:absolute;width:16px;height:16px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.25);}
+  .pin.b{background:var(--blue);} .pin.k{background:#2dd4bf;}
+  .wf-list-item{height:44px;border:1px solid var(--wire);border-radius:10px;margin:8px 0;display:flex;align-items:center;padding:0 12px;gap:8px;font-size:12.5px;color:var(--muted);}
+  .wf-input{height:40px;border:1px solid var(--wire);border-radius:10px;background:var(--surface);margin:6px 0;display:flex;align-items:center;padding:0 12px;font-size:12.5px;color:var(--muted);}
+  .wf-label{font-size:12px;font-weight:700;margin:10px 2px 2px;}
+  .wf-legend{display:flex;gap:14px;font-size:11.5px;color:var(--muted);margin-top:8px;flex-wrap:wrap;}
+  .wf-legend span{display:inline-flex;align-items:center;gap:6px;}
+  .dot{width:11px;height:11px;border-radius:50%;}
+  .join{border:1.5px solid var(--blue);background:var(--blue-soft);border-radius:12px;padding:10px 12px;margin:8px 0;}
+  .join .jt{font-size:12.5px;font-weight:800;color:var(--blue-dk);}
+  .summary{border:1px solid var(--wire);border-radius:10px;padding:8px 12px;margin:6px 0;}
+  .summary .sr{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:3px 0;border-bottom:1px dashed var(--line);}
+  .summary .sr:last-child{border-bottom:0;}
+  .seg{display:flex;border:1px solid var(--wire);border-radius:10px;overflow:hidden;margin:6px 0;}
+  .seg div{flex:1;text-align:center;font-size:12px;padding:8px;color:var(--muted);}
+  .seg div.on{background:var(--blue);color:#fff;font-weight:700;}
+
+  /* 라벨(특이사항) */
+  .notes{display:flex;flex-direction:column;gap:10px;}
+  .note{background:var(--note);border:1px solid var(--note-line);border-left:4px solid var(--note-line);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--ink);}
+  .note b{color:var(--note-ink);}
+  .note .tag{display:inline-block;font-family:var(--disp);font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--note-ink);margin-bottom:3px;}
+  .note.warn{background:#fdecec;border-color:#f3b4b4;border-left-color:#e05656;}
+  .note.warn .tag,.note.warn b{color:#b3352f;}
+
+  .foot{margin-top:34px;text-align:center;font-size:12px;color:var(--muted);}
+  .foot b{color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <p class="eyebrow">MoneyBox · Foreign Service</p>
+    <h1>외국인서비스 와이어프레임</h1>
+    <p>외국인 환전예약 주요 화면의 구조와 특이사항. 왼쪽은 화면 배치(와이어프레임), 오른쪽은 알아야 할 사항(라벨). 실제 디자인이 아닌 기획 검토용입니다.</p>
+  </header>
+
+  <!-- 1 지점 선택 -->
+  <section class="screen">
+    <div class="screen-h"><span class="screen-no">01</span><h2 class="screen-t">지역·지점 선택 (지도)</h2><span class="screen-flow">진입 → 지역 → <b>지점</b> → 금액</span></div>
+    <div class="cols">
+      <div class="wf"><div class="wf-phone">
+        <div class="wf-bar">← 지점 선택</div>
+        <div class="wf-title">어디서 받으실래요?</div>
+        <div class="cols" style="grid-template-columns:1fr 1.4fr;gap:10px;">
+          <div>
+            <div class="wf-input">호텔·역·주소 검색</div>
+            <div class="wf-bar tall" style="background:var(--blue-soft);border-color:var(--blue-soft);color:var(--blue-dk);justify-content:center;">내 위치에서 가까운 지점</div>
+            <div class="wf-list-item">명동점 · 예약 가능</div>
+            <div class="wf-list-item">강남점 · 예약 가능</div>
+          </div>
+          <div>
+            <div class="wf-map">
+              <div class="pin b" style="left:38%;top:32%;"></div>
+              <div class="pin b" style="left:60%;top:52%;"></div>
+              <div class="pin k" style="left:24%;top:64%;"></div>
+              <div class="pin k" style="left:72%;top:30%;"></div>
+            </div>
+            <div class="wf-legend"><span><span class="dot" style="background:var(--blue)"></span>지점(예약·수령)</span><span><span class="dot" style="background:#2dd4bf"></span>무인기(위치만)</span></div>
+          </div>
+        </div>
+      </div></div>
+      <div class="notes">
+        <div class="note"><span class="tag">지도</span> 지점(파란 핀)과 <b>무인기 머니24h(청록 핀)</b>를 함께 표시. 무인기는 <b>위치 안내용</b>일 뿐 예약·수령 불가.</div>
+        <div class="note"><span class="tag">선택</span> 지점 핀/목록을 누르면 바로 금액 단계로 이동. 검색은 왼쪽(좁게), 지도는 오른쪽(넓게) — 데스크톱 기준 2단.</div>
+        <div class="note"><span class="tag">데이터</span> 지도 검색은 OpenStreetMap. 지점은 40여 개 + 공항.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 금액 -->
+  <section class="screen">
+    <div class="screen-h"><span class="screen-no">02</span><h2 class="screen-t">금액 · 수령일</h2><span class="screen-flow">지점 → <b>금액</b> → 정보</span></div>
+    <div class="cols">
+      <div class="wf"><div class="wf-phone">
+        <div class="wf-bar">← 금액 입력</div>
+        <div class="seg"><div class="on">외화 → 원화</div><div>원화 → 외화</div></div>
+        <div class="wf-label">통화 / 금액</div>
+        <div class="wf-input">USD ▾ &nbsp;|&nbsp; 500</div>
+        <div class="summary"><div class="sr"><span>타 환전 채널 대비</span><span>평균 +5.6% 더</span></div></div>
+        <div class="wf-label">수령 예정일</div>
+        <div class="wf-input">2026-09-30 ▾</div>
+        <div class="wf-bar blue tall" style="margin-top:12px;">다음</div>
+      </div></div>
+      <div class="notes">
+        <div class="note"><span class="tag">환율</span> <b>예약 시 환율 미고정</b> — 수령일 지점 전광판 환율 적용. 현재 환율은 참고용(하단 명시).</div>
+        <div class="note"><span class="tag">방향</span> 기본값 외화→원화(매입). 토글로 반대 방향(매각) 선택.</div>
+        <div class="note"><span class="tag">한도</span> 최소·최대 한도 없음(양수면 신청 가능).</div>
+        <div class="note"><span class="tag">수령일</span> 오늘 이후 자유 선택. 본사가 상한(최대 N일)을 지정한 경우에만 제한.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 예약자 정보 + 간편가입 -->
+  <section class="screen">
+    <div class="screen-h"><span class="screen-no">03</span><h2 class="screen-t">예약자 정보 · 간편가입</h2><span class="screen-flow">금액 → <b>정보</b> → 완료 <span style="opacity:.7">(회원은 건너뜀)</span></span></div>
+    <div class="cols">
+      <div class="wf"><div class="wf-phone">
+        <div class="wf-bar">← 예약자 정보</div>
+        <div class="wf-label">예약자명 (여권 영문)</div>
+        <div class="wf-input">HONG GILDONG</div>
+        <div class="wf-label">이메일</div>
+        <div class="wf-input">you@example.com</div>
+        <div class="wf-row"><div class="wf-input" style="flex:1;margin:0;">인증번호</div><div class="wf-bar" style="width:90px;justify-content:center;">인증</div></div>
+        <div class="join"><div class="jt">회원 혜택 · 비밀번호만 설정하면 회원가입 완료</div>
+          <div class="wf-input" style="margin:8px 0 0;">비밀번호 (선택)</div></div>
+        <div class="wf-list-item" style="border-style:dashed;">☐ 마케팅 정보 수신 동의 (선택)</div>
+        <div class="wf-bar blue tall" style="margin-top:10px;">예약하기 / 회원가입하고 예약하기</div>
+      </div></div>
+      <div class="notes">
+        <div class="note"><span class="tag">간편가입</span> 이름·이메일 인증을 이미 받으므로 <b>비밀번호만 추가하면 회원가입</b>. 비우면 비회원 예약. 가입 시 해당 예약부터 회원 우대.</div>
+        <div class="note"><span class="tag">인증</span> 이메일 <b>수신 가능 여부</b> 확인용(OTP). 본인인증 용도 아님. 이메일 변경 시 재인증.</div>
+        <div class="note"><span class="tag">회원</span> 로그인 회원은 이 단계를 <b>건너뜀</b>(금액·수령일 후 바로 완료).</div>
+        <div class="note warn"><span class="tag">주의</span> 여권번호는 <b>수집하지 않음</b>(이름 영문 + 이메일만). 신분 확인은 수령 시 지점에서.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 예약 완료 -->
+  <section class="screen">
+    <div class="screen-h"><span class="screen-no">04</span><h2 class="screen-t">예약 완료</h2><span class="screen-flow">정보 → <b>완료</b></span></div>
+    <div class="cols">
+      <div class="wf"><div class="wf-phone">
+        <div class="wf-title" style="text-align:center;">예약이 완료됐어요</div>
+        <div class="wf-bar" style="justify-content:center;font-weight:800;color:var(--blue-dk);background:var(--blue-soft);border-color:var(--blue-soft);">RSV-20260930-0001</div>
+        <div class="summary" style="margin-top:10px;">
+          <div class="sr"><span>수령 지점</span><span>명동점</span></div>
+          <div class="sr"><span>금액</span><span>500 USD</span></div>
+          <div class="sr"><span>수령 예정일</span><span>2026-09-30</span></div>
+          <div class="sr"><span>적용 환율</span><span>수령일 전광판</span></div>
+        </div>
+        <div class="wf-sub" style="text-align:center;">수령일에 지점 방문 → 여권 확인 → 현금 수령</div>
+      </div></div>
+      <div class="notes">
+        <div class="note"><span class="tag">이메일</span> 예약 완료 메일 발송. <b>비회원에게는 회원가입 유도 문구 포함</b>(회원은 미노출).</div>
+        <div class="note"><span class="tag">안내</span> 수령일 하루 전 방문 예정 확인 메일. 미방문 시 수령기한 경과로 자동 취소.</div>
+        <div class="note"><span class="tag">취소</span> 수령기한 전까지 취소 가능, <b>취소 수수료 없음</b>(예약 시 결제 없음).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 예약 조회 -->
+  <section class="screen">
+    <div class="screen-h"><span class="screen-no">05</span><h2 class="screen-t">예약 조회</h2><span class="screen-flow">상단 · 내 예약</span></div>
+    <div class="cols">
+      <div class="wf"><div class="wf-phone">
+        <div class="wf-bar">← 예약 조회</div>
+        <div class="seg"><div class="on">회원</div><div>비회원</div></div>
+        <div class="wf-label">회원: 이메일 + 비밀번호</div>
+        <div class="wf-input">you@example.com</div>
+        <div class="wf-input">비밀번호</div>
+        <div class="wf-label" style="color:var(--muted)">비회원: 예약번호 + 이메일</div>
+        <div class="wf-input" style="opacity:.6;">RSV-... &nbsp;|&nbsp; you@example.com</div>
+        <div class="wf-bar blue tall" style="margin-top:10px;">조회</div>
+      </div></div>
+      <div class="notes">
+        <div class="note"><span class="tag">2가지 방식</span> <b>회원</b> = 이메일+비밀번호 / <b>비회원</b> = 예약번호+이메일. 로그인 없이 조회.</div>
+        <div class="note"><span class="tag">범위</span> 같은 이메일의 신청내역 전체 조회. 조회 후 변경·취소 가능.</div>
+        <div class="note warn"><span class="tag">프로토타입</span> 현재는 비밀번호를 실제 검증하지 않음(데모). 실서비스는 기존 계정 체계 연동.</div>
+      </div>
+    </div>
+  </section>
+
+  <p class="foot"><b>머니박스(Moneybox)</b> · 외국인서비스 와이어프레임 · 실제 디자인 아님(기획 검토용)</p>
+</div>
+</body>
+</html>
