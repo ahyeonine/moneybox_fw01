@@ -29,11 +29,11 @@ function editDistance(a = '', b = '') {
 const isKoreanName = (n = '') => /[가-힣]/.test(n)
 
 export const POS_RESV_NOTES = [
-  '환전예약 = 국내예약(기본) / 해외예약 토글 — 두 탭 모두 신분증 스캔이 먼저',
-  '두 탭 모두 하단 "건너뛰기" → 예약 목록 → 선택 시 기존 거래처리 화면 (모든 예약건에 이름 표시)',
-  '건너뛰기 목록 구분: 국내예약=한국인(한글 이름), 해외예약=외국인(영문 이름)',
-  '해외예약 스캔: 이름·생년월일이 일치(공통값)하거나 유사(오입력 의심·편집거리 ≤ 2)한 예약을 조회 → 선택 시 거래처리',
+  '현재(1차)는 예약 목록 조회 중심 — 국내예약(기본)/해외예약 토글로 목록에서 예약을 선택해 거래처리',
+  '⚠ 신분증 스캔(자동 매칭)은 우선순위에서 밀림 — 지점 확인 후 고도화 단계에 도입 예정(현재 화면은 미리보기만)',
+  '목록 구분: 국내예약=한국인(한글 이름), 해외예약=외국인(영문 이름)',
   '회원 우대 대상 예약은 목록에 🏅 회원 우대 배지로 표시 — 수령 시 현장에서 우대',
+  '신분증 대조 자체는 수령 시점에 지점에서 육안 확인(온라인 사전 수집 없음) — 스캔 자동화가 고도화 대상',
   '거래진행은 기존 거래처리 화면으로 연결(프로토타입은 플레이스홀더)',
   '자세히: 01_IA.md',
 ]
@@ -46,7 +46,8 @@ export default function PosReservationSearch() {
   const [tab, setTab] = useState('domestic') // 'domestic'(국내) | 'foreign'(해외)
   const [scanning, setScanning] = useState(false) // 인식 중 애니메이션
   const [scanned, setScanned] = useState(null) // { name, birthDate }
-  const [skipped, setSkipped] = useState(false) // 국내예약: 스캔 건너뛰고 전체 목록 보기
+  // 현재(1차)는 예약 목록 조회가 기본. 신분증 스캔은 고도화 예정(지점 확인 후) — 미리보기로만 진입.
+  const [skipped, setSkipped] = useState(true)
 
   // 데모 신분증 — 탭별 신원. 국내는 한국인(한글 이름), 해외는 외국인(영문 이름).
   //  · 해외(JOHN SMITH): 일치 예약 다수 + 생년월일 동일한 오타 이름 'JON SMITH'가 유사로 잡힘
@@ -140,7 +141,7 @@ export default function PosReservationSearch() {
             /* 건너뛰기 → 예약 목록 (국내=한국인 / 해외=외국인) */
             <>
               <h3 className="scan-h">📋 예약 목록 ({skipList.length})</h3>
-              <p className="muted">예약을 선택하면 기존 거래처리 화면으로 이동합니다.</p>
+              <p className="muted">예약을 선택하면 기존 거래처리 화면으로 이동합니다. (현재 1차 운영 방식)</p>
               <div className="scan-matches">
                 {skipList.length === 0 && (
                   <div className="notice" style={{ marginTop: 6 }}>예약이 없습니다.</div>
@@ -163,17 +164,23 @@ export default function PosReservationSearch() {
                 ))}
               </div>
               <button type="button" className="btn ghost block" onClick={() => setSkipped(false)}>
-                ‹ 신분증 스캔으로
+                🪪 신분증 스캔 미리보기 (고도화 예정)
               </button>
+              <div className="tiny scan-demo-note">
+                신분증 스캔 자동 매칭은 지점 확인 후 고도화 단계에 도입 예정입니다.
+              </div>
             </>
           ) : !scanned ? (
-            /* 신분증 스캔 화면 (국내·해외 공통) */
+            /* 신분증 스캔 화면 (고도화 예정 · 미리보기) */
             <>
-              <h3 className="scan-h">🪪 신분증 스캔</h3>
+              <div className="notice" style={{ marginBottom: 10 }}>
+                ⚠ <b>고도화 예정</b> — 신분증 스캔 자동 매칭은 지점 확인 후 고도화 단계에 도입됩니다. 아래는 미리보기입니다. (현재 1차는 예약 목록 조회로 진행)
+              </div>
+              <h3 className="scan-h">🪪 신분증 스캔 <span className="tiny">(고도화 예정)</span></h3>
               <p className="muted">
                 {tab === 'domestic'
-                  ? '신분증을 스캔해 예약자 본인을 확인합니다. 스캔 없이 진행하려면 건너뛰기를 누르세요.'
-                  : '여권/신분증을 스캔하면 이름·생년월일이 일치하거나 유사한 예약을 조회합니다.'}
+                  ? '신분증을 스캔해 예약자 본인을 확인합니다. (도입 시)'
+                  : '여권/신분증을 스캔하면 이름·생년월일이 일치하거나 유사한 예약을 조회합니다. (도입 시)'}
               </p>
               <div className={`scan-frame${scanning ? ' scanning' : ''}`}>
                 <div className="scan-frame-corner tl" />
@@ -199,14 +206,14 @@ export default function PosReservationSearch() {
               >
                 {scanning ? '인식 중…' : '📷 신분증 스캔'}
               </button>
-              <div className="tiny scan-demo-note">데모: 버튼을 누르면 샘플 신분증으로 스캔됩니다</div>
+              <div className="tiny scan-demo-note">데모: 버튼을 누르면 샘플 신분증으로 스캔됩니다 (고도화 도입 시 동작)</div>
               <button
                 type="button"
                 className="btn ghost block scan-skip-btn"
                 onClick={() => setSkipped(true)}
                 disabled={scanning}
               >
-                건너뛰기
+                ‹ 예약 목록으로 (현재 운영)
               </button>
             </>
           ) : (
