@@ -742,6 +742,39 @@ export default function Site2() {
               </div>
             </section>
 
+            {/* 환율 비교 강조 — 타 환전 채널·키오스크·공항보다 평균 몇 % 더 나은지(정적 평균, 실환율 미노출) */}
+            <section className="s2-lp-cmp-sec">
+              <h2 className="s2-lp-cmp-h">{t('s2.home.cmp.title')}</h2>
+              <p className="s2-lp-cmp-sub">
+                {t('s2.home.cmp.sub').replace('{pct}', AVG_MORE_PCT)}
+              </p>
+              <div className="s2-lp-cmp-card">
+                <div className="s2-lp-cmp-row mb">
+                  <span className="s2-lp-cmp-name">
+                    <Ic name="trophy" /> {t('s2.home.cmp.mb')}
+                  </span>
+                  <div className="s2-lp-cmp-bar">
+                    <span className="s2-lp-cmp-fill mb" style={{ width: '100%' }} />
+                  </div>
+                  <span className="s2-lp-cmp-tag">{t('s2.home.cmp.mbtag')}</span>
+                </div>
+                {CHANNEL_BARS.map((c) => (
+                  <div key={c.key} className="s2-lp-cmp-row">
+                    <span className="s2-lp-cmp-name">
+                      <Ic name={c.icon} /> {t(`s2.home.cmp.${c.key}`)}
+                    </span>
+                    <div className="s2-lp-cmp-bar">
+                      <span className="s2-lp-cmp-fill" style={{ width: `${c.rel}%` }} />
+                    </div>
+                    <span className="s2-lp-cmp-more">
+                      +{c.more}% {t('s2.home.cmp.more')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="s2-lp-cmp-note">{t('s2.home.cmp.note')}</div>
+            </section>
+
             {/* 가치 3종 */}
             <section className="s2-lp-sec">
               <h2 className="s2-lp-sec-t">{t('s2.home.val.title')}</h2>
