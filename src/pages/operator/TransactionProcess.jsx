@@ -190,99 +190,20 @@ export default function TransactionProcess() {
             </div>
             <div className="row">
               <span className="k">{t('common.rate')}</span>
-              <span className="v">
-                {isBoard ? t('op.tx.board.reservedNone') : `1 ${rec.currency} = ${formatNumber(rec.rate)} KRW`}
-              </span>
+              <span className="v">{t('op.tx.board.reservedNone')}</span>
             </div>
             <div className="row total">
               <span className="k">{t('common.krwAmount')}</span>
-              <span className="v">{isBoard ? '—' : formatKrw(rec.krwAmount)}</span>
+              <span className="v">{t('op.tx.board.settleOnPickup')}</span>
             </div>
           </div>
 
-          {/* 정산: BOARD(전광판+쿠폰) / FIXED(베스트레이트) */}
-          {rec.status === 'BOOKED' && (
+          {/* 정산: 환율 미고정 → 수령일 전광판 환율(현장 적용). 환율 수치는 노출하지 않음. */}
+          {(rec.status === 'BOOKED' || rec.status === 'COMPLETED') && (
             <div className="bestrate-box" style={{ marginTop: 14 }}>
-              <div className="bestrate-title">
-                {isBoard ? t('op.tx.board.title') : t('op.tx.bestRate.title')}
-              </div>
-              <div className="summary">
-                {isBoard ? (
-                  <>
-                    <div className="row">
-                      <span className="k">{t('op.tx.board.board')}</span>
-                      <span className="v">1 {rec.currency} = {formatNumber(todayRate)} KRW</span>
-                    </div>
-                    {hasCoupon && (
-                      <div className="row">
-                        <span className="k">{t('op.tx.board.coupon')}</span>
-                        <span className="v" style={{ color: '#0a7d3c', fontWeight: 700 }}>
-                          +{(WEB_COUPON_BONUS * 100).toFixed(1)}%
-                        </span>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <div className="row">
-                      <span className="k">{t('op.tx.bestRate.reserved')}</span>
-                      <span className="v">1 {rec.currency} = {formatNumber(rec.rate)} KRW</span>
-                    </div>
-                    <div className="row">
-                      <span className="k">{t('op.tx.bestRate.today')}</span>
-                      <span className="v">1 {rec.currency} = {formatNumber(todayRate)} KRW</span>
-                    </div>
-                  </>
-                )}
-                <div className="row">
-                  <span className="k">{t('op.tx.bestRate.applied')}</span>
-                  <span className="v" style={{ color: 'var(--brand)', fontWeight: 700 }}>
-                    1 {rec.currency} = {formatNumber(appliedRate)} KRW
-                  </span>
-                </div>
-                <div className="row total">
-                  <span className="k">{t('op.tx.bestRate.appliedKrw')}</span>
-                  <span className="v">{formatKrw(appliedKrw)}</span>
-                </div>
-              </div>
-              <div className="tiny" style={{ marginTop: 8 }}>
-                {isBoard
-                  ? hasCoupon
-                    ? t('op.tx.board.couponNote')
-                    : t('op.tx.board.note')
-                  : rateImproved
-                    ? t('op.tx.bestRate.improved')
-                    : t('op.tx.bestRate.same')}
-              </div>
-            </div>
-          )}
-
-          {/* 완료된 거래: 실제 적용된 베스트레이트 결과 표기 */}
-          {rec.status === 'COMPLETED' && rec.appliedRate != null && (
-            <div className="bestrate-box" style={{ marginTop: 14 }}>
-              <div className="bestrate-title">{t('op.tx.bestRate.title')}</div>
-              <div className="summary">
-                <div className="row">
-                  <span className="k">{t('op.tx.bestRate.reserved')}</span>
-                  <span className="v">
-                    1 {rec.currency} = {formatNumber(rec.rate)} KRW
-                  </span>
-                </div>
-                <div className="row">
-                  <span className="k">{t('op.tx.bestRate.applied')}</span>
-                  <span className="v" style={{ color: 'var(--brand)', fontWeight: 700 }}>
-                    1 {rec.currency} = {formatNumber(rec.appliedRate)} KRW
-                  </span>
-                </div>
-                <div className="row total">
-                  <span className="k">{t('op.tx.bestRate.appliedKrw')}</span>
-                  <span className="v">{formatKrw(rec.appliedKrwAmount ?? rec.krwAmount)}</span>
-                </div>
-              </div>
-              <div className="tiny" style={{ marginTop: 8 }}>
-                {rec.appliedRate > rec.rate
-                  ? t('op.tx.bestRate.improved')
-                  : t('op.tx.bestRate.same')}
+              <div className="bestrate-title">{t('op.tx.board.title')}</div>
+              <div className="tiny" style={{ marginTop: 6 }}>
+                {hasCoupon ? t('op.tx.board.couponNote') : t('op.tx.board.note')}
               </div>
             </div>
           )}

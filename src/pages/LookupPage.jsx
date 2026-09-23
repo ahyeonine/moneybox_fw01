@@ -308,17 +308,11 @@ function Detail({ rec, onBack, onCancel, onConfirmVisit, onEdit }) {
         </div>
         <div className="row">
           <span className="k">{t('common.rate')}</span>
-          <span className="v">
-            1 {rec.currency} = {formatNumber(rec.rate)} KRW
-          </span>
+          <span className="v">{t('s2v.sum.rate.board')}</span>
         </div>
         <div className="row">
           <span className="k">{t('common.pickupDate')}</span>
           <span className="v">{formatDate(rec.pickupDate, lang)}</span>
-        </div>
-        <div className="row total">
-          <span className="k">{t('common.krwAmount')}</span>
-          <span className="v">{formatKrw(rec.krwAmount)}</span>
         </div>
       </div>
 
@@ -439,8 +433,7 @@ function ChangeForm({ rec, today, onSave, onCancel }) {
 
       {amountValid && (
         <div className="notice info">
-          {t('common.krwAmount')}: <strong>{formatKrw(krw)}</strong> · 1 {effectiveCurrency} ={' '}
-          {formatNumber(rate)} KRW
+          {t('s2v.sum.rate.board')} · {t('s2v.rate.disclaimer')}
         </div>
       )}
 

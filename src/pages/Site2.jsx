@@ -736,44 +736,10 @@ export default function Site2() {
                     </button>
                   ))}
                 </div>
-                <CompareMini t={t} amount={amount} board={board} />
                 <button className="btn s2-primary block" onClick={() => enterFlow()}>
                   {t('s2.nav.book')} →
                 </button>
               </div>
-            </section>
-
-            {/* 환율 비교 강조 — 타 환전 채널·키오스크·공항보다 얼마나 더 받는지 */}
-            <section className="s2-lp-cmp-sec">
-              <h2 className="s2-lp-cmp-h">{t('s2.home.cmp.title')}</h2>
-              <p className="s2-lp-cmp-sub">
-                {t('s2.home.cmp.sub').replace('{pct}', AVG_MORE_PCT)}
-              </p>
-              <div className="s2-lp-cmp-card">
-                <div className="s2-lp-cmp-row mb">
-                  <span className="s2-lp-cmp-name">
-                    <Ic name="trophy" /> {t('s2.home.cmp.mb')}
-                  </span>
-                  <div className="s2-lp-cmp-bar">
-                    <span className="s2-lp-cmp-fill mb" style={{ width: '100%' }} />
-                  </div>
-                  <span className="s2-lp-cmp-tag">{t('s2.home.cmp.mbtag')}</span>
-                </div>
-                {CHANNEL_BARS.map((c) => (
-                  <div key={c.key} className="s2-lp-cmp-row">
-                    <span className="s2-lp-cmp-name">
-                      <Ic name={c.icon} /> {t(`s2.home.cmp.${c.key}`)}
-                    </span>
-                    <div className="s2-lp-cmp-bar">
-                      <span className="s2-lp-cmp-fill" style={{ width: `${c.rel}%` }} />
-                    </div>
-                    <span className="s2-lp-cmp-more">
-                      +{c.more}% {t('s2.home.cmp.more')}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="s2-lp-cmp-note">{t('s2.home.cmp.note')}</div>
             </section>
 
             {/* 가치 3종 */}
@@ -812,31 +778,6 @@ export default function Site2() {
                   </div>
                 ))}
               </div>
-            </section>
-
-            {/* 오늘의 환율 */}
-            <section className="s2-lp-sec">
-              <h2 className="s2-lp-sec-t">{t('s2.home.rates.title')}</h2>
-              <div className="s2-lp-rates">
-                {RATE_PREVIEW.map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    className="s2-lp-rate"
-                    onClick={() => {
-                      setCurrency(c)
-                      enterFlow(false)
-                    }}
-                  >
-                    <span className="s2-lp-rate-cur">
-                      <span aria-hidden="true">{CURRENCY_META[c]?.flag}</span> {c}
-                    </span>
-                    <span className="s2-lp-rate-val">{formatKrw(Math.round(getDisplayRates(c)?.base || 0))}</span>
-                    <span className="s2-lp-rate-unit">{t('s2.home.rates.unit')}</span>
-                  </button>
-                ))}
-              </div>
-              <div className="s2-lp-rates-note">{t('s2v.rate.disclaimer')}</div>
             </section>
 
             {/* 최종 CTA */}
@@ -1098,19 +1039,6 @@ export default function Site2() {
               ))}
             </div>
 
-            {/* 현재 환율 (참고 표시) */}
-            {board > 0 && (
-              <div className="s2v-baserate">
-                <div className="s2v-baserate-row">
-                  <span className="s2v-baserate-l">{t('s2v.baserate.label')}</span>
-                  <span className="s2v-baserate-v">
-                    1 {currency} = {formatKrw(Math.round(board))}
-                  </span>
-                </div>
-                <div className="s2v-baserate-note">{t('s2v.rate.disclaimer')}</div>
-              </div>
-            )}
-
             <div className="s2-field-label">{t('s2.amount.amt')}</div>
             <div className="s2-amount-row">
               <span className="s2-amount-flag" aria-hidden="true">{CURRENCY_META[currency]?.flag}</span>
@@ -1127,7 +1055,6 @@ export default function Site2() {
             <div className="s2v-hint">
               {direction === 'BUY' ? t('s2.dir.buy.hint') : t('s2.dir.sell.hint')}
             </div>
-            <CompareMini t={t} amount={amount} board={board} direction={direction} />
             <div className="s2v-rate-note">
               {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}
             </div>
