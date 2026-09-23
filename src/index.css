@@ -6365,9 +6365,26 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
   color: var(--text-3);
   font-weight: 600;
 }
-/* 오늘 전광판 기준율 (참고 표시) */
+/* 현재 환율 참고 — 요청 시에만 펼침 (예약 중에만, 최종 화면 미노출) */
+.s2v-rate-reveal {
+  margin-top: 10px;
+}
+.s2v-rate-reveal-btn {
+  border: 1px dashed var(--travel, #1f6bff);
+  background: transparent;
+  color: var(--travel-dark, #1846b8);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.s2v-rate-reveal-btn:hover {
+  background: var(--travel-soft, #eaf1ff);
+}
+/* 현재 환율 (참고 표시) */
 .s2v-baserate {
-  margin: 4px 0 4px;
+  margin: 8px 0 4px;
   padding: 12px 14px;
   border-radius: 12px;
   background: linear-gradient(180deg, #f5f8ff 0%, #eef4ff 100%);

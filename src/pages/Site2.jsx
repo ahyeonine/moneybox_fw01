@@ -378,6 +378,7 @@ export default function Site2() {
   const [custName, setCustName] = useState('')
   const [custEmail, setCustEmail] = useState('')
   const [pickupDate, setPickupDate] = useState('')
+  const [showRate, setShowRate] = useState(false) // 예약 중 현재 환율 참고 노출(요청 시). 최종 화면엔 미노출.
   const [verifiedEmail, setVerifiedEmail] = useState('') // 인증 완료된 이메일(수신 가능 확인)
   const [marketingOptIn, setMarketingOptIn] = useState(false) // 마케팅 정보 수신 동의(선택)
   const [custPw, setCustPw] = useState('') // 정보 단계 인라인 회원가입 비밀번호(선택)
@@ -723,9 +724,6 @@ export default function Site2() {
               {/* 환율 위젯 (금액 입력 → 지점 찾기) */}
               <div className="s2-lp-widget">
                 <div className="s2-lp-widget-t">{t('s2v.region.title')}</div>
-                <div className="s2-lp-widget-cmp">
-                  {t('s2.home.widget.cmp').replace('{pct}', AVG_MORE_PCT)}
-                </div>
                 <div className="s2-region-chips">
                   {REGIONS.map((r) => (
                     <button
@@ -743,39 +741,6 @@ export default function Site2() {
                   {t('s2.nav.book')} →
                 </button>
               </div>
-            </section>
-
-            {/* 환율 비교 강조 — 타 환전 채널·키오스크·공항보다 평균 몇 % 더 나은지(정적 평균, 실환율 미노출) */}
-            <section className="s2-lp-cmp-sec">
-              <h2 className="s2-lp-cmp-h">{t('s2.home.cmp.title')}</h2>
-              <p className="s2-lp-cmp-sub">
-                {t('s2.home.cmp.sub').replace('{pct}', AVG_MORE_PCT)}
-              </p>
-              <div className="s2-lp-cmp-card">
-                <div className="s2-lp-cmp-row mb">
-                  <span className="s2-lp-cmp-name">
-                    <Ic name="trophy" /> {t('s2.home.cmp.mb')}
-                  </span>
-                  <div className="s2-lp-cmp-bar">
-                    <span className="s2-lp-cmp-fill mb" style={{ width: '100%' }} />
-                  </div>
-                  <span className="s2-lp-cmp-tag">{t('s2.home.cmp.mbtag')}</span>
-                </div>
-                {CHANNEL_BARS.map((c) => (
-                  <div key={c.key} className="s2-lp-cmp-row">
-                    <span className="s2-lp-cmp-name">
-                      <Ic name={c.icon} /> {t(`s2.home.cmp.${c.key}`)}
-                    </span>
-                    <div className="s2-lp-cmp-bar">
-                      <span className="s2-lp-cmp-fill" style={{ width: `${c.rel}%` }} />
-                    </div>
-                    <span className="s2-lp-cmp-more">
-                      +{c.more}% {t('s2.home.cmp.more')}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="s2-lp-cmp-note">{t('s2.home.cmp.note')}</div>
             </section>
 
             {/* 가치 3종 */}
@@ -1094,6 +1059,32 @@ export default function Site2() {
             <div className="s2v-rate-note">
               {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}
             </div>
+
+            {/* 현재 환율 참고 — 기본 숨김, 요청 시에만 노출. 예약 진행 중에만 보이고 최종 화면엔 미노출 */}
+            {board > 0 && (
+              <div className="s2v-rate-reveal">
+                <button
+                  type="button"
+                  className="s2v-rate-reveal-btn"
+                  onClick={() => setShowRate((v) => !v)}
+                  aria-expanded={showRate}
+                >
+                  {showRate ? t('s2v.rate.hide') : t('s2v.rate.reveal')}
+                  <span aria-hidden="true">{showRate ? ' ▲' : ' ▼'}</span>
+                </button>
+                {showRate && (
+                  <div className="s2v-baserate">
+                    <div className="s2v-baserate-row">
+                      <span className="s2v-baserate-l">{t('s2v.baserate.label')}</span>
+                      <span className="s2v-baserate-v">
+                        1 {currency} = {formatKrw(Math.round(board))}
+                      </span>
+                    </div>
+                    <div className="s2v-baserate-note">{t('s2v.rate.disclaimer')}</div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* 수령 예정일 — 오늘 이후 자유 선택(본사가 상한을 지정한 경우에만 제한) */}
             <div className="s2-field-label">{t('s2v.info.pickup')}</div>

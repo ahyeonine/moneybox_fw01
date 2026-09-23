@@ -224,7 +224,7 @@ export default function PosReservationResults() {
             </div>
             <div className="row">
               <span className="k">적용환율</span>
-              <span className="v">수령일 전광판 환율(미고정)</span>
+              <span className="v">수령일 환율(미고정)</span>
             </div>
             <div className="row">
               <span className="k">거래금액</span>
