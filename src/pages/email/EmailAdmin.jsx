@@ -160,7 +160,7 @@ export default function EmailAdmin() {
             <div className="email-tpl-btns">
               {saved && <span className="saved-flash">저장됨</span>}
               <button className="cems-btn" onClick={onTestSend}>
-                ✉ 테스트 발송
+                테스트 발송
               </button>
               <button className="cems-btn primary" onClick={save}>
                 템플릿 저장
@@ -232,7 +232,7 @@ export default function EmailAdmin() {
           <div className="email-item-head" style={{ marginBottom: 8 }}>
             <span className={`email-tag t-${preview.type}`}>{preview.typeLabel}</span>
             <span className="email-to">{preview.to}</span>
-            <span className="email-status">✔ 발송됨(테스트)</span>
+            <span className="email-status">발송됨(테스트)</span>
           </div>
           <div className="email-subject">{preview.subject}</div>
           <pre className="email-body">{preview.body}</pre>

@@ -90,7 +90,7 @@ export default function PosReservationResults() {
       <DevNote items={POS_RESV_NOTES} />
       <header className="pos-resv-head">
         <div className="prh-title">
-          <span className="prh-icon">📋</span>
+          <span className="prh-icon"></span>
           <h1>환전예약</h1>
         </div>
         <div className="prh-actions">

@@ -19,12 +19,12 @@ export default function PosHome() {
       <div className="pos-grid">
         {/* 1행: 큰 타일 2개 */}
         <div className="pos-tile big sell" aria-disabled="true">
-          <div className="pt-icon">💴→🏦</div>
+          <div className="pt-icon">→</div>
           <div className="pt-en">SELL</div>
           <div className="pt-ko">외화 파실 때</div>
         </div>
         <div className="pos-tile big buy" aria-disabled="true">
-          <div className="pt-icon">🏦→💴</div>
+          <div className="pt-icon">→</div>
           <div className="pt-en">BUY</div>
           <div className="pt-ko">외화 사실 때</div>
         </div>
@@ -36,12 +36,12 @@ export default function PosHome() {
           <div className="pt-ko">더보기</div>
         </div>
         <button className="pos-tile small active t-resv" onClick={() => nav('/pos/reservation')}>
-          <div className="pt-icon gray">📋</div>
+          <div className="pt-icon gray"></div>
           <div className="pt-en">RESERVATION</div>
           <div className="pt-ko">환전예약</div>
         </button>
         <div className="pos-tile small t-online" aria-disabled="true">
-          <div className="pt-icon gray">🌐</div>
+          <div className="pt-icon gray"></div>
           <div className="pt-en">ONLINE EXCHANGE</div>
           <div className="pt-ko">온라인환전</div>
         </div>
@@ -49,7 +49,7 @@ export default function PosHome() {
 
       <footer className="pos-footer">
         <span className="pf-left">머니박스 지점</span>
-        <span className="pf-center">© MONEYBOX Corp.</span>
+        <span className="pf-center">MONEYBOX Corp.</span>
         <span className="pf-right">v1.0.0-demo</span>
       </footer>
     </div>

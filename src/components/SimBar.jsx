@@ -55,7 +55,7 @@ export default function SimBar() {
 
   return (
     <div className="sim-bar">
-      <span>🧪 {t('sim.title')}</span>
+      <span>{t('sim.title')}</span>
       <span>
         {t('sim.today')}: <span className="today">{formatDate(today, lang)}</span>
       </span>

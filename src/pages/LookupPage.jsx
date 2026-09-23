@@ -327,7 +327,7 @@ function Detail({ rec, onBack, onCancel, onConfirmVisit, onEdit }) {
           {/* 리마인더 방문 예정 확인 — 이 시점에 가용시재 반영(동시성) */}
           {confirmed ? (
             <div className="notice success" style={{ marginTop: 16 }}>
-              ✔ {t('lookup.visitConfirmedNote')}
+              {t('lookup.visitConfirmedNote')}
             </div>
           ) : (
             <button

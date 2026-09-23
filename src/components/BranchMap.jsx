@@ -16,7 +16,7 @@ export default function BranchMap({ selectedId, onSelect }) {
             title={b.name[lang]}
             onClick={() => onSelect(b.id)}
           >
-            <span className="pin-dot">📍</span>
+            <span className="pin-dot"></span>
             <span className="pin-label">{b.name[lang]}</span>
           </button>
         ))}

@@ -99,8 +99,8 @@ export const STRINGS = {
   },
   // 수령 시 신분증(여권) 지참 안내
   'book.idnotice': {
-    ko: '🪪 수령 시 본인 확인을 위해 신분증(여권)을 꼭 지참해 주세요.',
-    en: '🪪 Please bring a valid ID (passport) for identity verification at pickup.',
+    ko: '수령 시 본인 확인을 위해 신분증(여권)을 꼭 지참해 주세요.',
+    en: 'Please bring a valid ID (passport) for identity verification at pickup.',
   },
   'book.step8.title': { ko: '예약이 완료되었습니다', en: 'Reservation complete' },
   'book.step8.sub': {
@@ -143,12 +143,12 @@ export const STRINGS = {
     en: 'Look up with the reservation number and email from your booking. e.g. RSV-20260728-0001 / john@example.com',
   },
   'footer.copy': {
-    ko: '© 2026 (주)머니박스 · 프로토타입 (예시 데이터)',
-    en: '© 2026 MONEYBOX Corp. · Prototype (dummy data)',
+    ko: '2026 (주)머니박스 · 프로토타입 (예시 데이터)',
+    en: '2026 MONEYBOX Corp. · Prototype (dummy data)',
   },
   's2.foot.copy': {
-    ko: '© 2026 (주)머니박스 · 프로토타입 (예시 데이터)',
-    en: '© 2026 MONEYBOX Corp. · Prototype (dummy data)',
+    ko: '2026 (주)머니박스 · 프로토타입 (예시 데이터)',
+    en: '2026 MONEYBOX Corp. · Prototype (dummy data)',
   },
   'lookup.notfound': {
     ko: '일치하는 예약을 찾을 수 없습니다. 예약번호와 이메일을 확인하세요.',
@@ -640,7 +640,7 @@ export const STRINGS = {
   },
   's2.search.placeholder': { ko: '호텔·역·주소 검색', en: 'Search hotel, station, address' },
   's2.search.searching': { ko: '검색 중…', en: 'Searching…' },
-  's2.geo.btn': { ko: '📍 내 위치로 가까운 지점 찾기', en: '📍 Find nearest to my location' },
+  's2.geo.btn': { ko: '내 위치로 가까운 지점 찾기', en: 'Find nearest to my location' },
   's2.geo.locating': { ko: '위치 확인 중…', en: 'Locating…' },
   's2.geo.error': {
     ko: '위치를 가져오지 못했어요. 검색을 이용해 주세요.',
@@ -650,7 +650,7 @@ export const STRINGS = {
   's2.popular': { ko: '인기 위치', en: 'Popular places' },
   's2.all.title': { ko: '전체 지점에서 선택', en: 'Or pick any branch' },
   's2.reco.title': { ko: '가까운 지점을 찾았어요', en: 'Nearest branches for you' },
-  's2.mapattr': { ko: '지도 · © OpenStreetMap', en: 'Map · © OpenStreetMap' },
+  's2.mapattr': { ko: '지도 · OpenStreetMap', en: 'Map · OpenStreetMap' },
   's2.map.pickhint': {
     ko: '지도에서 파란 지점 마커를 누르면 바로 선택돼요.',
     en: 'Tap a blue branch marker on the map to select it.',
@@ -804,8 +804,8 @@ export const STRINGS = {
   },
   's2v.baserate.label': { ko: '현재 환율', en: 'Current rate' },
   's2v.rate.note.coupon': {
-    ko: '🏅 회원 우대 — 수령 시 현장에서 상황에 맞춰 우대 환율을 적용해 드려요.',
-    en: '🏅 Member perk — the branch applies a preferential rate at pickup based on conditions.',
+    ko: '회원 우대 — 수령 시 현장에서 상황에 맞춰 우대 환율을 적용해 드려요.',
+    en: 'Member perk — the branch applies a preferential rate at pickup based on conditions.',
   },
   's2v.more.line': {
     ko: '다른 곳보다 평균 약 {pct}% 더 받을 수 있어요',

@@ -10,14 +10,14 @@ const STATS = [
   { key: 'branches', value: '40+' },
 ]
 const VALUES = [
-  { k: 'v1', emoji: '🤝' },
-  { k: 'v2', emoji: '🛡️' },
-  { k: 'v3', emoji: '⚡' },
+  { k: 'v1', emoji: '' },
+  { k: 'v2', emoji: '' },
+  { k: 'v3', emoji: '' },
 ]
 const DO_ITEMS = [
-  { k: '1', emoji: '🏦' },
-  { k: '2', emoji: '🏧' },
-  { k: '3', emoji: '🧳' },
+  { k: '1', emoji: '' },
+  { k: '2', emoji: '' },
+  { k: '3', emoji: '' },
 ]
 
 export default function AboutPage() {
@@ -100,9 +100,9 @@ export default function AboutPage() {
         <div className="about-contact-t">{t('about.contact.title')}</div>
         <p className="about-contact-d">{t('about.contact.d')}</p>
         <div className="about-contact-rows">
-          <div>✉️ {t('footer.email')}</div>
-          <div>📍 {t('footer.addr')}</div>
-          <div>☎️ {t('footer.tel')}</div>
+          <div>{t('footer.email')}</div>
+          <div>{t('footer.addr')}</div>
+          <div>{t('footer.tel')}</div>
         </div>
       </section>
 

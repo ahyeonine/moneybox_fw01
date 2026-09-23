@@ -25,9 +25,9 @@ export default function StaticBranchMap({ branchId, lang = 'ko' }) {
           <circle cx="0" cy="0" r="6" fill="#2563eb" stroke="#fff" strokeWidth="2" />
         </g>
       </svg>
-      <div className="email-map-name">📍 {b.name[lang]}</div>
+      <div className="email-map-name">{b.name[lang]}</div>
       <div className="email-map-addr">{b.address[lang]}</div>
-      <div className="email-map-tel tiny">☎ {b.phone}</div>
+      <div className="email-map-tel tiny">{b.phone}</div>
     </div>
   )
 }

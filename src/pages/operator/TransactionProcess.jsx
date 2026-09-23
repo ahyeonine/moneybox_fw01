@@ -204,7 +204,7 @@ export default function TransactionProcess() {
           {rec.status === 'BOOKED' && (
             <div className="bestrate-box" style={{ marginTop: 14 }}>
               <div className="bestrate-title">
-                💱 {isBoard ? t('op.tx.board.title') : t('op.tx.bestRate.title')}
+                {isBoard ? t('op.tx.board.title') : t('op.tx.bestRate.title')}
               </div>
               <div className="summary">
                 {isBoard ? (
@@ -260,7 +260,7 @@ export default function TransactionProcess() {
           {/* 완료된 거래: 실제 적용된 베스트레이트 결과 표기 */}
           {rec.status === 'COMPLETED' && rec.appliedRate != null && (
             <div className="bestrate-box" style={{ marginTop: 14 }}>
-              <div className="bestrate-title">💱 {t('op.tx.bestRate.title')}</div>
+              <div className="bestrate-title">{t('op.tx.bestRate.title')}</div>
               <div className="summary">
                 <div className="row">
                   <span className="k">{t('op.tx.bestRate.reserved')}</span>

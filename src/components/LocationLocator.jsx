@@ -100,7 +100,7 @@ export default function LocationLocator({
       {showNearest && (
         <div className="loc-nearest">
           <button className="btn primary" onClick={findNearest} disabled={geoBusy}>
-            📍 {labels.nearestBtn}
+            {labels.nearestBtn}
           </button>
           {geoMsg && <span className={`loc-geomsg ${geoMsg.type}`}>{geoMsg.text}</span>}
         </div>
