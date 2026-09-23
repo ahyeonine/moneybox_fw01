@@ -187,10 +187,10 @@ export const STRINGS = {
 
   // 운영자
   'op.tx.title': { ko: '거래 처리', en: 'Process transaction' },
-  'op.tx.sub': { ko: '신분증을 스캔하면 이름·생년월일이 일치하는 예약을 불러옵니다.', en: 'Scan an ID to load reservations matching the name & date of birth.' },
+  'op.tx.sub': { ko: '예약번호로 예약을 조회해 거래를 처리합니다.', en: 'Look up a reservation by its number to process the transaction.' },
   'op.tx.lookupPlaceholder': { ko: '예약번호 입력 (예: RSV-20260728-0001)', en: 'Enter reservation no.' },
   'op.tx.birth': { ko: '생년월일', en: 'Date of birth' },
-  'op.tx.orSearch': { ko: '또는 예약번호로 검색', en: 'Or search by reservation no.' },
+  'op.tx.orSearch': { ko: '예약번호로 조회', en: 'Search by reservation no.' },
   'op.tx.scan.title': { ko: '신분증 스캔', en: 'Scan ID' },
   'op.tx.scan.sub': {
     ko: '여권/신분증을 스캔하면 이름·생년월일이 같은 예약을 자동으로 찾아드립니다.',
@@ -203,8 +203,8 @@ export const STRINGS = {
     ko: '이름·생년월일이 일치하는 예약이 없습니다.',
     en: 'No reservation matches this name & date of birth.',
   },
-  'op.tx.scan.back': { ko: '신분증 다시 스캔', en: 'Back to ID scan' },
-  'op.tx.idcheck': { ko: '신분증 대조 완료 (현장 OCR 시뮬레이션)', en: 'ID verified (on-site OCR, simulated)' },
+  'op.tx.scan.back': { ko: '조회로 돌아가기', en: 'Back to search' },
+  'op.tx.idcheck': { ko: '신분증 대조 완료 (현장 여권 확인)', en: 'ID verified (passport checked on site)' },
   'op.tx.complete': { ko: '거래완료 처리', en: 'Complete transaction' },
   'op.tx.completed.msg': { ko: '거래가 완료 처리되었습니다.', en: 'Transaction completed.' },
   'op.tx.branchCancel': { ko: '지점 예약 취소', en: 'Cancel (branch)' },
