@@ -246,7 +246,7 @@ export default function HqReservationAdmin() {
                   <td>
                     {CURRENCY_META[r.currency]?.flag} {r.currency}
                   </td>
-                  <td className="num">{`전광판${r.coupon ? '·쿠폰' : ''}`}</td>
+                  <td className="num">{`수령일${r.coupon ? '·쿠폰' : ''}`}</td>
                   <td className="num">{formatNumber(r.foreignAmount)}</td>
                   <td className="num">—</td>
                   <td>{r.createdAt.slice(0, 10)}</td>
@@ -308,7 +308,7 @@ export default function HqReservationAdmin() {
             </div>
             <div className="row">
               <span className="k">적용환율</span>
-              <span className="v">{`수령일 전광판 환율(미고정)${selected.coupon ? ' · 쿠폰 우대' : ''}`}</span>
+              <span className="v">{`수령일 환율(미고정)${selected.coupon ? ' · 쿠폰 우대' : ''}`}</span>
             </div>
             <div className="row">
               <span className="k">거래금액</span>
