@@ -57,13 +57,20 @@ export default function EmailAdmin() {
     setPreview(sent)
   }
 
-  // 신청완료 메일 → 신청내역조회 화면(이름+이메일 자동조회, 해당 예약 상세로 진입)
+  // 신청완료 메일 → 예약 페이지(예약확인)로 이동.
+  //  · 회원 예약(coupon) → 이메일로 자동 로그인(login=1) → 내 예약 목록에서 선택
+  //  · 비회원 예약 → 예약번호+이메일로 해당 예약 자동 조회
   function gotoLookup(m) {
+    const rec = reservations.find((r) => r.reservationNo === m.reservationNo)
     const q = new URLSearchParams()
-    if (m.name) q.set('name', m.name)
+    q.set('view', 'lookup')
     q.set('email', m.to)
-    if (m.reservationNo) q.set('no', m.reservationNo)
-    nav(`/site/lookup?${q.toString()}`)
+    if (rec?.coupon) {
+      q.set('login', '1') // 회원 자동 로그인
+    } else if (m.reservationNo) {
+      q.set('no', m.reservationNo) // 비회원: 예약번호
+    }
+    nav(`/site?${q.toString()}`)
   }
 
   // 리마인더 이메일의 고객 응답(데모): 방문 예정 / 예약 취소

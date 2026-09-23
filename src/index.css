@@ -2431,6 +2431,28 @@ th.num {
   border-radius: 12px;
   margin-bottom: 16px;
 }
+/* 이메일 링크로 진입한 회원 자동 로그인 배너 */
+.lookup-login-banner {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--travel-soft, #eaf1ff);
+  border: 1px solid #cdddfb;
+  color: var(--travel-dark, #1846b8);
+  font-size: 13px;
+  font-weight: 700;
+}
+.lookup-login-banner .lli-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #12b76a;
+  box-shadow: 0 0 0 3px rgba(18, 183, 106, 0.2);
+  flex: 0 0 auto;
+}
 .lookup-mode-btn {
   flex: 1;
   padding: 10px 12px;

@@ -129,6 +129,7 @@ export const STRINGS = {
   // 예약조회
   'lookup.title': { ko: '신청내역조회', en: 'My reservations' },
   'lookup.sub': { ko: '회원은 이메일·비밀번호, 비회원은 예약번호·이메일로 조회하세요.', en: 'Members look up with email and password; guests with reservation number and email.' },
+  'lookup.autologin': { ko: '{name}님으로 로그인되었어요 · 예약을 선택해 확인·변경·취소하세요', en: 'Signed in as {name} · pick a reservation to view, change or cancel' },
   'lookup.mode.label': { ko: '조회 방식', en: 'Lookup method' },
   'lookup.mode.member': { ko: '회원', en: 'Member' },
   'lookup.mode.guest': { ko: '비회원', en: 'Guest' },
@@ -906,6 +907,11 @@ export const STRINGS = {
   },
   's2v.done.again': { ko: '새 예약 하기', en: 'New reservation' },
   's2v.done.lookup': { ko: '예약 조회하기', en: 'Look up my reservation' },
+  's2v.done.title.member': { ko: '회원님, 예약이 완료됐어요!', en: 'All set — reservation confirmed!' },
+  's2v.done.member.note': { ko: '회원님 — 수령 시 현장에서 우대 환율이 적용돼요.', en: 'Member — a preferential rate applies on site at pickup.' },
+  's2v.done.member.hint': { ko: '이메일 링크 또는 로그인으로 언제든 내 예약을 관리할 수 있어요.', en: 'Manage your reservations anytime via the email link or by signing in.' },
+  's2v.done.member.manage': { ko: '내 예약 관리하기', en: 'Manage my reservations' },
+  's2v.done.guest.hint': { ko: '예약번호와 이메일로 조회·변경·취소할 수 있어요. 예약 확인 메일도 보냈어요.', en: 'Look up, change or cancel with your reservation number and email. A confirmation email was sent.' },
   's2v.signup.badge': { ko: '회원 우대', en: 'Member perk' },
   's2v.signup.title': { ko: '회원 우대 받기', en: 'Get the member perk' },
   's2v.signup.d': {

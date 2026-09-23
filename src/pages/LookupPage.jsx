@@ -13,7 +13,7 @@ import { StatusBadge } from '../components/Badges.jsx'
 import Modal from '../components/Modal.jsx'
 import DevNote from '../components/DevNote.jsx'
 
-export default function LookupPage() {
+export default function LookupPage({ ctx } = {}) {
   const { t } = useI18n()
   const { findReservationsForLookup, findReservationsByNameEmail, findReservationsByEmail, getByNo, cancelReservation, updateReservation, confirmVisit, today } =
     useReservations()
@@ -29,6 +29,7 @@ export default function LookupPage() {
     password: '',
   })
   const [searched, setSearched] = useState(false)
+  const [autoLoggedIn, setAutoLoggedIn] = useState(false) // 이메일 링크로 진입한 회원 자동 로그인
   const [results, setResults] = useState([]) // 조회 결과 리스트 (같은 이름+이메일 다건)
   const [detailNo, setDetailNo] = useState(null) // 상세 보기 대상 예약번호
   const [showCancel, setShowCancel] = useState(false)
@@ -64,12 +65,30 @@ export default function LookupPage() {
   const searchDisabled =
     mode === 'member' ? !form.email || !form.password : !form.resNo || !form.email
 
-  // 딥링크(예약완료·이메일 → 신청내역조회): 예약번호+이메일 우선, 없으면 이름+이메일로 자동 조회
+  // 진입 컨텍스트/딥링크(예약완료·이메일 → 예약확인):
+  //  - 회원: 이메일 자동 로그인 → 예약 목록에서 선택
+  //  - 비회원: 예약번호+이메일 → 해당 예약 자동 선택
   useEffect(() => {
+    // 인앱 컨텍스트(ctx) 우선
+    if (ctx?.autoLogin && ctx.email) {
+      setMode('member'); setForm((f) => ({ ...f, email: ctx.email })); setAutoLoggedIn(true)
+      applyResults(findReservationsByEmail(ctx.email), null)
+      return
+    }
+    if (ctx?.no && ctx.email) {
+      setMode('guest'); setForm((f) => ({ ...f, resNo: ctx.no, email: ctx.email }))
+      applyResults(findReservationsForLookup(ctx.no, ctx.email), ctx.no)
+      return
+    }
+    // URL 딥링크 폴백 (이메일 링크)
     const no = params.get('no')
     const name = params.get('name')
     const email = params.get('email')
-    if (no && email) applyResults(findReservationsForLookup(no, email), no)
+    const login = params.get('login')
+    if (login === '1' && email) {
+      setMode('member'); setForm((f) => ({ ...f, email })); setAutoLoggedIn(true)
+      applyResults(findReservationsByEmail(email), null)
+    } else if (no && email) applyResults(findReservationsForLookup(no, email), no)
     else if (name && email) runSearch(name, email, null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -122,6 +141,14 @@ export default function LookupPage() {
       <h1>{t('lookup.title')}</h1>
       <p className="muted">{t('lookup.sub')}</p>
 
+      {autoLoggedIn && (
+        <div className="lookup-login-banner">
+          <span className="lli-dot" aria-hidden="true" />
+          {t('lookup.autologin').replace('{name}', results[0]?.customerName || form.email)}
+        </div>
+      )}
+
+      {!autoLoggedIn && (
       <form className="card" onSubmit={doSearch}>
         {/* 조회 방식 토글 */}
         <div className="lookup-mode" role="group" aria-label={t('lookup.mode.label')}>
@@ -182,6 +209,7 @@ export default function LookupPage() {
           {mode === 'member' ? t('lookup.member.hint') : t('lookup.guest.hint')}
         </div>
       </form>
+      )}
 
       {searched && results.length === 0 && (
         <div className="notice danger" style={{ marginTop: 14 }}>

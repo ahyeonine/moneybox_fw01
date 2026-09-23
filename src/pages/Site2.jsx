@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext.jsx'
 import { useRates } from '../store/RatesContext.jsx'
 import { useReservations } from '../store/ReservationContext.jsx'
@@ -365,7 +366,21 @@ export default function Site2() {
   const { sendEmail } = useEmail() // 이메일 인증번호 발송(mock) → Outbox 기록
   const { maxWindowDays } = usePolicy() // 본사 설정 예약 가능 기간(수령일 최대 N일)
 
-  const [view, setView] = useState('home') // home | flow | about
+  const [view, setView] = useState('home') // home | flow | lookup | about
+  const [lookupCtx, setLookupCtx] = useState(null) // 예약확인 진입 컨텍스트(회원 자동로그인/비회원 예약번호)
+  const [searchParams] = useSearchParams()
+
+  // 이메일 링크(/site?view=lookup&...) 진입 시: 예약확인 뷰로 열고 컨텍스트 전달
+  useEffect(() => {
+    if (searchParams.get('view') !== 'lookup') return
+    setLookupCtx({
+      email: searchParams.get('email') || '',
+      no: searchParams.get('no') || '',
+      autoLogin: searchParams.get('login') === '1',
+    })
+    setView('lookup')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const [step, setStep] = useState('region') // region | branch | amount | info | done
   const howRef = useRef(null)
   const [region, setRegion] = useState('') // 선택 지역(ko)
@@ -681,7 +696,7 @@ export default function Site2() {
             <button
               type="button"
               className={`s2-about-link${view === 'lookup' ? ' on' : ''}`}
-              onClick={() => setView('lookup')}
+              onClick={() => { setLookupCtx(null); setView('lookup') }}
             >
               {t('s2.nav.lookup')}
             </button>
@@ -705,7 +720,7 @@ export default function Site2() {
         {view === 'about' ? (
           <AboutPage />
         ) : view === 'lookup' ? (
-          <LookupPage />
+          <LookupPage ctx={lookupCtx} />
         ) : view === 'home' ? (
           <>
             {/* 랜딩 히어로 + 환율 위젯 */}
@@ -1255,10 +1270,14 @@ export default function Site2() {
         {step === 'done' && result && (
           <section className="s2-card s2v-done">
             <div className="s2v-done-ic" aria-hidden="true"></div>
-            <h2 className="s2-card-t">{t('s2v.done.title')}</h2>
-            {joinedNow && (
+            <h2 className="s2-card-t">
+              {couponOn || joinedNow ? t('s2v.done.title.member') : t('s2v.done.title')}
+            </h2>
+            {joinedNow ? (
               <div className="s2v-done-member"><Ic name="shield" /> {t('s2v.join.done')}</div>
-            )}
+            ) : couponOn ? (
+              <div className="s2v-done-member"><Ic name="shield" /> {t('s2v.done.member.note')}</div>
+            ) : null}
             <div className="s2v-resno">{result.reservationNo}</div>
             <div className="s2v-summary">
               <div className="s2v-sum-row">
@@ -1286,9 +1305,27 @@ export default function Site2() {
             </div>
             <div className="s2v-sum-note">{t('s2v.rate.disclaimer')}</div>
             <div className="s2v-done-note">{t('s2v.done.note')}</div>
-            <button className="btn s2-primary block" onClick={() => setView('lookup')}>
-              {t('s2v.done.lookup')}
-            </button>
+            {couponOn || joinedNow ? (
+              <>
+                <div className="s2v-done-note">{t('s2v.done.member.hint')}</div>
+                <button
+                  className="btn s2-primary block"
+                  onClick={() => { setLookupCtx({ email: custEmail, autoLogin: true }); setView('lookup') }}
+                >
+                  {t('s2v.done.member.manage')}
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="s2v-done-note">{t('s2v.done.guest.hint')}</div>
+                <button
+                  className="btn s2-primary block"
+                  onClick={() => { setLookupCtx({ email: custEmail, no: result.reservationNo, autoLogin: false }); setView('lookup') }}
+                >
+                  {t('s2v.done.lookup')}
+                </button>
+              </>
+            )}
             <button className="btn s2-ghost block" onClick={restartV2}>
               {t('s2v.done.again')}
             </button>
