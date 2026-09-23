@@ -154,7 +154,7 @@ function Ic({ name, className = '' }) {
 
 // 타 환전 채널·키오스크·공항이 머니박스보다 "덜 주는" 비율(예시 수치, V1 비교 카드와 동일 톤).
 // 원화 환산액 대신 "평균 몇 % 더 많이 받는지"를 노출하기 위한 산출용.
-const CHANNEL_LESS = { other: 0.021, kiosk: 0.041, airport: 0.093 }
+const CHANNEL_LESS = { other: 0.002, kiosk: 0.004, airport: 0.008 }
 // 각 채널 대비 머니박스가 더 주는 비율 = p/(1-p)
 const CHANNEL_MORE_PCT = Object.fromEntries(
   Object.entries(CHANNEL_LESS).map(([k, p]) => [k, Math.round((p / (1 - p)) * 1000) / 10])
