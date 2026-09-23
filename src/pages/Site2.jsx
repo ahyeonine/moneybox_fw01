@@ -1286,6 +1286,9 @@ export default function Site2() {
             </div>
             <div className="s2v-sum-note">{t('s2v.rate.disclaimer')}</div>
             <div className="s2v-done-note">{t('s2v.done.note')}</div>
+            <button className="btn s2-primary block" onClick={() => setView('lookup')}>
+              {t('s2v.done.lookup')}
+            </button>
             <button className="btn s2-ghost block" onClick={restartV2}>
               {t('s2v.done.again')}
             </button>
