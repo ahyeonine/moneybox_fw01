@@ -808,6 +808,7 @@ export const STRINGS = {
     en: 'No rate is locked at booking. The branch rate on your pickup day applies.',
   },
   's2v.baserate.label': { ko: '현재 환율 (참고)', en: 'Current rate (ref.)' },
+  's2v.cmp.branchbasis': { ko: '이 지점 기준 비교', en: 'compared at this branch' },
   's2v.rate.reveal': { ko: '현재 환율 참고로 보기', en: 'Peek at the current rate' },
   's2v.rate.hide': { ko: '현재 환율 접기', en: 'Hide current rate' },
   's2v.rate.note.coupon': {

@@ -6974,8 +6974,17 @@ textarea.field-input:focus { outline: none; border-color: var(--brand); }
 }
 
 /* 컴팩트 환율 비교 (히어로 위젯·신청화면) */
+.s2v-cmp-wrap {
+  margin-top: 12px;
+}
+.s2v-cmp-branch {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--travel-dark, #1846b8);
+  margin: 0 2px 2px;
+}
 .s2v-cmpmini {
-  margin-top: 14px;
+  margin-top: 6px;
   padding: 14px 16px;
   border-radius: 14px;
   background: linear-gradient(180deg, #f2f7ff 0%, #eaf1ff 100%);
