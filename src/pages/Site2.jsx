@@ -176,6 +176,14 @@ const CHANNEL_BARS = [
   less: CHANNEL_LESS[c.key],
 }))
 
+// 지점마다 환율이 조금씩 다르다(프로토타입) — 지점 id 해시 기반 결정적 오프셋(약 -0.6% ~ +0.6%).
+// 기준 환율(현재 시세)에 곱해 "이 지점 기준" 환율을 만든다.
+function branchRateFactor(branchId = '') {
+  let h = 0
+  for (let i = 0; i < branchId.length; i++) h = (h * 31 + branchId.charCodeAt(i)) >>> 0
+  return 1 + ((h % 13) - 6) / 1000
+}
+
 // 외국인 사이트 2안 (WOWPASS 참고) — 별도 surface.
 // 플로우: ① 금액 입력 → ② 지점 선택 (실제 지도 검색 + 내 위치로 찾기 + 추천).
 // 지도/검색은 키가 필요 없는 OpenStreetMap(Nominatim + Leaflet) 사용.
@@ -396,7 +404,9 @@ export default function Site2() {
   const [suErr, setSuErr] = useState('')
 
   const couponOn = !!couponMember // 회원 우대 대상 여부(수령 시 현장 우대)
-  const board = getDisplayRates(currency)?.base || 0 // 현재(전광판/기준) 환율
+  const board = getDisplayRates(currency)?.base || 0 // 현재(기준) 환율
+  // 지점마다 환율이 다름 → 선택한 지점 기준 환율. 금액 비교/현재환율 참고에 사용.
+  const branchBoard = pickedBranch ? board * branchRateFactor(pickedBranch) : board
 
   const range = pickupRange(today, 0, maxWindowDays) // 리드타임 0, 본사 설정 예약 가능 기간
   const pickBranchObj = pickedBranch ? getBranch(pickedBranch) : null
@@ -1060,6 +1070,16 @@ export default function Site2() {
               {couponOn ? t('s2v.rate.note.coupon') : t('s2v.rate.note')}
             </div>
 
+            {/* 금액 입력 시 이 지점 기준 "타 채널 대비 원화로 얼마 이득"을 비교 노출(미입력 시 숨김) */}
+            {Number(amount) > 0 && direction === 'BUY' && branchBoard > 0 && (
+              <div className="s2v-cmp-wrap">
+                <div className="s2v-cmp-branch">
+                  {pickBranchObj ? pickBranchObj.name[lang] || pickBranchObj.name.ko : ''} · {t('s2v.cmp.branchbasis')}
+                </div>
+                <CompareMini t={t} amount={amount} board={branchBoard} direction={direction} />
+              </div>
+            )}
+
             {/* 현재 환율 참고 — 기본 숨김, 요청 시에만 노출. 예약 진행 중에만 보이고 최종 화면엔 미노출 */}
             {board > 0 && (
               <div className="s2v-rate-reveal">
@@ -1077,7 +1097,7 @@ export default function Site2() {
                     <div className="s2v-baserate-row">
                       <span className="s2v-baserate-l">{t('s2v.baserate.label')}</span>
                       <span className="s2v-baserate-v">
-                        1 {currency} = {formatKrw(Math.round(board))}
+                        1 {currency} = {formatKrw(Math.round(branchBoard))}
                       </span>
                     </div>
                     <div className="s2v-baserate-note">{t('s2v.rate.disclaimer')}</div>
