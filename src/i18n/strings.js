@@ -231,6 +231,7 @@ export const STRINGS = {
   // 전광판 정산 (환율 미고정 예약)
   'op.tx.board.title': { ko: '전광판 정산 (환율 미고정)', en: 'Board-rate settlement (no fixed rate)' },
   'op.tx.board.reservedNone': { ko: '예약 시 미고정 (수령일 전광판)', en: 'Not fixed at booking (board rate on pickup)' },
+  'op.tx.board.settleOnPickup': { ko: '수령일 정산', en: 'Settled on pickup' },
   'op.tx.board.board': { ko: '수령일 전광판 환율', en: 'Board rate on pickup day' },
   'op.tx.board.coupon': { ko: '쿠폰 우대', en: 'Coupon bonus' },
   'op.tx.board.note': {
