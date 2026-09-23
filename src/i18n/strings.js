@@ -158,7 +158,11 @@ export const STRINGS = {
   'lookup.detail': { ko: '예약 상세', en: 'Reservation details' },
   'lookup.listTitle': { ko: '조회 결과', en: 'Results' },
   'lookup.backToList': { ko: '목록으로', en: 'Back to list' },
-  'lookup.confirmVisit': { ko: '방문 예정 확인 (리마인더 응답)', en: 'Confirm visit (reminder)' },
+  'lookup.confirmVisit': { ko: '방문 확정', en: 'Confirm visit' },
+  'lookup.confirmWindow.note': {
+    ko: '수령이 임박했어요. 방문하실 예정이면 방문 확정을, 어려우시면 예약 취소를 눌러 주세요.',
+    en: 'Pickup is near. Tap Confirm visit if you’re coming, or Cancel if you can’t make it.',
+  },
   'lookup.visitConfirmed.msg': {
     ko: '방문 예정이 확인되었습니다. 가용 시재가 배정(예약시재 반영)되었습니다.',
     en: 'Your visit is confirmed. Stock has been allocated for your reservation.',

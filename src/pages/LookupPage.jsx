@@ -238,6 +238,7 @@ export default function LookupPage({ ctx } = {}) {
       {detailRec && !editing && (
         <Detail
           rec={detailRec}
+          today={today}
           onBack={backToList}
           onCancel={() => setShowCancel(true)}
           onConfirmVisit={onConfirmVisit}
@@ -297,11 +298,22 @@ function ResultList({ results, onSelect }) {
   )
 }
 
-function Detail({ rec, onBack, onCancel, onConfirmVisit, onEdit }) {
+// 두 날짜(YYYY-MM-DD) 사이 일수 차 (b - a).
+function daysBetween(a, b) {
+  if (!a || !b) return NaN
+  const d1 = new Date(`${a}T00:00:00`)
+  const d2 = new Date(`${b}T00:00:00`)
+  return Math.round((d2 - d1) / 86400000)
+}
+
+function Detail({ rec, today, onBack, onCancel, onConfirmVisit, onEdit }) {
   const { t, lang } = useI18n()
   const branch = getBranch(rec.branchId)
   const editable = rec.status === 'BOOKED'
   const confirmed = rec.reminderStatus === 'CONFIRMED'
+  // 수령 전날(D-1)~당일: 방문 확정 창. 이 기간에는 [방문 확정]+[예약 취소], 그 이전엔 [예약 변경]+[예약 취소].
+  const daysUntil = daysBetween(today, rec.pickupDate)
+  const inConfirmWindow = daysUntil === 0 || daysUntil === 1
   return (
     <div className="card" style={{ marginTop: 14 }}>
       <button className="btn ghost" style={{ marginBottom: 12 }} onClick={onBack}>
@@ -346,28 +358,44 @@ function Detail({ rec, onBack, onCancel, onConfirmVisit, onEdit }) {
 
       {editable && (
         <>
-          {/* 리마인더 방문 예정 확인 — 이 시점에 가용시재 반영(동시성) */}
           {confirmed ? (
-            <div className="notice success" style={{ marginTop: 16 }}>
-              {t('lookup.visitConfirmedNote')}
-            </div>
+            /* 이미 방문 예정 확인됨 — 안내 + 예약 취소 */
+            <>
+              <div className="notice success" style={{ marginTop: 16 }}>
+                {t('lookup.visitConfirmedNote')}
+              </div>
+              <div className="btn-row">
+                <button className="btn danger block" onClick={onCancel}>
+                  {t('lookup.cancelBtn')}
+                </button>
+              </div>
+            </>
+          ) : inConfirmWindow ? (
+            /* 수령 전날/당일 — 방문 확정 + 예약 취소 (변경은 불가) */
+            <>
+              <div className="notice info" style={{ marginTop: 16 }}>
+                {t('lookup.confirmWindow.note')}
+              </div>
+              <div className="btn-row">
+                <button className="btn success" onClick={onConfirmVisit}>
+                  {t('lookup.confirmVisit')}
+                </button>
+                <button className="btn danger" onClick={onCancel}>
+                  {t('lookup.cancelBtn')}
+                </button>
+              </div>
+            </>
           ) : (
-            <button
-              className="btn success block"
-              style={{ marginTop: 16 }}
-              onClick={onConfirmVisit}
-            >
-              {t('lookup.confirmVisit')}
-            </button>
+            /* 그 이전 — 예약 변경 + 예약 취소 */
+            <div className="btn-row">
+              <button className="btn ghost" onClick={onEdit}>
+                {t('lookup.changeBtn')}
+              </button>
+              <button className="btn danger" onClick={onCancel}>
+                {t('lookup.cancelBtn')}
+              </button>
+            </div>
           )}
-          <div className="btn-row">
-            <button className="btn ghost" onClick={onEdit}>
-              {t('lookup.changeBtn')}
-            </button>
-            <button className="btn danger" onClick={onCancel}>
-              {t('lookup.cancelBtn')}
-            </button>
-          </div>
         </>
       )}
       {!editable && (
