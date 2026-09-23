@@ -723,6 +723,9 @@ export default function Site2() {
               {/* 환율 위젯 (금액 입력 → 지점 찾기) */}
               <div className="s2-lp-widget">
                 <div className="s2-lp-widget-t">{t('s2v.region.title')}</div>
+                <div className="s2-lp-widget-cmp">
+                  {t('s2.home.widget.cmp').replace('{pct}', AVG_MORE_PCT)}
+                </div>
                 <div className="s2-region-chips">
                   {REGIONS.map((r) => (
                     <button
