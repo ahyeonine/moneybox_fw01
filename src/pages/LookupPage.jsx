@@ -72,7 +72,8 @@ export default function LookupPage({ ctx } = {}) {
     // 인앱 컨텍스트(ctx) 우선
     if (ctx?.autoLogin && ctx.email) {
       setMode('member'); setForm((f) => ({ ...f, email: ctx.email })); setAutoLoggedIn(true)
-      applyResults(findReservationsByEmail(ctx.email), null)
+      // 특정 예약(no)이 함께 오면(예: 리마인더 메일) 그 예약 상세를 바로 연다
+      applyResults(findReservationsByEmail(ctx.email), ctx.no || null)
       return
     }
     if (ctx?.no && ctx.email) {
@@ -87,7 +88,7 @@ export default function LookupPage({ ctx } = {}) {
     const login = params.get('login')
     if (login === '1' && email) {
       setMode('member'); setForm((f) => ({ ...f, email })); setAutoLoggedIn(true)
-      applyResults(findReservationsByEmail(email), null)
+      applyResults(findReservationsByEmail(email), no || null)
     } else if (no && email) applyResults(findReservationsForLookup(no, email), no)
     else if (name && email) runSearch(name, email, null)
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -16,8 +16,8 @@ const MAP_TYPES = ['applied', 'reminder']
 // 외국인 웹사이트 예약 데이터와 연동해 발송된 이메일을 기록/표시한다.
 export default function EmailAdmin() {
   const nav = useNavigate()
-  const { templates, outbox, updateTemplate, sendEmail, markReminderResponse } = useEmail()
-  const { reservations, confirmVisit, cancelReservation } = useReservations()
+  const { templates, outbox, updateTemplate, sendEmail } = useEmail()
+  const { reservations } = useReservations()
 
   const [type, setType] = useState('auth')
   const [saved, setSaved] = useState(false)
@@ -57,35 +57,22 @@ export default function EmailAdmin() {
     setPreview(sent)
   }
 
-  // 신청완료 메일 → 예약 페이지(예약확인)로 이동.
-  //  · 회원 예약(coupon) → 이메일로 자동 로그인(login=1) → 내 예약 목록에서 선택
+  // 이메일 → 예약 페이지(예약확인)로 이동.
+  //  · 회원 예약(coupon) → 이메일로 자동 로그인(login=1)
   //  · 비회원 예약 → 예약번호+이메일로 해당 예약 자동 조회
-  function gotoLookup(m) {
+  //  · openDetail=true(리마인더): 회원도 해당 예약 상세를 바로 열어 [방문 확정]/[예약 취소] 선택
+  function gotoLookup(m, openDetail = false) {
     const rec = reservations.find((r) => r.reservationNo === m.reservationNo)
     const q = new URLSearchParams()
     q.set('view', 'lookup')
     q.set('email', m.to)
     if (rec?.coupon) {
       q.set('login', '1') // 회원 자동 로그인
+      if (openDetail && m.reservationNo) q.set('no', m.reservationNo) // 특정 예약 상세로
     } else if (m.reservationNo) {
-      q.set('no', m.reservationNo) // 비회원: 예약번호
+      q.set('no', m.reservationNo) // 비회원: 예약번호로 해당 예약 조회
     }
     nav(`/site?${q.toString()}`)
-  }
-
-  // 리마인더 이메일의 고객 응답(데모): 방문 예정 / 예약 취소
-  function onReminderConfirm(rec) {
-    const res = confirmVisit(rec.reservationNo)
-    markReminderResponse(rec.id, 'CONFIRMED')
-    if (res && !res.ok && res.reason === 'SOLD_OUT') {
-      alert('다른 고객이 이미 확정하여 재고가 소진되었습니다.')
-    }
-  }
-  function onReminderCancel(rec) {
-    cancelReservation(rec.reservationNo)
-    markReminderResponse(rec.id, 'CANCELLED')
-    // 고객 취소 → 취소 완료 이메일 발송
-    sendEmail('customerCancel', rec.to, { name: rec.name, reservationNo: rec.reservationNo })
   }
 
   return (
@@ -94,7 +81,7 @@ export default function EmailAdmin() {
         items={[
           '이메일은 실제 발송 없이 시뮬레이션 — "발송" 시 아래 발송 이력(Outbox)에 기록됨',
           '발송 대상은 외국인 웹사이트 신청 시 입력한 이메일. 예약 데이터와 연동',
-          '리마인더 이메일의 "방문 예정 / 예약 취소" 버튼은 고객 클릭을 시뮬레이션 — 실제 예약 상태에 반영',
+          '리마인더 이메일의 "예약 확인하기" → 예약내역조회로 이동(회원 자동로그인·비회원 예약번호+이메일)해 해당 예약 상세에서 [방문 확정]/[예약 취소] 선택',
           '"테스트 발송": 선택한 목데이터 예약 기준으로 템플릿을 채워 미리보기(모달)+발송 이력에 기록. 신청완료·전일리마인더는 지도 포함',
           '취소 안내 메일 3종 구분 — 자동취소: 수령 예정일이 지나도록 방문(수령완료)하지 않아 시스템이 자동 취소 / 지점취소: 지점 사정으로 지점(직원)이 고객 거래를 취소 / 고객취소: 고객이 신청내역조회에서 [예약취소]를 눌러 직접 취소',
           '자세히: 01_IA.md',
@@ -218,11 +205,8 @@ export default function EmailAdmin() {
                   )}
                   {m.type === 'reminder' && m.status !== 'RESPONDED' && (
                     <div className="email-actions">
-                      <button className="btn success" onClick={() => onReminderConfirm(m)}>
-                        방문 예정
-                      </button>
-                      <button className="btn danger" onClick={() => onReminderCancel(m)}>
-                        예약 취소
+                      <button className="btn primary" onClick={() => gotoLookup(m, true)}>
+                        예약 확인하기
                       </button>
                     </div>
                   )}
