@@ -158,6 +158,37 @@ export function ReservationProvider({ children }) {
     )
   }, [])
 
+  // 예약 변경 = 고객 화면상 '예약 변경' 한 동작이지만, 내부적으로는
+  // 기존 예약 취소(cancelReason='CHANGE') + 변경 내용 반영한 신규 예약 생성(취소 후 재예약).
+  // 새 예약번호를 발급해 반환한다. 환율 미고정이므로 예약 환율 재픽스는 없음.
+  const changeReservation = useCallback(
+    (oldNo, patch) => {
+      const old = reservations.find((r) => r.reservationNo === oldNo && r.status === 'BOOKED')
+      if (!old) return null
+      const reservationNo = generateReservationNo(today, reservations)
+      const next = {
+        ...old,
+        ...patch,
+        reservationNo,
+        status: 'BOOKED',
+        reminderStatus: 'NONE',
+        createdAt: `${today}T00:00:00+09:00`,
+        processedAt: null,
+        idVerified: false,
+        changedFrom: oldNo, // 변경 이력(취소된 기존 예약번호)
+      }
+      setReservations((prev) =>
+        prev
+          .map((r) =>
+            r.reservationNo === oldNo ? { ...r, status: 'CANCELLED', cancelReason: 'CHANGE' } : r
+          )
+          .concat(next)
+      )
+      return next // 신규 예약 레코드 반환(호출측에서 목록·상세 즉시 갱신용)
+    },
+    [reservations, today]
+  )
+
   // 고객 취소
   const cancelReservation = useCallback((reservationNo) => {
     setReservations((prev) =>
@@ -287,6 +318,7 @@ export function ReservationProvider({ children }) {
     getByNo,
     countNoShow,
     updateReservation,
+    changeReservation,
     cancelReservation,
     cancelByBranch,
     completeReservation,
