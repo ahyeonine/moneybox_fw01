@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>외국인 앱 화면정의서</title>
-<meta name="description" content="머니박스 외국인 앱 화면정의서(Screen Definition Sheet) — 범례 + 대표 화면(알림 설정·금액 입력·내 예약 상세)">
+<meta name="description" content="머니박스 외국인 앱 화면정의서(Screen Definition Sheet) — 범례 + 전 화면(온보딩·홈·예약·마이페이지)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Sora:wght@600;700;800&display=swap">
@@ -45,7 +45,6 @@
   .surface-h{margin:34px 0 6px;padding-top:10px;border-top:2px solid var(--line);font-family:var(--disp);font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue-dk);}
   .surface-sub{font-size:12.5px;color:var(--muted);margin:2px 0 0;}
 
-  /* 범례 카드 */
   .legend{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-top:14px;}
   .legend h4{font-family:var(--disp);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-dk);margin:14px 0 6px;}
   .legend h4:first-child{margin-top:0;}
@@ -60,7 +59,6 @@
   .pill.on{background:#e7f6ec;color:#0a7d3c;} .pill.off{background:#f0f1f4;color:#8a93a8;} .pill.tbd{background:#fdf0e0;color:#c98a12;}
   .chk{color:#b3352f;}
 
-  /* 스펙 카드 */
   .spec{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);margin-top:16px;}
   .spec-head{background:var(--dark);color:#fff;padding:12px 16px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
   .spec-id{font-family:var(--disp);font-weight:800;font-size:12px;background:var(--blue);border-radius:6px;padding:3px 9px;color:#fff;}
@@ -74,7 +72,6 @@
   .spec-sec h4{font-family:var(--disp);font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--blue-dk);margin:0 0 6px;border-bottom:1px solid var(--line);padding-bottom:4px;}
   .spec-ul{margin:0;padding-left:18px;font-size:12.5px;} .spec-ul li{margin:3px 0;}
 
-  /* 폰 목업(간단) */
   .ph{max-width:230px;border:2px solid var(--wire);border-radius:22px;padding:12px;background:var(--surface);position:relative;}
   .ph::before{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);width:54px;height:4px;border-radius:3px;background:var(--wire);opacity:.7;}
   .ph-bar{height:30px;border-radius:7px;background:var(--wirefill);border:1px solid var(--wire);display:flex;align-items:center;padding:0 10px;font-size:11px;color:var(--muted);margin-top:6px;}
@@ -97,6 +94,17 @@
   .sw.on{background:#34a769;} .sw::after{content:"";position:absolute;top:2px;width:15px;height:15px;border-radius:50%;background:#fff;left:2px;} .sw.on::after{left:15px;}
   .ph-tab{display:flex;border-top:1px solid var(--wire);margin-top:8px;padding-top:7px;}
   .ph-tab div{flex:1;text-align:center;font-size:9px;color:var(--muted);} .ph-tab div.on{color:var(--blue);font-weight:800;}
+  .ph-hero{background:var(--blue);color:#fff;border-radius:9px;padding:9px;text-align:center;font-size:11px;font-weight:800;margin:6px 0;}
+  .ph-rate{display:flex;gap:4px;margin:6px 0;} .ph-rate div{flex:1;border:1px solid var(--wire);border-radius:7px;padding:4px;text-align:center;font-size:9px;color:var(--muted);} .ph-rate b{display:block;color:var(--ink);font-size:10.5px;}
+  .ph-card{border:1.5px solid var(--blue);background:var(--blue-soft);border-radius:8px;padding:7px 9px;margin:6px 0;font-size:10px;color:var(--blue-dk);font-weight:700;}
+  .ph-lang{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0;} .ph-lang span{border:1px solid var(--wire);border-radius:7px;padding:5px 9px;font-size:10px;color:var(--muted);} .ph-lang span.on{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-dk);font-weight:700;}
+  .ph-menu{display:flex;align-items:center;gap:8px;border:1px solid var(--wire);border-radius:8px;padding:7px 10px;margin:5px 0;font-size:10.5px;} .ph-menu .a{margin-left:auto;color:var(--muted);}
+  .ph-prof{display:flex;align-items:center;gap:8px;padding:4px 0 8px;} .ph-av{width:34px;height:34px;border-radius:50%;background:var(--wirefill);border:1px solid var(--wire);}
+  .ph-ill{height:76px;border:1px solid var(--wire);border-radius:8px;background:var(--wirefill);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);margin:6px 0;}
+  .ph-dots{display:flex;gap:4px;justify-content:center;margin:6px 0;} .ph-dots i{width:6px;height:6px;border-radius:50%;background:var(--wire);display:inline-block;} .ph-dots i.on{background:var(--blue);}
+  .ph-map{height:90px;border:1px solid var(--wire);border-radius:8px;background:var(--wirefill);position:relative;margin:6px 0;overflow:hidden;}
+  .ph-pin{position:absolute;width:12px;height:12px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:1.5px solid #fff;} .ph-pin.b{background:var(--blue);} .ph-pin.k{background:#2dd4bf;}
+  .ph-join{border:1.5px solid var(--blue);background:var(--blue-soft);border-radius:8px;padding:7px 9px;margin:6px 0;font-size:10px;color:var(--blue-dk);font-weight:700;}
 
   .foot{margin-top:34px;text-align:center;font-size:12px;color:var(--muted);}
   .foot b{color:var(--ink);}
@@ -109,9 +117,9 @@
   <header class="head">
     <p class="eyebrow">MoneyBox · Foreign App · Screen Definition</p>
     <h1>외국인 앱 화면정의서</h1>
-    <p>화면별 스펙 문서(Screen Definition Sheet). 각 화면의 기본 정보·적용 정책·화면 구성·인터랙션·문구(한/영)·이벤트 로그·개발 참고를 정의합니다. 이번 버전은 <b>범례 + 대표 화면 3종</b>(알림 설정 · 금액 입력 · 내 예약 상세)이며, 나머지 화면으로 확장할 수 있습니다. 화면 그림은 <a class="inl" href="app-screens.html">앱 화면설계서</a>, 정책은 외국인서비스 정책과 매핑됩니다.</p>
+    <p>화면별 스펙 문서(Screen Definition Sheet). 각 화면의 기본 정보·적용 정책·화면 구성·인터랙션·문구(한/영)·이벤트 로그·개발 참고를 정의합니다. 온보딩·홈·예약·마이페이지 <b>전 화면</b>을 포함하며, 화면 그림은 <a class="inl" href="app-screens.html">앱 화면설계서</a>, 정책은 외국인서비스 정책과 매핑됩니다.</p>
     <div class="toc">
-      <a href="#legend">범례·규칙</a><a href="#s1">UI-FA-4200 알림 설정</a><a href="#s2">UI-FA-3300 금액 입력</a><a href="#s3">UI-FA-3600 내 예약 상세</a>
+      <a href="#legend">범례·규칙</a><a href="#onboard">온보딩</a><a href="#home">홈</a><a href="#reserve">예약</a><a href="#my">마이페이지</a>
     </div>
   </header>
 
@@ -121,13 +129,13 @@
   <div class="legend">
     <h4>화면 ID 체계 — UI-FA-####</h4>
     <table class="st">
-      <tr><th>구간</th><th>대역</th><th>예</th></tr>
-      <tr><td>온보딩</td><td>1000번대</td><td>UI-FA-1100 언어 선택</td></tr>
-      <tr><td>홈</td><td>2000번대</td><td>UI-FA-2000 홈 대시보드</td></tr>
-      <tr><td>예약</td><td>3000번대</td><td>UI-FA-3100 지점 찾기 · 3300 금액 · 3600 상세</td></tr>
-      <tr><td>마이페이지</td><td>4000번대</td><td>UI-FA-4000 마이 · 4200 알림 설정</td></tr>
+      <tr><th>구간</th><th>대역</th><th>화면</th></tr>
+      <tr><td>온보딩</td><td>1000번대</td><td>1100 언어 · 1200 소개 · 1300 로그인/게스트 · 1400 위치 권한</td></tr>
+      <tr><td>홈</td><td>2000번대</td><td>2000 홈 대시보드</td></tr>
+      <tr><td>예약</td><td>3000번대</td><td>3100 지점 찾기 · 3200 지점 상세 · 3300 금액 · 3400 정보 · 3500 완료 · 3600 상세</td></tr>
+      <tr><td>마이페이지</td><td>4000번대</td><td>4000 마이 · 4200 알림 설정</td></tr>
     </table>
-    <p class="surface-sub" style="margin-top:6px;">FA = Foreign App. 뒤 두 자리는 하위 화면·상태 순번. 화면설계서 라벨(R1·H1·M1 등)과 병기.</p>
+    <p class="surface-sub" style="margin-top:6px;">FA = Foreign App. 화면설계서 라벨(O1·H1·R1·M1 등)과 병기.</p>
 
     <h4>정책 코드 — MB-POL-&lt;영역&gt;-## (외국인서비스 정책 § 매핑)</h4>
     <table class="st">
@@ -140,305 +148,828 @@
       <tr><td><span class="pcode">MB-POL-RSV-03</span></td><td>§5.6</td><td>지점·통화별 예약 수락 · 설정 통화만 노출</td></tr>
       <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>§7.1</td><td>수령 전날·당일 방문 예정 확인 · 방문 확정/취소</td></tr>
       <tr><td><span class="pcode">MB-POL-VISIT-02</span></td><td>§7.2</td><td>수령기한 경과 시 자동 취소(AUTO)</td></tr>
-      <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>§8.3</td><td>수령 전일 리마인더 · "예약 확인하기"→예약내역조회</td></tr>
-      <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>§3·9</td><td>회원 우대(현장 재량) · 비회원 예약 허용</td></tr>
+      <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>§8</td><td>이메일 인증·완료·리마인더·취소 안내 · "예약 확인하기"→예약내역조회</td></tr>
+      <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>§3·9·10</td><td>회원 우대(현장 재량) · 비회원 예약·무로그인 조회 허용</td></tr>
       <tr><td><span class="pcode">MB-POL-NOTI-01</span></td><td class="chk">신규(미확정)</td><td>거래 알림/마케팅 알림 분리 · 푸시 꺼도 이메일 발송</td></tr>
     </table>
 
     <h4>상태·이벤트 표기</h4>
     <table class="st">
       <tr><td class="k">상태 기본값</td><td><span class="pill on">기본 ON</span> <span class="pill off">기본 OFF</span> <span class="pill tbd">정책 미확정 · vN.N</span></td></tr>
-      <tr><td class="k">이벤트명</td><td><span class="evt">snake_case</span> — 진입은 <span class="evt">*_view</span>, 액션은 <span class="evt">동사</span>. 파라미터는 열로 명시</td></tr>
+      <tr><td class="k">이벤트명</td><td><span class="evt">snake_case</span> — 진입은 <span class="evt">*_view</span>, 액션은 동사. 파라미터는 열로 명시</td></tr>
       <tr><td class="k">체크포인트</td><td><span class="chk">빨간색</span> = 정책/법무 미결 또는 확인 필요 항목</td></tr>
     </table>
   </div>
 
-  <!-- ================= UI-FA-4200 알림 설정 ================= -->
-  <div class="surface-h" id="s1">UI-FA-4200 · 마이페이지 · 알림 설정</div>
+  <!-- ================= 온보딩 ================= -->
+  <div class="surface-h" id="onboard">1. 온보딩</div>
+  <p class="surface-sub">최초 실행 1회 — 언어 선택 → 서비스 소개 → 로그인/게스트 → 위치 권한.</p>
+
+  <!-- UI-FA-1100 언어 선택 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FA-4200</span><span class="spec-name">알림 설정</span><span class="spec-ver">v1.0 · 2026-09-30</span></div>
-    <div class="spec-body">
-      <div class="spec-cols">
-        <div>
-          <div class="ph">
-            <div class="ph-bar">← 알림 설정</div>
-            <div class="tgl"><span class="tt">예약 알림<small>거래 알림 · 수령 1시간·10분 전</small></span><span class="sw on"></span></div>
-            <div class="tgl"><span class="tt">환율 알림<small>v1.2 · 정책 미확정</small></span><span class="sw"></span></div>
-            <div class="tgl"><span class="tt">혜택·마케팅<small>광고 수신 동의</small></span><span class="sw"></span></div>
-            <div class="tgl"><span class="tt">근처 지점 알림<small>v1.2 · 정책 미확정</small></span><span class="sw"></span></div>
-            <div class="ph-note">푸시를 꺼도 예약 메일은 계속 발송됩니다</div>
-            <div class="ph-tab"><div>홈</div><div>예약</div><div class="on">마이</div></div>
-          </div>
-          <div class="ph-cap">마이 &gt; 알림 설정</div>
+    <div class="spec-head"><span class="spec-id">UI-FA-1100</span><span class="spec-name">언어 선택 (O1)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div style="text-align:center;margin:14px 0 4px;font-family:var(--disp);font-weight:800;font-size:16px;color:var(--blue-dk);">MONEY BOX</div>
+          <div class="ph-cap" style="margin:0 0 4px;">A simple way to exchange money</div>
+          <div class="ph-lang"><span class="on">English</span><span>中文(简)</span><span>中文(繁)</span><span>日本語</span><span>한국어</span></div>
+          <div class="ph-bar blue">시작하기</div>
         </div>
-        <div>
-          <div class="spec-sec"><h4>기본 정보</h4>
-            <table class="st">
-              <tr><td class="k">화면 ID</td><td>UI-FA-4200 (화면설계서 M1 하위)</td></tr>
-              <tr><td class="k">배포 버전</td><td>1.0</td></tr>
-              <tr><td class="k">화면 경로</td><td>마이 &gt; 알림 설정</td></tr>
-              <tr><td class="k">디바이스</td><td>iPhone · 393 × 852 pt (모바일 세로 기준)</td></tr>
-              <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#my">앱 화면설계서 · 마이페이지</a></td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>적용 정책</h4>
-            <table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
-              <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>푸시를 꺼도 예약·리마인더 이메일은 계속 발송</td></tr>
-              <tr><td><span class="pcode">MB-POL-NOTI-01</span></td><td>거래 알림/마케팅 알림 분리 · 알림 세부 정책 미확정</td></tr>
-              <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>환율 알림은 환율 미노출 정책과 충돌 → 정책 정리 후 설계</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>화면 구성</h4>
-            <table class="st"><tr><th>영역</th><th>내용</th></tr>
-              <tr><td>예약 알림</td><td><span class="pill on">기본 ON</span> 거래 알림 · 수령 예정 1시간 전·10분 전 사전 푸시</td></tr>
-              <tr><td>환율 알림</td><td><span class="pill off">기본 OFF</span> <span class="pill tbd">v1.2 · 정책 미확정</span></td></tr>
-              <tr><td>혜택·마케팅</td><td><span class="pill off">기본 OFF</span> 광고성 수신 동의 연동</td></tr>
-              <tr><td>근처 지점 알림</td><td><span class="pill off">기본 OFF</span> <span class="pill tbd">v1.2</span> 반경 300~500m · 72h 쿨다운 · 09~21시</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>Description</h4>
-            <ul class="spec-ul">
-              <li>예약 알림은 거래 알림이므로 광고 동의와 무관하게 기본 ON</li>
-              <li>마케팅 알림과 거래 알림을 분리</li>
-              <li>푸시 비활성 상태에서도 이메일은 발송됨을 명시</li>
-            </ul>
-          </div>
-          <div class="spec-sec"><h4>Check Point</h4>
-            <ul class="spec-ul">
-              <li><span class="chk">환율 알림은 환율 미노출 정책(MB-POL-RATE-02)과 충돌 — 정책 정리 후 설계</span></li>
-              <li><span class="chk">근처 지점 알림 = 광고성 푸시 표시 의무 법무 확인 선행 (미결)</span></li>
-              <li><span class="chk">예약 알림(거래 알림)을 끌 수 없게 할지 확인 필요</span></li>
-            </ul>
-          </div>
-          <div class="spec-sec"><h4>진입 · 다음 화면</h4>
-            <table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-              <tr><td>마이 탭 &gt; 알림 설정</td><td>토글 즉시 반영(별도 화면 없음)</td><td>뒤로 → 마이 탭</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>인터랙션</h4>
-            <table class="st"><tr><th>트리거</th><th>동작</th></tr>
-              <tr><td>토글 전환</td><td>서버 저장 · 즉시 반영</td></tr>
-              <tr><td>근처 지점 알림 ON</td><td>위치 '항상 허용' 권한 요청</td></tr>
-              <tr><td>예약 알림 OFF 시도</td><td>(정책 확정 전) 안내/제한 — 확인 필요</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>문구</h4>
-            <table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
-              <tr><td>타이틀</td><td>알림 설정</td><td>Notifications</td></tr>
-              <tr><td>이메일 고지</td><td>푸시를 꺼도 예약 메일은 계속 발송됩니다</td><td>Emails are sent even if push is off</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>이벤트 로그</h4>
-            <table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
-              <tr><td><span class="evt">noti_setting_view</span></td><td>진입</td><td>—</td></tr>
-              <tr><td><span class="evt">noti_toggle</span></td><td>토글 변경</td><td>type, value</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>개발 참고</h4>
-            <ul class="spec-ul">
-              <li>예약 알림은 거래 알림 → 끌 수 없게 할지 확인 필요</li>
-              <li>근처 지점 알림·환율 알림은 정책 미확정으로 v1.2 이후 구현</li>
-              <li>비회원도 마이 탭에서 푸시 설정에 접근 가능</li>
-              <li>예약 사전 푸시 = 수령 예정 시각 1시간 전·10분 전. 서버 시각 기준 이미 지난 시점은 소급 발송하지 않음</li>
-            </ul>
-          </div>
-        </div>
+        <div class="ph-cap">앱 최초 실행 &gt; 언어</div>
       </div>
-    </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-1100 (화면설계서 O1)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>앱 최초 실행(스플래시) &gt; 언어 선택</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#onboard">앱 화면설계서 · 온보딩 O1</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-RATE-03</span></td><td>태그라인 등 카피는 과장·최상급 표현 금지</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>로고·태그라인</td><td>MONEY BOX · 서비스 한 줄 소개</td></tr>
+          <tr><td>언어 선택</td><td>한국어·영어·중국어(간체·번체)·일본어 5종</td></tr>
+          <tr><td>시작하기</td><td>선택 언어로 온보딩 진입</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>최초 실행 시 1회 노출. 선택 언어는 앱 전역 적용(마이에서 변경)</li>
+          <li>주요 유입국(대만·홍콩·일본) 고려해 번체·일본어 노출</li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>앱 최초 실행(스플래시)</td><td>UI-FA-1200 서비스 소개</td><td>없음(최초 진입)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>언어 선택</td><td>전역 언어 적용 · 로컬 저장</td></tr>
+          <tr><td>시작하기</td><td>서비스 소개로 이동</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>타이틀</td><td>언어 선택</td><td>Choose language</td></tr>
+          <tr><td>태그라인</td><td>한국에서 간편하게 환전하세요</td><td>A simple way to exchange money in Korea</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">onboarding_lang_view</span></td><td>진입</td><td>—</td></tr>
+          <tr><td><span class="evt">onboarding_lang_select</span></td><td>언어 선택</td><td>lang</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>선택 언어 로컬 저장. 재실행 시 온보딩은 스킵하되 언어 유지</li>
+        </ul></div>
+      </div>
+    </div></div>
   </div>
 
-  <!-- ================= UI-FA-3300 금액 입력 ================= -->
-  <div class="surface-h" id="s2">UI-FA-3300 · 예약 · 금액 · 수령일</div>
+  <!-- UI-FA-1200 서비스 소개 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FA-3300</span><span class="spec-name">금액 · 수령일 (R3)</span><span class="spec-ver">v1.0 · 2026-09-30</span></div>
-    <div class="spec-body">
-      <div class="spec-cols">
-        <div>
-          <div class="ph">
-            <div class="ph-bar">← 명동점 · 금액 입력</div>
-            <div class="ph-seg"><div class="on">외화→원화</div><div>원화→외화</div></div>
-            <div class="ph-in">USD ▾ | 1,000</div>
-            <div class="ph-cmp"><div style="font-weight:800;margin-bottom:3px;">이 지점 기준 · 이만큼 더</div><div class="cr"><span>타 채널</span><b>≈ ₩2,800</b></div><div class="cr"><span>키오스크</span><b>≈ ₩5,600</b></div><div class="cr"><span>공항</span><b>≈ ₩11,200</b></div></div>
-            <div class="ph-in" style="border-style:dashed;border-color:var(--blue);color:var(--blue-dk);">현재 환율 참고로 보기 ▾</div>
-            <div class="ph-in">수령일 2026-09-30 (오늘) ▾</div>
-            <div class="ph-bar blue">다음</div>
-          </div>
-          <div class="ph-cap">예약 &gt; 지점 상세 &gt; 금액</div>
+    <div class="spec-head"><span class="spec-id">UI-FA-1200</span><span class="spec-name">서비스 소개 (O2)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div class="ph-bar" style="justify-content:flex-end;">건너뛰기</div>
+          <div class="ph-ill">일러스트 (지점·여권)</div>
+          <div style="font-size:11px;font-weight:800;text-align:center;">가까운 지점에서 여권만</div>
+          <div class="ph-dots"><i class="on"></i><i></i><i></i></div>
+          <div class="ph-bar blue">다음</div>
         </div>
-        <div>
-          <div class="spec-sec"><h4>기본 정보</h4>
-            <table class="st">
-              <tr><td class="k">화면 ID</td><td>UI-FA-3300 (화면설계서 R3)</td></tr>
-              <tr><td class="k">배포 버전</td><td>1.0</td></tr>
-              <tr><td class="k">화면 경로</td><td>예약 &gt; 지점 찾기 &gt; 지점 상세 &gt; 금액·수령일</td></tr>
-              <tr><td class="k">디바이스</td><td>iPhone · 393 × 852 pt</td></tr>
-              <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#reserve">앱 화면설계서 · 예약 R3</a></td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>적용 정책</h4>
-            <table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
-              <tr><td><span class="pcode">MB-POL-RATE-01</span></td><td>예약 시 환율 미고정 · 수령일 지점 환율(rate=null·BOARD)</td></tr>
-              <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>현재 환율은 '참고로 보기'로만 · 예약 중에만 · 완료 화면 미노출</td></tr>
-              <tr><td><span class="pcode">MB-POL-RATE-03</span></td><td>비교는 예시 수치 · 은행 등 업권 미지목 · 최상급 표현 금지</td></tr>
-              <tr><td><span class="pcode">MB-POL-RSV-02</span></td><td>수령일 당일(오늘) 선택 허용 · 본사 상한 내</td></tr>
-              <tr><td><span class="pcode">MB-POL-RSV-03</span></td><td>통화 선택지는 지점 설정 통화만 노출</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>화면 구성</h4>
-            <table class="st"><tr><th>영역</th><th>내용</th></tr>
-              <tr><td>거래 방향</td><td>기본 외화→원화(BUY) · 토글로 원화→외화(SELL)</td></tr>
-              <tr><td>통화 · 금액</td><td>통화 선택(설정 통화만) · 양수 금액 · 한도 없음</td></tr>
-              <tr><td>지점별 이득 비교</td><td>금액 입력 시 노출(미입력 숨김) · 이 지점 기준 원화 이득 · 예시 수치</td></tr>
-              <tr><td>현재 환율 참고</td><td>'현재 환율 참고로 보기' 토글 · 예약 중에만 · 완료 미노출</td></tr>
-              <tr><td>수령 예정일</td><td>오늘(당일)부터 · 본사 상한 초과 시 선택 불가</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>Description</h4>
-            <ul class="spec-ul">
-              <li>환율은 예약 시 고정하지 않으므로 특정 원화 금액을 확정하는 문구 지양</li>
-              <li>비교는 이 지점 환율 기준 원화 이득(예시). 업권 미지목</li>
-              <li>수령일을 오늘로 선택 가능(당일 예약)</li>
-            </ul>
-          </div>
-          <div class="spec-sec"><h4>Check Point</h4>
-            <ul class="spec-ul">
-              <li><span class="chk">지점마다 환율이 달라 비교 수치 상이 → 지점 변경 시 재계산</span></li>
-              <li><span class="chk">현재 환율 노출은 예약 중에만 — 완료·조회 화면 일관 미노출 확인</span></li>
-            </ul>
-          </div>
-          <div class="spec-sec"><h4>진입 · 다음 화면</h4>
-            <table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-              <tr><td>R2 지점 상세 &gt; 이 지점으로 예약</td><td>R4 예약자 정보 (회원=R5 완료로 스킵)</td><td>뒤로 → R2 지점 상세</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>인터랙션</h4>
-            <table class="st"><tr><th>트리거</th><th>동작</th></tr>
-              <tr><td>금액 입력</td><td>지점별 원화 이득 비교 노출(애니메이션)</td></tr>
-              <tr><td>'현재 환율 참고로 보기'</td><td>현재 환율 펼침 (예약 중 한정)</td></tr>
-              <tr><td>방향 토글</td><td>BUY/SELL 전환</td></tr>
-              <tr><td>통화 선택</td><td>지점 미설정 통화는 비활성</td></tr>
-              <tr><td>다음</td><td>입력 검증 → 예약자 정보(또는 회원 완료)</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>문구</h4>
-            <table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
-              <tr><td>타이틀</td><td>금액 입력</td><td>Enter amount</td></tr>
-              <tr><td>환율 안내</td><td>예약 시 환율 미고정 · 수령일 지점 환율 적용</td><td>Rate is set on the pickup day at the branch</td></tr>
-              <tr><td>비교</td><td>이 지점 기준 이만큼 더 받아요</td><td>You get this much more at this branch</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>이벤트 로그</h4>
-            <table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
-              <tr><td><span class="evt">rsv_amount_view</span></td><td>진입</td><td>branch_id</td></tr>
-              <tr><td><span class="evt">rsv_amount_input</span></td><td>금액 입력</td><td>currency, amount, direction</td></tr>
-              <tr><td><span class="evt">rsv_rate_reveal</span></td><td>현재 환율 보기</td><td>branch_id</td></tr>
-              <tr><td><span class="evt">rsv_amount_next</span></td><td>다음</td><td>currency, amount, pickup_date</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>개발 참고</h4>
-            <ul class="spec-ul">
-              <li>비교 수치는 지점 환율 계수 기반(지점별 상이). 완료·조회에는 환율 수치 미기록</li>
-              <li>예약 생성 시 rate=null(BOARD) · transactionType에 방향 기록</li>
-              <li>수령일 상한(maxWindowDays)은 본사 설정값을 즉시 반영</li>
-            </ul>
-          </div>
-        </div>
+        <div class="ph-cap">온보딩 &gt; 소개</div>
       </div>
-    </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-1200 (화면설계서 O2)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>온보딩 &gt; 서비스 소개</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#onboard">앱 화면설계서 · 온보딩 O2</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-RSV-01</span></td><td>무결제 예약(현장 현금)을 핵심 소개로</td></tr>
+          <tr><td><span class="pcode">MB-POL-RATE-03</span></td><td>과장·최상급 표현 금지</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>슬라이드</td><td>2~3장 — ① 가까운 지점 ② 무결제 예약 ③ 회원 혜택</td></tr>
+          <tr><td>인디케이터</td><td>현재 슬라이드 도트</td></tr>
+          <tr><td>다음/건너뛰기</td><td>다음 슬라이드 · 건너뛰기로 바로 로그인 단계</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>핵심 메시지 = 가까움·간편·신뢰. 환율은 보조</li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>UI-FA-1100 언어 선택</td><td>UI-FA-1300 로그인/게스트</td><td>건너뛰기 → 1300</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>스와이프/다음</td><td>슬라이드 전환</td></tr>
+          <tr><td>건너뛰기</td><td>로그인/게스트로 이동</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>건너뛰기</td><td>건너뛰기</td><td>Skip</td></tr>
+          <tr><td>슬라이드1</td><td>가까운 지점에서 여권만 보여주면 환전 끝</td><td>Just show your passport at a nearby branch</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">onboarding_intro_view</span></td><td>슬라이드 노출</td><td>index</td></tr>
+          <tr><td><span class="evt">onboarding_intro_skip</span></td><td>건너뛰기</td><td>—</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>슬라이드 3장 이내. 최초 1회만, 이후 스킵</li>
+        </ul></div>
+      </div>
+    </div></div>
   </div>
 
-  <!-- ================= UI-FA-3600 내 예약 상세 ================= -->
-  <div class="surface-h" id="s3">UI-FA-3600 · 예약 · 내 예약 상세</div>
+  <!-- UI-FA-1300 로그인/게스트 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FA-3600</span><span class="spec-name">내 예약 상세 (R6)</span><span class="spec-ver">v1.0 · 2026-09-30</span></div>
-    <div class="spec-body">
-      <div class="spec-cols">
-        <div>
-          <div class="ph">
-            <div class="ph-bar">← 예약 상세 · D-1</div>
-            <div class="ph-sum"><div class="r"><span>지점</span><span>명동점</span></div><div class="r"><span>수령일</span><span>내일</span></div><div class="r"><span>통화/금액</span><span>USD 1,000</span></div><div class="r"><span>환율</span><span>수령일 환율</span></div></div>
-            <div class="ph-note">수령 임박 · 방문 예정이면 방문 확정</div>
-            <div class="ph-row"><div class="ph-btn ok">방문 확정</div><div class="ph-btn dn">예약 취소</div></div>
-            <div class="ph-cap" style="margin-top:2px;">상태: 전날·당일(D-1~D-0)</div>
-          </div>
-          <div class="ph-cap">홈/마이 &gt; 내 예약 &gt; 상세</div>
+    <div class="spec-head"><span class="spec-id">UI-FA-1300</span><span class="spec-name">로그인 · 게스트 (O3)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div style="text-align:center;font-size:12px;font-weight:800;margin:10px 0 4px;">시작하기</div>
+          <div class="ph-join">회원가입하고 혜택 받기</div>
+          <div class="ph-in">이메일</div><div class="ph-in">비밀번호</div>
+          <div class="ph-bar blue">로그인</div>
+          <div class="ph-bar" style="justify-content:center;margin-top:6px;">게스트로 계속하기</div>
         </div>
-        <div>
-          <div class="spec-sec"><h4>기본 정보</h4>
-            <table class="st">
-              <tr><td class="k">화면 ID</td><td>UI-FA-3600 (화면설계서 R6)</td></tr>
-              <tr><td class="k">배포 버전</td><td>1.0</td></tr>
-              <tr><td class="k">화면 경로</td><td>홈 진행중 예약 / 마이 내 예약 / 리마인더 메일 → 상세</td></tr>
-              <tr><td class="k">디바이스</td><td>iPhone · 393 × 852 pt</td></tr>
-              <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#reserve">앱 화면설계서 · 예약 R6</a></td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>적용 정책</h4>
-            <table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
-              <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>수령 전날·당일(D-1~D-0)엔 방문 확정/취소(변경 불가)</td></tr>
-              <tr><td><span class="pcode">MB-POL-VISIT-02</span></td><td>수령기한 경과 시 자동 취소(AUTO)</td></tr>
-              <tr><td><span class="pcode">MB-POL-RSV-01</span></td><td>취소 수수료 없음(무결제) · 수령기한 전 취소 가능</td></tr>
-              <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>리마인더 '예약 확인하기' → 이 상세로 진입해 확정/취소</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>화면 구성 (상태별 버튼)</h4>
-            <table class="st"><tr><th>상태</th><th>버튼 · 표시</th></tr>
-              <tr><td>여유 (D-2 이상)</td><td>[예약 변경] [예약 취소]</td></tr>
-              <tr><td>임박 (D-1~D-0)</td><td>안내 문구 + [방문 확정] [예약 취소] (변경 불가)</td></tr>
-              <tr><td>확정 완료</td><td>확정 안내 + [예약 취소]</td></tr>
-              <tr><td>완료/취소</td><td>버튼 없이 안내만 (변경·취소 불가)</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>Description</h4>
-            <ul class="spec-ul">
-              <li>수령 임박 구간엔 변경 대신 방문 확정/취소를 제공</li>
-              <li>리마인더 메일 '예약 확인하기' → 이 상세로 진입 (상태 변경 일원화)</li>
-              <li>취소·방문 확정은 이 화면에서만 처리</li>
-            </ul>
-          </div>
-          <div class="spec-sec"><h4>Check Point</h4>
-            <ul class="spec-ul">
-              <li><span class="chk">방문 확정 시점에 가용 시재 재확인·차감(동시성) → 소진 시 안내</span></li>
-              <li><span class="chk">'변경 불가' 경계(D-1 기준 시각) 확정 필요</span></li>
-            </ul>
-          </div>
-          <div class="spec-sec"><h4>진입 · 다음 화면</h4>
-            <table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-              <tr><td>홈 진행중 카드 / 마이 내 예약 / 리마인더 메일 링크</td><td>변경(R3) · 취소 완료 · 방문 확정 완료</td><td>뒤로 → 내 예약 목록</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>인터랙션</h4>
-            <table class="st"><tr><th>트리거</th><th>동작</th></tr>
-              <tr><td>[방문 확정]</td><td>시재 재확인·차감 → 확정. 실패 시 SOLD_OUT 안내</td></tr>
-              <tr><td>[예약 취소]</td><td>확인 모달 → 취소 + 고객취소 안내 메일 발송</td></tr>
-              <tr><td>[예약 변경]</td><td>R3 금액 단계로 (여유 구간만)</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>문구</h4>
-            <table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
-              <tr><td>타이틀</td><td>예약 상세</td><td>Reservation</td></tr>
-              <tr><td>임박 안내</td><td>수령이 임박했어요. 방문 예정이면 방문 확정을 눌러주세요</td><td>Pickup is near. Tap Confirm visit if you're coming</td></tr>
-              <tr><td>확정 완료</td><td>방문 예정이 확정됐어요</td><td>Visit confirmed</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>이벤트 로그</h4>
-            <table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
-              <tr><td><span class="evt">rsv_detail_view</span></td><td>진입</td><td>reservation_no, days_until</td></tr>
-              <tr><td><span class="evt">rsv_visit_confirm</span></td><td>방문 확정</td><td>reservation_no, result</td></tr>
-              <tr><td><span class="evt">rsv_cancel</span></td><td>취소</td><td>reservation_no</td></tr>
-              <tr><td><span class="evt">rsv_edit_open</span></td><td>변경 진입</td><td>reservation_no</td></tr>
-            </table>
-          </div>
-          <div class="spec-sec"><h4>개발 참고</h4>
-            <ul class="spec-ul">
-              <li>버튼 상태 = f(status, reminderStatus, daysBetween(today, pickupDate)). editable = status BOOKED</li>
-              <li>방문 확정 = confirmVisit(), 취소 = cancelReservation() + customerCancel 메일</li>
-              <li>완료/취소 상태는 조회만, 액션 버튼 미노출</li>
-            </ul>
-          </div>
-        </div>
+        <div class="ph-cap">온보딩 &gt; 로그인</div>
       </div>
-    </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-1300 (화면설계서 O3)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>온보딩 &gt; 로그인/게스트</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#onboard">앱 화면설계서 · 온보딩 O3</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>비회원(게스트)도 예약 가능 · 로그인 강제 아님</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>혜택 배너</td><td>회원 우대·쿠폰·환율 알림 유도</td></tr>
+          <tr><td>로그인</td><td>이메일 + 비밀번호</td></tr>
+          <tr><td>게스트</td><td>로그인 없이 계속</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>비회원도 예약 가능. 가입은 예약 중 간편가입으로도 전환 가능</li>
+        </ul></div>
+        <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
+          <li><span class="chk">프로토타입은 비밀번호 미검증 — 실서비스는 기존 계정 체계 연동</span></li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>UI-FA-1200 서비스 소개</td><td>UI-FA-1400 위치 권한</td><td>게스트로 계속 → 1400</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>로그인</td><td>계정 검증 → 위치 권한/홈</td></tr>
+          <tr><td>게스트로 계속</td><td>비회원 상태로 위치 권한/홈</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>배너</td><td>회원가입하고 혜택 받기</td><td>Sign up for benefits</td></tr>
+          <tr><td>게스트</td><td>게스트로 계속하기</td><td>Continue as guest</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">auth_gate_view</span></td><td>진입</td><td>—</td></tr>
+          <tr><td><span class="evt">auth_login_submit</span></td><td>로그인</td><td>result</td></tr>
+          <tr><td><span class="evt">auth_guest_continue</span></td><td>게스트 진입</td><td>—</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>게스트 플래그 유지. 기존 계정 체계 연동 예정</li>
+        </ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- UI-FA-1400 위치 권한 -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-1400</span><span class="spec-name">위치 권한 (O4)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div class="ph-map"><span class="ph-pin b" style="left:46%;top:40%;"></span></div>
+          <div style="font-size:11px;font-weight:800;text-align:center;">가까운 지점을 찾아드릴게요</div>
+          <div class="ph-cap" style="margin:2px 0 6px;">위치 허용 시 주변 지점·무인기 표시</div>
+          <div class="ph-bar blue">위치 허용</div>
+          <div class="ph-bar" style="justify-content:center;margin-top:6px;">나중에 하기</div>
+        </div>
+        <div class="ph-cap">온보딩 &gt; 위치 권한</div>
+      </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-1400 (화면설계서 O4)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>온보딩 &gt; 위치 권한</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#onboard">앱 화면설계서 · 온보딩 O4</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td>—</td><td>직접 매핑 정책 없음. 위치는 가까운 지점 정렬 목적(선택 권한)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>안내</td><td>위치 사용 목적 설명 · 미니맵</td></tr>
+          <tr><td>위치 허용</td><td>OS 권한 요청</td></tr>
+          <tr><td>나중에</td><td>권한 없이 홈 진입</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>GPS 기반 가까운 지점 정렬. 거부해도 지역 선택으로 이용 가능</li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>UI-FA-1300 로그인/게스트</td><td>UI-FA-2000 홈</td><td>나중에 → 홈</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>위치 허용</td><td>OS 권한 요청 → 홈</td></tr>
+          <tr><td>나중에</td><td>홈 진입(예약 R1에서 재요청)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>타이틀</td><td>가까운 지점을 찾아드릴게요</td><td>Find nearby branches</td></tr>
+          <tr><td>허용</td><td>위치 허용</td><td>Allow location</td></tr>
+          <tr><td>나중에</td><td>나중에 하기</td><td>Later</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">perm_location_view</span></td><td>진입</td><td>—</td></tr>
+          <tr><td><span class="evt">perm_location_result</span></td><td>응답</td><td>value(allow/later)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>거부 시 지역 선택 폴백. 근처 지점 알림(마이)은 별도 '항상 허용' 권한</li>
+        </ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ================= 홈 ================= -->
+  <div class="surface-h" id="home">2. 홈</div>
+  <p class="surface-sub">앱 대시보드 — 현재 환율 참고 · 진행 중 예약 · 빠른 예약.</p>
+
+  <!-- UI-FA-2000 홈 -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-2000</span><span class="spec-name">홈 대시보드 (H1)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div class="ph-bar" style="justify-content:space-between;">안녕하세요 <span>🔔 한국어▾</span></div>
+          <div class="ph-rate"><div>USD<b>1,380</b></div><div>JPY<b>8.9</b></div><div>CNY<b>190</b></div></div>
+          <div class="ph-hero">환전 예약하기</div>
+          <div class="ph-card">RSV-…0002 · 강남점 · D-1<br><span style="font-weight:400;color:var(--muted)">방문 확정을 눌러주세요 →</span></div>
+          <div class="ph-tab"><div class="on">홈</div><div>예약</div><div>마이</div></div>
+        </div>
+        <div class="ph-cap">하단 탭 · 홈</div>
+      </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-2000 (화면설계서 H1)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>온보딩 완료/앱 재실행 &gt; 홈</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#home">앱 화면설계서 · 홈</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>현재 환율은 참고만(홈은 예약 중 화면 아님 → 최소 노출)</td></tr>
+          <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>진행 중 예약이 D-1~D-0이면 방문 확정 유도</td></tr>
+          <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>비회원에게만 가입 유도 배너</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>상단</td><td>인사 · 언어 · 알림</td></tr>
+          <tr><td>현재 환율 참고</td><td>USD·JPY·CNY 미니(참고 시세)</td></tr>
+          <tr><td>빠른 예약 CTA</td><td>환전 예약하기 → 예약 플로우</td></tr>
+          <tr><td>진행 중 예약</td><td>BOOKED 최근 건 카드(D-1이면 방문 확정 유도)</td></tr>
+          <tr><td>프로모션</td><td>비회원 가입 유도 배너</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>홈은 예약 중 화면이 아니므로 현재 환율은 참고 수준으로만</li>
+          <li>진행 중 예약이 있으면 카드로 노출, 임박 시 방문 확정 유도</li>
+        </ul></div>
+        <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
+          <li><span class="chk">홈의 현재 환율 노출 범위 — 완료·조회 화면과 일관(참고만)</span></li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>온보딩 완료 / 앱 재실행</td><td>예약(CTA) · 상세(카드) · 마이(탭)</td><td>앱 종료</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>환전 예약하기</td><td>예약 R1(가까운 지점 있으면 바로 진입)</td></tr>
+          <tr><td>진행 중 예약 카드</td><td>내 예약 상세(R6)</td></tr>
+          <tr><td>탭 전환</td><td>예약 / 마이</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>CTA</td><td>환전 예약하기</td><td>Reserve exchange</td></tr>
+          <tr><td>환율 안내</td><td>참고 시세 · 실제는 수령일 지점 환율</td><td>Reference rate · actual rate set on pickup day</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">home_view</span></td><td>진입</td><td>member(bool)</td></tr>
+          <tr><td><span class="evt">home_reserve_cta</span></td><td>예약 CTA</td><td>—</td></tr>
+          <tr><td><span class="evt">home_active_rsv_tap</span></td><td>진행중 카드</td><td>reservation_no</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>진행 중 예약 = BOOKED 최근순. D-1~D-0이면 방문 확정 유도 노출</li>
+        </ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ================= 예약 ================= -->
+  <div class="surface-h" id="reserve">3. 예약</div>
+  <p class="surface-sub">지점 찾기 → 지점 상세 → 금액·수령일 → 예약자 정보 → 완료 → 내 예약 상세. (정책 동일)</p>
+
+  <!-- UI-FA-3100 지점 찾기 -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-3100</span><span class="spec-name">지점 찾기 (R1)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div class="ph-bar" style="justify-content:space-between;">지점 찾기 <span>서울▾</span></div>
+          <div class="ph-in">지점명·지역 검색</div>
+          <div class="ph-map"><span class="ph-pin b" style="left:36%;top:30%;"></span><span class="ph-pin b" style="left:58%;top:52%;"></span><span class="ph-pin k" style="left:24%;top:62%;"></span></div>
+          <div class="ph-in" style="justify-content:space-between;">명동점 · 0.4km <span style="color:var(--blue-dk);font-weight:700;">예약 가능</span></div>
+          <div class="ph-in" style="color:#0a9488;">머니24h · 안내</div>
+          <div class="ph-tab"><div>홈</div><div class="on">예약</div><div>마이</div></div>
+        </div>
+        <div class="ph-cap">예약 &gt; 지점 찾기</div>
+      </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-3100 (화면설계서 R1)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>예약 탭 / 홈 CTA &gt; 지점 찾기</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#reserve">앱 화면설계서 · 예약 R1</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-RSV-03</span></td><td>예약 가능 지점만 선택 · 통화별 수락 반영</td></tr>
+          <tr><td><span class="pcode">MB-POL-RATE-03</span></td><td>무인기는 위치 안내용(예약·수령 불가, §5.5)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>검색·지역 필터</td><td>지점명·지역 검색 · 서울/부산/그 외</td></tr>
+          <tr><td>지도</td><td>지점(파란)·무인기 머니24h(청록) 표시</td></tr>
+          <tr><td>지점 리스트</td><td>가까운 순 · 예약 가능 배지</td></tr>
+          <tr><td>무인기 항목</td><td>24시간·안내(선택 시 위치 팝업)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>위치 탭을 예약에 통합 — 예약 안에서 지점 찾기</li>
+          <li>무인기는 위치 안내만, 예약 대상 아님</li>
+        </ul></div>
+        <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
+          <li><span class="chk">무인기 마커/항목은 예약 불가 — 위치 팝업만</span></li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>예약 탭 / 홈 빠른 예약</td><td>UI-FA-3200 지점 상세</td><td>뒤로 → 홈</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>검색·필터</td><td>목록·지도 갱신</td></tr>
+          <tr><td>지점 선택</td><td>지점 상세(R2)</td></tr>
+          <tr><td>무인기 선택</td><td>위치 팝업(예약 버튼 없음)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>타이틀</td><td>지점 찾기</td><td>Find a branch</td></tr>
+          <tr><td>무인기</td><td>무인기 머니24h · 위치 안내(예약 불가)</td><td>Money24h kiosk · location only</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">rsv_branch_view</span></td><td>진입</td><td>—</td></tr>
+          <tr><td><span class="evt">rsv_branch_search</span></td><td>검색</td><td>q</td></tr>
+          <tr><td><span class="evt">rsv_branch_select</span></td><td>지점 선택</td><td>branch_id</td></tr>
+          <tr><td><span class="evt">kiosk_info_open</span></td><td>무인기 선택</td><td>kiosk_id</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>예약 가능 지점만 선택 가능. 무인기는 위치 데이터만(예약 흐름 제외)</li>
+        </ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- UI-FA-3200 지점 상세 -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-3200</span><span class="spec-name">지점 상세 (R2)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div class="ph-bar">← 명동점</div>
+          <div class="ph-map"><span class="ph-pin b" style="left:46%;top:40%;"></span></div>
+          <div class="ph-sum"><div class="r"><span>주소</span><span>명동8길 27</span></div><div class="r"><span>영업</span><span>09–21시</span></div><div class="r"><span>통화</span><span>USD·JPY·CNY</span></div></div>
+          <div class="ph-row"><div class="ph-btn gh">길찾기</div><div class="ph-btn gh">전화</div></div>
+          <div class="ph-bar blue">이 지점으로 예약하기</div>
+        </div>
+        <div class="ph-cap">지점 &gt; 상세</div>
+      </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-3200 (화면설계서 R2)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>예약 &gt; 지점 찾기 &gt; 지점 상세</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#reserve">앱 화면설계서 · 예약 R2</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-RSV-03</span></td><td>취급 통화는 지점 설정 통화만 표시</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>미니맵</td><td>지점 위치</td></tr>
+          <tr><td>정보</td><td>주소 · 영업시간 · 취급 통화</td></tr>
+          <tr><td>액션</td><td>길찾기 · 전화</td></tr>
+          <tr><td>예약</td><td>이 지점으로 예약하기 → 금액</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>지점 정보를 확인하고 바로 예약 시작</li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>UI-FA-3100 지점 찾기</td><td>UI-FA-3300 금액·수령일</td><td>뒤로 → R1</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>길찾기·전화</td><td>외부 지도·전화 앱 연동</td></tr>
+          <tr><td>이 지점으로 예약</td><td>금액 단계(R3)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>예약 버튼</td><td>이 지점으로 예약하기</td><td>Reserve at this branch</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">rsv_branch_detail_view</span></td><td>진입</td><td>branch_id</td></tr>
+          <tr><td><span class="evt">rsv_branch_reserve</span></td><td>예약 시작</td><td>branch_id</td></tr>
+          <tr><td><span class="evt">branch_directions</span></td><td>길찾기</td><td>branch_id</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>취급 통화 = 지점 설정. 무인기 상세는 예약 버튼 없음</li>
+        </ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- UI-FA-3300 금액·수령일 -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-3300</span><span class="spec-name">금액 · 수령일 (R3)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div class="ph-bar">← 명동점 · 금액</div>
+          <div class="ph-seg"><div class="on">외화→원화</div><div>원화→외화</div></div>
+          <div class="ph-in">USD ▾ | 1,000</div>
+          <div class="ph-cmp"><div style="font-weight:800;margin-bottom:3px;">이 지점 기준 · 이만큼 더</div><div class="cr"><span>타 채널</span><b>≈ ₩2,800</b></div><div class="cr"><span>키오스크</span><b>≈ ₩5,600</b></div><div class="cr"><span>공항</span><b>≈ ₩11,200</b></div></div>
+          <div class="ph-in" style="border-style:dashed;border-color:var(--blue);color:var(--blue-dk);">현재 환율 참고로 보기 ▾</div>
+          <div class="ph-in">수령일 오늘 ▾</div>
+          <div class="ph-bar blue">다음</div>
+        </div>
+        <div class="ph-cap">지점 상세 &gt; 금액</div>
+      </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-3300 (화면설계서 R3)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>예약 &gt; 지점 상세 &gt; 금액·수령일</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#reserve">앱 화면설계서 · 예약 R3</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-RATE-01</span></td><td>예약 시 환율 미고정 · 수령일 지점 환율(rate=null·BOARD)</td></tr>
+          <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>현재 환율은 '참고로 보기'로만 · 예약 중에만 · 완료 미노출</td></tr>
+          <tr><td><span class="pcode">MB-POL-RATE-03</span></td><td>비교는 예시 수치 · 은행 등 업권 미지목</td></tr>
+          <tr><td><span class="pcode">MB-POL-RSV-02</span></td><td>수령일 당일(오늘) 선택 허용 · 본사 상한 내</td></tr>
+          <tr><td><span class="pcode">MB-POL-RSV-03</span></td><td>통화 선택지는 지점 설정 통화만</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>거래 방향</td><td>기본 외화→원화(BUY) · 토글 SELL</td></tr>
+          <tr><td>통화·금액</td><td>설정 통화만 · 양수 · 한도 없음</td></tr>
+          <tr><td>지점별 이득 비교</td><td>금액 입력 시 노출 · 이 지점 기준 원화 이득(예시)</td></tr>
+          <tr><td>현재 환율 참고</td><td>토글 · 예약 중에만 · 완료 미노출</td></tr>
+          <tr><td>수령 예정일</td><td>오늘부터 · 본사 상한 내</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>환율 미고정이므로 특정 원화 금액 확정 문구 지양</li>
+          <li>비교는 이 지점 환율 기준 원화 이득(예시)</li>
+          <li>수령일을 오늘로 선택 가능(당일 예약)</li>
+        </ul></div>
+        <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
+          <li><span class="chk">지점마다 환율 상이 → 지점 변경 시 비교 재계산</span></li>
+          <li><span class="chk">현재 환율은 예약 중에만 — 완료·조회 일관 미노출</span></li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>UI-FA-3200 지점 상세</td><td>UI-FA-3400 정보 (회원=3500 완료로 스킵)</td><td>뒤로 → R2</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>금액 입력</td><td>지점별 원화 이득 비교 노출(애니메이션)</td></tr>
+          <tr><td>현재 환율 참고로 보기</td><td>현재 환율 펼침(예약 중 한정)</td></tr>
+          <tr><td>방향 토글</td><td>BUY/SELL</td></tr>
+          <tr><td>다음</td><td>검증 → 정보(또는 회원 완료)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>타이틀</td><td>금액 입력</td><td>Enter amount</td></tr>
+          <tr><td>환율 안내</td><td>예약 시 환율 미고정 · 수령일 지점 환율 적용</td><td>Rate is set on the pickup day at the branch</td></tr>
+          <tr><td>비교</td><td>이 지점 기준 이만큼 더 받아요</td><td>You get this much more at this branch</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">rsv_amount_view</span></td><td>진입</td><td>branch_id</td></tr>
+          <tr><td><span class="evt">rsv_amount_input</span></td><td>금액 입력</td><td>currency, amount, direction</td></tr>
+          <tr><td><span class="evt">rsv_rate_reveal</span></td><td>현재 환율 보기</td><td>branch_id</td></tr>
+          <tr><td><span class="evt">rsv_amount_next</span></td><td>다음</td><td>currency, amount, pickup_date</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>비교 수치는 지점 환율 계수 기반(지점별 상이). 완료·조회엔 환율 수치 미기록</li>
+          <li>예약 생성 시 rate=null(BOARD) · transactionType에 방향 기록</li>
+        </ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- UI-FA-3400 예약자 정보 -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-3400</span><span class="spec-name">예약자 정보 · 간편가입 (R4)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div class="ph-bar">← 예약자 정보</div>
+          <div class="ph-in">HONG GILDONG</div>
+          <div class="ph-in">you@example.com</div>
+          <div class="ph-row"><div class="ph-in" style="flex:1;margin:0;">인증번호</div><div class="ph-btn gh" style="width:60px;flex:none;">인증</div></div>
+          <div class="ph-join">비밀번호만 추가하면 회원가입<div class="ph-in" style="margin:6px 0 0;">비밀번호(선택)</div></div>
+          <div class="ph-bar blue">예약하기</div>
+        </div>
+        <div class="ph-cap">금액 &gt; 정보 (회원 스킵)</div>
+      </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-3400 (화면설계서 R4)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>예약 &gt; 금액 &gt; 예약자 정보 (회원 건너뜀)</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#reserve">앱 화면설계서 · 예약 R4</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>비회원 예약 허용 · 간편가입(비밀번호만)</td></tr>
+          <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>이메일 인증(수신 가능 여부 확인) · OTP는 본인인증 아님</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>예약자명</td><td>여권 영문명</td></tr>
+          <tr><td>이메일·인증</td><td>이메일 입력 + 인증번호</td></tr>
+          <tr><td>간편가입</td><td>비밀번호(선택) → 회원가입</td></tr>
+          <tr><td>마케팅 동의</td><td>선택</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>이름·이메일 인증 후 비밀번호만 추가하면 회원가입(비우면 비회원)</li>
+          <li>회원 로그인 시 이 단계 건너뜀</li>
+        </ul></div>
+        <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
+          <li><span class="chk">여권번호 미수집 — 신분 확인은 수령 시 지점</span></li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>UI-FA-3300 금액</td><td>UI-FA-3500 완료</td><td>뒤로 → R3</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>인증</td><td>이메일 인증번호 요청·확인</td></tr>
+          <tr><td>비밀번호 입력</td><td>회원가입 전환</td></tr>
+          <tr><td>예약하기</td><td>예약 생성 → 완료</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>타이틀</td><td>예약자 정보</td><td>Your details</td></tr>
+          <tr><td>간편가입</td><td>비밀번호만 추가하면 회원가입 완료</td><td>Add a password to sign up</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">rsv_info_view</span></td><td>진입</td><td>—</td></tr>
+          <tr><td><span class="evt">rsv_email_verify</span></td><td>인증</td><td>result</td></tr>
+          <tr><td><span class="evt">rsv_submit</span></td><td>예약하기</td><td>member(bool), marketing(bool)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>회원 로그인 시 미표시(스킵). marketingConsent 기록. 이메일 변경 시 재인증</li>
+        </ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- UI-FA-3500 예약 완료 -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-3500</span><span class="spec-name">예약 완료 (R5)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div style="text-align:center;font-size:12px;font-weight:800;margin:8px 0;">OOO님, 완료됐어요</div>
+          <div class="ph-bar" style="justify-content:center;color:var(--blue-dk);background:var(--blue-soft);border-color:var(--blue-soft);font-weight:800;">RSV-20260930-0002</div>
+          <div class="ph-sum"><div class="r"><span>지점</span><span>강남점</span></div><div class="r"><span>금액</span><span>1,000 USD</span></div><div class="r"><span>수령일</span><span>09-30</span></div><div class="r"><span>환율</span><span>수령일 환율</span></div></div>
+          <div class="ph-note">회원 우대 대상 · 현장 우대</div>
+          <div class="ph-bar blue">내 예약 관리하기</div>
+        </div>
+        <div class="ph-cap">완료 (회원 예시)</div>
+      </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-3500 (화면설계서 R5)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>예약 &gt; 정보(또는 회원 금액) &gt; 완료</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#reserve">앱 화면설계서 · 예약 R5</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>완료 화면엔 환율 수치 없음 — "수령일 환율"만</td></tr>
+          <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>회원/비회원 완료 분기 · 비회원 가입 유도</td></tr>
+          <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>완료 메일 발송 · 이후 수령 전일 리마인더</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>비회원</td><td>예약번호 · 요약 · 가입 유도 · "예약 조회하기"</td></tr>
+          <tr><td>회원</td><td>이름 인사 · 요약 · 우대 안내 · "내 예약 관리하기"</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>완료 화면이 회원/비회원으로 나뉨. 환율 수치 미표기</li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>UI-FA-3400 정보 (회원=R3)</td><td>예약 조회(비회원)·내 예약 관리(회원)→조회</td><td>홈</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>예약 조회하기</td><td>예약내역조회(비회원=예약번호+이메일)</td></tr>
+          <tr><td>내 예약 관리하기</td><td>자동 로그인 조회(회원)</td></tr>
+          <tr><td>새 예약</td><td>예약 R1</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>타이틀</td><td>예약이 완료됐어요</td><td>Reservation complete</td></tr>
+          <tr><td>회원 CTA</td><td>내 예약 관리하기</td><td>Manage my reservation</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">rsv_done_view</span></td><td>진입</td><td>member(bool)</td></tr>
+          <tr><td><span class="evt">rsv_done_lookup</span></td><td>조회 이동</td><td>member(bool)</td></tr>
+          <tr><td><span class="evt">rsv_done_new</span></td><td>새 예약</td><td>—</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>비회원=예약번호+가입 유도, 회원=자동 로그인 진입. 완료 메일 발송</li>
+        </ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- UI-FA-3600 내 예약 상세 -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-3600</span><span class="spec-name">내 예약 상세 (R6)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div class="ph-bar">← 예약 상세 · D-1</div>
+          <div class="ph-sum"><div class="r"><span>지점</span><span>명동점</span></div><div class="r"><span>수령일</span><span>내일</span></div><div class="r"><span>통화/금액</span><span>USD 1,000</span></div><div class="r"><span>환율</span><span>수령일 환율</span></div></div>
+          <div class="ph-note">수령 임박 · 방문 예정이면 방문 확정</div>
+          <div class="ph-row"><div class="ph-btn ok">방문 확정</div><div class="ph-btn dn">예약 취소</div></div>
+        </div>
+        <div class="ph-cap">상태: 전날·당일(D-1~D-0)</div>
+      </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-3600 (화면설계서 R6)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>홈 진행중 예약 / 마이 내 예약 / 리마인더 메일 → 상세</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#reserve">앱 화면설계서 · 예약 R6</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>수령 전날·당일(D-1~D-0)엔 방문 확정/취소(변경 불가)</td></tr>
+          <tr><td><span class="pcode">MB-POL-VISIT-02</span></td><td>수령기한 경과 시 자동 취소(AUTO)</td></tr>
+          <tr><td><span class="pcode">MB-POL-RSV-01</span></td><td>취소 수수료 없음 · 수령기한 전 취소 가능</td></tr>
+          <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>리마인더 '예약 확인하기' → 이 상세로 진입</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성 (상태별 버튼)</h4><table class="st"><tr><th>상태</th><th>버튼·표시</th></tr>
+          <tr><td>여유 (D-2↑)</td><td>[예약 변경] [예약 취소]</td></tr>
+          <tr><td>임박 (D-1~D-0)</td><td>안내 + [방문 확정] [예약 취소] (변경 불가)</td></tr>
+          <tr><td>확정 완료</td><td>확정 안내 + [예약 취소]</td></tr>
+          <tr><td>완료/취소</td><td>버튼 없이 안내만</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>임박 구간엔 변경 대신 방문 확정/취소</li>
+          <li>리마인더 메일 → 이 상세로 진입(상태 변경 일원화)</li>
+        </ul></div>
+        <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
+          <li><span class="chk">방문 확정 시 가용 시재 재확인·차감(동시성) → 소진 시 안내</span></li>
+          <li><span class="chk">'변경 불가' 경계(D-1 기준 시각) 확정 필요</span></li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>홈 카드 / 마이 내 예약 / 리마인더 메일</td><td>변경(R3) · 취소 완료 · 방문 확정 완료</td><td>뒤로 → 목록</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>[방문 확정]</td><td>시재 재확인·차감·확정. 실패 시 SOLD_OUT 안내</td></tr>
+          <tr><td>[예약 취소]</td><td>확인 모달 → 취소 + 고객취소 메일</td></tr>
+          <tr><td>[예약 변경]</td><td>R3 금액(여유 구간만)</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>타이틀</td><td>예약 상세</td><td>Reservation</td></tr>
+          <tr><td>임박 안내</td><td>수령이 임박했어요. 방문 예정이면 방문 확정을 눌러주세요</td><td>Pickup is near. Tap Confirm visit if you're coming</td></tr>
+          <tr><td>확정 완료</td><td>방문 예정이 확정됐어요</td><td>Visit confirmed</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">rsv_detail_view</span></td><td>진입</td><td>reservation_no, days_until</td></tr>
+          <tr><td><span class="evt">rsv_visit_confirm</span></td><td>방문 확정</td><td>reservation_no, result</td></tr>
+          <tr><td><span class="evt">rsv_cancel</span></td><td>취소</td><td>reservation_no</td></tr>
+          <tr><td><span class="evt">rsv_edit_open</span></td><td>변경 진입</td><td>reservation_no</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>버튼 상태 = f(status, reminderStatus, daysBetween(today, pickupDate)). editable = status BOOKED</li>
+          <li>방문 확정 = confirmVisit(), 취소 = cancelReservation() + customerCancel 메일</li>
+        </ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ================= 마이페이지 ================= -->
+  <div class="surface-h" id="my">4. 마이페이지</div>
+  <p class="surface-sub">회원=프로필·내 예약·쿠폰·알림·설정 / 비회원=로그인 유도·예약번호 조회.</p>
+
+  <!-- UI-FA-4000 마이페이지 -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-4000</span><span class="spec-name">마이페이지 (M1)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div class="ph-prof"><span class="ph-av"></span><span style="font-size:11px;font-weight:800;">OOO님<br><span style="font-weight:400;color:#0a7d3c;">회원 우대 대상</span></span></div>
+          <div class="ph-menu">내 예약<span class="a">›</span></div>
+          <div class="ph-menu">쿠폰·혜택<span class="a">›</span></div>
+          <div class="ph-menu">알림 설정<span class="a">›</span></div>
+          <div class="ph-menu">언어 설정<span class="a">›</span></div>
+          <div class="ph-tab"><div>홈</div><div>예약</div><div class="on">마이</div></div>
+        </div>
+        <div class="ph-cap">하단 탭 · 마이 (회원)</div>
+      </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-4000 (화면설계서 M1)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>하단 탭 &gt; 마이</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#my">앱 화면설계서 · 마이페이지</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>회원/비회원 분기 · 무로그인 예약 조회(비회원)</td></tr>
+          <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>내 예약·조회 진입점</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>회원</td><td>프로필(우대 배지) · 내 예약 · 쿠폰·혜택 · 환율 알림 · 언어 · 로그아웃</td></tr>
+          <tr><td>비회원</td><td>로그인/회원가입 유도 · 예약번호+이메일 조회 · 언어</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>회원/비회원 분기. 내 예약 → R6 상세, 알림 설정 → UI-FA-4200</li>
+        </ul></div>
+        <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
+          <li><span class="chk">프로토타입은 계정·비밀번호 미검증</span></li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>하단 탭 마이</td><td>내 예약(R6) · 알림 설정(4200) · 예약 조회</td><td>다른 탭</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>메뉴 선택</td><td>해당 화면 이동</td></tr>
+          <tr><td>예약번호 조회(비회원)</td><td>예약번호+이메일로 조회</td></tr>
+          <tr><td>로그아웃</td><td>비회원 상태로 전환</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>타이틀</td><td>마이페이지</td><td>My page</td></tr>
+          <tr><td>비회원</td><td>로그인 / 회원가입</td><td>Log in · Sign up</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">my_view</span></td><td>진입</td><td>member(bool)</td></tr>
+          <tr><td><span class="evt">my_menu_tap</span></td><td>메뉴 선택</td><td>menu</td></tr>
+          <tr><td><span class="evt">my_guest_lookup</span></td><td>비회원 조회</td><td>—</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>알림 설정은 회원·비회원 모두 접근. 쿠폰·환율 알림은 회원 전용</li>
+        </ul></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- UI-FA-4200 알림 설정 -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-4200</span><span class="spec-name">알림 설정</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-body"><div class="spec-cols">
+      <div>
+        <div class="ph">
+          <div class="ph-bar">← 알림 설정</div>
+          <div class="tgl"><span class="tt">예약 알림<small>거래 · 수령 1시간·10분 전</small></span><span class="sw on"></span></div>
+          <div class="tgl"><span class="tt">환율 알림<small>v1.2 · 미확정</small></span><span class="sw"></span></div>
+          <div class="tgl"><span class="tt">혜택·마케팅<small>광고 수신 동의</small></span><span class="sw"></span></div>
+          <div class="tgl"><span class="tt">근처 지점<small>v1.2 · 미확정</small></span><span class="sw"></span></div>
+          <div class="ph-note">푸시를 꺼도 예약 메일은 계속 발송</div>
+        </div>
+        <div class="ph-cap">마이 &gt; 알림 설정</div>
+      </div>
+      <div>
+        <div class="spec-sec"><h4>기본 정보</h4><table class="st">
+          <tr><td class="k">화면 ID</td><td>UI-FA-4200 (마이 하위)</td></tr>
+          <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+          <tr><td class="k">화면 경로</td><td>마이 &gt; 알림 설정</td></tr>
+          <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#my">앱 화면설계서 · 마이페이지</a></td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+          <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>푸시를 꺼도 예약·리마인더 이메일은 계속 발송</td></tr>
+          <tr><td><span class="pcode">MB-POL-NOTI-01</span></td><td>거래 알림/마케팅 알림 분리 · 세부 정책 미확정</td></tr>
+          <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>환율 알림은 환율 미노출 정책과 충돌 → 정책 정리 후 설계</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
+          <tr><td>예약 알림</td><td><span class="pill on">기본 ON</span> 거래 알림 · 수령 1시간 전·10분 전 사전 푸시</td></tr>
+          <tr><td>환율 알림</td><td><span class="pill off">기본 OFF</span> <span class="pill tbd">v1.2 · 정책 미확정</span></td></tr>
+          <tr><td>혜택·마케팅</td><td><span class="pill off">기본 OFF</span> 광고성 수신 동의 연동</td></tr>
+          <tr><td>근처 지점 알림</td><td><span class="pill off">기본 OFF</span> <span class="pill tbd">v1.2</span> 반경 300~500m · 72h 쿨다운 · 09~21시</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
+          <li>예약 알림은 거래 알림이므로 광고 동의와 무관하게 기본 ON</li>
+          <li>마케팅 알림과 거래 알림을 분리</li>
+          <li>푸시 비활성 상태에서도 이메일은 발송됨을 명시</li>
+        </ul></div>
+        <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
+          <li><span class="chk">환율 알림 ↔ 환율 미노출 정책(RATE-02) 충돌 — 정책 정리 후 설계</span></li>
+          <li><span class="chk">근처 지점 알림 = 광고성 푸시 표시 의무 법무 확인 선행(미결)</span></li>
+          <li><span class="chk">예약 알림(거래 알림)을 끌 수 없게 할지 확인</span></li>
+        </ul></div>
+        <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+          <tr><td>마이 &gt; 알림 설정</td><td>토글 즉시 반영(별도 화면 없음)</td><td>뒤로 → 마이</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
+          <tr><td>토글 전환</td><td>서버 저장 · 즉시 반영</td></tr>
+          <tr><td>근처 지점 알림 ON</td><td>위치 '항상 허용' 권한 요청</td></tr>
+          <tr><td>예약 알림 OFF 시도</td><td>(정책 확정 전) 안내/제한 — 확인 필요</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+          <tr><td>타이틀</td><td>알림 설정</td><td>Notifications</td></tr>
+          <tr><td>이메일 고지</td><td>푸시를 꺼도 예약 메일은 계속 발송됩니다</td><td>Emails are sent even if push is off</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+          <tr><td><span class="evt">noti_setting_view</span></td><td>진입</td><td>—</td></tr>
+          <tr><td><span class="evt">noti_toggle</span></td><td>토글 변경</td><td>type, value</td></tr>
+        </table></div>
+        <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
+          <li>예약 알림은 거래 알림 → 끌 수 없게 할지 확인 필요</li>
+          <li>근처 지점·환율 알림은 정책 미확정으로 v1.2 이후 구현</li>
+          <li>비회원도 마이 탭에서 푸시 설정에 접근 가능</li>
+          <li>예약 사전 푸시 = 수령 1시간 전·10분 전. 서버 시각 기준 이미 지난 시점은 소급 발송 안 함</li>
+        </ul></div>
+      </div>
+    </div></div>
   </div>
 
   <p class="foot"><b>머니박스(Moneybox)</b> · 외국인 앱 화면정의서 · 기획 검토용 · 정책은 외국인서비스 정책 문서와 매핑</p>
