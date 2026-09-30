@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>외국인 앱 화면설계서</title>
-<meta name="description" content="머니박스 외국인 앱 화면설계서 — 앱 전체 플로우·온보딩·홈·예약·마이페이지 (화면 + 라벨)">
+<title>외국인 웹 화면설계서</title>
+<meta name="description" content="머니박스 외국인 웹 화면설계서 — 사이트 전체 플로우·진입/랜딩·홈·예약·마이페이지 (화면 + 라벨)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Sora:wght@600;700;800&display=swap">
@@ -94,11 +94,11 @@
   .s2cmp-row .bar i{display:block;height:100%;background:var(--blue);border-radius:6px;}
   .s2cmp-row b{color:var(--blue-dk);white-space:nowrap;font-size:11.5px;}
 
-  /* 하단 탭바(앱) */
-  .tabbar{display:flex;border-top:1px solid var(--wire);margin-top:12px;padding-top:9px;}
-  .tabbar div{flex:1;text-align:center;font-size:10px;color:var(--muted);display:flex;flex-direction:column;gap:4px;align-items:center;}
-  .tabbar div.on{color:var(--blue);font-weight:800;}
-  .tabbar .ti{width:19px;height:19px;border-radius:6px;border:1.6px solid currentColor;}
+  /* 상단 네비게이션(웹 GNB) */
+  .gnb{display:flex;align-items:center;gap:10px;border:1px solid var(--wire);border-radius:8px;padding:8px 10px;font-size:11px;color:var(--muted);margin-bottom:8px;}
+  .gnb .lg{font-family:var(--disp);font-weight:800;color:var(--blue-dk);font-size:12px;}
+  .gnb .mn{margin-left:auto;display:flex;gap:10px;}
+  .gnb .mn span.on{color:var(--blue);font-weight:800;}
 
   /* 홈 위젯 */
   .rate3{display:flex;gap:6px;margin:8px 0;}
@@ -117,7 +117,7 @@
   .badge{font-size:9.5px;padding:1px 7px;border-radius:999px;background:var(--blue-soft);color:var(--blue-dk);font-weight:700;}
   .badge.g{background:#e7f6ec;color:#0a7d3c;}
 
-  /* 앱 전체 플로우 */
+  /* 사이트 전체 플로우 */
   .appflow{display:flex;flex-direction:column;gap:12px;}
   .flowrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .flowbox{border:1.5px solid var(--wire);border-radius:10px;background:var(--wirefill);padding:8px 12px;font-size:12px;font-weight:700;color:var(--ink);}
@@ -154,31 +154,29 @@
 <body>
 <div class="wrap">
   <header class="head">
-    <p class="eyebrow">MoneyBox · Foreign App</p>
-    <h1>외국인 앱 화면설계서</h1>
-    <p>머니박스 외국인 앱(모바일)의 화면설계서. 앱 전체 플로우 → 온보딩 · 홈 · 예약 · 마이페이지로 나눴습니다. 지점 지도·무인기 안내·지점 상세는 예약 플로우에 통합했습니다. 왼쪽은 화면 배치, 오른쪽은 알아야 할 사항(라벨). 실제 디자인이 아닌 기획 검토용이며, 환전예약 서비스 정책과 동일합니다.</p>
+    <p class="eyebrow">MoneyBox · Foreign Web</p>
+    <h1>외국인 웹 화면설계서</h1>
+    <p>머니박스 외국인 웹사이트(모바일 웹)의 화면설계서. 사이트 전체 플로우 → 진입/랜딩 · 홈 · 예약 · 마이페이지로 나눴습니다. 지점 지도·무인기 안내·지점 상세는 예약 플로우에 통합했습니다. 왼쪽은 화면 배치, 오른쪽은 알아야 할 사항(라벨). 실제 디자인이 아닌 기획 검토용이며, 환전예약 서비스 정책과 동일합니다.</p>
     <div class="toc">
-      <a href="#flow">앱 전체 플로우</a><a href="#onboard">온보딩</a><a href="#home">홈</a><a href="#reserve">예약</a><a href="#my">마이페이지</a><a href="screen-specs.html" style="background:rgba(255,255,255,.28);">화면정의서 →</a>
+      <a href="#flow">사이트 전체 플로우</a><a href="#onboard">진입·랜딩</a><a href="#home">홈</a><a href="#reserve">예약</a><a href="#my">마이페이지</a><a href="screen-specs.html" style="background:rgba(255,255,255,.28);">화면정의서 →</a>
     </div>
   </header>
 
-  <!-- ================= 앱 전체 플로우 ================= -->
-  <div class="surface-h" id="flow">앱 전체 플로우</div>
-  <p class="surface-sub">스플래시 → 온보딩 → 홈(하단 3탭). 각 탭에서 예약·마이페이지로 분기. 지점 지도·무인기·지점 상세는 예약에 통합.</p>
+  <!-- ================= 사이트 전체 플로우 ================= -->
+  <div class="surface-h" id="flow">사이트 전체 플로우</div>
+  <p class="surface-sub">통합웹 외국어 선택 → 외국인 웹 진입 → 홈(상단 메뉴). 상단 메뉴에서 예약·마이페이지로 분기. 지점 지도·무인기·지점 상세는 예약에 통합.</p>
 
   <section class="screen">
     <div class="cols">
       <div class="wf">
         <div class="appflow">
           <div class="flowrow">
-            <span class="flowbox blue">스플래시</span><span class="flowar">→</span>
-            <span class="flowbox">언어 선택</span><span class="flowar">→</span>
-            <span class="flowbox">서비스 소개</span><span class="flowar">→</span>
-            <span class="flowbox">로그인 / 게스트</span><span class="flowar">→</span>
-            <span class="flowbox">위치 권한</span>
+            <span class="flowbox blue">통합웹 외국어 선택</span><span class="flowar">→</span>
+            <span class="flowbox">외국인 웹 랜딩<br><span style="font-weight:400;font-size:10.5px;color:var(--muted)">언어·서비스 소개</span></span><span class="flowar">→</span>
+            <span class="flowbox">로그인 / 게스트</span>
           </div>
           <div class="flowrow">
-            <span class="flowar">↓</span><span class="flowbox blue">홈 (하단 탭)</span>
+            <span class="flowar">↓</span><span class="flowbox blue">홈 (상단 메뉴)</span>
           </div>
           <div class="flowsub appflow">
             <div class="flowrow"><span class="flowtab">홈</span><span class="flowar">·</span><span style="font-size:12px;color:var(--muted)">현재 환율 참고 · 진행 중 예약 · 빠른 예약 · 가까운 지점</span></div>
@@ -188,20 +186,20 @@
         </div>
       </div>
       <div class="notes">
-        <div class="note"><span class="tag">진입</span> 통합웹에서 외국어 선택 시 외국인 웹으로, 앱은 <b>스토어 설치 후 최초 실행</b> 시 온보딩. 국내 고객은 통합웹.</div>
-        <div class="note"><span class="tag">네비게이션</span> 홈 진입 후에는 <b>하단 3탭</b>(홈·예약·마이). 지점 찾기·무인기 안내는 <b>예약 탭 안</b>으로 통합(별도 위치 탭 없음).</div>
+        <div class="note"><span class="tag">진입</span> 통합웹(m-box.com)에서 <b>외국어 선택 시 외국인 웹으로 자동 이동</b>. 국내 고객은 통합웹. (앱 설치·스플래시 없음 — 웹 접속)</div>
+        <div class="note"><span class="tag">네비게이션</span> <b>상단 메뉴(웹 GNB)</b> — 예약 · 예약 조회 · About. 지점 찾기·무인기 안내는 <b>예약 안</b>으로 통합(별도 위치 메뉴 없음).</div>
         <div class="note"><span class="tag">게스트</span> 로그인 없이도 예약 가능(비회원). 마이페이지·쿠폰·환율 알림 등은 회원 기능.</div>
         <div class="note"><span class="tag">정책 연동</span> 예약·환율·수령·취소 규칙은 <b>외국인서비스 정책</b>과 동일(환율 미고정·수령일 지점 환율·무결제 예약 등).</div>
       </div>
     </div>
   </section>
 
-  <!-- ================= 온보딩 ================= -->
-  <div class="surface-h" id="onboard">1. 온보딩</div>
-  <p class="surface-sub">최초 실행 시 1회. 언어 선택 → 서비스 소개 → 로그인/게스트 → 위치 권한.</p>
+  <!-- ================= 진입·랜딩 ================= -->
+  <div class="surface-h" id="onboard">1. 진입 · 랜딩</div>
+  <p class="surface-sub">통합웹 외국어 선택 → 외국인 웹 진입. 언어 선택 · 서비스 소개(랜딩) · 로그인/게스트 · 위치 허용(브라우저).</p>
 
   <section class="screen">
-    <div class="screen-h"><span class="screen-no">O1</span><h2 class="screen-t">스플래시 · 언어 선택</h2><span class="screen-flow">앱 최초 실행</span></div>
+    <div class="screen-h"><span class="screen-no">O1</span><h2 class="screen-t">언어 선택 (진입)</h2><span class="screen-flow">통합웹 → 외국어 선택</span></div>
     <div class="cols">
       <div class="wf"><div class="wf-phone">
         <div style="text-align:center;margin:22px 0 6px;font-family:var(--disp);font-weight:800;font-size:22px;color:var(--blue-dk);">MONEY BOX</div>
@@ -213,7 +211,7 @@
         <div class="wf-bar blue tall" style="margin-top:10px;">시작하기</div>
       </div></div>
       <div class="notes">
-        <div class="note"><span class="tag">언어</span> 지원 5종 — 한국어·영어·중국어(간체·번체)·일본어. 선택 언어는 앱 전역 적용, 마이페이지에서 변경.</div>
+        <div class="note"><span class="tag">언어</span> 지원 5종 — 한국어·영어·중국어(간체·번체)·일본어. 통합웹에서 외국어 선택 시 이 화면으로 진입. 선택 언어는 사이트 전역 적용, 마이페이지에서 변경.</div>
         <div class="note"><span class="tag">유입국</span> 대만·홍콩·일본이 주요 유입 — 번체·일본어 노출 우선.</div>
         <div class="note warn"><span class="tag">카피 주의</span> "최저가·무조건" 등 과장·최상급 표현 금지(정책 §2.3).</div>
       </div>
@@ -221,19 +219,21 @@
   </section>
 
   <section class="screen">
-    <div class="screen-h"><span class="screen-no">O2</span><h2 class="screen-t">서비스 소개 (온보딩 슬라이드)</h2><span class="screen-flow">언어 → 소개 → 로그인</span></div>
+    <div class="screen-h"><span class="screen-no">O2</span><h2 class="screen-t">랜딩 · 서비스 소개</h2><span class="screen-flow">언어 → 랜딩 → 예약</span></div>
     <div class="cols">
       <div class="wf"><div class="wf-phone">
-        <div class="wf-bar" style="justify-content:flex-end;color:var(--muted);">건너뛰기</div>
-        <div class="wf-map" style="height:150px;margin-top:10px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;">일러스트 (지점 방문·여권)</div>
+        <div class="gnb"><span class="lg">MONEY BOX</span><span class="mn"><span>예약</span><span>조회</span><span>EN▾</span></span></div>
+        <div class="wf-map" style="height:130px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;">히어로 일러스트 (지점·여권)</div>
         <div class="wf-title" style="text-align:center;margin-top:12px;">가까운 지점에서 여권만 보여주면 환전 끝</div>
         <div class="wf-sub" style="text-align:center;">온라인 선결제 없이, 예약 후 수령일에 현장에서 환전</div>
-        <div style="display:flex;gap:6px;justify-content:center;margin:10px 0;"><span class="dot" style="background:var(--blue)"></span><span class="dot" style="background:var(--wire)"></span><span class="dot" style="background:var(--wire)"></span></div>
-        <div class="wf-bar blue tall">다음</div>
+        <div class="wf-bar blue tall" style="margin-top:8px;">예약 시작하기</div>
+        <div class="wf-bar" style="margin-top:8px;justify-content:center;">예약 조회하기</div>
+        <div class="wf-legend" style="justify-content:center;margin-top:8px;"><span>가까움</span> · <span>간편</span> · <span>신뢰</span></div>
       </div></div>
       <div class="notes">
-        <div class="note"><span class="tag">메시징</span> 핵심은 <b>가까움·간편·신뢰</b>. 2~3장 슬라이드(① 가까운 지점 ② 무결제 예약 ③ 회원 혜택).</div>
-        <div class="note"><span class="tag">스킵</span> "건너뛰기"로 바로 로그인/게스트 단계로.</div>
+        <div class="note"><span class="tag">랜딩</span> 웹 랜딩 페이지 — 상단 GNB + 히어로 + <b>예약 시작</b> CTA. 아래로 스크롤하면 서비스 소개 섹션(가까운 지점·무결제·회원 혜택).</div>
+        <div class="note"><span class="tag">메시징</span> 핵심은 <b>가까움·간편·신뢰</b>. 환율은 보조(정책 §2.3 과장 표현 금지).</div>
+        <div class="note"><span class="tag">진입</span> "예약 시작하기" → 예약 플로우. "예약 조회하기" → 예약내역조회.</div>
       </div>
     </div>
   </section>
@@ -258,39 +258,38 @@
   </section>
 
   <section class="screen">
-    <div class="screen-h"><span class="screen-no">O4</span><h2 class="screen-t">위치 권한 요청</h2><span class="screen-flow">로그인 → 위치 권한 → 홈</span></div>
+    <div class="screen-h"><span class="screen-no">O4</span><h2 class="screen-t">위치 허용 (브라우저)</h2><span class="screen-flow">로그인 → 위치 허용 → 홈</span></div>
     <div class="cols">
       <div class="wf"><div class="wf-phone">
         <div class="wf-map" style="height:130px;margin-top:14px;"><div class="pin b" style="left:48%;top:44%;"></div></div>
         <div class="wf-title" style="text-align:center;margin-top:12px;">가까운 지점을 찾아드릴게요</div>
-        <div class="wf-sub" style="text-align:center;">위치 권한을 허용하면 내 주변 지점·무인기를 바로 보여드려요</div>
+        <div class="wf-sub" style="text-align:center;">브라우저 위치 권한을 허용하면 내 주변 지점·무인기를 바로 보여드려요</div>
         <div class="wf-bar blue tall" style="margin-top:8px;">위치 허용</div>
         <div class="wf-bar" style="margin-top:8px;justify-content:center;">나중에 하기</div>
       </div></div>
       <div class="notes">
-        <div class="note"><span class="tag">목적</span> GPS 기반 <b>가까운 지점순</b> 정렬(브릿지 개념과 동일). 거부해도 지역 선택으로 이용 가능.</div>
-        <div class="note"><span class="tag">선택</span> "나중에"도 홈 진입 가능 — 예약의 지점 찾기(R1)에서 재요청.</div>
+        <div class="note"><span class="tag">목적</span> <b>브라우저 위치 권한(Geolocation)</b>으로 가까운 지점순 정렬(브릿지 개념과 동일). 거부해도 지역 선택으로 이용 가능.</div>
+        <div class="note"><span class="tag">선택</span> "나중에"도 홈 진입 가능 — 예약의 지점 찾기(R1)에서 재요청. 지점 찾기 진입 시 자동 요청도 가능.</div>
       </div>
     </div>
   </section>
 
   <!-- ================= 홈 ================= -->
   <div class="surface-h" id="home">2. 홈</div>
-  <p class="surface-sub">앱의 대시보드. 현재 환율 참고 · 진행 중 예약 · 빠른 예약 · 가까운 지점.</p>
+  <p class="surface-sub">웹 홈. 현재 환율 참고 · 진행 중 예약 · 빠른 예약 · 가까운 지점.</p>
 
   <section class="screen">
-    <div class="screen-h"><span class="screen-no">H1</span><h2 class="screen-t">홈 대시보드</h2><span class="screen-flow">하단 탭 · 홈</span></div>
+    <div class="screen-h"><span class="screen-no">H1</span><h2 class="screen-t">홈</h2><span class="screen-flow">상단 메뉴 · 홈</span></div>
     <div class="cols">
       <div class="wf"><div class="wf-phone">
-        <div class="wf-bar" style="justify-content:space-between;"><b style="color:var(--ink)">안녕하세요 👋</b><span>🔔 · 한국어 ▾</span></div>
+        <div class="gnb"><span class="lg">MONEY BOX</span><span class="mn"><span class="on">홈</span><span>예약</span><span>조회</span><span>EN▾</span></span></div>
         <div class="wf-label">현재 환율 (참고)</div>
         <div class="rate3"><div>USD<b>1,380</b></div><div>JPY<b>8.9</b></div><div>CNY<b>190</b></div></div>
         <div class="wf-sub" style="margin:2px;">참고 시세 · 실제 적용은 수령일 지점 환율</div>
         <div class="hero-cta">환전 예약하기<small>가까운 지점에서 여권만 · 무결제</small></div>
         <div class="wf-label">진행 중 예약</div>
         <div class="card-live"><div class="ct">RSV-…0002 · 강남점 · 내일 수령 (D-1)</div><div class="wf-sub" style="margin:4px 0 0;">방문 예정이면 [방문 확정]을 눌러주세요 →</div></div>
-        <div class="promo">🎫 회원가입하고 우대·쿠폰 받기 (비회원 노출)</div>
-        <div class="tabbar"><div class="on"><span class="ti"></span>홈</div><div><span class="ti"></span>예약</div><div><span class="ti"></span>마이</div></div>
+        <div class="promo">회원가입하고 우대·쿠폰 받기 (비회원 노출)</div>
       </div></div>
       <div class="notes">
         <div class="note"><span class="tag">현재 환율</span> <b>참고 시세만</b> 표기 — 실제는 수령일 지점 환율(정책 §2.2). 홈은 예약 중 화면이 아니므로 참고 노출은 최소화.</div>
@@ -316,7 +315,6 @@
         <div class="wf-list-item" style="justify-content:space-between;">명동점 · 0.4km <span class="badge">예약 가능</span></div>
         <div class="wf-list-item" style="justify-content:space-between;">강남점 · 1.2km <span class="badge">예약 가능</span></div>
         <div class="wf-list-item" style="justify-content:space-between;color:#0a9488;">머니24h 명동 눈스퀘어 · 0.5km <span>24시간 · 안내</span></div>
-        <div class="tabbar"><div><span class="ti"></span>홈</div><div class="on"><span class="ti"></span>예약</div><div><span class="ti"></span>마이</div></div>
       </div></div>
       <div class="notes">
         <div class="note ok"><span class="tag">통합</span> 별도 위치 탭 없이 <b>예약 탭 안에서 지점 찾기</b>. 지도+검색+가까운 지점 리스트를 한 화면에.</div>
@@ -473,7 +471,7 @@
   <p class="surface-sub">회원=프로필·내 예약·쿠폰·알림·설정 / 비회원=로그인 유도·예약번호 조회.</p>
 
   <section class="screen">
-    <div class="screen-h"><span class="screen-no">M1</span><h2 class="screen-t">마이페이지 (회원 / 비회원)</h2><span class="screen-flow">하단 탭 · 마이</span></div>
+    <div class="screen-h"><span class="screen-no">M1</span><h2 class="screen-t">마이페이지 (회원 / 비회원)</h2><span class="screen-flow">상단 메뉴 · 마이</span></div>
     <div class="cols">
       <div class="wf"><div class="wf-duo">
         <div>
@@ -485,7 +483,6 @@
             <div class="mrow"><span class="mi"></span>환율 알림 설정<span class="arr">›</span></div>
             <div class="mrow"><span class="mi"></span>언어 설정 · 한국어<span class="arr">›</span></div>
             <div class="mrow"><span class="mi"></span>로그아웃<span class="arr">›</span></div>
-            <div class="tabbar"><div><span class="ti"></span>홈</div><div><span class="ti"></span>예약</div><div class="on"><span class="ti"></span>마이</div></div>
           </div>
         </div>
         <div>
@@ -497,7 +494,6 @@
             <div class="wf-input">RSV-… &nbsp;|&nbsp; 이메일</div>
             <div class="wf-bar" style="margin-top:6px;justify-content:center;">예약 조회</div>
             <div class="mrow" style="margin-top:8px;"><span class="mi"></span>언어 설정 · 한국어<span class="arr">›</span></div>
-            <div class="tabbar"><div><span class="ti"></span>홈</div><div><span class="ti"></span>예약</div><div class="on"><span class="ti"></span>마이</div></div>
           </div>
         </div>
       </div></div>
@@ -510,7 +506,7 @@
     </div>
   </section>
 
-  <p class="foot"><b>머니박스(Moneybox)</b> · 외국인 앱 화면설계서 · 실제 디자인 아님(기획 검토용) · 정책은 외국인서비스 정책 문서와 동일</p>
+  <p class="foot"><b>머니박스(Moneybox)</b> · 외국인 웹 화면설계서 · 실제 디자인 아님(기획 검토용) · 정책은 외국인서비스 정책 문서와 동일</p>
 </div>
 </body>
 </html>
