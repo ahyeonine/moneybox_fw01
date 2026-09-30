@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>외국인 앱 화면정의서</title>
+<meta name="description" content="머니박스 외국인 앱 화면정의서(Screen Definition Sheet) — 범례 + 대표 화면(알림 설정·금액 입력·내 예약 상세)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Sora:wght@600;700;800&display=swap">
+<style>
+  :root{
+    --blue:#1f6bff; --blue-dk:#1846b8; --blue-soft:#eaf1ff;
+    --bg:#eef3fb; --surface:#ffffff; --ink:#16204a; --muted:#6b7690;
+    --line:#dfe6f3; --wire:#c3ccde; --wirefill:#eef2f8;
+    --note:#fff6e6; --note-line:#f4d79a; --note-ink:#7a5a12; --dark:#16204a;
+    --shadow:0 10px 30px rgba(31,107,255,.10);
+    --kr:'Noto Sans KR',system-ui,sans-serif; --disp:'Sora','Noto Sans KR',sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+    --blue:#5c8dff; --blue-dk:#a9c4ff; --blue-soft:#1a2947;
+    --bg:#0c1020; --surface:#121933; --ink:#eaf0ff; --muted:#97a1bd;
+    --line:#263355; --wire:#35446e; --wirefill:#1a2340;
+    --note:#2a2410; --note-line:#5c4a1c; --note-ink:#e7cf92; --dark:#0a1024;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }}
+  :root[data-theme="dark"]{
+    --blue:#5c8dff; --blue-dk:#a9c4ff; --blue-soft:#1a2947;
+    --bg:#0c1020; --surface:#121933; --ink:#eaf0ff; --muted:#97a1bd;
+    --line:#263355; --wire:#35446e; --wirefill:#1a2340;
+    --note:#2a2410; --note-line:#5c4a1c; --note-ink:#e7cf92; --dark:#0a1024;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--kr);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 16px 72px;}
+  .head{background:linear-gradient(135deg,#3a86ff 0%,var(--blue) 55%,var(--blue-dk) 100%);border-radius:22px;padding:30px 28px;color:#fff;box-shadow:var(--shadow);}
+  .eyebrow{font-family:var(--disp);font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.85);margin:0 0 10px;}
+  .head h1{font-size:clamp(24px,5vw,32px);font-weight:900;letter-spacing:-.02em;margin:0 0 8px;}
+  .head p{font-size:14px;color:rgba(255,255,255,.92);margin:0;max-width:70ch;}
+  .toc{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;}
+  .toc a{font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:4px 11px;text-decoration:none;}
+
+  .surface-h{margin:34px 0 6px;padding-top:10px;border-top:2px solid var(--line);font-family:var(--disp);font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue-dk);}
+  .surface-sub{font-size:12.5px;color:var(--muted);margin:2px 0 0;}
+
+  /* 범례 카드 */
+  .legend{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-top:14px;}
+  .legend h4{font-family:var(--disp);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-dk);margin:14px 0 6px;}
+  .legend h4:first-child{margin-top:0;}
+
+  table.st{width:100%;border-collapse:collapse;font-size:12px;margin:2px 0;}
+  table.st th{background:var(--wirefill);color:var(--muted);text-align:left;font-weight:700;padding:6px 8px;border:1px solid var(--line);white-space:nowrap;vertical-align:top;}
+  table.st td{padding:6px 8px;border:1px solid var(--line);color:var(--ink);vertical-align:top;}
+  table.st td.k{background:var(--wirefill);color:var(--muted);font-weight:700;width:130px;white-space:nowrap;}
+  .pcode{font-family:var(--disp);font-size:10.5px;font-weight:700;color:var(--blue-dk);background:var(--blue-soft);border-radius:5px;padding:1px 6px;white-space:nowrap;}
+  .evt{font-family:var(--mono);font-size:11px;color:var(--ink);}
+  .pill{display:inline-block;font-size:10px;font-weight:700;border-radius:999px;padding:1px 8px;white-space:nowrap;}
+  .pill.on{background:#e7f6ec;color:#0a7d3c;} .pill.off{background:#f0f1f4;color:#8a93a8;} .pill.tbd{background:#fdf0e0;color:#c98a12;}
+  .chk{color:#b3352f;}
+
+  /* 스펙 카드 */
+  .spec{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);margin-top:16px;}
+  .spec-head{background:var(--dark);color:#fff;padding:12px 16px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .spec-id{font-family:var(--disp);font-weight:800;font-size:12px;background:var(--blue);border-radius:6px;padding:3px 9px;color:#fff;}
+  .spec-name{font-weight:800;font-size:15px;}
+  .spec-ver{margin-left:auto;font-size:11px;color:#aeb9dd;}
+  .spec-body{padding:16px;}
+  .spec-cols{display:grid;grid-template-columns:230px 1fr;gap:18px;align-items:start;}
+  @media(max-width:760px){.spec-cols{grid-template-columns:1fr;}}
+  .spec-sec{margin-top:16px;}
+  .spec-sec:first-child{margin-top:0;}
+  .spec-sec h4{font-family:var(--disp);font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--blue-dk);margin:0 0 6px;border-bottom:1px solid var(--line);padding-bottom:4px;}
+  .spec-ul{margin:0;padding-left:18px;font-size:12.5px;} .spec-ul li{margin:3px 0;}
+
+  /* 폰 목업(간단) */
+  .ph{max-width:230px;border:2px solid var(--wire);border-radius:22px;padding:12px;background:var(--surface);position:relative;}
+  .ph::before{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);width:54px;height:4px;border-radius:3px;background:var(--wire);opacity:.7;}
+  .ph-bar{height:30px;border-radius:7px;background:var(--wirefill);border:1px solid var(--wire);display:flex;align-items:center;padding:0 10px;font-size:11px;color:var(--muted);margin-top:6px;}
+  .ph-bar.blue{background:var(--blue);color:#fff;border-color:var(--blue);justify-content:center;font-weight:800;}
+  .ph-cap{text-align:center;font-size:10.5px;color:var(--muted);margin-top:8px;}
+  .ph-seg{display:flex;border:1px solid var(--wire);border-radius:8px;overflow:hidden;margin:6px 0;}
+  .ph-seg div{flex:1;text-align:center;font-size:10.5px;padding:6px;color:var(--muted);} .ph-seg div.on{background:var(--blue);color:#fff;font-weight:700;}
+  .ph-in{height:32px;border:1px solid var(--wire);border-radius:8px;display:flex;align-items:center;padding:0 10px;font-size:10.5px;color:var(--muted);margin:5px 0;}
+  .ph-sum{border:1px solid var(--wire);border-radius:8px;padding:6px 10px;margin:6px 0;}
+  .ph-sum .r{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);padding:2px 0;border-bottom:1px dashed var(--line);} .ph-sum .r:last-child{border-bottom:0;}
+  .ph-cmp{border:1px solid #d7e4fb;background:linear-gradient(180deg,#f2f7ff,#eaf1ff);border-radius:8px;padding:8px;margin:6px 0;font-size:10px;color:var(--blue-dk);}
+  .ph-cmp .cr{display:flex;justify-content:space-between;margin:3px 0;color:var(--muted);} .ph-cmp b{color:var(--blue-dk);}
+  .ph-row{display:flex;gap:6px;margin:6px 0;}
+  .ph-btn{flex:1;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+  .ph-btn.ok{background:#0a7d3c;color:#fff;} .ph-btn.dn{border:1px solid #e9a3a3;color:#b3352f;} .ph-btn.gh{border:1px solid var(--wire);color:var(--muted);}
+  .ph-note{border:1px solid var(--note-line);background:var(--note);border-radius:8px;padding:6px 9px;font-size:10px;color:var(--note-ink);margin:6px 0;}
+  .tgl{display:flex;align-items:center;gap:8px;border:1px solid var(--wire);border-radius:9px;padding:7px 10px;margin:6px 0;font-size:11px;color:var(--ink);}
+  .tgl .tt{flex:1;} .tgl .tt small{display:block;color:var(--muted);font-size:9.5px;}
+  .sw{width:32px;height:19px;border-radius:999px;background:var(--wire);position:relative;flex:0 0 auto;}
+  .sw.on{background:#34a769;} .sw::after{content:"";position:absolute;top:2px;width:15px;height:15px;border-radius:50%;background:#fff;left:2px;} .sw.on::after{left:15px;}
+  .ph-tab{display:flex;border-top:1px solid var(--wire);margin-top:8px;padding-top:7px;}
+  .ph-tab div{flex:1;text-align:center;font-size:9px;color:var(--muted);} .ph-tab div.on{color:var(--blue);font-weight:800;}
+
+  .foot{margin-top:34px;text-align:center;font-size:12px;color:var(--muted);}
+  .foot b{color:var(--ink);}
+  a.inl{color:var(--blue);text-decoration:none;font-weight:700;}
+  .head a.inl{color:#fff;text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <p class="eyebrow">MoneyBox · Foreign App · Screen Definition</p>
+    <h1>외국인 앱 화면정의서</h1>
+    <p>화면별 스펙 문서(Screen Definition Sheet). 각 화면의 기본 정보·적용 정책·화면 구성·인터랙션·문구(한/영)·이벤트 로그·개발 참고를 정의합니다. 이번 버전은 <b>범례 + 대표 화면 3종</b>(알림 설정 · 금액 입력 · 내 예약 상세)이며, 나머지 화면으로 확장할 수 있습니다. 화면 그림은 <a class="inl" href="app-screens.html">앱 화면설계서</a>, 정책은 외국인서비스 정책과 매핑됩니다.</p>
+    <div class="toc">
+      <a href="#legend">범례·규칙</a><a href="#s1">UI-FA-4200 알림 설정</a><a href="#s2">UI-FA-3300 금액 입력</a><a href="#s3">UI-FA-3600 내 예약 상세</a>
+    </div>
+  </header>
+
+  <!-- ================= 범례 ================= -->
+  <div class="surface-h" id="legend">범례 · 작성 규칙</div>
+  <p class="surface-sub">모든 화면정의서에 공통 적용되는 ID·정책 코드·이벤트·상태 표기 규칙.</p>
+  <div class="legend">
+    <h4>화면 ID 체계 — UI-FA-####</h4>
+    <table class="st">
+      <tr><th>구간</th><th>대역</th><th>예</th></tr>
+      <tr><td>온보딩</td><td>1000번대</td><td>UI-FA-1100 언어 선택</td></tr>
+      <tr><td>홈</td><td>2000번대</td><td>UI-FA-2000 홈 대시보드</td></tr>
+      <tr><td>예약</td><td>3000번대</td><td>UI-FA-3100 지점 찾기 · 3300 금액 · 3600 상세</td></tr>
+      <tr><td>마이페이지</td><td>4000번대</td><td>UI-FA-4000 마이 · 4200 알림 설정</td></tr>
+    </table>
+    <p class="surface-sub" style="margin-top:6px;">FA = Foreign App. 뒤 두 자리는 하위 화면·상태 순번. 화면설계서 라벨(R1·H1·M1 등)과 병기.</p>
+
+    <h4>정책 코드 — MB-POL-&lt;영역&gt;-## (외국인서비스 정책 § 매핑)</h4>
+    <table class="st">
+      <tr><th>정책 코드</th><th>정책 §</th><th>내용</th></tr>
+      <tr><td><span class="pcode">MB-POL-RATE-01</span></td><td>§2.1·2.2</td><td>예약 시 환율 미고정 · 수령일 지점 환율 적용</td></tr>
+      <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>§2.2</td><td>현재 환율은 예약 중 참고만 노출 · 완료·조회 화면 미노출</td></tr>
+      <tr><td><span class="pcode">MB-POL-RATE-03</span></td><td>§2.3</td><td>과장·최상급 표현 금지 · 특정 업권 미지목</td></tr>
+      <tr><td><span class="pcode">MB-POL-RSV-01</span></td><td>§5.1·6.3</td><td>무결제 예약 · 현장 현금 · 취소 수수료 없음</td></tr>
+      <tr><td><span class="pcode">MB-POL-RSV-02</span></td><td>§5.2</td><td>당일 예약 허용 · 수령일 상한은 본사 설정</td></tr>
+      <tr><td><span class="pcode">MB-POL-RSV-03</span></td><td>§5.6</td><td>지점·통화별 예약 수락 · 설정 통화만 노출</td></tr>
+      <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>§7.1</td><td>수령 전날·당일 방문 예정 확인 · 방문 확정/취소</td></tr>
+      <tr><td><span class="pcode">MB-POL-VISIT-02</span></td><td>§7.2</td><td>수령기한 경과 시 자동 취소(AUTO)</td></tr>
+      <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>§8.3</td><td>수령 전일 리마인더 · "예약 확인하기"→예약내역조회</td></tr>
+      <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>§3·9</td><td>회원 우대(현장 재량) · 비회원 예약 허용</td></tr>
+      <tr><td><span class="pcode">MB-POL-NOTI-01</span></td><td class="chk">신규(미확정)</td><td>거래 알림/마케팅 알림 분리 · 푸시 꺼도 이메일 발송</td></tr>
+    </table>
+
+    <h4>상태·이벤트 표기</h4>
+    <table class="st">
+      <tr><td class="k">상태 기본값</td><td><span class="pill on">기본 ON</span> <span class="pill off">기본 OFF</span> <span class="pill tbd">정책 미확정 · vN.N</span></td></tr>
+      <tr><td class="k">이벤트명</td><td><span class="evt">snake_case</span> — 진입은 <span class="evt">*_view</span>, 액션은 <span class="evt">동사</span>. 파라미터는 열로 명시</td></tr>
+      <tr><td class="k">체크포인트</td><td><span class="chk">빨간색</span> = 정책/법무 미결 또는 확인 필요 항목</td></tr>
+    </table>
+  </div>
+
+  <!-- ================= UI-FA-4200 알림 설정 ================= -->
+  <div class="surface-h" id="s1">UI-FA-4200 · 마이페이지 · 알림 설정</div>
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-4200</span><span class="spec-name">알림 설정</span><span class="spec-ver">v1.0 · 2026-09-30</span></div>
+    <div class="spec-body">
+      <div class="spec-cols">
+        <div>
+          <div class="ph">
+            <div class="ph-bar">← 알림 설정</div>
+            <div class="tgl"><span class="tt">예약 알림<small>거래 알림 · 수령 1시간·10분 전</small></span><span class="sw on"></span></div>
+            <div class="tgl"><span class="tt">환율 알림<small>v1.2 · 정책 미확정</small></span><span class="sw"></span></div>
+            <div class="tgl"><span class="tt">혜택·마케팅<small>광고 수신 동의</small></span><span class="sw"></span></div>
+            <div class="tgl"><span class="tt">근처 지점 알림<small>v1.2 · 정책 미확정</small></span><span class="sw"></span></div>
+            <div class="ph-note">푸시를 꺼도 예약 메일은 계속 발송됩니다</div>
+            <div class="ph-tab"><div>홈</div><div>예약</div><div class="on">마이</div></div>
+          </div>
+          <div class="ph-cap">마이 &gt; 알림 설정</div>
+        </div>
+        <div>
+          <div class="spec-sec"><h4>기본 정보</h4>
+            <table class="st">
+              <tr><td class="k">화면 ID</td><td>UI-FA-4200 (화면설계서 M1 하위)</td></tr>
+              <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+              <tr><td class="k">화면 경로</td><td>마이 &gt; 알림 설정</td></tr>
+              <tr><td class="k">디바이스</td><td>iPhone · 393 × 852 pt (모바일 세로 기준)</td></tr>
+              <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#my">앱 화면설계서 · 마이페이지</a></td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>적용 정책</h4>
+            <table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+              <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>푸시를 꺼도 예약·리마인더 이메일은 계속 발송</td></tr>
+              <tr><td><span class="pcode">MB-POL-NOTI-01</span></td><td>거래 알림/마케팅 알림 분리 · 알림 세부 정책 미확정</td></tr>
+              <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>환율 알림은 환율 미노출 정책과 충돌 → 정책 정리 후 설계</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>화면 구성</h4>
+            <table class="st"><tr><th>영역</th><th>내용</th></tr>
+              <tr><td>예약 알림</td><td><span class="pill on">기본 ON</span> 거래 알림 · 수령 예정 1시간 전·10분 전 사전 푸시</td></tr>
+              <tr><td>환율 알림</td><td><span class="pill off">기본 OFF</span> <span class="pill tbd">v1.2 · 정책 미확정</span></td></tr>
+              <tr><td>혜택·마케팅</td><td><span class="pill off">기본 OFF</span> 광고성 수신 동의 연동</td></tr>
+              <tr><td>근처 지점 알림</td><td><span class="pill off">기본 OFF</span> <span class="pill tbd">v1.2</span> 반경 300~500m · 72h 쿨다운 · 09~21시</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>Description</h4>
+            <ul class="spec-ul">
+              <li>예약 알림은 거래 알림이므로 광고 동의와 무관하게 기본 ON</li>
+              <li>마케팅 알림과 거래 알림을 분리</li>
+              <li>푸시 비활성 상태에서도 이메일은 발송됨을 명시</li>
+            </ul>
+          </div>
+          <div class="spec-sec"><h4>Check Point</h4>
+            <ul class="spec-ul">
+              <li><span class="chk">환율 알림은 환율 미노출 정책(MB-POL-RATE-02)과 충돌 — 정책 정리 후 설계</span></li>
+              <li><span class="chk">근처 지점 알림 = 광고성 푸시 표시 의무 법무 확인 선행 (미결)</span></li>
+              <li><span class="chk">예약 알림(거래 알림)을 끌 수 없게 할지 확인 필요</span></li>
+            </ul>
+          </div>
+          <div class="spec-sec"><h4>진입 · 다음 화면</h4>
+            <table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+              <tr><td>마이 탭 &gt; 알림 설정</td><td>토글 즉시 반영(별도 화면 없음)</td><td>뒤로 → 마이 탭</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>인터랙션</h4>
+            <table class="st"><tr><th>트리거</th><th>동작</th></tr>
+              <tr><td>토글 전환</td><td>서버 저장 · 즉시 반영</td></tr>
+              <tr><td>근처 지점 알림 ON</td><td>위치 '항상 허용' 권한 요청</td></tr>
+              <tr><td>예약 알림 OFF 시도</td><td>(정책 확정 전) 안내/제한 — 확인 필요</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>문구</h4>
+            <table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+              <tr><td>타이틀</td><td>알림 설정</td><td>Notifications</td></tr>
+              <tr><td>이메일 고지</td><td>푸시를 꺼도 예약 메일은 계속 발송됩니다</td><td>Emails are sent even if push is off</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>이벤트 로그</h4>
+            <table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+              <tr><td><span class="evt">noti_setting_view</span></td><td>진입</td><td>—</td></tr>
+              <tr><td><span class="evt">noti_toggle</span></td><td>토글 변경</td><td>type, value</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>개발 참고</h4>
+            <ul class="spec-ul">
+              <li>예약 알림은 거래 알림 → 끌 수 없게 할지 확인 필요</li>
+              <li>근처 지점 알림·환율 알림은 정책 미확정으로 v1.2 이후 구현</li>
+              <li>비회원도 마이 탭에서 푸시 설정에 접근 가능</li>
+              <li>예약 사전 푸시 = 수령 예정 시각 1시간 전·10분 전. 서버 시각 기준 이미 지난 시점은 소급 발송하지 않음</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= UI-FA-3300 금액 입력 ================= -->
+  <div class="surface-h" id="s2">UI-FA-3300 · 예약 · 금액 · 수령일</div>
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-3300</span><span class="spec-name">금액 · 수령일 (R3)</span><span class="spec-ver">v1.0 · 2026-09-30</span></div>
+    <div class="spec-body">
+      <div class="spec-cols">
+        <div>
+          <div class="ph">
+            <div class="ph-bar">← 명동점 · 금액 입력</div>
+            <div class="ph-seg"><div class="on">외화→원화</div><div>원화→외화</div></div>
+            <div class="ph-in">USD ▾ | 1,000</div>
+            <div class="ph-cmp"><div style="font-weight:800;margin-bottom:3px;">이 지점 기준 · 이만큼 더</div><div class="cr"><span>타 채널</span><b>≈ ₩2,800</b></div><div class="cr"><span>키오스크</span><b>≈ ₩5,600</b></div><div class="cr"><span>공항</span><b>≈ ₩11,200</b></div></div>
+            <div class="ph-in" style="border-style:dashed;border-color:var(--blue);color:var(--blue-dk);">현재 환율 참고로 보기 ▾</div>
+            <div class="ph-in">수령일 2026-09-30 (오늘) ▾</div>
+            <div class="ph-bar blue">다음</div>
+          </div>
+          <div class="ph-cap">예약 &gt; 지점 상세 &gt; 금액</div>
+        </div>
+        <div>
+          <div class="spec-sec"><h4>기본 정보</h4>
+            <table class="st">
+              <tr><td class="k">화면 ID</td><td>UI-FA-3300 (화면설계서 R3)</td></tr>
+              <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+              <tr><td class="k">화면 경로</td><td>예약 &gt; 지점 찾기 &gt; 지점 상세 &gt; 금액·수령일</td></tr>
+              <tr><td class="k">디바이스</td><td>iPhone · 393 × 852 pt</td></tr>
+              <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#reserve">앱 화면설계서 · 예약 R3</a></td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>적용 정책</h4>
+            <table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+              <tr><td><span class="pcode">MB-POL-RATE-01</span></td><td>예약 시 환율 미고정 · 수령일 지점 환율(rate=null·BOARD)</td></tr>
+              <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>현재 환율은 '참고로 보기'로만 · 예약 중에만 · 완료 화면 미노출</td></tr>
+              <tr><td><span class="pcode">MB-POL-RATE-03</span></td><td>비교는 예시 수치 · 은행 등 업권 미지목 · 최상급 표현 금지</td></tr>
+              <tr><td><span class="pcode">MB-POL-RSV-02</span></td><td>수령일 당일(오늘) 선택 허용 · 본사 상한 내</td></tr>
+              <tr><td><span class="pcode">MB-POL-RSV-03</span></td><td>통화 선택지는 지점 설정 통화만 노출</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>화면 구성</h4>
+            <table class="st"><tr><th>영역</th><th>내용</th></tr>
+              <tr><td>거래 방향</td><td>기본 외화→원화(BUY) · 토글로 원화→외화(SELL)</td></tr>
+              <tr><td>통화 · 금액</td><td>통화 선택(설정 통화만) · 양수 금액 · 한도 없음</td></tr>
+              <tr><td>지점별 이득 비교</td><td>금액 입력 시 노출(미입력 숨김) · 이 지점 기준 원화 이득 · 예시 수치</td></tr>
+              <tr><td>현재 환율 참고</td><td>'현재 환율 참고로 보기' 토글 · 예약 중에만 · 완료 미노출</td></tr>
+              <tr><td>수령 예정일</td><td>오늘(당일)부터 · 본사 상한 초과 시 선택 불가</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>Description</h4>
+            <ul class="spec-ul">
+              <li>환율은 예약 시 고정하지 않으므로 특정 원화 금액을 확정하는 문구 지양</li>
+              <li>비교는 이 지점 환율 기준 원화 이득(예시). 업권 미지목</li>
+              <li>수령일을 오늘로 선택 가능(당일 예약)</li>
+            </ul>
+          </div>
+          <div class="spec-sec"><h4>Check Point</h4>
+            <ul class="spec-ul">
+              <li><span class="chk">지점마다 환율이 달라 비교 수치 상이 → 지점 변경 시 재계산</span></li>
+              <li><span class="chk">현재 환율 노출은 예약 중에만 — 완료·조회 화면 일관 미노출 확인</span></li>
+            </ul>
+          </div>
+          <div class="spec-sec"><h4>진입 · 다음 화면</h4>
+            <table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+              <tr><td>R2 지점 상세 &gt; 이 지점으로 예약</td><td>R4 예약자 정보 (회원=R5 완료로 스킵)</td><td>뒤로 → R2 지점 상세</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>인터랙션</h4>
+            <table class="st"><tr><th>트리거</th><th>동작</th></tr>
+              <tr><td>금액 입력</td><td>지점별 원화 이득 비교 노출(애니메이션)</td></tr>
+              <tr><td>'현재 환율 참고로 보기'</td><td>현재 환율 펼침 (예약 중 한정)</td></tr>
+              <tr><td>방향 토글</td><td>BUY/SELL 전환</td></tr>
+              <tr><td>통화 선택</td><td>지점 미설정 통화는 비활성</td></tr>
+              <tr><td>다음</td><td>입력 검증 → 예약자 정보(또는 회원 완료)</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>문구</h4>
+            <table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+              <tr><td>타이틀</td><td>금액 입력</td><td>Enter amount</td></tr>
+              <tr><td>환율 안내</td><td>예약 시 환율 미고정 · 수령일 지점 환율 적용</td><td>Rate is set on the pickup day at the branch</td></tr>
+              <tr><td>비교</td><td>이 지점 기준 이만큼 더 받아요</td><td>You get this much more at this branch</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>이벤트 로그</h4>
+            <table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+              <tr><td><span class="evt">rsv_amount_view</span></td><td>진입</td><td>branch_id</td></tr>
+              <tr><td><span class="evt">rsv_amount_input</span></td><td>금액 입력</td><td>currency, amount, direction</td></tr>
+              <tr><td><span class="evt">rsv_rate_reveal</span></td><td>현재 환율 보기</td><td>branch_id</td></tr>
+              <tr><td><span class="evt">rsv_amount_next</span></td><td>다음</td><td>currency, amount, pickup_date</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>개발 참고</h4>
+            <ul class="spec-ul">
+              <li>비교 수치는 지점 환율 계수 기반(지점별 상이). 완료·조회에는 환율 수치 미기록</li>
+              <li>예약 생성 시 rate=null(BOARD) · transactionType에 방향 기록</li>
+              <li>수령일 상한(maxWindowDays)은 본사 설정값을 즉시 반영</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= UI-FA-3600 내 예약 상세 ================= -->
+  <div class="surface-h" id="s3">UI-FA-3600 · 예약 · 내 예약 상세</div>
+  <div class="spec">
+    <div class="spec-head"><span class="spec-id">UI-FA-3600</span><span class="spec-name">내 예약 상세 (R6)</span><span class="spec-ver">v1.0 · 2026-09-30</span></div>
+    <div class="spec-body">
+      <div class="spec-cols">
+        <div>
+          <div class="ph">
+            <div class="ph-bar">← 예약 상세 · D-1</div>
+            <div class="ph-sum"><div class="r"><span>지점</span><span>명동점</span></div><div class="r"><span>수령일</span><span>내일</span></div><div class="r"><span>통화/금액</span><span>USD 1,000</span></div><div class="r"><span>환율</span><span>수령일 환율</span></div></div>
+            <div class="ph-note">수령 임박 · 방문 예정이면 방문 확정</div>
+            <div class="ph-row"><div class="ph-btn ok">방문 확정</div><div class="ph-btn dn">예약 취소</div></div>
+            <div class="ph-cap" style="margin-top:2px;">상태: 전날·당일(D-1~D-0)</div>
+          </div>
+          <div class="ph-cap">홈/마이 &gt; 내 예약 &gt; 상세</div>
+        </div>
+        <div>
+          <div class="spec-sec"><h4>기본 정보</h4>
+            <table class="st">
+              <tr><td class="k">화면 ID</td><td>UI-FA-3600 (화면설계서 R6)</td></tr>
+              <tr><td class="k">배포 버전</td><td>1.0</td></tr>
+              <tr><td class="k">화면 경로</td><td>홈 진행중 예약 / 마이 내 예약 / 리마인더 메일 → 상세</td></tr>
+              <tr><td class="k">디바이스</td><td>iPhone · 393 × 852 pt</td></tr>
+              <tr><td class="k">와이어프레임</td><td><a class="inl" href="app-screens.html#reserve">앱 화면설계서 · 예약 R6</a></td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>적용 정책</h4>
+            <table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
+              <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>수령 전날·당일(D-1~D-0)엔 방문 확정/취소(변경 불가)</td></tr>
+              <tr><td><span class="pcode">MB-POL-VISIT-02</span></td><td>수령기한 경과 시 자동 취소(AUTO)</td></tr>
+              <tr><td><span class="pcode">MB-POL-RSV-01</span></td><td>취소 수수료 없음(무결제) · 수령기한 전 취소 가능</td></tr>
+              <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>리마인더 '예약 확인하기' → 이 상세로 진입해 확정/취소</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>화면 구성 (상태별 버튼)</h4>
+            <table class="st"><tr><th>상태</th><th>버튼 · 표시</th></tr>
+              <tr><td>여유 (D-2 이상)</td><td>[예약 변경] [예약 취소]</td></tr>
+              <tr><td>임박 (D-1~D-0)</td><td>안내 문구 + [방문 확정] [예약 취소] (변경 불가)</td></tr>
+              <tr><td>확정 완료</td><td>확정 안내 + [예약 취소]</td></tr>
+              <tr><td>완료/취소</td><td>버튼 없이 안내만 (변경·취소 불가)</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>Description</h4>
+            <ul class="spec-ul">
+              <li>수령 임박 구간엔 변경 대신 방문 확정/취소를 제공</li>
+              <li>리마인더 메일 '예약 확인하기' → 이 상세로 진입 (상태 변경 일원화)</li>
+              <li>취소·방문 확정은 이 화면에서만 처리</li>
+            </ul>
+          </div>
+          <div class="spec-sec"><h4>Check Point</h4>
+            <ul class="spec-ul">
+              <li><span class="chk">방문 확정 시점에 가용 시재 재확인·차감(동시성) → 소진 시 안내</span></li>
+              <li><span class="chk">'변경 불가' 경계(D-1 기준 시각) 확정 필요</span></li>
+            </ul>
+          </div>
+          <div class="spec-sec"><h4>진입 · 다음 화면</h4>
+            <table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
+              <tr><td>홈 진행중 카드 / 마이 내 예약 / 리마인더 메일 링크</td><td>변경(R3) · 취소 완료 · 방문 확정 완료</td><td>뒤로 → 내 예약 목록</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>인터랙션</h4>
+            <table class="st"><tr><th>트리거</th><th>동작</th></tr>
+              <tr><td>[방문 확정]</td><td>시재 재확인·차감 → 확정. 실패 시 SOLD_OUT 안내</td></tr>
+              <tr><td>[예약 취소]</td><td>확인 모달 → 취소 + 고객취소 안내 메일 발송</td></tr>
+              <tr><td>[예약 변경]</td><td>R3 금액 단계로 (여유 구간만)</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>문구</h4>
+            <table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
+              <tr><td>타이틀</td><td>예약 상세</td><td>Reservation</td></tr>
+              <tr><td>임박 안내</td><td>수령이 임박했어요. 방문 예정이면 방문 확정을 눌러주세요</td><td>Pickup is near. Tap Confirm visit if you're coming</td></tr>
+              <tr><td>확정 완료</td><td>방문 예정이 확정됐어요</td><td>Visit confirmed</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>이벤트 로그</h4>
+            <table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
+              <tr><td><span class="evt">rsv_detail_view</span></td><td>진입</td><td>reservation_no, days_until</td></tr>
+              <tr><td><span class="evt">rsv_visit_confirm</span></td><td>방문 확정</td><td>reservation_no, result</td></tr>
+              <tr><td><span class="evt">rsv_cancel</span></td><td>취소</td><td>reservation_no</td></tr>
+              <tr><td><span class="evt">rsv_edit_open</span></td><td>변경 진입</td><td>reservation_no</td></tr>
+            </table>
+          </div>
+          <div class="spec-sec"><h4>개발 참고</h4>
+            <ul class="spec-ul">
+              <li>버튼 상태 = f(status, reminderStatus, daysBetween(today, pickupDate)). editable = status BOOKED</li>
+              <li>방문 확정 = confirmVisit(), 취소 = cancelReservation() + customerCancel 메일</li>
+              <li>완료/취소 상태는 조회만, 액션 버튼 미노출</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot"><b>머니박스(Moneybox)</b> · 외국인 앱 화면정의서 · 기획 검토용 · 정책은 외국인서비스 정책 문서와 매핑</p>
+</div>
+</body>
+</html>
