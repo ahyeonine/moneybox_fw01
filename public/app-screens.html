@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>외국인 앱 화면설계서</title>
-<meta name="description" content="머니박스 외국인 앱 화면설계서 — 앱 전체 플로우·온보딩·홈·예약·위치 안내·마이페이지 (화면 + 라벨)">
+<meta name="description" content="머니박스 외국인 앱 화면설계서 — 앱 전체 플로우·온보딩·홈·예약·마이페이지 (화면 + 라벨)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Sora:wght@600;700;800&display=swap">
@@ -156,15 +156,15 @@
   <header class="head">
     <p class="eyebrow">MoneyBox · Foreign App</p>
     <h1>외국인 앱 화면설계서</h1>
-    <p>머니박스 외국인 앱(모바일)의 화면설계서. 앱 전체 플로우 → 온보딩 · 홈 · 예약 · 위치 안내 · 마이페이지로 나눴습니다. 왼쪽은 화면 배치, 오른쪽은 알아야 할 사항(라벨). 실제 디자인이 아닌 기획 검토용이며, 환전예약 서비스 정책과 동일합니다.</p>
+    <p>머니박스 외국인 앱(모바일)의 화면설계서. 앱 전체 플로우 → 온보딩 · 홈 · 예약 · 마이페이지로 나눴습니다. 지점 지도·무인기 안내·지점 상세는 예약 플로우에 통합했습니다. 왼쪽은 화면 배치, 오른쪽은 알아야 할 사항(라벨). 실제 디자인이 아닌 기획 검토용이며, 환전예약 서비스 정책과 동일합니다.</p>
     <div class="toc">
-      <a href="#flow">앱 전체 플로우</a><a href="#onboard">온보딩</a><a href="#home">홈</a><a href="#reserve">예약</a><a href="#location">위치 안내</a><a href="#my">마이페이지</a>
+      <a href="#flow">앱 전체 플로우</a><a href="#onboard">온보딩</a><a href="#home">홈</a><a href="#reserve">예약</a><a href="#my">마이페이지</a>
     </div>
   </header>
 
   <!-- ================= 앱 전체 플로우 ================= -->
   <div class="surface-h" id="flow">앱 전체 플로우</div>
-  <p class="surface-sub">스플래시 → 온보딩 → 홈(하단 4탭). 각 탭에서 예약·위치·마이페이지로 분기.</p>
+  <p class="surface-sub">스플래시 → 온보딩 → 홈(하단 3탭). 각 탭에서 예약·마이페이지로 분기. 지점 지도·무인기·지점 상세는 예약에 통합.</p>
 
   <section class="screen">
     <div class="cols">
@@ -182,15 +182,14 @@
           </div>
           <div class="flowsub appflow">
             <div class="flowrow"><span class="flowtab">홈</span><span class="flowar">·</span><span style="font-size:12px;color:var(--muted)">현재 환율 참고 · 진행 중 예약 · 빠른 예약 · 가까운 지점</span></div>
-            <div class="flowrow"><span class="flowtab">예약</span><span class="flowar">→</span><span class="flowbox">지점</span><span class="flowar">→</span><span class="flowbox">금액·수령일</span><span class="flowar">→</span><span class="flowbox">예약자 정보</span><span class="flowar">→</span><span class="flowbox">완료</span><span class="flowar">→</span><span class="flowbox">내 예약 상세</span></div>
-            <div class="flowrow"><span class="flowtab">위치</span><span class="flowar">→</span><span class="flowbox">지도(지점·무인기)</span><span class="flowar">→</span><span class="flowbox">지점 상세</span><span class="flowar">→</span><span class="flowbox">이 지점으로 예약</span></div>
+            <div class="flowrow"><span class="flowtab">예약</span><span class="flowar">→</span><span class="flowbox">지점 지도<br><span style="font-weight:400;font-size:10.5px;color:var(--muted)">지점·무인기</span></span><span class="flowar">→</span><span class="flowbox">지점 상세</span><span class="flowar">→</span><span class="flowbox">금액·수령일</span><span class="flowar">→</span><span class="flowbox">예약자 정보</span><span class="flowar">→</span><span class="flowbox">완료</span><span class="flowar">→</span><span class="flowbox">내 예약 상세</span></div>
             <div class="flowrow"><span class="flowtab">마이</span><span class="flowar">→</span><span class="flowbox">내 예약 · 쿠폰 · 환율 알림 · 언어 설정</span></div>
           </div>
         </div>
       </div>
       <div class="notes">
         <div class="note"><span class="tag">진입</span> 통합웹에서 외국어 선택 시 외국인 웹으로, 앱은 <b>스토어 설치 후 최초 실행</b> 시 온보딩. 국내 고객은 통합웹.</div>
-        <div class="note"><span class="tag">네비게이션</span> 홈 진입 후에는 <b>하단 4탭</b>(홈·예약·위치·마이)으로 이동. 예약/위치/마이는 어디서나 접근.</div>
+        <div class="note"><span class="tag">네비게이션</span> 홈 진입 후에는 <b>하단 3탭</b>(홈·예약·마이). 지점 찾기·무인기 안내는 <b>예약 탭 안</b>으로 통합(별도 위치 탭 없음).</div>
         <div class="note"><span class="tag">게스트</span> 로그인 없이도 예약 가능(비회원). 마이페이지·쿠폰·환율 알림 등은 회원 기능.</div>
         <div class="note"><span class="tag">정책 연동</span> 예약·환율·수령·취소 규칙은 <b>외국인서비스 정책</b>과 동일(환율 미고정·수령일 지점 환율·무결제 예약 등).</div>
       </div>
@@ -270,7 +269,7 @@
       </div></div>
       <div class="notes">
         <div class="note"><span class="tag">목적</span> GPS 기반 <b>가까운 지점순</b> 정렬(브릿지 개념과 동일). 거부해도 지역 선택으로 이용 가능.</div>
-        <div class="note"><span class="tag">선택</span> "나중에"도 홈 진입 가능 — 위치 탭에서 재요청.</div>
+        <div class="note"><span class="tag">선택</span> "나중에"도 홈 진입 가능 — 예약의 지점 찾기(R1)에서 재요청.</div>
       </div>
     </div>
   </section>
@@ -291,7 +290,7 @@
         <div class="wf-label">진행 중 예약</div>
         <div class="card-live"><div class="ct">RSV-…0002 · 강남점 · 내일 수령 (D-1)</div><div class="wf-sub" style="margin:4px 0 0;">방문 예정이면 [방문 확정]을 눌러주세요 →</div></div>
         <div class="promo">🎫 회원가입하고 우대·쿠폰 받기 (비회원 노출)</div>
-        <div class="tabbar"><div class="on"><span class="ti"></span>홈</div><div><span class="ti"></span>예약</div><div><span class="ti"></span>위치</div><div><span class="ti"></span>마이</div></div>
+        <div class="tabbar"><div class="on"><span class="ti"></span>홈</div><div><span class="ti"></span>예약</div><div><span class="ti"></span>마이</div></div>
       </div></div>
       <div class="notes">
         <div class="note"><span class="tag">현재 환율</span> <b>참고 시세만</b> 표기 — 실제는 수령일 지점 환율(정책 §2.2). 홈은 예약 중 화면이 아니므로 참고 노출은 최소화.</div>
@@ -304,29 +303,50 @@
 
   <!-- ================= 예약 ================= -->
   <div class="surface-h" id="reserve">3. 예약</div>
-  <p class="surface-sub">환전예약 플로우 — 지점 → 금액·수령일 → 예약자 정보 → 완료 → 내 예약 상세. (정책 동일)</p>
+  <p class="surface-sub">환전예약 플로우 — 지점 지도 → 지점 상세 → 금액·수령일 → 예약자 정보 → 완료 → 내 예약 상세. 지점 찾기·무인기 안내를 이 플로우에 통합. (정책 동일)</p>
 
   <section class="screen">
-    <div class="screen-h"><span class="screen-no">R1</span><h2 class="screen-t">지점 선택 (지도)</h2><span class="screen-flow">예약 → <b>지점</b> → 금액</span></div>
+    <div class="screen-h"><span class="screen-no">R1</span><h2 class="screen-t">지점 찾기 (지도 · 무인기 통합)</h2><span class="screen-flow">예약 → <b>지점</b> → 상세</span></div>
     <div class="cols">
       <div class="wf"><div class="wf-phone">
-        <div class="wf-bar" style="justify-content:space-between;"><b style="color:var(--ink)">지점 선택</b><span>서울 ▾</span></div>
-        <div class="wf-map" style="margin-top:10px;"><div class="pin b" style="left:38%;top:32%;"></div><div class="pin b" style="left:60%;top:52%;"></div><div class="pin k" style="left:24%;top:64%;"></div><div class="pin k" style="left:72%;top:30%;"></div></div>
-        <div class="wf-legend"><span><span class="dot" style="background:var(--blue)"></span>지점(예약)</span><span><span class="dot" style="background:#2dd4bf"></span>무인기(위치 안내)</span></div>
+        <div class="wf-bar" style="justify-content:space-between;"><b style="color:var(--ink)">지점 찾기</b><span>📍 서울 ▾</span></div>
+        <div class="wf-input" style="margin-top:8px;">지점명·지역 검색</div>
+        <div class="wf-map" style="margin-top:6px;"><div class="pin b" style="left:38%;top:32%;"></div><div class="pin b" style="left:60%;top:52%;"></div><div class="pin k" style="left:24%;top:64%;"></div><div class="pin k" style="left:72%;top:30%;"></div></div>
+        <div class="wf-legend"><span><span class="dot" style="background:var(--blue)"></span>지점(예약·수령)</span><span><span class="dot" style="background:#2dd4bf"></span>무인기 머니24h(안내)</span></div>
         <div class="wf-list-item" style="justify-content:space-between;">명동점 · 0.4km <span class="badge">예약 가능</span></div>
         <div class="wf-list-item" style="justify-content:space-between;">강남점 · 1.2km <span class="badge">예약 가능</span></div>
-        <div class="tabbar"><div><span class="ti"></span>홈</div><div class="on"><span class="ti"></span>예약</div><div><span class="ti"></span>위치</div><div><span class="ti"></span>마이</div></div>
+        <div class="wf-list-item" style="justify-content:space-between;color:#0a9488;">머니24h 명동 눈스퀘어 · 0.5km <span>24시간 · 안내</span></div>
+        <div class="tabbar"><div><span class="ti"></span>홈</div><div class="on"><span class="ti"></span>예약</div><div><span class="ti"></span>마이</div></div>
       </div></div>
       <div class="notes">
-        <div class="note"><span class="tag">지도</span> 지점(파란)·<b>무인기 머니24h(청록)</b> 표시. 무인기는 <b>위치 안내용</b> — 예약·수령 불가(정책 §5.5).</div>
-        <div class="note"><span class="tag">정렬</span> 위치 허용 시 <b>가까운 순</b>. 지역 필터(서울·부산·그 외)로도 선택.</div>
-        <div class="note"><span class="tag">선택</span> 지점 핀/목록 → 금액 단계로. 위치 탭 상세에서 "이 지점으로 예약"으로도 진입.</div>
+        <div class="note ok"><span class="tag">통합</span> 별도 위치 탭 없이 <b>예약 탭 안에서 지점 찾기</b>. 지도+검색+가까운 지점 리스트를 한 화면에.</div>
+        <div class="note"><span class="tag">지도</span> 지점(파란)·<b>무인기 머니24h(청록)</b> 함께 표시. 무인기는 <b>위치 안내용</b> — 예약·수령 불가(정책 §5.5). 무인기 마커/항목은 위치 팝업만.</div>
+        <div class="note"><span class="tag">정렬</span> 위치 허용 시 <b>가까운 순</b>. 지역 필터(서울·부산·그 외)·검색으로도 선택.</div>
+        <div class="note"><span class="tag">선택</span> 지점 핀/목록 → <b>지점 상세(R2)</b>로. 홈 "빠른 예약"·마이 재예약은 이 단계를 건너뛰고 바로 진입 가능.</div>
       </div>
     </div>
   </section>
 
   <section class="screen">
-    <div class="screen-h"><span class="screen-no">R2</span><h2 class="screen-t">금액 · 수령일</h2><span class="screen-flow">지점 → <b>금액</b> → 정보</span></div>
+    <div class="screen-h"><span class="screen-no">R2</span><h2 class="screen-t">지점 상세</h2><span class="screen-flow">지점 → <b>상세</b> → 금액</span></div>
+    <div class="cols">
+      <div class="wf"><div class="wf-phone">
+        <div class="wf-bar">← 명동점</div>
+        <div class="wf-map" style="height:120px;margin-top:10px;"><div class="pin b" style="left:48%;top:44%;"></div></div>
+        <div class="summary" style="margin-top:10px;"><div class="sr"><span>주소</span><span>서울 중구 명동8길 27</span></div><div class="sr"><span>영업시간</span><span>09:00–21:00</span></div><div class="sr"><span>취급 통화</span><span>USD·JPY·CNY·EUR…</span></div></div>
+        <div class="wf-row"><div class="wf-bar" style="flex:1;justify-content:center;">길찾기</div><div class="wf-bar" style="flex:1;justify-content:center;">전화</div></div>
+        <div class="wf-bar blue tall">이 지점으로 예약하기</div>
+      </div></div>
+      <div class="notes">
+        <div class="note"><span class="tag">정보</span> 주소·영업시간·미니맵·길찾기·전화. <b>취급 통화는 지점·통화별 설정</b> 반영(정책 §5.6) — 설정 통화만 표시.</div>
+        <div class="note"><span class="tag">전환</span> "이 지점으로 예약하기" → 금액 단계(R3)로. 지점 정보를 확인하고 바로 예약 시작.</div>
+        <div class="note"><span class="tag">무인기</span> 무인기(머니24h) 선택 시엔 예약 버튼 없이 <b>위치·운영시간 안내만</b> 표시.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen">
+    <div class="screen-h"><span class="screen-no">R3</span><h2 class="screen-t">금액 · 수령일</h2><span class="screen-flow">상세 → <b>금액</b> → 정보</span></div>
     <div class="cols">
       <div class="wf"><div class="wf-phone">
         <div class="wf-bar">← 명동점 · 금액 입력</div>
@@ -355,7 +375,7 @@
   </section>
 
   <section class="screen">
-    <div class="screen-h"><span class="screen-no">R3</span><h2 class="screen-t">예약자 정보 · 간편가입</h2><span class="screen-flow">금액 → <b>정보</b> → 완료 <span style="opacity:.7">(회원 건너뜀)</span></span></div>
+    <div class="screen-h"><span class="screen-no">R4</span><h2 class="screen-t">예약자 정보 · 간편가입</h2><span class="screen-flow">금액 → <b>정보</b> → 완료 <span style="opacity:.7">(회원 건너뜀)</span></span></div>
     <div class="cols">
       <div class="wf"><div class="wf-phone">
         <div class="wf-bar">← 예약자 정보</div>
@@ -375,7 +395,7 @@
   </section>
 
   <section class="screen">
-    <div class="screen-h"><span class="screen-no">R4</span><h2 class="screen-t">예약 완료 — 비회원 / 회원 분기</h2><span class="screen-flow">정보 → <b>완료</b></span></div>
+    <div class="screen-h"><span class="screen-no">R5</span><h2 class="screen-t">예약 완료 — 비회원 / 회원 분기</h2><span class="screen-flow">정보 → <b>완료</b></span></div>
     <div class="cols">
       <div class="wf"><div class="wf-duo">
         <div>
@@ -410,7 +430,7 @@
   </section>
 
   <section class="screen">
-    <div class="screen-h"><span class="screen-no">R5</span><h2 class="screen-t">내 예약 상세 — 시점별 버튼</h2><span class="screen-flow">홈/마이 · 내 예약 → 상세</span></div>
+    <div class="screen-h"><span class="screen-no">R6</span><h2 class="screen-t">내 예약 상세 — 시점별 버튼</h2><span class="screen-flow">홈/마이 · 내 예약 → 상세</span></div>
     <div class="cols">
       <div class="wf"><div class="wf-duo" style="gap:10px;">
         <div>
@@ -448,48 +468,8 @@
     </div>
   </section>
 
-  <!-- ================= 위치 안내 ================= -->
-  <div class="surface-h" id="location">4. 위치 안내</div>
-  <p class="surface-sub">지점·무인기(머니24h) 지도와 지점 상세. 무인기는 위치 안내용(예약·수령 불가).</p>
-
-  <section class="screen">
-    <div class="screen-h"><span class="screen-no">L1</span><h2 class="screen-t">지도 (지점 · 무인기)</h2><span class="screen-flow">하단 탭 · 위치</span></div>
-    <div class="cols">
-      <div class="wf"><div class="wf-phone">
-        <div class="wf-bar" style="justify-content:space-between;"><b style="color:var(--ink)">주변 지점</b><span>📍 내 위치</span></div>
-        <div class="wf-map" style="margin-top:10px;height:200px;"><div class="pin b" style="left:40%;top:30%;"></div><div class="pin b" style="left:62%;top:50%;"></div><div class="pin k" style="left:26%;top:62%;"></div><div class="pin k" style="left:70%;top:28%;"></div></div>
-        <div class="wf-legend"><span><span class="dot" style="background:var(--blue)"></span>지점(예약·수령)</span><span><span class="dot" style="background:#2dd4bf"></span>무인기(위치 안내)</span></div>
-        <div class="wf-list-item" style="justify-content:space-between;">명동점 · 0.4km <span>09–21시</span></div>
-        <div class="wf-list-item" style="justify-content:space-between;">머니24h 명동 눈스퀘어 · 0.5km <span>24시간</span></div>
-        <div class="tabbar"><div><span class="ti"></span>홈</div><div><span class="ti"></span>예약</div><div class="on"><span class="ti"></span>위치</div><div><span class="ti"></span>마이</div></div>
-      </div></div>
-      <div class="notes">
-        <div class="note"><span class="tag">두 종류</span> 지점(파란)=예약·수령 / <b>무인기 머니24h(청록)=위치 안내용</b>, 예약·수령 불가. 마커 클릭 시 위치 팝업(24시간·예약 불가).</div>
-        <div class="note"><span class="tag">정렬</span> 위치 허용 시 가까운 순. 미허용 시 지역 선택.</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="screen">
-    <div class="screen-h"><span class="screen-no">L2</span><h2 class="screen-t">지점 상세</h2><span class="screen-flow">지도/목록 → 지점</span></div>
-    <div class="cols">
-      <div class="wf"><div class="wf-phone">
-        <div class="wf-bar">← 명동점</div>
-        <div class="wf-map" style="height:120px;margin-top:10px;"><div class="pin b" style="left:48%;top:44%;"></div></div>
-        <div class="summary" style="margin-top:10px;"><div class="sr"><span>주소</span><span>서울 중구 명동8길 27</span></div><div class="sr"><span>영업시간</span><span>09:00–21:00</span></div><div class="sr"><span>취급 통화</span><span>USD·JPY·CNY·EUR…</span></div></div>
-        <div class="wf-row"><div class="wf-bar" style="flex:1;justify-content:center;">길찾기</div><div class="wf-bar" style="flex:1;justify-content:center;">전화</div></div>
-        <div class="wf-bar blue tall">이 지점으로 예약하기</div>
-      </div></div>
-      <div class="notes">
-        <div class="note"><span class="tag">정보</span> 주소·영업시간·미니맵·길찾기·전화. <b>취급 통화는 지점·통화별 설정</b> 반영(정책 §5.6) — 설정 통화만 표시.</div>
-        <div class="note"><span class="tag">전환</span> "이 지점으로 예약하기" → 예약 플로우의 금액 단계로 바로 진입.</div>
-        <div class="note"><span class="tag">무인기 상세</span> 무인기 선택 시엔 예약 버튼 없이 <b>위치·운영시간 안내만</b>.</div>
-      </div>
-    </div>
-  </section>
-
   <!-- ================= 마이페이지 ================= -->
-  <div class="surface-h" id="my">5. 마이페이지</div>
+  <div class="surface-h" id="my">4. 마이페이지</div>
   <p class="surface-sub">회원=프로필·내 예약·쿠폰·알림·설정 / 비회원=로그인 유도·예약번호 조회.</p>
 
   <section class="screen">
@@ -505,7 +485,7 @@
             <div class="mrow"><span class="mi"></span>환율 알림 설정<span class="arr">›</span></div>
             <div class="mrow"><span class="mi"></span>언어 설정 · 한국어<span class="arr">›</span></div>
             <div class="mrow"><span class="mi"></span>로그아웃<span class="arr">›</span></div>
-            <div class="tabbar"><div><span class="ti"></span>홈</div><div><span class="ti"></span>예약</div><div><span class="ti"></span>위치</div><div class="on"><span class="ti"></span>마이</div></div>
+            <div class="tabbar"><div><span class="ti"></span>홈</div><div><span class="ti"></span>예약</div><div class="on"><span class="ti"></span>마이</div></div>
           </div>
         </div>
         <div>
@@ -517,12 +497,12 @@
             <div class="wf-input">RSV-… &nbsp;|&nbsp; 이메일</div>
             <div class="wf-bar" style="margin-top:6px;justify-content:center;">예약 조회</div>
             <div class="mrow" style="margin-top:8px;"><span class="mi"></span>언어 설정 · 한국어<span class="arr">›</span></div>
-            <div class="tabbar"><div><span class="ti"></span>홈</div><div><span class="ti"></span>예약</div><div><span class="ti"></span>위치</div><div class="on"><span class="ti"></span>마이</div></div>
+            <div class="tabbar"><div><span class="ti"></span>홈</div><div><span class="ti"></span>예약</div><div class="on"><span class="ti"></span>마이</div></div>
           </div>
         </div>
       </div></div>
       <div class="notes">
-        <div class="note"><span class="tag">회원</span> 프로필(회원 우대 배지)·내 예약·쿠폰·환율 알림·언어 설정·로그아웃. <b>내 예약 → R5 상세</b>로.</div>
+        <div class="note"><span class="tag">회원</span> 프로필(회원 우대 배지)·내 예약·쿠폰·환율 알림·언어 설정·로그아웃. <b>내 예약 → R6 상세</b>로.</div>
         <div class="note"><span class="tag">비회원</span> 로그인/회원가입 유도 + <b>예약번호+이메일 조회</b>(무로그인 조회, 정책 §10). 언어 설정은 공통.</div>
         <div class="note"><span class="tag">쿠폰</span> 회원 할인 쿠폰·환율 알림은 회원 전용. 지점·상권별 쿠폰은 CEMS 발급 연동(별도).</div>
         <div class="note warn"><span class="tag">프로토타입</span> 계정·비밀번호 미검증(데모). 실서비스는 기존 계정 체계 연동.</div>
