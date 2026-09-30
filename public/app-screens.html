@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이동 — 외국인 웹 화면설계서</title>
+<!-- app-screens.html → web-screens.html 로 파일명 변경. 이 페이지는 옛 링크 호환용 리다이렉트입니다. -->
+<script>
+  // 해시(#onboard 등)까지 유지해 이동
+  location.replace('web-screens.html' + (location.hash || ''));
+</script>
+<meta http-equiv="refresh" content="0; url=web-screens.html">
+<style>
+  body{margin:0;font-family:system-ui,'Noto Sans KR',sans-serif;background:#eef3fb;color:#16204a;
+       display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center;padding:24px;}
+  a{color:#1f6bff;font-weight:700;}
+</style>
+</head>
+<body>
+  <div>
+    <p>페이지가 <b>web-screens.html</b> 로 이동했습니다.</p>
+    <p>자동으로 넘어가지 않으면 <a href="web-screens.html">여기를 눌러주세요</a>.</p>
+  </div>
+</body>
+</html>
