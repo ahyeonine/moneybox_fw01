@@ -118,14 +118,10 @@ export default function LookupPage({ ctx } = {}) {
     setFlash({ type: 'success', msg: t('lookup.change.saved') })
   }
 
-  // 리마인더 "방문 예정" 확인 → 이 시점에 가용시재 재확인·차감(동시성). 재고 없으면 안내.
+  // 리마인더 "방문 예정" 확인 → 예약 확정(차감 예정 표시). 정책상 품절 거절 없이 항상 성공.
   function onConfirmVisit() {
     const res = confirmVisit(detailNo)
-    if (res.ok) {
-      setFlash({ type: 'success', msg: t('lookup.visitConfirmed.msg') })
-    } else if (res.reason === 'SOLD_OUT') {
-      setFlash({ type: 'danger', msg: t('lookup.visitSoldOut.msg') })
-    }
+    if (res.ok) setFlash({ type: 'success', msg: t('lookup.visitConfirmed.msg') })
   }
 
   return (
@@ -135,7 +131,7 @@ export default function LookupPage({ ctx } = {}) {
           '조회 방식: 회원=이메일+비밀번호 / 비회원=예약번호+이메일 (같은 이메일의 신청내역 전체 조회)',
           '프로토타입: 회원 비밀번호는 확인만(실계정 미연동), 조회는 이메일 일치로 처리',
           '"예약" 상태일 때만 취소/변경 가능',
-          '가용시재 차감(예약시재 반영)은 예약완료가 아니라 "방문 예정 확인" 시점에 발생 — 이 시점에 재고 재확인(동시성)',
+          '예약 접수는 시재와 무관(부족해도 접수·지점 조달). "방문 예정 확인"은 차감 예정 표시만, 실제 재고 차감은 수령(거래완료) 시점 — 품절 거절 없음',
           '자세히: 03_플로우.mermaid',
         ]}
       />

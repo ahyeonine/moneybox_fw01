@@ -216,9 +216,9 @@ export const SEED_RESERVATIONS = [
     createdAt: '2026-07-30T09:00:00+09:00',
     reminderStatus: 'CONFIRMED',
   }),
-  // ── 재고 경쟁 데모: 같은 지점·통화(B004+USD, 재고 1개)에 방문예정 미확인 예약 2건 ──
-  // 같은 이메일(rush@example.com)로 조회 → 첫 건 "방문 예정 확인" 성공(재고 1→0),
-  // 둘째 건 확인 시 "다른 고객이 이미 확정하여 재고가 소진되었습니다".
+  // ── 오버부킹 허용 데모: 같은 지점·통화(B004+USD)에 방문예정 미확인 예약 2건 ──
+  // 정책상 접수는 시재와 무관(부족해도 접수·지점 조달)하고 품절 거절이 없으므로,
+  // 같은 이메일(rush@example.com)로 조회 → 두 건 모두 "방문 예정 확인" 성공(차감 예정 표시만).
   make({
     reservationNo: 'RSV-20260729-0201',
     status: 'BOOKED',
@@ -246,7 +246,7 @@ export const SEED_RESERVATIONS = [
     reminderStatus: 'NO_RESPONSE',
   }),
   // ── 방문예정확인 후 미방문(노쇼) 데모 ──
-  // reminderStatus=CONFIRMED(방문예정확인) 이므로 시드 재고(B002+USD)에서 1개 미리 차감된 상태.
+  // reminderStatus=CONFIRMED(방문예정확인) 상태. 실제 재고는 수령 시점에만 차감되므로 미리 차감된 재고 없음.
   // 기준일을 수령기한(2026-07-31) 이후로 넘긴 뒤 "자동취소 실행" → 이 건도 자동취소되고
   // 확인 시점에 잡았던 가용시재가 복구된다. (노쇼 누적에도 카운트)
   make({
