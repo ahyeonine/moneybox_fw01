@@ -164,16 +164,16 @@ export const STRINGS = {
     en: 'Pickup is near. Tap Confirm visit if you’re coming, or Cancel if you can’t make it.',
   },
   'lookup.visitConfirmed.msg': {
-    ko: '방문 예정이 확인되었습니다. 가용 시재가 배정(예약시재 반영)되었습니다.',
-    en: 'Your visit is confirmed. Stock has been allocated for your reservation.',
+    ko: '방문 예정이 확정되었습니다. 지점이 수령일에 맞춰 준비합니다.',
+    en: 'Your visit is confirmed. The branch will have it ready on your pickup day.',
   },
   'lookup.visitSoldOut.msg': {
     ko: '다른 고객이 이미 확정하여 재고가 소진되었습니다.',
     en: 'Another customer already confirmed and the stock is sold out.',
   },
   'lookup.visitConfirmedNote': {
-    ko: '방문 예정이 확인된 예약입니다. (가용 시재 배정 완료)',
-    en: 'Visit confirmed — stock allocated.',
+    ko: '방문 예정이 확정된 예약입니다. 지점이 수령일에 맞춰 준비합니다.',
+    en: 'Visit confirmed — the branch will have it ready on your pickup day.',
   },
   'lookup.cancelBtn': { ko: '예약 취소', en: 'Cancel reservation' },
   'lookup.changeBtn': { ko: '예약 변경', en: 'Change reservation' },
@@ -259,8 +259,8 @@ export const STRINGS = {
   'sim.autoCancelled': { ko: '건이 자동취소되었습니다.', en: 'reservation(s) auto-cancelled.' },
   'sim.restored': { ko: '재고 복구', en: 'stock restored' },
   'sim.hint': {
-    ko: '실제 스케줄러 대신, 기준일을 넘기고 자동취소를 실행해 볼 수 있습니다. (수령기한 경과 예약 → 자동취소, KST 자정 기준. 방문예정확인 건도 미방문 시 동일하게 자동취소되며 잡았던 재고는 복구됨)',
-    en: 'Instead of a real scheduler, advance the date and run auto-cancel (overdue booked → cancelled at KST midnight; confirmed-but-no-visit is also auto-cancelled and its reserved stock is restored).',
+    ko: '실제 스케줄러 대신, 기준일을 넘기고 자동취소를 실행해 볼 수 있습니다. (수령기한 경과 예약 → 자동취소, KST 자정 기준. 방문예정확인 건도 미방문 시 동일하게 자동취소됨. 실제 재고는 수령 시점에만 차감되므로 복구할 재고 없음)',
+    en: 'Instead of a real scheduler, advance the date and run auto-cancel (overdue booked → cancelled at KST midnight; confirmed-but-no-visit is also auto-cancelled). Stock is only consumed at pickup, so nothing needs to be restored.',
   },
 
   // About / eSIM

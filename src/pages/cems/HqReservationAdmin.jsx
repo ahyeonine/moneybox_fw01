@@ -49,7 +49,7 @@ export default function HqReservationAdmin() {
     setModalFlash(null)
   }
 
-  // 예약취소(지점·직원 취소와 동일 처리) — 상태→취소, 재고 복구, 지점 취소 안내 이메일
+  // 예약취소(지점·직원 취소와 동일 처리) — 상태→취소, 지점 취소 안내 이메일
   function cancelBranch() {
     if (!selected || selected.status !== 'BOOKED') return
     cancelByBranch(selected.reservationNo)
@@ -103,7 +103,7 @@ export default function HqReservationAdmin() {
         items={[
           '본사관리자 화면: 전 지점의 외국인 환전예약을 한 화면에서 조회. 검색 필터에 지점 선택 포함',
           '예약 가능 기간(수령일 최대 N일) 설정은 좌측 [예약 가능 기간 설정 (본사)] 화면에서',
-          '행 클릭 → 예약 상세 모달. 예약취소(지점·직원 취소) 가능: 상태→취소, 재고 복구, 지점 취소 안내 이메일 발송',
+          '행 클릭 → 예약 상세 모달. 예약취소(지점·직원 취소) 가능: 상태→취소, 지점 취소 안내 이메일 발송',
           '자세히: 01_IA.md',
         ]}
       />
