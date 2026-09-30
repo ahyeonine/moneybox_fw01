@@ -15,7 +15,7 @@ import DevNote from '../components/DevNote.jsx'
 
 export default function LookupPage({ ctx } = {}) {
   const { t } = useI18n()
-  const { findReservationsForLookup, findReservationsByNameEmail, findReservationsByEmail, getByNo, cancelReservation, updateReservation, confirmVisit, today } =
+  const { findReservationsForLookup, findReservationsByNameEmail, findReservationsByEmail, getByNo, cancelReservation, changeReservation, confirmVisit, today } =
     useReservations()
   const { sendEmail } = useEmail()
   const [params] = useSearchParams()
@@ -113,8 +113,19 @@ export default function LookupPage({ ctx } = {}) {
   }
 
   function onSaved(patch) {
-    updateReservation(detailNo, patch)
+    // 고객에게는 '예약 변경', 내부적으로는 기존 예약 취소 + 신규 예약 생성(취소 후 재예약)
+    const nextRec = changeReservation(detailNo, patch)
     setEditing(false)
+    if (nextRec) {
+      // 기존 건은 취소로 표시하고, 신규 예약을 목록에 추가한 뒤 상세로 전환
+      setResults((prev) => [
+        ...prev.map((r) =>
+          r.reservationNo === detailNo ? { ...r, status: 'CANCELLED', cancelReason: 'CHANGE' } : r
+        ),
+        nextRec,
+      ])
+      setDetailNo(nextRec.reservationNo)
+    }
     setFlash({ type: 'success', msg: t('lookup.change.saved') })
   }
 
