@@ -127,7 +127,7 @@
   <div class="surface-h" id="legend">범례 · 작성 규칙</div>
   <p class="surface-sub">모든 화면정의서에 공통 적용되는 ID·정책 코드·이벤트·상태 표기 규칙.</p>
   <div class="legend">
-    <h4>화면 ID 체계 — UI-FW-#### (FW = Foreign Web)</h4>
+    <h4>화면 ID 체계 — UI-W-#### (W = Web)</h4>
     <table class="st">
       <tr><th>구간</th><th>대역</th><th>화면</th></tr>
       <tr><td>진입·랜딩</td><td>1000번대</td><td>1100 언어 · 1200 소개(랜딩) · 1300 로그인/게스트 · 1400 위치 허용</td></tr>
@@ -135,7 +135,7 @@
       <tr><td>예약</td><td>3000번대</td><td>3100 지점 찾기 · 3200 지점 상세 · 3300 금액 · 3400 정보 · 3500 완료 · 3600 상세</td></tr>
       <tr><td>마이페이지</td><td>4000번대</td><td>4000 마이 · 4200 알림 설정</td></tr>
     </table>
-    <p class="surface-sub" style="margin-top:6px;">FW = Foreign Web. 화면설계서 라벨(O1·H1·R1·M1 등)과 병기.</p>
+    <p class="surface-sub" style="margin-top:6px;">W = Web (외국인 웹). 화면설계서 라벨(O1·H1·R1·M1 등)과 병기.</p>
 
     <h4>정책 코드 — MB-POL-&lt;영역&gt;-## (외국인서비스 정책 § 매핑)</h4>
     <table class="st">
@@ -165,9 +165,9 @@
   <div class="surface-h" id="onboard">1. 진입 · 랜딩</div>
   <p class="surface-sub">통합웹 외국어 선택 → 외국인 웹 진입. 언어 선택 · 서비스 소개(랜딩) · 로그인/게스트 · 위치 허용(브라우저).</p>
 
-  <!-- UI-FW-1100 언어 선택 -->
+  <!-- UI-W-1100 언어 선택 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-1100</span><span class="spec-name">언어 선택 (O1)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-1100</span><span class="spec-name">언어 선택 (O1)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -180,7 +180,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-1100 (화면설계서 O1)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-1100 (화면설계서 O1)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>통합웹 외국어 선택 &gt; 언어 선택</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#onboard">웹 화면설계서 · 진입·랜딩 O1</a></td></tr>
@@ -198,7 +198,7 @@
           <li>주요 유입국(대만·홍콩·일본) 고려해 번체·일본어 노출</li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-          <tr><td>통합웹 외국어 선택</td><td>UI-FW-1200 서비스 소개</td><td>없음(최초 진입)</td></tr>
+          <tr><td>통합웹 외국어 선택</td><td>UI-W-1200 서비스 소개</td><td>없음(최초 진입)</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
           <tr><td>언어 선택</td><td>전역 언어 적용 · 로컬 저장</td></tr>
@@ -219,9 +219,9 @@
     </div></div>
   </div>
 
-  <!-- UI-FW-1200 서비스 소개 -->
+  <!-- UI-W-1200 서비스 소개 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-1200</span><span class="spec-name">서비스 소개 (O2)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-1200</span><span class="spec-name">서비스 소개 (O2)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -235,7 +235,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-1200 (화면설계서 O2)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-1200 (화면설계서 O2)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>진입 &gt; 랜딩(서비스 소개)</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#onboard">웹 화면설계서 · 진입·랜딩 O2</a></td></tr>
@@ -254,7 +254,7 @@
           <li>앱 온보딩 슬라이드가 아니라 스크롤 랜딩 섹션</li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-          <tr><td>UI-FW-1100 언어 선택</td><td>예약(예약 시작) · 홈 · 예약 조회</td><td>사이트 이탈</td></tr>
+          <tr><td>UI-W-1100 언어 선택</td><td>예약(예약 시작) · 홈 · 예약 조회</td><td>사이트 이탈</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
           <tr><td>예약 시작하기</td><td>예약 플로우(R1 지점 찾기)</td></tr>
@@ -277,9 +277,9 @@
     </div></div>
   </div>
 
-  <!-- UI-FW-1300 로그인/게스트 -->
+  <!-- UI-W-1300 로그인/게스트 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-1300</span><span class="spec-name">로그인 · 게스트 (O3)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-1300</span><span class="spec-name">로그인 · 게스트 (O3)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -293,7 +293,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-1300 (화면설계서 O3)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-1300 (화면설계서 O3)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>진입 &gt; 로그인/게스트</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#onboard">웹 화면설계서 · 진입·랜딩 O3</a></td></tr>
@@ -313,7 +313,7 @@
           <li><span class="chk">프로토타입은 비밀번호 미검증 — 실서비스는 기존 계정 체계 연동</span></li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-          <tr><td>UI-FW-1200 서비스 소개</td><td>UI-FW-1400 위치 권한</td><td>게스트로 계속 → 1400</td></tr>
+          <tr><td>UI-W-1200 서비스 소개</td><td>UI-W-1400 위치 권한</td><td>게스트로 계속 → 1400</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
           <tr><td>로그인</td><td>계정 검증 → 위치 권한/홈</td></tr>
@@ -335,9 +335,9 @@
     </div></div>
   </div>
 
-  <!-- UI-FW-1400 위치 허용 -->
+  <!-- UI-W-1400 위치 허용 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-1400</span><span class="spec-name">위치 허용 (O4)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-1400</span><span class="spec-name">위치 허용 (O4)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -351,7 +351,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-1400 (화면설계서 O4)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-1400 (화면설계서 O4)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>진입 &gt; 위치 허용(브라우저)</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#onboard">웹 화면설계서 · 진입·랜딩 O4</a></td></tr>
@@ -368,7 +368,7 @@
           <li>브라우저 위치 권한으로 가까운 지점 정렬. 거부해도 지역 선택으로 이용 가능</li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-          <tr><td>UI-FW-1300 로그인/게스트</td><td>UI-FW-2000 홈</td><td>나중에 → 홈</td></tr>
+          <tr><td>UI-W-1300 로그인/게스트</td><td>UI-W-2000 홈</td><td>나중에 → 홈</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
           <tr><td>위치 허용</td><td>브라우저 위치 권한 요청 → 홈</td></tr>
@@ -394,9 +394,9 @@
   <div class="surface-h" id="home">2. 홈</div>
   <p class="surface-sub">웹 홈 — 현재 환율 참고 · 진행 중 예약 · 빠른 예약.</p>
 
-  <!-- UI-FW-2000 홈 -->
+  <!-- UI-W-2000 홈 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-2000</span><span class="spec-name">홈 대시보드 (H1)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-2000</span><span class="spec-name">홈 대시보드 (H1)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -409,7 +409,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-2000 (화면설계서 H1)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-2000 (화면설계서 H1)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>외국인 웹 진입·재방문 &gt; 홈</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#home">웹 화면설계서 · 홈</a></td></tr>
@@ -461,9 +461,9 @@
   <div class="surface-h" id="reserve">3. 예약</div>
   <p class="surface-sub">지점 찾기 → 지점 상세 → 금액·수령일 → 예약자 정보 → 완료 → 내 예약 상세. (정책 동일)</p>
 
-  <!-- UI-FW-3100 지점 찾기 -->
+  <!-- UI-W-3100 지점 찾기 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-3100</span><span class="spec-name">지점 찾기 (R1)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-3100</span><span class="spec-name">지점 찾기 (R1)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -477,7 +477,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-3100 (화면설계서 R1)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-3100 (화면설계서 R1)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>예약 탭 / 홈 CTA &gt; 지점 찾기</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#reserve">웹 화면설계서 · 예약 R1</a></td></tr>
@@ -500,7 +500,7 @@
           <li><span class="chk">무인기 마커/항목은 예약 불가 — 위치 팝업만</span></li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-          <tr><td>예약 탭 / 홈 빠른 예약</td><td>UI-FW-3200 지점 상세</td><td>뒤로 → 홈</td></tr>
+          <tr><td>예약 탭 / 홈 빠른 예약</td><td>UI-W-3200 지점 상세</td><td>뒤로 → 홈</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
           <tr><td>검색·필터</td><td>목록·지도 갱신</td></tr>
@@ -524,9 +524,9 @@
     </div></div>
   </div>
 
-  <!-- UI-FW-3200 지점 상세 -->
+  <!-- UI-W-3200 지점 상세 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-3200</span><span class="spec-name">지점 상세 (R2)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-3200</span><span class="spec-name">지점 상세 (R2)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -540,7 +540,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-3200 (화면설계서 R2)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-3200 (화면설계서 R2)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>예약 &gt; 지점 찾기 &gt; 지점 상세</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#reserve">웹 화면설계서 · 예약 R2</a></td></tr>
@@ -558,7 +558,7 @@
           <li>지점 정보를 확인하고 바로 예약 시작</li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-          <tr><td>UI-FW-3100 지점 찾기</td><td>UI-FW-3300 금액·수령일</td><td>뒤로 → R1</td></tr>
+          <tr><td>UI-W-3100 지점 찾기</td><td>UI-W-3300 금액·수령일</td><td>뒤로 → R1</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
           <tr><td>길찾기·전화</td><td>외부 지도·전화 연결(지도 앱·tel:)</td></tr>
@@ -579,9 +579,9 @@
     </div></div>
   </div>
 
-  <!-- UI-FW-3300 금액·수령일 -->
+  <!-- UI-W-3300 금액·수령일 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-3300</span><span class="spec-name">금액 · 수령일 (R3)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-3300</span><span class="spec-name">금액 · 수령일 (R3)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -597,7 +597,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-3300 (화면설계서 R3)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-3300 (화면설계서 R3)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>예약 &gt; 지점 상세 &gt; 금액·수령일</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#reserve">웹 화면설계서 · 예약 R3</a></td></tr>
@@ -626,7 +626,7 @@
           <li><span class="chk">현재 환율은 예약 중에만 — 완료·조회 일관 미노출</span></li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-          <tr><td>UI-FW-3200 지점 상세</td><td>UI-FW-3400 정보 (회원=3500 완료로 스킵)</td><td>뒤로 → R2</td></tr>
+          <tr><td>UI-W-3200 지점 상세</td><td>UI-W-3400 정보 (회원=3500 완료로 스킵)</td><td>뒤로 → R2</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
           <tr><td>금액 입력</td><td>지점별 원화 이득 비교 노출(애니메이션)</td></tr>
@@ -653,9 +653,9 @@
     </div></div>
   </div>
 
-  <!-- UI-FW-3400 예약자 정보 -->
+  <!-- UI-W-3400 예약자 정보 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-3400</span><span class="spec-name">예약자 정보 · 간편가입 (R4)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-3400</span><span class="spec-name">예약자 정보 · 간편가입 (R4)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -670,7 +670,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-3400 (화면설계서 R4)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-3400 (화면설계서 R4)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>예약 &gt; 금액 &gt; 예약자 정보 (회원 건너뜀)</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#reserve">웹 화면설계서 · 예약 R4</a></td></tr>
@@ -693,7 +693,7 @@
           <li><span class="chk">여권번호 미수집 — 신분 확인은 수령 시 지점</span></li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-          <tr><td>UI-FW-3300 금액</td><td>UI-FW-3500 완료</td><td>뒤로 → R3</td></tr>
+          <tr><td>UI-W-3300 금액</td><td>UI-W-3500 완료</td><td>뒤로 → R3</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
           <tr><td>인증</td><td>이메일 인증번호 요청·확인</td></tr>
@@ -716,9 +716,9 @@
     </div></div>
   </div>
 
-  <!-- UI-FW-3500 예약 완료 -->
+  <!-- UI-W-3500 예약 완료 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-3500</span><span class="spec-name">예약 완료 (R5)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-3500</span><span class="spec-name">예약 완료 (R5)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -732,7 +732,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-3500 (화면설계서 R5)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-3500 (화면설계서 R5)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>예약 &gt; 정보(또는 회원 금액) &gt; 완료</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#reserve">웹 화면설계서 · 예약 R5</a></td></tr>
@@ -750,7 +750,7 @@
           <li>완료 화면이 회원/비회원으로 나뉨. 환율 수치 미표기</li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
-          <tr><td>UI-FW-3400 정보 (회원=R3)</td><td>예약 조회(비회원)·내 예약 관리(회원)→조회</td><td>홈</td></tr>
+          <tr><td>UI-W-3400 정보 (회원=R3)</td><td>예약 조회(비회원)·내 예약 관리(회원)→조회</td><td>홈</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
           <tr><td>예약 조회하기</td><td>예약내역조회(비회원=예약번호+이메일)</td></tr>
@@ -773,9 +773,9 @@
     </div></div>
   </div>
 
-  <!-- UI-FW-3600 내 예약 상세 -->
+  <!-- UI-W-3600 내 예약 상세 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-3600</span><span class="spec-name">내 예약 상세 (R6)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-3600</span><span class="spec-name">내 예약 상세 (R6)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -788,7 +788,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-3600 (화면설계서 R6)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-3600 (화면설계서 R6)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>홈 진행중 예약 / 마이 내 예약 / 리마인더 메일 → 상세</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#reserve">웹 화면설계서 · 예약 R6</a></td></tr>
@@ -844,9 +844,9 @@
   <div class="surface-h" id="my">4. 마이페이지</div>
   <p class="surface-sub">회원=프로필·내 예약·쿠폰·알림·설정 / 비회원=로그인 유도·예약번호 조회.</p>
 
-  <!-- UI-FW-4000 마이페이지 -->
+  <!-- UI-W-4000 마이페이지 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-4000</span><span class="spec-name">마이페이지 (M1)</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-4000</span><span class="spec-name">마이페이지 (M1)</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -860,7 +860,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-4000 (화면설계서 M1)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-4000 (화면설계서 M1)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>상단 메뉴 &gt; 마이</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#my">웹 화면설계서 · 마이페이지</a></td></tr>
@@ -874,7 +874,7 @@
           <tr><td>비회원</td><td>로그인/회원가입 유도 · 예약번호+이메일 조회 · 언어</td></tr>
         </table></div>
         <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
-          <li>회원/비회원 분기. 내 예약 → R6 상세, 알림 설정 → UI-FW-4200</li>
+          <li>회원/비회원 분기. 내 예약 → R6 상세, 알림 설정 → UI-W-4200</li>
         </ul></div>
         <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
           <li><span class="chk">프로토타입은 계정·비밀번호 미검증</span></li>
@@ -903,9 +903,9 @@
     </div></div>
   </div>
 
-  <!-- UI-FW-4200 알림 설정 -->
+  <!-- UI-W-4200 알림 설정 -->
   <div class="spec">
-    <div class="spec-head"><span class="spec-id">UI-FW-4200</span><span class="spec-name">알림 설정</span><span class="spec-ver">v1.0</span></div>
+    <div class="spec-head"><span class="spec-id">UI-W-4200</span><span class="spec-name">알림 설정</span><span class="spec-ver">v1.0</span></div>
     <div class="spec-body"><div class="spec-cols">
       <div>
         <div class="ph">
@@ -920,7 +920,7 @@
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
-          <tr><td class="k">화면 ID</td><td>UI-FW-4200 (마이 하위)</td></tr>
+          <tr><td class="k">화면 ID</td><td>UI-W-4200 (마이 하위)</td></tr>
           <tr><td class="k">배포 버전</td><td>1.0</td></tr>
           <tr><td class="k">화면 경로</td><td>마이 &gt; 알림 설정</td></tr>
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#my">웹 화면설계서 · 마이페이지</a></td></tr>
