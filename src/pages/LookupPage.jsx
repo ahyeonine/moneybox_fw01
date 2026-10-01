@@ -142,7 +142,7 @@ export default function LookupPage({ ctx } = {}) {
           '조회 방식: 회원=이메일+비밀번호 / 비회원=예약번호+이메일 (같은 이메일의 신청내역 전체 조회)',
           '프로토타입: 회원 비밀번호는 확인만(실계정 미연동), 조회는 이메일 일치로 처리',
           '"예약" 상태일 때만 취소/변경 가능',
-          '예약 접수는 시재와 무관(부족해도 접수·지점 조달). "방문 예정 확인"은 차감 예정 표시만, 실제 재고 차감은 수령(거래완료) 시점 — 품절 거절 없음',
+          '예약 접수는 시재와 무관(부족해도 접수·지점 조달). "방문 예정 확인"은 차감 예정 표시만, 실제 시재 차감은 수령(거래완료) 시점 — 품절 거절 없음',
           '자세히: 03_플로우.mermaid',
         ]}
       />
@@ -433,7 +433,7 @@ function ChangeForm({ rec, today, onSave, onCancel }) {
   const rate = getRate(effectiveCurrency)
   const krw = amountValid ? toKrw(Number(amount), rate) : 0
 
-  // 재고 재확인(목데이터): 항상 가능하다고 간주. TODO: 실제 재고 API
+  // 시재 재확인(목데이터): 항상 가능하다고 간주. TODO: 실제 시재 API
   // 상한(range.maxDate)이 null이면 기간 제한 없음(무제한) → 하한만 확인
   const dateOk =
     pickupDate >= range.minDate && (range.maxDate == null || pickupDate <= range.maxDate)

@@ -117,7 +117,7 @@ export const STRINGS = {
   'err.name': { ko: '영문 이름을 정확히 입력하세요.', en: 'Enter a valid English name.' },
   'err.soldout.t': { ko: '예약이 불가합니다', en: 'Not available' },
   'err.soldout.d': {
-    ko: '해당 지점·통화·기간에 재고가 소진되었습니다. 다른 조건으로 다시 시도해 주세요.',
+    ko: '해당 지점·통화·기간에 시재가 소진되었습니다. 다른 조건으로 다시 시도해 주세요.',
     en: 'Stock is sold out for this branch/currency/date. Please try different options.',
   },
   'err.soldout.restart': { ko: '처음부터 다시', en: 'Start over' },
@@ -168,7 +168,7 @@ export const STRINGS = {
     en: 'Your visit is confirmed. The branch will have it ready on your pickup day.',
   },
   'lookup.visitSoldOut.msg': {
-    ko: '다른 고객이 이미 확정하여 재고가 소진되었습니다.',
+    ko: '다른 고객이 이미 확정하여 시재가 소진되었습니다.',
     en: 'Another customer already confirmed and the stock is sold out.',
   },
   'lookup.visitConfirmedNote': {
@@ -257,9 +257,9 @@ export const STRINGS = {
   'sim.reminderSent': { ko: '전일 리마인더 발송', en: 'Day-before reminders sent' },
   'sim.reset': { ko: '데이터 초기화', en: 'Reset data' },
   'sim.autoCancelled': { ko: '건이 자동취소되었습니다.', en: 'reservation(s) auto-cancelled.' },
-  'sim.restored': { ko: '재고 복구', en: 'stock restored' },
+  'sim.restored': { ko: '시재 복구', en: 'stock restored' },
   'sim.hint': {
-    ko: '실제 스케줄러 대신, 기준일을 넘기고 자동취소를 실행해 볼 수 있습니다. (수령기한 경과 예약 → 자동취소, KST 자정 기준. 방문예정확인 건도 미방문 시 동일하게 자동취소됨. 실제 재고는 수령 시점에만 차감되므로 복구할 재고 없음)',
+    ko: '실제 스케줄러 대신, 기준일을 넘기고 자동취소를 실행해 볼 수 있습니다. (수령기한 경과 예약 → 자동취소, KST 자정 기준. 방문예정확인 건도 미방문 시 동일하게 자동취소됨. 실제 시재는 수령 시점에만 차감되므로 복구할 시재 없음)',
     en: 'Instead of a real scheduler, advance the date and run auto-cancel (overdue booked → cancelled at KST midnight; confirmed-but-no-visit is also auto-cancelled). Stock is only consumed at pickup, so nothing needs to be restored.',
   },
 

@@ -246,7 +246,7 @@ export const SEED_RESERVATIONS = [
     reminderStatus: 'NO_RESPONSE',
   }),
   // ── 방문예정확인 후 미방문(노쇼) 데모 ──
-  // reminderStatus=CONFIRMED(방문예정확인) 상태. 실제 재고는 수령 시점에만 차감되므로 미리 차감된 재고 없음.
+  // reminderStatus=CONFIRMED(방문예정확인) 상태. 실제 시재는 수령 시점에만 차감되므로 미리 차감된 시재 없음.
   // 기준일을 수령기한(2026-07-31) 이후로 넘긴 뒤 "자동취소 실행" → 이 건도 자동취소되고
   // 확인 시점에 잡았던 가용시재가 복구된다. (노쇼 누적에도 카운트)
   make({
