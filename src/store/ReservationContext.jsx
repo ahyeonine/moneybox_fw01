@@ -16,17 +16,17 @@ function clone(arr) {
   return arr.map((r) => ({ ...r }))
 }
 
-// 재고(시재) 시드: 지점×통화 조합별 수량(목데이터).
+// 시재(시재) 시드: 지점×통화 조합별 수량(목데이터).
 // 정책(D-30-16): 예약 접수는 시재와 무관(부족·마이너스여도 접수), 방문 예정 확인 시엔 '차감 예정'으로만
-// 표시하고, 실제 재고 차감은 수령(거래완료) 시점이다. 시재 부족은 지점이 조달하므로 품절로 거절하지 않는다.
+// 표시하고, 실제 시재 차감은 수령(거래완료) 시점이다. 시재 부족은 지점이 조달하므로 품절로 거절하지 않는다.
 function seedStock() {
   const s = {}
   for (const b of BRANCHES) {
     for (const cur of b.currencies) {
-      s[`${b.id}:${cur}`] = 50 // 기본 재고 (목데이터)
+      s[`${b.id}:${cur}`] = 50 // 기본 시재 (목데이터)
     }
   }
-  // 이미 거래완료(COMPLETED)된 시드 예약은 수령 시점에 재고가 차감된 상태로 반영
+  // 이미 거래완료(COMPLETED)된 시드 예약은 수령 시점에 시재가 차감된 상태로 반영
   for (const r of SEED_RESERVATIONS) {
     if (r.status === 'COMPLETED') {
       const k = `${r.branchId}:${r.currency}`
@@ -39,7 +39,7 @@ function seedStock() {
 export function ReservationProvider({ children }) {
   const [reservations, setReservations] = useState(() => clone(SEED_RESERVATIONS))
   const [today, setToday] = useState(INITIAL_TODAY)
-  // 재고는 동기적으로 읽고/차감해야 하므로 ref 로 관리 (동시성 확인 로직에서 사용)
+  // 시재는 동기적으로 읽고/차감해야 하므로 ref 로 관리 (동시성 확인 로직에서 사용)
   const stockRef = useRef(seedStock())
 
   // 신규 예약 생성 → BOOKED 상태로 추가, 예약번호 발급
@@ -201,7 +201,7 @@ export function ReservationProvider({ children }) {
   }, [])
 
   // 지점 취소 (운영자/CEMS) — 노쇼 카운트 제외. cancelReason='BRANCH'
-  //  · 실제 재고는 수령(거래완료) 시점에만 차감되므로, 미수령 취소 건은 복구할 재고가 없다.
+  //  · 실제 시재는 수령(거래완료) 시점에만 차감되므로, 미수령 취소 건은 복구할 시재가 없다.
   //  · 취소된 예약 레코드를 반환 → 호출측에서 지점취소 안내 이메일 발송에 사용.
   const cancelByBranch = useCallback(
     (reservationNo) => {
@@ -225,7 +225,7 @@ export function ReservationProvider({ children }) {
   //  · 예약환율(rate)/예약원화(krwAmount)는 보존하고, 실제 정산값만 별도 필드로 저장(베스트레이트).
   const completeReservation = useCallback(
     (reservationNo, extra = {}) => {
-      // 실제 재고 차감은 수령(거래완료) 시점. 부족해도 진행(지점 조달, 음수 허용).
+      // 실제 시재 차감은 수령(거래완료) 시점. 부족해도 진행(지점 조달, 음수 허용).
       const rec = reservations.find(
         (r) => r.reservationNo === reservationNo && r.status === 'BOOKED'
       )
@@ -247,17 +247,17 @@ export function ReservationProvider({ children }) {
     [reservations, today]
   )
 
-  // ── 재고(시재) ──
+  // ── 시재(시재) ──
   const getStock = useCallback((branchId, currency) => stockRef.current[`${branchId}:${currency}`] ?? 0, [])
-  // 실제 재고 차감(수령/거래완료 시점). 정책상 부족해도 진행하므로 음수까지 허용(지점 조달).
+  // 실제 시재 차감(수령/거래완료 시점). 정책상 부족해도 진행하므로 음수까지 허용(지점 조달).
   const consumeStock = (branchId, currency) => {
     const k = `${branchId}:${currency}`
     stockRef.current = { ...stockRef.current, [k]: (stockRef.current[k] ?? 0) - 1 }
   }
 
   // 리마인더 "방문 예정" 확인 → 예약을 확정(reminderStatus='CONFIRMED').
-  //  정책(D-30-16): 확인 시점엔 재고를 '차감 예정'으로만 잡고 실제 차감은 하지 않으며, 품절로 거절하지 않는다.
-  //  실제 재고 차감은 수령(거래완료) 시점(completeReservation).
+  //  정책(D-30-16): 확인 시점엔 시재를 '차감 예정'으로만 잡고 실제 차감은 하지 않으며, 품절로 거절하지 않는다.
+  //  실제 시재 차감은 수령(거래완료) 시점(completeReservation).
   const confirmVisit = useCallback(
     (reservationNo) => {
       const rec = reservations.find(
@@ -289,7 +289,7 @@ export function ReservationProvider({ children }) {
       (r) => r.status === 'BOOKED' && diffDays(r.pickupDate, today) < 0
     )
     if (!targets.length) return { cancelled: 0, restored: 0 }
-    // 실제 재고는 수령(거래완료) 시점에만 차감되므로, 미수령 자동취소 건은 복구할 재고가 없다.
+    // 실제 시재는 수령(거래완료) 시점에만 차감되므로, 미수령 자동취소 건은 복구할 시재가 없다.
     const cancelSet = new Set(targets.map((r) => r.reservationNo))
     // 노쇼 이력(이메일별 자동취소 누적)에는 두 경우 모두 cancelReason='AUTO' 로 동일 카운트.
     setReservations((prev) =>

@@ -9,15 +9,15 @@
 
 ### 1. 백엔드 서버 + DB
 - REST(또는 GraphQL) API 서버 + 관계형 DB(PostgreSQL 등). 스키마는 `05_데이터모델.md` 기준: Reservation / Branch / BranchCurrency / Rate / CurrencyMinAmount / BranchMaxAmount.
-- 트랜잭션·동시성 처리(특히 재고 차감/복구). 예약번호 발급(일자별 시퀀스, 유니크).
+- 트랜잭션·동시성 처리(특히 시재 차감/복구). 예약번호 발급(일자별 시퀀스, 유니크).
 
 ### 2. 환율 피드 (필수)
 - 실시간 환율 소스(내부 딜링/외부 환율 API) → `Rate.baseRate` 갱신(현재 2분 자동변동은 목).
 - **전광판(기준) 환율** 제공(매입·매각 양방향). 예약은 환율을 고정하지 않고(`rateMode=BOARD`), 수령일 전광판 환율로 POS 정산. 최고가 보장 보유 시 `WEB_COUPON_BONUS`만큼 우대.
 - 전광판 환율은 지점의 기존 전광판 시스템에서 공급(프로토타입은 목 자동변동). CEMS 내 별도 환율관리 화면은 없음.
 
-### 3. 재고(시재) 시스템 (필수)
-- 지점×통화별 가용시재 관리. `availability` 조회, **방문예정 확인 시 차감(consume)**, 자동취소 시 조건부 복구(restore).
+### 3. 시재(시재) 시스템 (필수)
+- 지점×통화별 시재 관리(D-30-16·18). **예약 접수는 시재와 무관(품절 거절 없음)**, 방문예정 확인 시엔 '차감 예정' 표시만, **실제 차감은 수령(거래완료) 시점**. 미수령 취소·자동취소는 차감 전이라 복구 없음.
 - 동시성: 오버부킹 허용(예약 생성 시 미차감) → 확인 시점 경쟁 해소. 원자적 차감 필요.
 
 ### 4. 이메일 발송 (필수)
@@ -34,7 +34,7 @@
 - 지점 좌표 정합성, "가까운 지점" 계산(현재 하버사인, 실서비스는 실도로/소요시간 고려 가능).
 
 ### 7. 스케줄러/배치
-- 자동취소(수령기한 경과 → CANCELLED, 조건부 재고복구), 리마인더 발송 크론.
+- 자동취소(수령기한 경과 → CANCELLED), 리마인더 발송 크론.
 
 ### 8. CEMS/POS 연동
 - 예약 생성 → CEMS 예약관리 리스트 반영. POS 거래완료 시 상태전이 + **정산(수령일 전광판 환율, 최고가 보장 시 우대)** 결과·실제적용환율·최종원화금액 기록.
@@ -55,16 +55,16 @@
 - `GET /branches` — 지점(취급통화·좌표)
 - `GET /branches/{id}/currencies`
 - `GET /rates?currencies=USD,JPY` — 현재 적용환율(전 고객 동일)
-- `GET /branches/{id}/availability?currency&date&amount` — 재고 확인 (`200 {available}` / `409 SOLD_OUT`)
+- `GET /branches/{id}/availability?currency&date` — 지점·통화 수락 여부 확인 (`200 {accepted}`). 시재 부족은 접수를 막지 않음(품절 거절 없음)
 - `GET /geocode?q=&countrycodes=kr` — 장소 검색 → 좌표 *(실서비스: 유료 지오코딩)*
 
 ### 예약 (Customer · 무인증)
 - `POST /reservations` — 신규 예약(무결제). `transactionType`(`BUY` 외화→원화 / `SELL` 원화→외화), `rateMode='BOARD'`, `coupon`. 서버가 예약번호 발급(환율 미고정).
-  - 검증코드: `BELOW_MIN | ABOVE_MAX | INVALID_FORMAT | LEAD_TIME | OUT_OF_WINDOW | SOLD_OUT`. 수령일 = 리드타임 이후 ~ 14일.
+  - 검증코드: `INVALID_FORMAT | OUT_OF_WINDOW | CURRENCY_NOT_ACCEPTED`(지점 미취급 통화). 수령일 = 오늘 이후(당일 포함) ~ 본사 상한.
 - `GET /reservations/lookup?reservationNo&email` — 조회(번호+이메일)
 - `PATCH /reservations/{no}` — 변경(BOOKED만)
 - `POST /reservations/{no}/cancel` — 고객 취소
-- `POST /reservations/{no}/reminder-response` — 방문예정 확인 (**이 시점 재고 차감**, 소진 시 409)
+- `POST /reservations/{no}/reminder-response` — 방문예정 확인 (**'차감 예정' 표시만**, 실제 차감은 수령 시점. 품절 거절 없음)
 
 ### 인증/회원 (선택 · 최고가 보장용)
 - `POST /auth/email/code` — 이메일 인증코드 발송
@@ -78,8 +78,8 @@
 - `POST /operator/reservations/{no}/complete` — 거래완료(`idVerified` 선행) + **정산(전광판·최고가 보장)**
 
 ### 배치/시스템
-- `POST /system/auto-cancel` — 수령기한 경과 예약 일괄 취소(+조건부 재고복구)
+- `POST /system/auto-cancel` — 수령기한 경과 예약 일괄 취소
 - `POST /system/reminders/send` — 전일/당일 리마인더 발송
 
 ### 상태코드
-생성 `201` · 성공 `200` · 검증실패 `422` · 재고소진·전이불가 `409` · 조회실패 `404` · 운영자 인증실패 `401`.
+생성 `201` · 성공 `200` · 검증실패 `422` · 전이불가 `409` · 조회실패 `404` · 운영자 인증실패 `401`. (시재 부족은 접수를 막지 않음 — 품절 거절 없음)

@@ -48,7 +48,7 @@ export function pickupRange(todayIso, leadTimeDays, maxWindowDays = null) {
 
 /**
  * 수령 시간대 슬롯 생성. 지점 영업시간(open~close, "HH:mm") 내 1시간 단위.
- * TODO: 실제 예약 가능 시간/슬롯 재고 정책으로 교체.
+ * TODO: 실제 예약 가능 시간/슬롯 시재 정책으로 교체.
  */
 export function timeSlots(hours) {
   const open = hours?.open ?? '10:00'
