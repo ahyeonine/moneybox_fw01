@@ -148,7 +148,8 @@
   .svc-chev { color: var(--muted); transition: transform .15s; }
   .svc[open] .svc-chev { transform: rotate(90deg); }
   .svc-body { padding: 2px 8px 8px; border-top: 1px dashed var(--line); }
-  .legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); padding: 10px 10px 0; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); padding: 10px 10px 0; }
+  .legend span { white-space: nowrap; }
   .legend span { display: inline-flex; align-items: center; gap: 6px; }
   .legend i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
   .legend i.pend { background: transparent; border: 1.5px solid var(--muted); }
@@ -255,6 +256,14 @@
   .svc-card li a.pend { color: var(--muted); }
   .svc-card li i { width: 7px; height: 7px; border-radius: 50%; background: var(--c); flex: none; }
   .svc-card li a.pend i { background: transparent; border: 1.5px solid var(--muted); }
+
+  /* 설명 필요 빈칸 */
+  .blank { border: 2px dashed var(--warn); border-radius: 14px; padding: 14px 18px; margin: 16px 0; background: var(--warn-soft); }
+  .blank .lbl { display: inline-block; font-size: 11.5px; font-weight: 900; color: #fff; background: var(--warn); padding: 1px 9px; border-radius: 999px; margin-right: 6px; }
+  .blank b.t { font-size: 15px; }
+  .blank p { margin: 6px 0 0; color: var(--ink-2); font-size: 14px; }
+  .blank .space { margin-top: 10px; height: 44px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); }
+  .nav-link .tag.need { color: var(--warn); font-weight: 700; }
 
   /* 준비 중 */
   .pending { text-align: center; background: var(--paper); border: 2px dashed var(--line); border-radius: 18px; padding: 44px 24px; margin-top: 22px; }
@@ -404,10 +413,11 @@
 
   // ── 사이드바 ──
   var side = document.getElementById('side');
+  function needs(p) { return p.blocks.some(function (b) { return b && b.type === 'blank'; }); }
   function link(slug) {
     var p = G.pages[slug];
     return '<a class="nav-link" href="#/' + slug + '" data-slug="' + slug + '"><i class="st' + (p.pending ? ' pend' : '') + '"></i>' + p.title +
-      (p.pending ? '<span class="tag">준비 중</span>' : '') + '</a>';
+      (p.pending ? '<span class="tag">준비 중</span>' : needs(p) ? '<span class="tag need">설명 필요</span>' : '') + '</a>';
   }
   side.innerHTML = G.nav.map(function (grp, gi) {
     var pages = grp.pages.filter(function (s) { return G.pages[s]; });
@@ -416,7 +426,7 @@
     return '<details class="svc" data-g="' + gi + '"><summary><span class="svc-ic" style="background:' + color(grp) + '">' + grp.group.charAt(0) + '</span>' +
       '<span class="svc-t">' + grp.group + '<small>' + (grp.desc || '') + '</small></span><span class="svc-n">' + done + '/' + pages.length + '</span>' + ICON.chev + '</summary>' +
       '<div class="svc-body">' + pages.map(link).join('') + '</div></details>';
-  }).join('') + '<div class="legend"><span><i></i>작성 완료</span><span><i class="pend"></i>준비 중</span></div>';
+  }).join('') + '<div class="legend"><span><i></i>작성 완료</span><span><i class="pend"></i>준비 중</span><span style="color:var(--warn)">설명 필요 = 빈칸 있음</span></div>';
   document.getElementById('menuBtn').onclick = function () { document.body.classList.toggle('nav-open'); };
   document.getElementById('sideDim').onclick = function () { document.body.classList.remove('nav-open'); };
 
@@ -444,6 +454,9 @@
     if (b.type === 'callout') {
       var lbl = { tip: 'TIP', warn: '주의', danger: '중요' }[b.tone || 'tip'];
       return '<div class="callout ' + (b.tone || 'tip') + '"><span class="lbl">' + lbl + '</span>' + b.html + '</div>';
+    }
+    if (b.type === 'blank') {
+      return '<div class="blank"><span class="lbl">설명 필요</span><b class="t">' + b.title + '</b><p>' + b.html + '</p><div class="space" aria-hidden="true"></div></div>';
     }
     if (b.type === 'cards') {
       return '<div class="cards">' + b.items.map(function (c) { return '<a class="card" href="#/' + c.to + '"><b>' + c.title + '</b><span>' + c.desc + '</span></a>'; }).join('') + '</div>';
@@ -573,6 +586,7 @@
       if (b.type === 'steps') return plain(b.items.map(function (s) { return s.join(' '); }).join(' '));
       if (b.type === 'checklist') return plain(b.items.map(function (s) { return [].concat(s).join(' '); }).join(' '));
       if (b.type === 'cards') return b.items.map(function (c) { return c.title + ' ' + c.desc; }).join(' ');
+      if (b.type === 'blank') return '설명 필요 ' + b.title + ' ' + plain(b.html);
       return plain(b.html || '');
     }).join(' ');
     return { p: p, head: (p.grp.group + ' ' + p.title).toLowerCase(), text: (p.grp.group + ' ' + p.title + ' ' + p.lead + ' ' + t).toLowerCase() };
