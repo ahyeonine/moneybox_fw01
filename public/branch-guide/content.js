@@ -1,10 +1,13 @@
 /*
- * CEMS·POS 지점 운영 가이드 — 콘텐츠
+ * CEMS 지점 운영 가이드 — 콘텐츠
  * ------------------------------------------------------------
  * 화면(틀)은 index.html, 글은 이 파일에서만 고칩니다.
  *
  * nav     : 좌측 메뉴 그룹과 순서 (이 순서대로 이전/다음이 이어짐)
+ *           tab: CEMS 상단 탭 이름(있으면 서비스 그룹으로 표시), color: 그룹 색
  * pages   : slug → { title, lead, blocks, related }
+ *           pending: true 이면 '준비 중' 페이지로 표시 (캡처를 받으면 blocks를 채우고 pending 제거)
+ *   { type: 'services' } : 가이드 소개용 — 상단 탭별 메뉴 현황 카드 (nav에서 자동 생성)
  * blocks  : HTML 문자열, 또는 아래 타입 객체
  *   { type: 'figure', src, caption, marks: [{ box: [x%, y%, w%, h%], title, desc }] }
  *   { type: 'callout', tone: 'tip'|'warn'|'danger', html }
@@ -17,18 +20,22 @@
  * 스크린샷(img/)은 공개 저장소에 올라가므로 고객 이름·연락처·접속 IP는 반드시 가린 뒤 넣는다.
  */
 window.GUIDE = {
-  title: 'CEMS·POS 지점 운영 가이드',
+  title: 'CEMS 지점 운영 가이드',
   footer: '2026-10-06 캡처 화면 기준 · 고객 개인정보는 가림 처리했어요 · 화면이 바뀌면 이 가이드도 함께 업데이트돼요.',
-  alias: { status: 'home', cems: 'exchange-request', pos: 'pos' },
+  alias: { status: 'home', cems: 'exchange-request', pos: 'home' },
 
   nav: [
     { group: '시작하기', pages: ['home', 'layout'] },
-    { group: '머니 익스체인지', pages: ['exchange-request'] },
-    { group: '머니 24h', pages: ['m24-request'] },
-    { group: '환전예약', pages: ['reservation'] },
-    { group: '온라인환전', pages: ['online-deposit'] },
-    { group: '설정', pages: ['rate'] },
-    { group: 'POS', pages: ['pos'] },
+    { group: '머니 익스체인지', tab: true, desc: '유인지점 창구', color: '#1170ff',
+      pages: ['exchange-request', 'ex-rate', 'ex-cashflow', 'ex-closing', 'ex-daily'] },
+    { group: '머니 24h', tab: true, desc: '무인환전기', color: '#00a37a',
+      pages: ['m24-request', 'm24-rate', 'm24-closing', 'm24-daily', 'm24-cash', 'm24-reserve'] },
+    { group: '환전예약', tab: true, desc: '예약 고객', color: '#7a4dff',
+      pages: ['reservation', 'rsv-vaccount', 'rsv-rate', 'rsv-sales', 'rsv-holiday'] },
+    { group: '온라인환전', tab: true, desc: '온라인 신청 고객', color: '#ff7a1a',
+      pages: ['online-deposit', 'onl-pickup', 'onl-refund', 'onl-receivable', 'onl-rate'] },
+    { group: '설정', tab: true, desc: '공통 설정', color: '#5b6b85',
+      pages: ['rate', 'set-b2b', 'set-b2b-sell', 'set-hours', 'set-basic', 'set-notice'] },
     { group: '참고', pages: ['terms'] },
   ],
 
@@ -36,30 +43,24 @@ window.GUIDE = {
     /* ───────────── 시작하기 ───────────── */
     home: {
       title: '가이드 소개',
-      lead: '지점에서 쓰는 CEMS(환전 관리시스템)와 POS 화면, 버튼을 한곳에 정리했어요.',
+      lead: '지점에서 쓰는 CEMS(환전 관리시스템)의 화면과 버튼을 상단 탭 · 좌측 메뉴 순서 그대로 정리했어요.',
       blocks: [
-        { type: 'callout', tone: 'tip', html: '<p><b>화면 속 빨간 테두리와 번호</b>는 바로 아래 설명 번호와 짝이에요.</p><p>설명에 마우스를 올리면 화면의 해당 위치가 강조되고, 화면을 누르면 크게 볼 수 있어요.</p>' },
+        '<h2>서비스별 가이드</h2>',
+        '<p class="muted">CEMS 상단 탭 다섯 개와 그 아래 좌측 메뉴를 그대로 옮겼어요. 메뉴를 누르면 해당 화면 설명으로 이동해요.</p>',
+        { type: 'services' },
         '<h2>처음이라면 여기부터</h2>',
-        '<ul>' +
-          '<li><a href="#/layout"><b>화면 구성 살펴보기</b></a> | 상단 탭, 지점 선택, 좌측 메뉴… CEMS 화면이 어떻게 생겼는지부터 확인하세요.</li>' +
-          '<li><a href="#/exchange-request"><b>환전신청관리</b></a> | 우리 지점에서 일어난 환전 거래 원장을 보는 화면이에요.</li>' +
-          '<li><a href="#/terms"><b>표기·용어 정리</b></a> | 매입·매각, 입력방식, 거래번호 읽는 법을 먼저 알아두세요.</li>' +
-        '</ul>',
-        '<h2>자주 찾는 기능</h2>',
-        { type: 'cards', items: [
-          { to: 'exchange-request', title: '오늘 환전 거래 보기', desc: '등록기간 기본값이 오늘' },
-          { to: 'm24-request', title: '무인환전기 거래 보기', desc: '머니 24h에서 무인기 선택' },
-          { to: 'reservation', title: '환전예약 확인', desc: '진행상태 · 입금상태 · 수령일시' },
-          { to: 'online-deposit', title: '온라인환전 입금 확인', desc: '입금상태 · 수령상태' },
-          { to: 'rate', title: '환율 · 지점별 보유량', desc: '사실 때 · 기준 · 파실 때' },
-          { to: 'exchange-request', title: '창구 거래 수기 등록', desc: '외환등록 · 상품권등록' },
+        { type: 'steps', items: [
+          ['<a href="#/layout">화면 구성 살펴보기</a>', '상단 탭, 지점 선택, 좌측 메뉴가 어디 있는지부터 확인하세요.'],
+          ['<a href="#/terms">표기·용어 정리</a>', '매입·매각, 입력방식, 거래번호 읽는 법을 알아두세요.'],
+          ['<a href="#/exchange-request">환전신청관리</a>', '가장 자주 여는 화면 — 우리 지점 환전 거래 원장이에요.'],
         ] },
+        { type: 'callout', tone: 'tip', html: '<p><b>화면 위 주황색 번호</b>는 아래 설명 번호와 짝이에요. 설명에 마우스를 올리면 화면 위치가 강조되고, 화면을 누르면 크게 보면서 번호별 설명을 볼 수 있어요.</p>' },
         '<h2>이 가이드의 기준</h2>',
         '<ul>' +
           '<li>2026년 10월 6일 캡처한 지점 CEMS 화면 기준이에요. 화면은 업데이트에 따라 조금 달라질 수 있어요.</li>' +
           '<li>금액은 모두 원(KRW) 기준이고, 외화는 통화 코드(USD, JPY…)와 함께 따로 표기해요.</li>' +
           '<li>캡처 속 고객 이름·연락처·접속 정보는 가림 처리했어요.</li>' +
-          '<li>POS 화면은 정리 중이에요.</li>' +
+          '<li>‘준비 중’ 표시가 있는 메뉴는 화면 설명을 정리하고 있어요.</li>' +
         '</ul>',
       ],
     },
@@ -77,13 +78,12 @@ window.GUIDE = {
         ] },
         '<h2>탭별 좌측 메뉴</h2>',
         { type: 'table', head: ['상단 탭', '대상', '좌측 메뉴'], rows: [
-          ['머니 익스체인지', '유인지점 창구', '<a href="#/exchange-request">환전신청관리</a> · 환전율관리 · Cash Flow · 시재관리·마감 · 일자별 마감조회'],
-          ['머니 24h', '무인환전기', '<a href="#/m24-request">환전신청관리</a> · 환전율관리 · 시재관리·마감 · 일자별 마감조회 · 시재금현황 · 준비금설정'],
-          ['환전예약', '예약 고객', '<a href="#/reservation">환전예약관리</a> · 가상계좌입금조회 · 환전율관리 · 기간별 매출조회 · 휴일관리'],
-          ['온라인환전', '온라인 신청 고객', '<a href="#/online-deposit">입금관리</a> · 수령관리 · 취소환불관리 · 미수금 조회 · 환전율관리'],
-          ['설정', '공통', '<a href="#/rate">환전율관리</a> · B2B · B2B 매각 요청 · 영업시간 · 기초설정 · 공지사항'],
+          ['머니 익스체인지', '유인지점 창구', '<a href="#/exchange-request">환전신청관리</a> · <a href="#/ex-rate">환전율관리</a> · <a href="#/ex-cashflow">Cash Flow</a> · <a href="#/ex-closing">시재관리·마감</a> · <a href="#/ex-daily">일자별 마감조회</a>'],
+          ['머니 24h', '무인환전기', '<a href="#/m24-request">환전신청관리</a> · <a href="#/m24-rate">환전율관리</a> · <a href="#/m24-closing">시재관리·마감</a> · <a href="#/m24-daily">일자별 마감조회</a> · <a href="#/m24-cash">시재금현황</a> · <a href="#/m24-reserve">준비금설정</a>'],
+          ['환전예약', '예약 고객', '<a href="#/reservation">환전예약관리</a> · <a href="#/rsv-vaccount">가상계좌입금조회</a> · <a href="#/rsv-rate">환전율관리</a> · <a href="#/rsv-sales">기간별 매출조회</a> · <a href="#/rsv-holiday">휴일관리</a>'],
+          ['온라인환전', '온라인 신청 고객', '<a href="#/online-deposit">입금관리</a> · <a href="#/onl-pickup">수령관리</a> · <a href="#/onl-refund">취소환불관리</a> · <a href="#/onl-receivable">미수금 조회</a> · <a href="#/onl-rate">환전율관리</a>'],
+          ['설정', '공통', '<a href="#/rate">환전율관리</a> · <a href="#/set-b2b">B2B</a> · <a href="#/set-b2b-sell">B2B 매각 요청</a> · <a href="#/set-hours">영업시간</a> · <a href="#/set-basic">기초설정</a> · <a href="#/set-notice">공지사항</a>'],
         ] },
-        { type: 'callout', tone: 'tip', html: '<p>링크가 걸린 메뉴는 이 가이드에 설명이 있어요. 나머지 메뉴는 정리되는 대로 추가돼요.</p>' },
         { type: 'callout', tone: 'warn', html: '<p><b>지점 선택을 먼저 확인하세요.</b> 같은 화면이라도 선택한 지점·무인기에 따라 보이는 거래가 달라요.</p>' },
       ],
       related: ['exchange-request', 'terms'],
@@ -120,7 +120,7 @@ window.GUIDE = {
 
     /* ───────────── 머니 24h ───────────── */
     'm24-request': {
-      title: '환전신청관리 (무인환전기)',
+      title: '환전신청관리',
       lead: '머니 24h 탭에서는 무인환전기를 골라 그 기기에서 일어난 거래를 봐요. 화면 구성은 지점 환전신청관리와 같아요.',
       blocks: [
         { type: 'figure', src: 'img/cems-24h-request.png', caption: '머니 24h › 환전신청관리', marks: [
@@ -194,7 +194,7 @@ window.GUIDE = {
 
     /* ───────────── 설정 ───────────── */
     rate: {
-      title: '환전율 관리',
+      title: '환전율관리',
       lead: '통화별 오늘 환율(사실 때 · 기준환율 · 파실 때)과 지점·무인기별 외화 보유 현황을 보는 화면이에요.',
       blocks: [
         { type: 'figure', src: 'img/cems-rate.png', caption: '설정 › 환전율관리', marks: [
@@ -209,14 +209,29 @@ window.GUIDE = {
       related: ['exchange-request', 'online-deposit'],
     },
 
-    /* ───────────── POS ───────────── */
-    pos: {
-      title: 'POS 가이드 (준비 중)',
-      lead: 'POS 화면 설명은 정리 중이에요.',
-      blocks: [
-        { type: 'callout', tone: 'warn', html: '<p>POS 화면 캡처와 설명이 준비되면 이 자리에 추가돼요.</p>' },
-      ],
-    },
+    /* ───────────── 준비 중 (캡처 받으면 채움) ───────────── */
+    'ex-rate': { title: '환전율관리', lead: '머니 익스체인지(유인지점)의 환전율관리 화면이에요.', pending: true, blocks: [] },
+    'ex-cashflow': { title: 'Cash Flow', lead: '지점의 현금 흐름을 보는 화면이에요.', pending: true, blocks: [] },
+    'ex-closing': { title: '시재관리·마감', lead: '지점 시재를 관리하고 마감하는 화면이에요.', pending: true, blocks: [] },
+    'ex-daily': { title: '일자별 마감조회', lead: '지난 마감 내역을 날짜별로 조회하는 화면이에요.', pending: true, blocks: [] },
+    'm24-rate': { title: '환전율관리', lead: '무인환전기의 환전율관리 화면이에요.', pending: true, blocks: [] },
+    'm24-closing': { title: '시재관리·마감', lead: '무인환전기 시재를 관리하고 마감하는 화면이에요.', pending: true, blocks: [] },
+    'm24-daily': { title: '일자별 마감조회', lead: '무인환전기 마감 내역을 날짜별로 조회하는 화면이에요.', pending: true, blocks: [] },
+    'm24-cash': { title: '시재금현황', lead: '무인환전기의 시재금 현황을 보는 화면이에요.', pending: true, blocks: [] },
+    'm24-reserve': { title: '준비금설정', lead: '무인환전기 준비금을 설정하는 화면이에요.', pending: true, blocks: [] },
+    'rsv-vaccount': { title: '가상계좌입금조회', lead: '환전예약 가상계좌 입금 내역을 조회하는 화면이에요.', pending: true, blocks: [] },
+    'rsv-rate': { title: '환전율관리', lead: '환전예약에 적용하는 환전율관리 화면이에요.', pending: true, blocks: [] },
+    'rsv-sales': { title: '기간별 매출조회', lead: '환전예약 매출을 기간별로 조회하는 화면이에요.', pending: true, blocks: [] },
+    'rsv-holiday': { title: '휴일관리', lead: '환전예약 휴일을 관리하는 화면이에요.', pending: true, blocks: [] },
+    'onl-pickup': { title: '수령관리', lead: '온라인환전 고객의 수령을 처리하는 화면이에요.', pending: true, blocks: [] },
+    'onl-refund': { title: '취소환불관리', lead: '온라인환전 취소·환불을 처리하는 화면이에요.', pending: true, blocks: [] },
+    'onl-receivable': { title: '미수금 조회', lead: '온라인환전 미수금을 조회하는 화면이에요.', pending: true, blocks: [] },
+    'onl-rate': { title: '환전율관리', lead: '온라인환전에 적용하는 환전율관리 화면이에요.', pending: true, blocks: [] },
+    'set-b2b': { title: 'B2B', lead: 'B2B 거래 관련 설정 화면이에요.', pending: true, blocks: [] },
+    'set-b2b-sell': { title: 'B2B 매각 요청', lead: 'B2B 매각을 요청하는 화면이에요.', pending: true, blocks: [] },
+    'set-hours': { title: '영업시간', lead: '지점 영업시간을 설정하는 화면이에요.', pending: true, blocks: [] },
+    'set-basic': { title: '기초설정', lead: '지점 기초 정보를 설정하는 화면이에요.', pending: true, blocks: [] },
+    'set-notice': { title: '공지사항', lead: '본사 공지사항을 확인하는 화면이에요.', pending: true, blocks: [] },
 
     /* ───────────── 참고 ───────────── */
     terms: {

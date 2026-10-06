@@ -37,7 +37,7 @@ npm run build && npm run preview
 | **POS** `/pos` | 지점 직원 | 예약 검색 → 신분증 대조 → 거래완료(베스트레이트 정산 시뮬레이션) |
 | **이메일** `/email` | 운영 | 발송 이메일(예약확인·리마인더·OTP 등) 이력·미리보기 |
 | **기획문서** `/docs` | 내부 | `docs-plan/` 문서 뷰어(IA·구조도·플로우·API·데이터모델·상태도·정책) |
-| **지점 가이드** `branch-guide/` | 지점 직원 | CEMS·POS 지점 운영 가이드(문서형: 좌측 메뉴·검색·다크 모드·번호 주석 스크린샷). 글은 `public/branch-guide/content.js`, 캡처는 `public/branch-guide/img/`. 배포: https://ahyeonine.github.io/moneybox_fw01/branch-guide/ |
+| **CEMS 지점 운영 가이드** `branch-guide/` | 지점 직원 | CEMS 상단 탭·좌측 메뉴별 화면 설명(번호 주석 스크린샷·검색·다크 모드). 글은 `public/branch-guide/content.js`, 캡처는 `public/branch-guide/img/`(고객 정보 가림 필수). 배포: https://ahyeonine.github.io/moneybox_fw01/branch-guide/ |
 
 > CEMS는 **지점용 어드민**입니다. 한도(최소/단위/최대)·환율은 각 지점이 자기 CEMS에서 설정하며,
 > 프로토타입은 지점 계정 분리를 시뮬레이션하지 않으므로 **로그인 지점 1곳**을 대표해 보여줍니다.
