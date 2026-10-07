@@ -67,6 +67,7 @@ function EmailVerify({ email, verified, onVerify, sendEmail, t }) {
   const [code, setCode] = useState('') // 발송된 인증번호(데모)
   const [input, setInput] = useState('')
   const [err, setErr] = useState('')
+  const [sendCount, setSendCount] = useState(0) // 재전송 횟수(최대 5, 초과 시 10분 잠금)
 
   if (verified) {
     return (
@@ -84,12 +85,18 @@ function EmailVerify({ email, verified, onVerify, sendEmail, t }) {
       setErr(t('s2v.verify.err.email'))
       return
     }
+    // 재전송 최대 5회, 초과 시 10분 잠금 (정책 §8.1 — 국내 전화번호 인증 기준 준용)
+    if (sendCount >= 5) {
+      setErr(t('s2v.verify.err.limit'))
+      return
+    }
     const c = String(Math.floor(100000 + Math.random() * 900000))
     setCode(c)
     setSentTo(email.trim())
     setInput('')
     setErr('')
-    sendEmail('auth', email.trim(), { code: c }) // 이메일 Outbox에 기록
+    setSendCount(sendCount + 1)
+    sendEmail('auth', email.trim(), { code: c }) // 이메일 Outbox에 기록 (인증코드 유효시간 3분)
   }
   function confirm() {
     if (input.trim() === code) {
@@ -123,6 +130,7 @@ function EmailVerify({ email, verified, onVerify, sendEmail, t }) {
             </button>
           </div>
           <div className="s2v-verify-sent">{t('s2v.verify.sent').replace('{email}', sentTo)}</div>
+          <div className="s2v-verify-note tiny">{t('s2v.verify.valid')}</div>
           <div className="s2v-verify-demo">{t('s2v.verify.demo').replace('{code}', code)}</div>
           <button type="button" className="s2v-verify-resend" onClick={send}>
             {t('s2v.verify.resend')}

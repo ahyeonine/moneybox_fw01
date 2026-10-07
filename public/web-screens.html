@@ -179,7 +179,7 @@
             <span class="flowar">↓</span><span class="flowbox blue">홈 (상단 메뉴)</span>
           </div>
           <div class="flowsub appflow">
-            <div class="flowrow"><span class="flowtab">홈</span><span class="flowar">·</span><span style="font-size:12px;color:var(--muted)">현재 환율 참고 · 진행 중 예약 · 빠른 예약 · 가까운 지점</span></div>
+            <div class="flowrow"><span class="flowtab">홈</span><span class="flowar">·</span><span style="font-size:12px;color:var(--muted)">진행 중 예약 · 빠른 예약 · 가까운 지점</span></div>
             <div class="flowrow"><span class="flowtab">예약</span><span class="flowar">→</span><span class="flowbox">지점 지도<br><span style="font-weight:400;font-size:10.5px;color:var(--muted)">지점·무인기</span></span><span class="flowar">→</span><span class="flowbox">지점 상세</span><span class="flowar">→</span><span class="flowbox">금액·수령일</span><span class="flowar">→</span><span class="flowbox">예약자 정보</span><span class="flowar">→</span><span class="flowbox">완료</span><span class="flowar">→</span><span class="flowbox">내 예약 상세</span></div>
             <div class="flowrow"><span class="flowtab">마이</span><span class="flowar">→</span><span class="flowbox">내 예약 · 쿠폰 · 환율 알림 · 언어 설정</span></div>
           </div>
@@ -276,24 +276,21 @@
 
   <!-- ================= 홈 ================= -->
   <div class="surface-h" id="home">2. 홈</div>
-  <p class="surface-sub">웹 홈. 현재 환율 참고 · 진행 중 예약 · 빠른 예약 · 가까운 지점.</p>
+  <p class="surface-sub">웹 홈. 진행 중 예약 · 빠른 예약 · 가까운 지점.</p>
 
   <section class="screen">
     <div class="screen-h"><span class="screen-no">H1</span><h2 class="screen-t">홈</h2><span class="screen-flow">상단 메뉴 · 홈</span></div>
     <div class="cols">
       <div class="wf"><div class="wf-phone">
         <div class="gnb"><span class="lg">MONEY BOX</span><span class="mn"><span class="on">홈</span><span>예약</span><span>조회</span><span>EN▾</span></span></div>
-        <div class="wf-label">현재 환율 (참고)</div>
-        <div class="rate3"><div>USD<b>1,380</b></div><div>JPY<b>8.9</b></div><div>CNY<b>190</b></div></div>
-        <div class="wf-sub" style="margin:2px;">참고 시세 · 실제 적용은 수령일 지점 환율</div>
         <div class="hero-cta">환전 예약하기<small>가까운 지점에서 여권만 · 무결제</small></div>
-        <div class="wf-label">진행 중 예약</div>
+        <div class="wf-label">진행 중 예약 (로그인 회원 · 수령 전일)</div>
         <div class="card-live"><div class="ct">RSV-…0002 · 강남점 · 내일 수령 (D-1)</div><div class="wf-sub" style="margin:4px 0 0;">방문 예정이면 [방문 확정]을 눌러주세요 →</div></div>
         <div class="promo">회원가입하고 우대·쿠폰 받기 (비회원 노출)</div>
       </div></div>
       <div class="notes">
-        <div class="note"><span class="tag">현재 환율</span> <b>참고 시세만</b> 표기 — 실제는 수령일 지점 환율(정책 §2.2). 홈은 예약 중 화면이 아니므로 참고 노출은 최소화.</div>
-        <div class="note ok"><span class="tag">진행 중 예약</span> 예약 있으면 카드로 노출. <b>D-1~D-0이면 방문 확정 유도</b> → 내 예약 상세로 이동해 [방문 확정]/[예약 취소].</div>
+        <div class="note"><span class="tag">현재 환율</span> 홈에는 환율을 <b>노출하지 않음(홈 미노출)</b> — 홈은 예약 중 화면이 아님. 실제 적용은 수령일 지점 환율(정책 §2.2).</div>
+        <div class="note ok"><span class="tag">진행 중 예약</span> <b>로그인 회원</b>에게만, <b>수령 전일(D-1)</b>에만 카드로 노출 → 내 예약 상세로 이동해 [방문 확정]/[예약 취소].</div>
         <div class="note"><span class="tag">빠른 예약</span> 큰 CTA로 예약 플로우 진입. 가까운 지점이 있으면 바로 그 지점으로 시작.</div>
         <div class="note"><span class="tag">가입 유도</span> 비회원에게만 프로모션 배너 노출(회원 미노출).</div>
       </div>
@@ -440,7 +437,7 @@
           </div>
         </div>
         <div>
-          <div class="wf-cap">② 전날·당일 (D-1~D-0)</div>
+          <div class="wf-cap">② 수령 전일 (D-1)</div>
           <div class="wf-phone plain">
             <span class="state-tag w">D-1</span>
             <div class="summary"><div class="sr"><span>지점</span><span>명동점</span></div><div class="sr"><span>수령일</span><span>내일</span></div><div class="sr"><span>통화/금액</span><span>USD 1,000</span></div><div class="sr"><span>환율</span><span>수령일 환율</span></div></div>
@@ -459,7 +456,7 @@
         </div>
       </div></div>
       <div class="notes">
-        <div class="note"><span class="tag">시점 분기</span> D-2 이상=[예약 변경]+[예약 취소], <b>전날·당일=[방문 확정]+[예약 취소]</b>(변경 불가), 확정 후=[예약 취소]만.</div>
+        <div class="note"><span class="tag">시점 분기</span> D-2 이상=[예약 변경]+[예약 취소], <b>수령 전일(D-1)=[방문 확정]+[예약 취소]</b>(변경 불가), 확정 후=[예약 취소]만.</div>
         <div class="note"><span class="tag">리마인더 연동</span> 전일 리마인더 메일의 "예약 확인하기" → <b>예약내역조회로 이동</b>해 이 상세에서 확정/취소. 상태 변경은 상세 한 곳에서만.</div>
         <div class="note"><span class="tag">조회</span> 회원=자동 로그인 목록/상세, 비회원=예약번호+이메일. 완료·취소 건은 조회만.</div>
       </div>
