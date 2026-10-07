@@ -209,6 +209,8 @@
   .shot-bar button { border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 2px 10px; font-size: 12.5px; cursor: pointer; color: var(--ink-2); display: inline-flex; align-items: center; gap: 5px; }
   .shot-bar button:hover { border-color: var(--brand); color: var(--brand-ink); }
   .shot-frame { position: relative; cursor: zoom-in; background: #fff; }
+  .shot.narrow { max-width: 460px; }
+  .shot.narrow .anno { grid-template-columns: 1fr; }
   .shot-frame img { display: block; width: 100%; height: auto; }
   .mk { position: absolute; border: 2px dashed var(--mark); border-radius: 6px; transition: background .15s, box-shadow .15s, border-style .15s; pointer-events: none; }
   .mk.hl { border-style: solid; background: var(--mark-soft); box-shadow: 0 0 0 3px var(--mark-soft); }
@@ -446,7 +448,7 @@
     if (typeof b === 'string') return b;
     if (b.type === 'figure') {
       var id = 'fig' + idx; figs[id] = b;
-      return '<figure class="shot" data-fig="' + id + '">' +
+      return '<figure class="shot' + (b.narrow ? ' narrow' : '') + '" data-fig="' + id + '">' +
         '<div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span class="cap">' + b.caption + '</span><button type="button" data-zoom="' + id + '">' + ICON.zoom + '크게 보기</button></div>' +
         '<div class="shot-frame" data-fig="' + id + '" title="눌러서 크게 보기"><img src="' + b.src + '" alt="' + esc(b.caption) + '" loading="lazy">' + markers(b) + '</div>' +
         '<ol class="anno">' + b.marks.map(function (m, i) { return annoItem(m, i, id); }).join('') + '</ol></figure>';
