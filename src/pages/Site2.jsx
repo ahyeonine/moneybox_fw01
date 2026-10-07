@@ -488,12 +488,20 @@ export default function Site2() {
     )
   }
 
-  // 지역(선택 시) 기준 지점. 위치 있으면 가까운 순, 없으면 등장 순.
+  // 전체 지점을 노출하되 선택 지역/내 위치 주변을 우선 추천(앞에 정렬). 지역은 '필터'가 아니라 '추천 기준'.
   const branches = useMemo(() => {
-    let list = BRANCHES
-    if (region) list = list.filter((b) => branchMatchesRegion(b, region))
-    if (!loc) return list.map((b) => ({ b, km: null }))
-    return list.map((b) => ({ b, km: distanceKm(loc, b) })).sort((x, y) => x.km - y.km)
+    const list = BRANCHES
+    if (loc) {
+      // 내 위치가 있으면 가까운 순(전체 노출, 주변 우선 추천)
+      return list.map((b) => ({ b, km: distanceKm(loc, b) })).sort((x, y) => x.km - y.km)
+    }
+    if (region) {
+      // 선택 지역을 앞에, 나머지 지역도 뒤에 전체 노출
+      const inR = list.filter((b) => branchMatchesRegion(b, region))
+      const others = list.filter((b) => !branchMatchesRegion(b, region))
+      return [...inR, ...others].map((b) => ({ b, km: null }))
+    }
+    return list.map((b) => ({ b, km: null }))
   }, [loc, region])
 
   const mapPoints = useMemo(
@@ -941,7 +949,25 @@ export default function Site2() {
               </>
             )}
 
-            {/* 지점 리스트 (위치 있으면 가까운 순, 없으면 전체) */}
+            {/* 지역 바꾸기 — 선택 지역을 우선 추천하되 전체 지점은 그대로 노출 */}
+            <div className="s2-field-label">{t('s2v.region.title')}</div>
+            <div className="s2-region-chips s2-region-chips-sm">
+              {REGIONS.map((r) => (
+                <button
+                  key={r.ko}
+                  type="button"
+                  className={`s2-region-chip${region === r.ko && !loc ? ' on' : ''}`}
+                  onClick={() => {
+                    setRegion(r.ko)
+                    setLoc(null)
+                  }}
+                >
+                  <span className="s2-region-name">{r[lang] || r.ko}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* 지점 리스트 (위치 있으면 가까운 순, 없으면 선택 지역 우선·전체 노출) */}
             <div className="s2-field-label">{loc ? t('s2.reco.title') : t('s2.all.title')}</div>
             <div className="s2-branch-list">
               {branches.length === 0 && <div className="s2-empty">{t('s2.br.none')}</div>}
