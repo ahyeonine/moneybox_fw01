@@ -319,9 +319,9 @@ function Detail({ rec, today, onBack, onCancel, onConfirmVisit, onEdit }) {
   const branch = getBranch(rec.branchId)
   const editable = rec.status === 'BOOKED'
   const confirmed = rec.reminderStatus === 'CONFIRMED'
-  // 수령 전날(D-1)~당일: 방문 확정 창. 이 기간에는 [방문 확정]+[예약 취소], 그 이전엔 [예약 변경]+[예약 취소].
+  // 수령 전일(D-1): 방문 확정 창. 이 날에는 [방문 확정]+[예약 취소], 그 이전엔 [예약 변경]+[예약 취소].
   const daysUntil = daysBetween(today, rec.pickupDate)
-  const inConfirmWindow = daysUntil === 0 || daysUntil === 1
+  const inConfirmWindow = daysUntil === 1
   return (
     <div className="card" style={{ marginTop: 14 }}>
       <button className="btn ghost" style={{ marginBottom: 12 }} onClick={onBack}>
