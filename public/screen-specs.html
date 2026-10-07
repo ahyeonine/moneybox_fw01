@@ -146,11 +146,11 @@
       <tr><td><span class="pcode">MB-POL-RSV-01</span></td><td>§5.1·6.3</td><td>무결제 예약 · 현장 현금 · 취소 수수료 없음</td></tr>
       <tr><td><span class="pcode">MB-POL-RSV-02</span></td><td>§5.2</td><td>당일 예약 허용 · 수령일 상한은 본사 설정</td></tr>
       <tr><td><span class="pcode">MB-POL-RSV-03</span></td><td>§5.6</td><td>지점·통화별 예약 수락 · 설정 통화만 노출</td></tr>
-      <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>§7.1</td><td>수령 전날·당일 방문 예정 확인 · 방문 확정/취소</td></tr>
-      <tr><td><span class="pcode">MB-POL-VISIT-02</span></td><td>§7.2</td><td>수령기한 경과 시 자동 취소(AUTO)</td></tr>
+      <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>§7.1</td><td>수령 전일(D-1) 방문 예정 확인 · 방문 확정/취소</td></tr>
+      <tr><td><span class="pcode">MB-POL-VISIT-02</span></td><td>§7.2</td><td>수령기한(수령일 당일이 끝나는 자정 = 익일 00:00) 경과 시 자동 취소(AUTO)</td></tr>
       <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>§8</td><td>이메일 인증·완료·리마인더·취소 안내 · "예약 확인하기"→예약내역조회</td></tr>
       <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>§3·9·10</td><td>회원 우대(현장 재량) · 비회원 예약·무로그인 조회 허용</td></tr>
-      <tr><td><span class="pcode">MB-POL-NOTI-01</span></td><td class="chk">신규(미확정)</td><td>거래 알림/마케팅 알림 분리 · 푸시 꺼도 이메일 발송</td></tr>
+      <tr><td><span class="pcode">MB-POL-NOTI-01</span></td><td>§8</td><td>웹은 이메일만 · 예약 안내 이메일 항상 발송 · 마케팅 이메일 분리(수신 동의 시)</td></tr>
     </table>
 
     <h4>상태·이벤트 표기</h4>
@@ -384,7 +384,7 @@
           <tr><td><span class="evt">perm_location_result</span></td><td>응답</td><td>value(allow/later)</td></tr>
         </table></div>
         <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
-          <li>거부 시 지역 선택 폴백. 근처 지점 알림(마이)은 별도 '항상 허용' 권한</li>
+          <li>거부 시 지역 선택 폴백 — 지역 선택으로 이용 가능</li>
         </ul></div>
       </div>
     </div></div>
@@ -392,7 +392,7 @@
 
   <!-- ================= 홈 ================= -->
   <div class="surface-h" id="home">2. 홈</div>
-  <p class="surface-sub">웹 홈 — 현재 환율 참고 · 진행 중 예약 · 빠른 예약.</p>
+  <p class="surface-sub">웹 홈 — 진행 중 예약 · 빠른 예약.</p>
 
   <!-- UI-W-2000 홈 -->
   <div class="spec">
@@ -401,7 +401,6 @@
       <div>
         <div class="ph">
           <div class="ph-bar" style="justify-content:space-between;">안녕하세요 <span>🔔 한국어▾</span></div>
-          <div class="ph-rate"><div>USD<b>1,380</b></div><div>JPY<b>8.9</b></div><div>CNY<b>190</b></div></div>
           <div class="ph-hero">환전 예약하기</div>
           <div class="ph-card">RSV-…0002 · 강남점 · D-1<br><span style="font-weight:400;color:var(--muted)">방문 확정을 눌러주세요 →</span></div>
         </div>
@@ -415,23 +414,19 @@
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#home">웹 화면설계서 · 홈</a></td></tr>
         </table></div>
         <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
-          <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>현재 환율은 참고만(홈은 예약 중 화면 아님 → 최소 노출)</td></tr>
-          <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>진행 중 예약이 D-1~D-0이면 방문 확정 유도</td></tr>
-          <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>비회원에게만 가입 유도 배너</td></tr>
+          <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>홈은 예약 중 화면이 아니므로 현재 환율 미노출(환율은 금액 화면에서만)</td></tr>
+          <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>로그인 회원·수령 전일(D-1)·방문 확정 전 예약에만 방문 확정 유도</td></tr>
+          <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>비회원에게만 가입 유도(배너 아닌 텍스트 링크 한 줄)</td></tr>
         </table></div>
         <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
           <tr><td>상단</td><td>인사 · 언어 · 알림</td></tr>
-          <tr><td>현재 환율 참고</td><td>USD·JPY·CNY 미니(참고 시세)</td></tr>
           <tr><td>빠른 예약 CTA</td><td>환전 예약하기 → 예약 플로우</td></tr>
-          <tr><td>진행 중 예약</td><td>BOOKED 최근 건 카드(D-1이면 방문 확정 유도)</td></tr>
-          <tr><td>프로모션</td><td>비회원 가입 유도 배너</td></tr>
+          <tr><td>진행 중 예약</td><td>로그인 회원·수령 전일(D-1)·방문 확정 전 BOOKED 건만 카드 노출(방문 확정 유도)</td></tr>
+          <tr><td>가입 유도</td><td>비회원 대상 텍스트 링크 한 줄(배너 아님)</td></tr>
         </table></div>
         <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
-          <li>홈은 예약 중 화면이 아니므로 현재 환율은 참고 수준으로만</li>
-          <li>진행 중 예약이 있으면 카드로 노출, 임박 시 방문 확정 유도</li>
-        </ul></div>
-        <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
-          <li><span class="chk">홈의 현재 환율 노출 범위 — 완료·조회 화면과 일관(참고만)</span></li>
+          <li>와이어프레임 A1(랜딩) 기준 — 랜딩형 홈. 홈은 예약 중 화면이 아니므로 현재 환율 미노출(환율은 금액 화면에서만)</li>
+          <li>로그인 회원이고 수령 전일(D-1)·방문 확정 전인 예약이 있을 때만 카드 노출(방문 확정 유도). 상시 노출·비회원·당일(D-0) 노출 없음</li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
           <tr><td>외국인 웹 진입·재방문</td><td>예약(CTA) · 상세(카드) · 마이(탭)</td><td>사이트 이탈</td></tr>
@@ -443,7 +438,7 @@
         </table></div>
         <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
           <tr><td>CTA</td><td>환전 예약하기</td><td>Reserve exchange</td></tr>
-          <tr><td>환율 안내</td><td>참고 시세 · 실제는 수령일 지점 환율</td><td>Reference rate · actual rate set on pickup day</td></tr>
+          <tr><td>가입 유도</td><td>회원가입하고 혜택 받기</td><td>Sign up for benefits</td></tr>
         </table></div>
         <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
           <tr><td><span class="evt">home_view</span></td><td>진입</td><td>member(bool)</td></tr>
@@ -451,7 +446,7 @@
           <tr><td><span class="evt">home_active_rsv_tap</span></td><td>진행중 카드</td><td>reservation_no</td></tr>
         </table></div>
         <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
-          <li>진행 중 예약 = BOOKED 최근순. D-1~D-0이면 방문 확정 유도 노출</li>
+          <li>진행 중 예약 카드 = 로그인 회원 && 수령 전일(D-1) && 방문 확정 전 && status BOOKED일 때만 노출</li>
         </ul></div>
       </div>
     </div></div>
@@ -740,7 +735,7 @@
         <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
           <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>완료 화면엔 환율 수치 없음 — "수령일 환율"만</td></tr>
           <tr><td><span class="pcode">MB-POL-MEMBER-01</span></td><td>회원/비회원 완료 분기 · 비회원 가입 유도</td></tr>
-          <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>완료 메일 발송 · 이후 수령 전일 리마인더</td></tr>
+          <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>완료 메일 발송 · 이후 수령 전일(D-1) 리마인더(당일·전일 접수 건은 생략)</td></tr>
         </table></div>
         <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
           <tr><td>비회원</td><td>예약번호 · 요약 · 가입 유도 · "예약 조회하기"</td></tr>
@@ -748,6 +743,7 @@
         </table></div>
         <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
           <li>완료 화면이 회원/비회원으로 나뉨. 환율 수치 미표기</li>
+          <li>당일·전일(수령일까지 1일 이하) 예약은 접수 즉시 방문 확정(컨펌) 처리 · 전일 리마인더 메일 생략</li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
           <tr><td>UI-W-3400 정보 (회원=R3)</td><td>예약 조회(비회원)·내 예약 관리(회원)→조회</td><td>홈</td></tr>
@@ -784,7 +780,7 @@
           <div class="ph-note">수령 임박 · 방문 예정이면 방문 확정</div>
           <div class="ph-row"><div class="ph-btn ok">방문 확정</div><div class="ph-btn dn">예약 취소</div></div>
         </div>
-        <div class="ph-cap">상태: 전날·당일(D-1~D-0)</div>
+        <div class="ph-cap">상태: 전일(D-1)</div>
       </div>
       <div>
         <div class="spec-sec"><h4>기본 정보</h4><table class="st">
@@ -794,30 +790,31 @@
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#reserve">웹 화면설계서 · 예약 R6</a></td></tr>
         </table></div>
         <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
-          <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>수령 전날·당일(D-1~D-0)엔 방문 확정/취소(변경 불가)</td></tr>
-          <tr><td><span class="pcode">MB-POL-VISIT-02</span></td><td>수령기한 경과 시 자동 취소(AUTO)</td></tr>
+          <tr><td><span class="pcode">MB-POL-VISIT-01</span></td><td>수령 전일(D-1)엔 방문 확정/취소(변경 불가)</td></tr>
+          <tr><td><span class="pcode">MB-POL-VISIT-02</span></td><td>수령기한(수령일 당일이 끝나는 자정 = 익일 00:00) 경과 시 자동 취소(AUTO)</td></tr>
           <tr><td><span class="pcode">MB-POL-RSV-01</span></td><td>취소 수수료 없음 · 수령기한 전 취소 가능</td></tr>
           <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>리마인더 '예약 확인하기' → 이 상세로 진입</td></tr>
         </table></div>
         <div class="spec-sec"><h4>화면 구성 (상태별 버튼)</h4><table class="st"><tr><th>상태</th><th>버튼·표시</th></tr>
           <tr><td>여유 (D-2↑)</td><td>[예약 변경] [예약 취소]</td></tr>
-          <tr><td>임박 (D-1~D-0)</td><td>안내 + [방문 확정] [예약 취소] (변경 불가)</td></tr>
+          <tr><td>임박 (D-1)</td><td>안내 + [방문 확정] [예약 취소] (변경 불가)</td></tr>
           <tr><td>확정 완료</td><td>확정 안내 + [예약 취소]</td></tr>
           <tr><td>완료/취소</td><td>버튼 없이 안내만</td></tr>
         </table></div>
         <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
           <li>임박 구간엔 변경 대신 방문 확정/취소</li>
           <li>리마인더 메일 → 이 상세로 진입(상태 변경 일원화)</li>
+          <li>당일·전일(수령일까지 1일 이하) 접수 예약은 접수 즉시 방문 확정(컨펌) · 전일 메일 생략</li>
         </ul></div>
         <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
-          <li><span class="chk">방문 확정 시 가용 시재 재확인·차감(동시성) → 소진 시 안내</span></li>
+          <li><span class="chk">방문 확정 = 시재 차감 예정(컨펌) 등록 · 항상 성공(품절/SOLD_OUT 없음) · 실제 차감은 수령(거래완료) 시점</span></li>
           <li><span class="chk">'변경 불가' 경계(D-1 기준 시각) 확정 필요</span></li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
           <tr><td>홈 카드 / 마이 내 예약 / 리마인더 메일</td><td>변경(R3) · 취소 완료 · 방문 확정 완료</td><td>뒤로 → 목록</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
-          <tr><td>[방문 확정]</td><td>시재 재확인·차감·확정. 실패 시 SOLD_OUT 안내</td></tr>
+          <tr><td>[방문 확정]</td><td>시재 차감 예정(컨펌) 등록 · 항상 성공(SOLD_OUT 없음). 실제 차감은 수령 시점</td></tr>
           <tr><td>[예약 취소]</td><td>확인 모달 → 취소 + 고객취소 메일</td></tr>
           <tr><td>[예약 변경]</td><td>R3 금액(여유 구간만)</td></tr>
         </table></div>
@@ -910,11 +907,9 @@
       <div>
         <div class="ph">
           <div class="ph-bar">← 알림 설정</div>
-          <div class="tgl"><span class="tt">예약 알림<small>거래 · 수령 1시간·10분 전</small></span><span class="sw on"></span></div>
-          <div class="tgl"><span class="tt">환율 알림<small>v1.2 · 미확정</small></span><span class="sw"></span></div>
-          <div class="tgl"><span class="tt">혜택·마케팅<small>광고 수신 동의</small></span><span class="sw"></span></div>
-          <div class="tgl"><span class="tt">근처 지점<small>v1.2 · 미확정</small></span><span class="sw"></span></div>
-          <div class="ph-note">푸시를 꺼도 예약 메일은 계속 발송</div>
+          <div class="tgl"><span class="tt">예약 안내 이메일<small>항상 발송 · 끌 수 없음</small></span><span class="sw on"></span></div>
+          <div class="tgl"><span class="tt">마케팅 수신 동의<small>광고성 이메일 수신</small></span><span class="sw"></span></div>
+          <div class="ph-note">웹은 이메일만 발송 · 예약 안내 메일은 항상 발송</div>
         </div>
         <div class="ph-cap">마이 &gt; 알림 설정</div>
       </div>
@@ -926,47 +921,40 @@
           <tr><td class="k">와이어프레임</td><td><a class="inl" href="web-screens.html#my">웹 화면설계서 · 마이페이지</a></td></tr>
         </table></div>
         <div class="spec-sec"><h4>적용 정책</h4><table class="st"><tr><th>정책 코드</th><th>내용</th></tr>
-          <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>푸시를 꺼도 예약·리마인더 이메일은 계속 발송</td></tr>
-          <tr><td><span class="pcode">MB-POL-NOTI-01</span></td><td>거래 알림/마케팅 알림 분리 · 세부 정책 미확정</td></tr>
-          <tr><td><span class="pcode">MB-POL-RATE-02</span></td><td>환율 알림은 환율 미노출 정책과 충돌 → 정책 정리 후 설계</td></tr>
+          <tr><td><span class="pcode">MB-POL-EMAIL-01</span></td><td>웹은 이메일만 · 예약·리마인더 이메일은 항상 발송(끌 수 없음)</td></tr>
+          <tr><td><span class="pcode">MB-POL-NOTI-01</span></td><td>거래 이메일/마케팅 이메일 분리 · 마케팅은 수신 동의 시에만</td></tr>
         </table></div>
         <div class="spec-sec"><h4>화면 구성</h4><table class="st"><tr><th>영역</th><th>내용</th></tr>
-          <tr><td>예약 알림</td><td><span class="pill on">기본 ON</span> 거래 알림 · 수령 1시간 전·10분 전 사전 푸시</td></tr>
-          <tr><td>환율 알림</td><td><span class="pill off">기본 OFF</span> <span class="pill tbd">v1.2 · 정책 미확정</span></td></tr>
-          <tr><td>혜택·마케팅</td><td><span class="pill off">기본 OFF</span> 광고성 수신 동의 연동</td></tr>
-          <tr><td>근처 지점 알림</td><td><span class="pill off">기본 OFF</span> <span class="pill tbd">v1.2</span> 반경 300~500m · 72h 쿨다운 · 09~21시</td></tr>
+          <tr><td>예약 안내 이메일</td><td><span class="pill on">항상 ON</span> 거래 이메일 · 끌 수 없음(예약·인증·완료·리마인더·취소)</td></tr>
+          <tr><td>마케팅 수신 동의</td><td><span class="pill off">기본 OFF</span> 광고성 이메일 수신 동의 연동</td></tr>
         </table></div>
         <div class="spec-sec"><h4>Description</h4><ul class="spec-ul">
-          <li>예약 알림은 거래 알림이므로 광고 동의와 무관하게 기본 ON</li>
-          <li>마케팅 알림과 거래 알림을 분리</li>
-          <li>푸시 비활성 상태에서도 이메일은 발송됨을 명시</li>
+          <li>웹은 이메일 채널만 — 앱 푸시·사전 푸시·근처 지점 알림 없음</li>
+          <li>예약 안내 이메일(거래)은 끌 수 없음 · 마케팅 이메일은 수신 동의 시에만</li>
+          <li>거래 이메일과 마케팅 이메일을 분리</li>
         </ul></div>
         <div class="spec-sec"><h4>Check Point</h4><ul class="spec-ul">
-          <li><span class="chk">환율 알림 ↔ 환율 미노출 정책(RATE-02) 충돌 — 정책 정리 후 설계</span></li>
-          <li><span class="chk">근처 지점 알림 = 광고성 푸시 표시 의무 법무 확인 선행(미결)</span></li>
-          <li><span class="chk">예약 알림(거래 알림)을 끌 수 없게 할지 확인</span></li>
+          <li><span class="chk">마케팅 이메일 수신 동의 = 광고성 정보 수신 동의 표기 의무 법무 확인</span></li>
         </ul></div>
         <div class="spec-sec"><h4>진입 · 다음 화면</h4><table class="st"><tr><th>진입 경로</th><th>다음 화면</th><th>이탈 지점</th></tr>
           <tr><td>마이 &gt; 알림 설정</td><td>토글 즉시 반영(별도 화면 없음)</td><td>뒤로 → 마이</td></tr>
         </table></div>
         <div class="spec-sec"><h4>인터랙션</h4><table class="st"><tr><th>트리거</th><th>동작</th></tr>
-          <tr><td>토글 전환</td><td>서버 저장 · 즉시 반영</td></tr>
-          <tr><td>근처 지점 알림 ON</td><td>위치 '항상 허용' 권한 요청</td></tr>
-          <tr><td>예약 알림 OFF 시도</td><td>(정책 확정 전) 안내/제한 — 확인 필요</td></tr>
+          <tr><td>마케팅 수신 동의 전환</td><td>서버 저장 · 즉시 반영(marketingConsent)</td></tr>
+          <tr><td>예약 안내 이메일</td><td>끌 수 없음 — 토글 없음</td></tr>
         </table></div>
         <div class="spec-sec"><h4>문구</h4><table class="st"><tr><th>위치</th><th>한국어</th><th>English</th></tr>
           <tr><td>타이틀</td><td>알림 설정</td><td>Notifications</td></tr>
-          <tr><td>이메일 고지</td><td>푸시를 꺼도 예약 메일은 계속 발송됩니다</td><td>Emails are sent even if push is off</td></tr>
+          <tr><td>이메일 고지</td><td>예약 안내 이메일은 항상 발송됩니다(끌 수 없음)</td><td>Reservation emails are always sent</td></tr>
         </table></div>
         <div class="spec-sec"><h4>이벤트 로그</h4><table class="st"><tr><th>이벤트명</th><th>시점</th><th>파라미터</th></tr>
           <tr><td><span class="evt">noti_setting_view</span></td><td>진입</td><td>—</td></tr>
-          <tr><td><span class="evt">noti_toggle</span></td><td>토글 변경</td><td>type, value</td></tr>
+          <tr><td><span class="evt">noti_toggle</span></td><td>마케팅 동의 변경</td><td>value</td></tr>
         </table></div>
         <div class="spec-sec"><h4>개발 참고</h4><ul class="spec-ul">
-          <li>예약 알림은 거래 알림 → 끌 수 없게 할지 확인 필요</li>
-          <li>근처 지점·환율 알림은 정책 미확정으로 v1.2 이후 구현</li>
-          <li>비회원도 마이 탭에서 푸시 설정에 접근 가능</li>
-          <li>예약 사전 푸시 = 수령 1시간 전·10분 전. 서버 시각 기준 이미 지난 시점은 소급 발송 안 함</li>
+          <li>웹 채널은 이메일만 — 예약 안내 이메일(거래)은 끌 수 없음</li>
+          <li>마케팅 이메일은 marketingConsent에 연동 · 수신 동의 시에만 발송</li>
+          <li>비회원도 마이 탭에서 알림 설정에 접근 가능</li>
         </ul></div>
       </div>
     </div></div>
