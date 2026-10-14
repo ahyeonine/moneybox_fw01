@@ -4,7 +4,7 @@
 새 세션에 "docs-plan/CEMS_가이드_인수인계.md 읽고 CEMS 가이드 작업 이어서 해줘"라고 말하면 돼요.
 
 ## 어디에 있나
-- 브랜치: `claude/magical-mccarthy-ly947s` (main에는 아직 머지 안 됨, PR 없음)
+- 브랜치: `claude/cems-guide-work-o64goc` (`claude/magical-mccarthy-ly947s`에서 이어 받음. main에는 아직 머지 안 됨, PR 없음)
 - 가이드 본체: `public/branch-guide/`
   - `index.html` — 화면 틀(렌더러·CSS·검색·라우팅 `#/slug`, `#/slug/anchor`)
   - `content.js` — 모든 내용(`window.GUIDE`). 페이지 추가·수정은 거의 여기서만 함
@@ -46,12 +46,12 @@
    (+ `briefs` 한 줄 설명, 필요하면 상황 카드 추가)
 2. `set-b2b-sell`(B2B 매각 요청), `set-hours`(영업시간) 캡처 받아 채우기
 3. 빈칸: 입금관리 사용 여부(online-deposit, 사용자가 보류), 기간별 매출조회 사용법(rsv-sales)
-4. 거래번호 접두 글자 R/P/K/O 의미 확인
+4. 거래번호 접두 글자 R/P/K/O 의미 확인 (저장소 문서·코드에는 단서 없음 → 사용자 답변 필요)
 5. 공개 범위(공개/비공개)와 main 머지 시점 결정
 
 ## 확인 방법
 ```
 npm run build && cp -r public/branch-guide/* dist/branch-guide/ && npx vite preview --port 4173
-# http://localhost:4173/branch-guide/#/home
+# http://localhost:4173/moneybox_fw01/branch-guide/#/home  (vite base가 /moneybox_fw01/)
 ```
 Playwright로 32개 페이지 전부 열어 콘솔 에러가 없는지 확인하고 스크린샷으로 레이아웃 검토.
