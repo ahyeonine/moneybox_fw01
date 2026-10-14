@@ -17,7 +17,7 @@ last update: 2026.10.14
   - 화면설계서: https://ahyeonine.github.io/moneybox_fw01/web-screens.html  ← 두레이 링크는 구버전 `app-screens.html`(리다이렉트)이니 이걸로 교체 권장
   - 로드맵: https://ahyeonine.github.io/moneybox_fw01/roadmap.html
 - **기획 문서(md)**: `docs-plan/외국인웹/` — 정책·공통규칙·CEMS대응·의사결정로그·미결사항·기획문서·화면정의서·화면설계서·와이어프레임 (전부 최신)
-- **Figma 화면설계서**: 송재욱(mbmnoah@gmail.com) 계정 초안에 빈 파일로 있음(미사용·삭제 예정). 본 담당자 계정이 아니면 새 Figma 계정에서 다시 생성 필요.
+- **Figma 화면설계서**: https://www.figma.com/design/GH4lUZ9ESCzzYjcGpz6NuD (구아연 계정 초안, 2026.10.14 생성) — `화면설계서.md`/`web-screens.html` 기준 플로우·O1~O4·H1·R1~R6·M1 + 라벨. 로컬 컴포넌트 `WF/Button`·`WF/Input`·`WF/Chip`·`WF/Note`로 구성(실제 디자인 아님, 기획 검토용). 송재욱 계정의 빈 초안은 미사용.
 
 ## 3. 핵심 확정 결정 (상세: `docs-plan/외국인웹/외국인_웹_의사결정로그.md`)
 - **시재 모델**: 예약 접수는 시재 무관(품절 거절 없음). 방문 확정 = 시재 차감 '예정(컨펌)'만, 실제 차감은 수령(거래완료) 시점. 용어는 '시재'(재고 아님).
