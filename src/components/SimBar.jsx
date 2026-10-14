@@ -44,7 +44,7 @@ export default function SimBar() {
     const next = addDays(today, 1)
     advanceDay()
     // 하루 넘긴 뒤: 수령 전일 리마인더 발송 (당일 무응답 리마인더는 제거됨)
-    const rem = sendBatch('reminder', (r) => r.pickupDate === addDays(next, 1))
+    const rem = sendBatch('reminder', (r) => r.pickupDate === addDays(next, 1) && r.reminderStatus !== 'CONFIRMED')
     setMsg(rem ? `${t('sim.reminderSent')}: ${rem}` : null)
   }
 
@@ -65,7 +65,7 @@ export default function SimBar() {
       <button
         className="btn ghost"
         style={{ padding: '6px 10px' }}
-        onClick={() => setMsg(`${t('sim.reminderSent')}: ${sendBatch('reminder', (r) => r.pickupDate === addDays(today, 1))}`)}
+        onClick={() => setMsg(`${t('sim.reminderSent')}: ${sendBatch('reminder', (r) => r.pickupDate === addDays(today, 1) && r.reminderStatus !== 'CONFIRMED')}`)}
         title={`내일 수령 예정 ${dueTomorrow}건`}
       >
         {t('sim.sendReminder')}{dueTomorrow > 0 ? ` (${dueTomorrow})` : ''}

@@ -947,6 +947,11 @@ export const STRINGS = {
   's2v.verify.done': { ko: '이메일 인증 완료', en: 'Email verified' },
   's2v.verify.err.email': { ko: '올바른 이메일을 먼저 입력해 주세요.', en: 'Enter a valid email first.' },
   's2v.verify.err.code': { ko: '인증번호가 올바르지 않아요.', en: "That code isn't correct." },
+  's2v.verify.err.limit': {
+    ko: '인증번호 전송 한도를 초과했습니다. 10분 후 다시 시도해 주세요.',
+    en: 'Too many requests. Please try again in 10 minutes.',
+  },
+  's2v.verify.valid': { ko: '인증번호는 3분간 유효합니다.', en: 'The code is valid for 3 minutes.' },
 
   // 마케팅 정보 수신 동의(선택)
   's2v.marketing.label': { ko: '마케팅 정보 수신 동의 (선택)', en: 'Marketing updates (optional)' },

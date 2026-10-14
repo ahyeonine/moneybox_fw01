@@ -68,7 +68,8 @@ export function ReservationProvider({ children }) {
         createdAt: `${today}T00:00:00+09:00`, // 프로토타입: 시각은 기준일 자정(KST)으로 기록
         processedAt: null,
         idVerified: false,
-        reminderStatus: 'NONE',
+        // 당일·전일 예약(수령일까지 1일 이하)은 전일 확인 사이클이 불가하므로 접수 즉시 방문 확정(컨펌) (정책 §7.3)
+        reminderStatus: diffDays(draft.pickupDate, today) <= 1 ? 'CONFIRMED' : 'NONE',
         cancelReason: null, // CANCELLED 시 'AUTO'(노쇼/자동취소) | 'CUSTOMER'(고객취소)
       }
       setReservations((prev) => [record, ...prev])
@@ -171,7 +172,8 @@ export function ReservationProvider({ children }) {
         ...patch,
         reservationNo,
         status: 'BOOKED',
-        reminderStatus: 'NONE',
+        // 변경 후 수령일까지 1일 이하면 접수 즉시 방문 확정(컨펌) (정책 §7.3)
+        reminderStatus: diffDays(patch.pickupDate ?? old.pickupDate, today) <= 1 ? 'CONFIRMED' : 'NONE',
         createdAt: `${today}T00:00:00+09:00`,
         processedAt: null,
         idVerified: false,
