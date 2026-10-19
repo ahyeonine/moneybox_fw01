@@ -18,6 +18,8 @@
   - `pending: true` → "준비 중" 페이지. 캡처를 받으면 `blocks`를 채우고 `pending` 삭제
 - `briefs[slug]`: 첫 화면 "기능 한눈에 보기"에 나오는 메뉴별 한 줄 설명
 - `scenarios`: 상황별 가이드 카드 `{group, items:[{id, title, path:[slug], steps:[html]}]}`
+- 화면 전환: figure에 `id`(fig-…)·`back`(앞 화면 figure id), mark에 `go`('fig-id' · 'slug/fig-id' · 'slug')·`goLabel`.
+  캡처 위에 '○○ 보기 ›' 버튼, 설명 칸에 '누르면 열리는 화면' 링크, 열린 창 캡처 상단 바에 '‹ 앞 화면' 버튼이 생김
 - 블록 종류: HTML 문자열, `figure`(src, caption, narrow, marks[{box:[x%,y%,w%,h%], title, desc}]),
   `callout`(tip/warn/danger), `cards`, `table`, `steps`, `checklist`, `services`,
   `blank`(사용자 설명 필요 자리), `scenario-index`, `scenarios`

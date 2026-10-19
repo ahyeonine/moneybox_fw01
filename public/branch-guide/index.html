@@ -246,6 +246,17 @@
   .anno .n { flex: none; min-width: 24px; height: 24px; border-radius: 7px; background: var(--mark); color: #fff; font-family: var(--disp); font-weight: 800; font-size: 13px; display: grid; place-items: center; margin-top: 2px; }
   .anno .t { display: block; font-weight: 700; margin-bottom: 1px; }
   .anno .d { color: var(--ink-2); font-size: 14.5px; line-height: 1.65; }
+  /* 화면 전환 링크 */
+  a.go { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 4px 12px; border-radius: 999px; background: var(--brand); color: #fff; font-size: 13px; font-weight: 700; }
+  a.go:hover { background: var(--brand-ink); text-decoration: none; }
+  .mk-go { position: absolute; transform: translate(-100%, 4px); white-space: nowrap; padding: 2px 9px; border-radius: 999px; background: var(--brand); color: #fff !important; font-size: 12px; font-weight: 800; box-shadow: 0 2px 8px rgba(0,0,0,.25); pointer-events: auto; z-index: 2; }
+  .mk-go.up { transform: translate(-100%, calc(-100% - 4px)); }
+  .mk-go:hover { background: var(--brand-ink); text-decoration: none; }
+  .back-link { flex: none; display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 700; padding: 2px 10px; border-radius: 8px; background: var(--brand); color: #fff !important; }
+  .back-link:hover { background: var(--brand-ink); text-decoration: none; }
+  figure.shot { scroll-margin-top: 80px; }
+  figure.shot.flash { box-shadow: 0 0 0 4px var(--brand-soft); border-color: var(--brand); }
+  @media (max-width: 900px) { .mk-go { font-size: 10.5px; padding: 1px 6px; } }
 
   .steps { list-style: none; padding: 0 !important; margin: 14px 0; display: grid; gap: 10px; counter-reset: s; }
   .steps > li { counter-increment: s; display: flex; gap: 14px; margin: 0 !important; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); }
@@ -492,22 +503,34 @@
 
   // ── 블록 ──
   var figs = {};
+  // 화면 전환: mark.go = 'fig-id'(같은 페이지) 또는 'slug/fig-id'(다른 페이지) 또는 'slug'(페이지)
+  var curSlug = '';
+  function goTarget(go) {
+    var parts = go.split('/'), slug = parts.length > 1 ? parts[0] : (G.pages[go] ? go : curSlug), fid = parts.length > 1 ? parts[1] : (G.pages[go] ? '' : go);
+    var p = G.pages[slug], label = p ? p.title : go;
+    if (fid && p) p.blocks.forEach(function (b) { if (b && b.type === 'figure' && b.id === fid) label = b.caption.split('›').pop().trim(); });
+    return { href: '#/' + slug + (fid ? '/' + fid : ''), label: label };
+  }
   function markers(f) {
     return f.marks.map(function (m, i) {
-      var b = m.box;
+      var b = m.box, g = m.go ? goTarget(m.go) : null;
       return '<div class="mk" data-i="' + i + '" style="left:' + b[0] + '%;top:' + b[1] + '%;width:' + b[2] + '%;height:' + b[3] + '%"></div>' +
-        '<div class="mk-n" data-i="' + i + '" style="left:' + b[0] + '%;top:' + b[1] + '%">' + (i + 1) + '</div>';
+        '<div class="mk-n" data-i="' + i + '" style="left:' + b[0] + '%;top:' + b[1] + '%">' + (i + 1) + '</div>' +
+        (g ? '<a class="mk-go' + (b[1] + b[3] > 90 ? ' up' : '') + '" href="' + g.href + '" style="left:' + (b[0] + b[2]) + '%;top:' + (b[1] + b[3] > 90 ? b[1] : b[1] + b[3]) + '%">' + (m.goLabel || g.label) + ' 보기 ›</a>' : '');
     }).join('');
   }
   function annoItem(m, i, figId) {
-    return '<li tabindex="0" data-fig="' + figId + '" data-i="' + i + '"><span class="n">' + (i + 1) + '</span><div><span class="t">' + m.title + '</span><div class="d">' + m.desc + '</div></div></li>';
+    var g = m.go ? goTarget(m.go) : null;
+    return '<li tabindex="0" data-fig="' + figId + '" data-i="' + i + '"><span class="n">' + (i + 1) + '</span><div><span class="t">' + m.title + '</span><div class="d">' + m.desc + '</div>' +
+      (g ? '<a class="go" href="' + g.href + '">누르면 열리는 화면: ' + (m.goLabel || g.label) + ' ›</a>' : '') + '</div></li>';
   }
   function renderBlock(b, idx) {
     if (typeof b === 'string') return b;
     if (b.type === 'figure') {
       var id = 'fig' + idx; figs[id] = b;
-      return '<figure class="shot' + (b.narrow ? ' narrow' : '') + '" data-fig="' + id + '">' +
-        '<div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span class="cap">' + b.caption + '</span><button type="button" data-zoom="' + id + '">' + ICON.zoom + '크게 보기</button></div>' +
+      var back = b.back ? goTarget(b.back) : null;
+      return '<figure class="shot' + (b.narrow ? ' narrow' : '') + '" data-fig="' + id + '"' + (b.id ? ' id="' + b.id + '"' : '') + '>' +
+        '<div class="shot-bar">' + (back ? '<a class="back-link" href="' + back.href + '">‹ ' + back.label + '</a>' : '<span class="dots"><i></i><i></i><i></i></span>') + '<span class="cap">' + b.caption + '</span><button type="button" data-zoom="' + id + '">' + ICON.zoom + '크게 보기</button></div>' +
         '<div class="shot-body"><div class="shot-pane"><div class="shot-frame" data-fig="' + id + '" title="눌러서 크게 보기"><img src="' + b.src + '" alt="' + esc(b.caption) + '" ">' + markers(b) + '</div></div>' +
         '<ol class="anno">' + b.marks.map(function (m, i) { return annoItem(m, i, id); }).join('') + '</ol></div></figure>';
     }
@@ -570,6 +593,7 @@
     var i = PAGES.findIndex(function (p) { return p.slug === slug; });
     if (i < 0) { i = 0; history.replaceState(null, '', '#/' + PAGES[0].slug); }
     var p = PAGES[i], prev = PAGES[i - 1], next = PAGES[i + 1], grp = p.grp;
+    curSlug = p.slug; closeLb();
     figs = {};
     main.style.setProperty('--accent', color(grp));
 
@@ -630,6 +654,7 @@
       if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 76, behavior: 'smooth' });
       return;
     }
+    if (e.target.closest('a.go, a.mk-go, a.back-link')) return;
     var z = e.target.closest('[data-zoom]') || e.target.closest('.shot-frame');
     if (z) openLb(z.getAttribute('data-zoom') || z.getAttribute('data-fig'));
   });
@@ -679,6 +704,7 @@
   }
   document.getElementById('lbClose').onclick = closeLb;
   lb.addEventListener('click', function (e) {
+    if (e.target.closest('a')) return;
     var n = e.target.closest('.mk-n, .lb-list li');
     if (n) return select(n.getAttribute('data-i'));
     if (e.target.id === 'lbStage') closeLb();
