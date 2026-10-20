@@ -74,6 +74,9 @@
 - 미리보기는 claude.ai 아티팩트로 올림 (public/branch-guide/index.html + content.js + img/). 같은 파일 경로로 다시 올리면 같은 주소가 갱신됨.
   공유 범위는 아티팩트 페이지의 공유 메뉴에서 사용자가 정함.
 
+## 캐시
+- 수정할 때마다 `content.js`의 `version`과 `index.html`의 `content.js?v=` 값을 같이 올린다(예: 날짜). 안 올리면 브라우저가 예전 내용을 보여 줄 수 있음
+
 ## 확인 방법
 ```
 npm run build && cp -r public/branch-guide/* dist/branch-guide/ && npx vite preview --port 4173

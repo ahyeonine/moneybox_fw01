@@ -418,7 +418,7 @@
   </aside>
 </div>
 
-<script src="content.js"></script>
+<script src="content.js?v=20261020"></script>
 <script>
 (function () {
   var G = window.GUIDE;
@@ -506,7 +506,7 @@
       var back = b.back ? goTarget(b.back) : null;
       return '<figure class="shot' + (b.narrow ? ' narrow' : '') + '" data-fig="' + id + '"' + (b.id ? ' id="' + b.id + '"' : '') + '>' +
         '<div class="shot-bar">' + (back ? '<a class="back-link" href="' + back.href + '">‹ ' + back.label + '</a>' : '<span class="dots"><i></i><i></i><i></i></span>') + '<span class="cap">' + b.caption + '</span><button type="button" data-zoom="' + id + '">' + ICON.zoom + '크게 보기</button></div>' +
-        '<div class="shot-body"><div class="shot-pane"><div class="shot-frame" data-fig="' + id + '" title="눌러서 크게 보기"><img src="' + b.src + '" alt="' + esc(b.caption) + '" ">' + markers(b) + '</div></div>' +
+        '<div class="shot-body"><div class="shot-pane"><div class="shot-frame" data-fig="' + id + '" title="눌러서 크게 보기"><img src="' + b.src + '?v=' + (G.version || '') + '" alt="' + esc(b.caption) + '" ">' + markers(b) + '</div></div>' +
         '<ol class="anno">' + b.marks.map(function (m, i) { return annoItem(m, i, id); }).join('') + '</ol></div></figure>';
     }
     if (b.type === 'callout') {
@@ -665,7 +665,7 @@
   var lb = document.getElementById('lb'), lbInner = document.getElementById('lbInner'), lbList = document.getElementById('lbList');
   function openLb(id) {
     var f = figs[id]; if (!f) return;
-    lbInner.innerHTML = '<img src="' + f.src + '" alt="' + esc(f.caption) + '">' + markers(f);
+    lbInner.innerHTML = '<img src="' + f.src + '?v=' + (G.version || '') + '" alt="' + esc(f.caption) + '">' + markers(f);
     lbList.innerHTML = f.marks.map(function (m, i) { return annoItem(m, i, id); }).join('');
     document.getElementById('lbTitle').textContent = f.caption;
     lb.classList.add('open'); document.body.style.overflow = 'hidden';
