@@ -288,6 +288,7 @@
   .sc-col a span { color: var(--muted); }
   .sc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
   .sc-card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; box-shadow: var(--shadow); scroll-margin-top: 84px; transition: box-shadow .3s, border-color .3s; }
+  .sc-note { margin: 12px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--muted); }
   .sc-card.flash { border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-soft); }
   .sc-card h3 { margin: 0 0 10px; font-size: 17px; }
   .sc-path { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 12px; }
@@ -418,7 +419,7 @@
   </aside>
 </div>
 
-<script src="content.js?v=20261020e"></script>
+<script src="content.js?v=20261020f"></script>
 <script>
 (function () {
   var G = window.GUIDE;
@@ -543,7 +544,7 @@
             var q = G.pages[x]; return '<a class="sc-chip" href="#/' + x + '"><i style="background:' + color(q.grp) + '"></i>' + (q.grp.tab ? q.grp.group + ' › ' : '') + q.title + '</a>';
           }).join('');
           return '<article class="sc-card" id="' + it.id + '"><h3>' + it.title + '</h3><div class="sc-path"><span>쓰는 메뉴</span>' + chips + '</div>' +
-            '<ol>' + it.steps.map(function (st) { return '<li>' + st + '</li>'; }).join('') + '</ol></article>';
+            '<ol>' + it.steps.map(function (st) { return '<li>' + st + '</li>'; }).join('') + '</ol>' + (it.note ? '<p class="sc-note">' + it.note + '</p>' : '') + '</article>';
         }).join('') + '</div>';
       }).join('');
     }
