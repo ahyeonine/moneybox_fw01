@@ -23,6 +23,7 @@
  * 스크린샷(img/)은 공개 저장소에 올라가므로 고객 이름·연락처·접속 IP는 반드시 가린 뒤 넣습니다.
  */
 window.GUIDE = {
+  version: '20261020',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
   title: 'CEMS 지점 운영 가이드',
   footer: '2026-10-06 · 10-14 캡처 화면 기준 · 고객 개인정보는 가림 처리하였습니다 · 화면이 바뀌면 이 가이드도 함께 업데이트됩니다.',
   alias: { status: 'home', cems: 'exchange-request', pos: 'home', closing: 'daily-closing' },
