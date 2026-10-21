@@ -23,7 +23,7 @@
  * 스크린샷(img/)은 공개 저장소에 올라가므로 고객 이름·연락처·접속 IP는 반드시 가린 뒤 넣습니다.
  */
 window.GUIDE = {
-  version: '20261021d',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
+  version: '20261021e',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
   title: 'CEMS 지점 운영 가이드',
   footer: '2026-10-06 · 10-14 캡처 화면 기준 · 고객 개인정보는 가림 처리하였습니다 · 화면이 바뀌면 이 가이드도 함께 업데이트됩니다.',
   alias: { status: 'home', cems: 'exchange-request', pos: 'home', closing: 'daily-closing' },
@@ -129,9 +129,9 @@ window.GUIDE = {
     ] },
     { group: '마감', items: [
       { id: 's-close', title: '매일 마감하기', path: ['daily-closing', 'onl-receivable', 'ex-closing'], steps: [
-        '온라인환전 › 미수금 조회에서 <b>본사→지점 이체확인</b> 먼저',
+        '본사에서 미수금을 입금했는지 확인한 뒤, 온라인환전 › 미수금 조회에서 <b>본사→지점 이체확인</b>',
         '금고·시재통 외화를 세서 시재관리·마감의 외화시재와 비교',
-        '원화 6항목 입력 (운영시재 재입금 · 미수금 · 지출 · 특이사항 · 권종별 시재금)',
+        '원화 6항목 입력 (운영시재 재입금 · 미수금 · 지출 · 특이사항 · 권종별 시재금)<br><span class="muted">입력할 금액이 지출이나 운영시재가 아닌 경우(예: 은행 계좌에 있는 금액)에는 은행입금액의 <span class="btnlabel">+ 추가</span> 버튼으로 칸을 만들어 입력합니다.</span>',
         '최종 마감금액이 <b>어제와 같으면</b> 끝',
       ] },
       { id: 's-close-off', title: '마감이 안 맞습니다', path: ['daily-closing'], steps: [
