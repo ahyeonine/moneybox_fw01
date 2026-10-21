@@ -23,7 +23,7 @@
  * 스크린샷(img/)은 공개 저장소에 올라가므로 고객 이름·연락처·접속 IP는 반드시 가린 뒤 넣습니다.
  */
 window.GUIDE = {
-  version: '20261021a',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
+  version: '20261021b',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
   title: 'CEMS 지점 운영 가이드',
   footer: '2026-10-06 · 10-14 캡처 화면 기준 · 고객 개인정보는 가림 처리하였습니다 · 화면이 바뀌면 이 가이드도 함께 업데이트됩니다.',
   alias: { status: 'home', cems: 'exchange-request', pos: 'home', closing: 'daily-closing' },
@@ -280,7 +280,7 @@ window.GUIDE = {
     /* ───────────── 머니 익스체인지 ───────────── */
     'exchange-request': {
       title: '환전신청관리',
-      lead: '선택한 지점에서 발생한 환전 거래 원장을 조회하고, 창구에서 처리한 건을 수기로 등록하는 화면입니다.',
+      lead: '선택한 지점에서 발생한 환전 거래를 조회하고, POS를 통하지 않고 처리한 건을 수기로 등록하는 화면입니다.',
       blocks: [
         { type: 'figure', id: 'fig-main', src: 'img/cems-exchange-request.png', caption: '머니 익스체인지 › 환전신청관리', marks: [
           { box: [15.81, 50.72, 70.93, 6.38], title: '조회 조건 (1줄)', desc: '등록기간(기본값 오늘), 통화, 환전구분(매입/매각), 입력방식(POS 자동 · POS 수동 · 수기등록 · 온라인환전 · 환전예약), 신분증확인(Y/N), 거래구분으로 거래를 좁힙니다.' },
