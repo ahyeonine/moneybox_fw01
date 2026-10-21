@@ -23,7 +23,7 @@
  * 스크린샷(img/)은 공개 저장소에 올라가므로 고객 이름·연락처·접속 IP는 반드시 가린 뒤 넣습니다.
  */
 window.GUIDE = {
-  version: '20261021c',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
+  version: '20261021d',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
   title: 'CEMS 지점 운영 가이드',
   footer: '2026-10-06 · 10-14 캡처 화면 기준 · 고객 개인정보는 가림 처리하였습니다 · 화면이 바뀌면 이 가이드도 함께 업데이트됩니다.',
   alias: { status: 'home', cems: 'exchange-request', pos: 'home', closing: 'daily-closing' },
@@ -113,12 +113,6 @@ window.GUIDE = {
         '환율과 금액을 계산해 <b>원화와 외화를 모두 계수기에 통과</b>시킨 뒤 고객에게 전달',
         'CEMS 환전신청관리 › <span class="btnlabel">외환등록</span>으로 금액 입력 (빨간 별(*) 필수 칸) — 등록한 거래는 입력방식 <b>수기등록</b>으로 보입니다',
       ], note: '외화·원화를 모두 계수기에 돌리는 이유: 마감이 안 맞을 때 찾기 위해서입니다. 계수 기록이 남아 있지 않으면 어디서 실수가 났는지 찾기 어렵습니다.' },
-      { id: 's-online-came', title: '온라인환전 고객이 찾으러 왔습니다', path: ['onl-pickup'], steps: [
-        '온라인환전 › 수령관리에서 거래번호 클릭',
-        '외화를 준비해 <span class="btnlabel">봉투담기</span> (미리 해 뒀다면 생략)',
-        '<b>신분증으로 본인 확인</b> 후 외화 전달',
-        '<span class="btnlabel">고객수령</span> 클릭',
-      ] },
       { id: 's-missing', title: 'POS로 거래했는데 CEMS에 안 보입니다', path: ['exchange-request'], steps: [
         'POS·PC 인터넷 연결 확인 — POS 왼쪽 위 <code>미전송 : N건</code> 확인',
         '연결이 돌아오면 <b>10분 안에 자동 전송</b>',
