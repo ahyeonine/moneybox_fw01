@@ -23,7 +23,7 @@
  * 스크린샷(img/)은 공개 저장소에 올라가므로 고객 이름·연락처·접속 IP는 반드시 가린 뒤 넣습니다.
  */
 window.GUIDE = {
-  version: '20261022d',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
+  version: '20261022e',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
   title: 'CEMS 지점 운영 가이드',
   footer: '2026-10-06 · 10-14 캡처 화면 기준 · 고객 개인정보는 가림 처리하였습니다 · 화면이 바뀌면 이 가이드도 함께 업데이트됩니다.',
   alias: { status: 'home', cems: 'exchange-request', pos: 'pos-home', closing: 'daily-closing' },
@@ -58,6 +58,7 @@ window.GUIDE = {
     'set-basic': '개점할 때 기본 시재금 설정',
     'set-notice': '본사 공지 확인',
     'pos-home': 'POS 첫 화면 · 거래 기본 흐름',
+    'pos-situations': '상황마다 POS에서 누르는 순서',
     'pos-sell': '고객이 외화를 팔 때 (매입)',
     'pos-buy': '고객이 외화를 살 때 (매각)',
     'pos-dual': '외화를 다른 외화로 바꿀 때',
@@ -160,6 +161,83 @@ window.GUIDE = {
     ] },
   ],
 
+  // POS 상황별 가이드
+  posScenarios: [
+    { group: '환전 거래', items: [
+      { id: 'p-sell', title: '고객이 외화를 원화로 바꾸려 합니다', path: ['pos-sell'], steps: [
+        '홈에서 <b>외화 파실 때 (SELL)</b>',
+        '통화를 고르고 <b>판매하실 외화 금액</b> 입력 → <span class="btnlabel">추가</span> (통화를 고르지 않고 계수기에 바로 넣어도 통화를 알아보고 거래 건이 추가됩니다)',
+        '<b>판매하실 외화</b> 창에서 계수 → <span class="btnlabel">확인</span> — 오른쪽 거래 건이 모두 <b>초록색</b>이 되어야 합니다',
+        '<span class="btnlabel">확인</span> → 신분증 스캔(또는 <span class="btnlabel">패스</span>) → <span class="btnlabel">영수증 출력</span> 또는 <span class="btnlabel">영수증 미출력</span>',
+      ] },
+      { id: 'p-buy', title: '고객이 원화로 외화를 사려 합니다', path: ['pos-buy'], steps: [
+        '홈에서 <b>외화 사실 때 (BUY)</b>',
+        '원하는 외화 금액이 있으면: 통화를 고르고 외화 금액 입력 → 원화 금액 안내 → <span class="btnlabel">추가</span>',
+        '받은 원화와 드릴 외화를 계수하고, <b>받은 금액</b>을 넣으면 거스름돈이 자동 계산됩니다',
+        '<span class="btnlabel">확인</span> → 신분증 스캔(또는 <span class="btnlabel">패스</span>) → 영수증',
+      ] },
+      { id: 'p-buy-max', title: '가진 원화만큼 외화를 사고 싶어 합니다', path: ['pos-buy'], steps: [
+        'BUY 화면에서 고객에게 받은 <b>원화부터 계수</b> → 받은 금액에 들어갑니다',
+        '통화를 고르고 <span class="btnlabel">최대금액확인</span> → 살 수 있는 최대 외화 확인 → <span class="btnlabel">확인</span>',
+        '판매하실 외화 금액에 최대 금액이 들어가면 <span class="btnlabel">추가</span> → 외화 · 거스름돈 계수 → <span class="btnlabel">확인</span>',
+      ] },
+      { id: 'p-partial', title: '가져온 외화 중 일부만 바꾸려 합니다', path: ['pos-sell'], steps: [
+        'SELL 화면에서 가져온 외화를 <b>계수기로 모두 셈</b> (직접 입력하면 부분환전 버튼이 나오지 않습니다)',
+        '<span class="btnlabel">부분환전</span> → <b>실제 거래금액</b> 입력',
+        '<b>반환할 외화금액</b>을 계수해 돌려드리고 <span class="btnlabel">확인</span> → 실제 거래금액만 거래에 들어갑니다',
+      ] },
+      { id: 'p-dual', title: '가진 외화를 다른 외화로 바꾸려 합니다 (이중환전)', path: ['pos-dual'], steps: [
+        'SELL에서 고객이 준 외화를 등록 → <span class="btnlabel">이중환전 계산</span>',
+        'BUY 화면에서 살 외화를 고르고 <span class="btnlabel">최대금액확인</span> → <span class="btnlabel">추가</span> → 외화와 거스름돈 계수 → <span class="btnlabel">확인</span>',
+        'SELL로 돌아와 <span class="btnlabel">이중환전</span> → <span class="btnlabel">다음</span> → 신분증 → 영수증 (남은 금액은 원화로 드림)',
+      ] },
+      { id: 'p-uncountable', title: '계수기로 셀 수 없는 지폐·동전이 있습니다', path: ['pos-sell', 'pos-reservation'], steps: [
+        '계수 창의 <b>계수 불가금액 추가</b> 칸에 그 금액을 직접 넣습니다',
+        '계수된 금액 + 계수 불가금액이 설정 금액과 같아지면 <span class="btnlabel">확인</span>이 켜집니다',
+      ], note: '판매하실 외화 · 부분환전 · 예약금 계수 · 온라인환전 외화 계수 창에 모두 있습니다.' },
+      { id: 'p-rate', title: '이 거래의 환율을 조정해야 합니다', path: ['pos-buy', 'pos-more'], steps: [
+        '거래를 추가하기 전: <span class="btnlabel">환율변경</span> → 우대율(%) 또는 설정된 환율 입력 → <span class="btnlabel">확인</span>',
+        '거래를 추가한 뒤: <span class="btnlabel">거래수정</span>으로 환율을 바꿉니다',
+        '원래 환율로 돌리려면 환율변경 창의 <span class="btnlabel">초기화</span> (CEMS에 설정된 환율)',
+      ], note: '바꿀 수 있는 폭은 더보기 › 스프레드 설정의 허용 한도(%)로 제한될 수 있습니다.' },
+    ] },
+    { group: '예약 · 온라인 고객', items: [
+      { id: 'p-rsv', title: '환전예약 고객이 왔습니다', path: ['pos-reservation', 'reservation'], steps: [
+        '홈에서 <b>환전예약</b> → 수령일(필수)과 이름 · 전화번호 뒤 4자리로 검색',
+        '예약 건 클릭 → 예약 정보 확인 → <span class="btnlabel">거래하기</span>',
+        '<b>예약금 계수</b> 창에서 돌려드릴 예약금을 계수 → <span class="btnlabel">확인</span>',
+        'SELL · BUY와 같은 순서로 진행 (통화를 새로 고르거나 예약 거래 건을 고칠 수 없습니다) → <b>신분증 스캔</b> → 외화와 신분증을 함께 전달',
+      ], note: 'POS로 예약 거래를 마치면 CEMS 환전예약관리 상태는 자동으로 처리완료가 됩니다.' },
+      { id: 'p-online', title: '온라인환전 고객이 왔습니다', path: ['pos-online', 'onl-pickup'], steps: [
+        '앱에서 이미 신분증 인증(KYC)을 했으므로 <b>신분증을 먼저 돌려드립니다</b>',
+        '홈에서 <b>온라인환전</b> → 수령일(필수)로 검색 → 신청 건 클릭 → <span class="btnlabel">거래하기</span>',
+        '<b>외화 계수</b> 창에서 드릴 외화를 계수 → <span class="btnlabel">확인</span>',
+        '<span class="btnlabel">확인</span> → 신분증 스캔 없이 바로 완료',
+      ] },
+    ] },
+    { group: '거래 후 · 기타', items: [
+      { id: 'p-cancel', title: '거래를 중간에 그만두려 합니다', path: ['pos-sell'], steps: [
+        '신분증 화면: <span class="btnlabel">홈</span> — 홈으로 가고 거래 내용은 저장되지 않습니다',
+        '영수증 화면: <span class="btnlabel">환전취소</span> — 거래를 취소하고 첫 화면으로 돌아갑니다 (저장되지 않음)',
+      ] },
+      { id: 'p-noid', title: '신분증 스캔 없이 진행해야 합니다', path: ['pos-sell', 'terms'], steps: [
+        '신분증 화면에서 <span class="btnlabel">패스</span>',
+      ], note: 'CEMS 환전신청관리에는 입력방식 앞에 빨간 네모(신분증 스캔 패스)로 표시됩니다.' },
+      { id: 'p-receipt', title: '영수증을 다시 뽑아 달라고 합니다', path: ['pos-more', 'exchange-request'], steps: [
+        'CEMS 환전신청관리에서 그 거래의 <b>거래번호</b> 확인',
+        'POS 홈 › <b>더보기</b> › <b>영수증 출력</b> → 거래번호 입력 → <span class="btnlabel">검색</span>',
+      ] },
+      { id: 'p-offline', title: '네트워크 오류로 환율을 받아오지 못합니다', path: ['pos-more'], steps: [
+        '더보기 › 설정 › <b>오프라인 환율 수동 설정</b> → <span class="btnlabel">설정하기</span>로 거래 환율을 직접 정합니다',
+      ], note: '연결이 끊겨 CEMS로 아직 보내지 못한 거래는 미전송 건으로 남습니다. 이때 <b>POS 초기화</b>를 누르면 미전송 거래 건이 지워집니다.' },
+      { id: 'p-monitor', title: '매장 환율 모니터 표시를 바꾸고 싶습니다', path: ['pos-more'], steps: [
+        '더보기 › <b>환율 모니터</b>',
+        '띄울 통화 선택(Shift + 클릭 = 고정), 출력 거래 종류 · 갱신주기 · 디자인 선택',
+        '<span class="btnlabel">적용</span>',
+      ] },
+    ] },
+  ],
+
   nav: [
     { group: '시작하기', pages: ['home', 'situations', 'layout'] },
     { group: '머니 익스체인지', tab: true, desc: '유인지점 창구', color: '#1170ff',
@@ -172,7 +250,7 @@ window.GUIDE = {
       pages: ['online-deposit', 'onl-pickup', 'onl-refund', 'onl-receivable', 'onl-rate'] },
     { group: '설정', tab: true, desc: '공통 설정', color: '#5b6b85',
       pages: ['rate', 'set-b2b', 'set-b2b-sell', 'set-hours', 'set-basic', 'set-notice'] },
-    { group: 'POS 사용 가이드', root: 'POS', pages: ['pos-home', 'pos-sell', 'pos-buy', 'pos-dual', 'pos-reservation', 'pos-online', 'pos-more'] },
+    { group: 'POS 사용 가이드', root: 'POS', pages: ['pos-home', 'pos-situations', 'pos-sell', 'pos-buy', 'pos-dual', 'pos-reservation', 'pos-online', 'pos-more'] },
     { group: '운영 매뉴얼', pages: ['daily-closing'] },
     { group: '참고', pages: ['terms'] },
   ],
@@ -193,6 +271,7 @@ window.GUIDE = {
         '<p class="muted">창구 POS로 환전 거래를 하는 방법입니다. 거래 결과는 CEMS로 자동 전송됩니다.</p>',
         { type: 'cards', items: [
           { to: 'pos-home', title: 'POS 홈 화면', desc: '첫 화면 타일 · 거래 기본 흐름' },
+          { to: 'pos-situations', title: 'POS 상황별 가이드', desc: '상황마다 POS에서 누르는 순서' },
           { to: 'pos-sell', title: '외화 파실 때 (SELL)', desc: '고객이 외화를 팔 때 · 부분환전' },
           { to: 'pos-buy', title: '외화 사실 때 (BUY)', desc: '고객이 외화를 살 때 · 최대금액확인 · 환율변경' },
           { to: 'pos-dual', title: '이중환전', desc: '외화를 다른 외화로 바꿀 때' },
@@ -1313,6 +1392,8 @@ window.GUIDE = {
           { box: [0.5, 94.5, 99.0, 4.5], title: '하단 정보', desc: '왼쪽은 지점명과 POS 번호, 오른쪽은 POS 프로그램 버전입니다.' },
         ] },
         { type: 'callout', tone: 'tip', html: '<p>POS 화면 이름은 <b>고객 기준</b>입니다. <b>외화 파실 때(SELL)</b> = CEMS의 <b>매입</b>, <b>외화 사실 때(BUY)</b> = CEMS의 <b>매각</b>입니다. (<a href="#/terms">표기·용어 정리</a>)</p>' },
+        '<h2>상황별로 찾기</h2>',
+        { type: 'scenario-index', src: 'posScenarios', page: 'pos-situations' },
         '<h2>거래 기본 흐름</h2>',
         '<p>SELL · BUY · 이중환전 · 환전예약 · 온라인환전 모두 아래 순서로 진행됩니다.</p>',
         { type: 'steps', items: [
@@ -1329,6 +1410,16 @@ window.GUIDE = {
         ] },
       ],
       related: ['pos-sell', 'pos-buy', 'exchange-request'],
+    },
+
+    'pos-situations': {
+      title: 'POS 상황별 가이드',
+      lead: '창구에서 자주 생기는 상황마다, POS에서 무엇을 순서대로 누르면 되는지 정리하였습니다.',
+      blocks: [
+        { type: 'scenario-index', src: 'posScenarios', page: 'pos-situations' },
+        { type: 'scenarios', src: 'posScenarios' },
+      ],
+      related: ['pos-home', 'situations'],
     },
 
     'pos-sell': {
