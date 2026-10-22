@@ -419,7 +419,7 @@
   </aside>
 </div>
 
-<script src="content.js?v=20261022c"></script>
+<script src="content.js?v=20261022d"></script>
 <script>
 (function () {
   var G = window.GUIDE;
@@ -573,7 +573,7 @@
     figs = {};
     main.style.setProperty('--accent', color(grp));
 
-    var path = '<div class="path"><span class="chip">CEMS</span>›' +
+    var path = '<div class="path"><span class="chip">' + (grp.root || 'CEMS') + '</span>›' +
       (grp.tab ? '<span class="chip"><i style="background:' + color(grp) + '"></i>상단 탭 · ' + grp.group + '</span>›<span class="chip">좌측 메뉴 · ' + p.title + '</span>'
                : '<span class="chip">' + grp.group + '</span>') + '</div>';
     var body = p.pending
