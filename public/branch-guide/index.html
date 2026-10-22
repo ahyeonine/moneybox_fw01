@@ -419,7 +419,7 @@
   </aside>
 </div>
 
-<script src="content.js?v=20261022d"></script>
+<script src="content.js?v=20261022e"></script>
 <script>
 (function () {
   var G = window.GUIDE;
@@ -531,14 +531,14 @@
       return '<ul class="checklist">' + b.items.map(function (s) { return '<li>' + (Array.isArray(s) ? s[0] + '<small>' + s[1] + '</small>' : s) + '</li>'; }).join('') + '</ul>';
     }
     if (b.type === 'scenario-index') {
-      return '<div class="sc-index">' + (G.scenarios || []).map(function (g) {
+      return '<div class="sc-index">' + (G[b.src || 'scenarios'] || []).map(function (g) {
         return '<div class="sc-col"><h3>' + g.group + '</h3><ul>' + g.items.map(function (it) {
-          return '<li><a href="#/situations/' + it.id + '">' + it.title + '<span aria-hidden="true">›</span></a></li>';
+          return '<li><a href="#/' + (b.page || 'situations') + '/' + it.id + '">' + it.title + '<span aria-hidden="true">›</span></a></li>';
         }).join('') + '</ul></div>';
       }).join('') + '</div>';
     }
     if (b.type === 'scenarios') {
-      return (G.scenarios || []).map(function (g) {
+      return (G[b.src || 'scenarios'] || []).map(function (g) {
         return '<h2>' + g.group + '</h2><div class="sc-grid">' + g.items.map(function (it) {
           var chips = it.path.filter(function (x) { return G.pages[x]; }).map(function (x) {
             var q = G.pages[x]; return '<a class="sc-chip" href="#/' + x + '"><i style="background:' + color(q.grp) + '"></i>' + (q.grp.tab ? q.grp.group + ' › ' : '') + q.title + '</a>';
@@ -698,7 +698,7 @@
       if (b.type === 'checklist') return plain(b.items.map(function (s) { return [].concat(s).join(' '); }).join(' '));
       if (b.type === 'cards') return b.items.map(function (c) { return c.title + ' ' + c.desc; }).join(' ');
       if (b.type === 'blank') return '설명 필요 ' + b.title + ' ' + plain(b.html);
-      if (b.type === 'scenarios') return plain((G.scenarios || []).map(function (g) { return g.items.map(function (it) { return it.title + ' ' + it.steps.join(' '); }).join(' '); }).join(' '));
+      if (b.type === 'scenarios') return plain((G[b.src || 'scenarios'] || []).map(function (g) { return g.items.map(function (it) { return it.title + ' ' + it.steps.join(' '); }).join(' '); }).join(' '));
       return plain(b.html || '');
     }).join(' ');
     return { p: p, head: (p.grp.group + ' ' + p.title).toLowerCase(), text: (p.grp.group + ' ' + p.title + ' ' + p.lead + ' ' + t).toLowerCase() };
