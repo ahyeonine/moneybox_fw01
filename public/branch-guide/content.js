@@ -23,7 +23,7 @@
  * 스크린샷(img/)은 공개 저장소에 올라가므로 고객 이름·연락처·접속 IP는 반드시 가린 뒤 넣습니다.
  */
 window.GUIDE = {
-  version: '20261022e',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
+  version: '20261023a',  // 내용을 고치면 index.html의 content.js?v= 값과 같이 올립니다 (브라우저 캐시 갱신용)
   title: 'CEMS 지점 운영 가이드',
   footer: '2026-10-06 · 10-14 캡처 화면 기준 · 고객 개인정보는 가림 처리하였습니다 · 화면이 바뀌면 이 가이드도 함께 업데이트됩니다.',
   alias: { status: 'home', cems: 'exchange-request', pos: 'pos-home', closing: 'daily-closing' },
@@ -140,6 +140,19 @@ window.GUIDE = {
         '본사·다른 지점을 거쳐 거래했다면 B2B 대신 <b>외환등록</b>, 거래명 <code>[본사 은행 매입]</code> 등',
       ] },
     ] },
+    { group: '무인기', items: [
+      { id: 'k-change', title: '거스름돈이 안 나왔습니다 (미지급)', path: ['m24-trouble'], steps: ['<b>교통선불카드 거래관리</b>', '거래 상세 → <span class="btnlabel">미지급금 지급</span> → 권종 입력(합계 일치) → <span class="btnlabel">지급 확정</span>'] },
+      { id: 'k-collect', title: '외화를 가져왔는데 수거 버튼을 누르지 않았습니다', path: ['m24-trouble'], steps: ['<b>시재관리 › 운영금고</b>', '알아챈 즉시 <span class="btnlabel">수거</span>를 누릅니다. 그 사이 들어온 외화가 섞였을 수 있으니 시재관리 메모에 남기고 본사에 알립니다.'] },
+      { id: 'k-deposit-log', title: '입금 관리의 외화 입금 기록이 사라졌습니다', path: ['m24-trouble'], steps: ['<b>현장 관리자 화면 › 입금 관리</b>', '출금 관리에서 <span class="btnlabel">입력값으로 변경</span>을 누르면 초기화되는 것이 정상입니다. 미리 찍어 둔 사진으로 확인합니다.'] },
+      { id: 'k-card-stock', title: '카드 시재를 추가 장수만 입력했습니다', path: ['m24-trouble'], steps: ['<b>현장 관리자 화면 › 카드 시재</b>', '사진·메모해 둔 <b>기존 잔량 + 추가 장수</b> 합계로 다시 입력합니다.'] },
+      { id: 'k-cash-log', title: '충전·수거한 원화가 운영금고에 보이지 않습니다', path: ['m24-trouble'], steps: ['<b>시재관리 › 운영금고</b>', '자동으로 기록되지 않습니다. <span class="btnlabel">원화 입출고 조정 추가</span>로 반출(충전) · 인입(수거)을 기록합니다.'] },
+      { id: 'k-denom', title: '금고에 큰 권종만 많습니다', path: ['m24-trouble'], steps: ['<b>시재관리 › 운영금고</b>', '<span class="btnlabel">권종 교환</span>으로 큰 권종을 작은 권종으로 바꿉니다 (총액은 그대로).'] },
+      { id: 'k-unknown', title: '이유를 모르는 현금 증감이 있습니다', path: ['m24-trouble'], steps: ['<b>시재관리 › 운영금고</b>', '<span class="btnlabel">원화 입출고 조정 추가</span> — 인입 · 반출 · 손실금 회수 중 고르고 <b>감사 사유</b>를 반드시 적습니다.'] },
+      { id: 'k-wallet', title: '예치금이 곧 바닥납니다', path: ['m24-trouble'], steps: ['<b>선불지갑 예치금</b>', '<span class="btnlabel">충전 요청</span> → 본사에서 완료 처리'] },
+      { id: 'k-blank-card', title: '공카드가 곧 떨어집니다', path: ['m24-trouble'], steps: ['<b>공카드 관리</b>', '<span class="btnlabel">카드 요청</span> → 본사 배정 → 입고 확인'] },
+      { id: 'k-bad-card', title: '불량 방출 카드가 나왔습니다', path: ['m24-trouble'], steps: ['<b>공카드 관리</b>', '회수함에서 회수 → 반납 대상으로 적재'] },
+      { id: 'k-error', title: '장치에 오류가 떴습니다', path: ['m24-trouble'], steps: ['<b>관제·헬스체크</b>', '해당 장치를 <b>원격 초기화</b>합니다.'] },
+    ] },
     { group: '마감', items: [
       { id: 's-close', title: '매일 마감하기', path: ['daily-closing', 'onl-receivable', 'ex-closing'], steps: [
         '본사에서 미수금을 입금했는지 확인한 뒤, 온라인환전 › 미수금 조회에서 <b>본사→지점 이체확인</b>',
@@ -251,7 +264,7 @@ window.GUIDE = {
     { group: '설정', tab: true, desc: '공통 설정', color: '#5b6b85',
       pages: ['rate', 'set-b2b', 'set-b2b-sell', 'set-hours', 'set-basic', 'set-notice'] },
     { group: 'POS 사용 가이드', root: 'POS', pages: ['pos-home', 'pos-situations', 'pos-sell', 'pos-buy', 'pos-dual', 'pos-reservation', 'pos-online', 'pos-more'] },
-    { group: '운영 매뉴얼', pages: ['daily-closing'] },
+    { group: '운영 매뉴얼', pages: ['daily-closing', 'm24-trouble'] },
     { group: '참고', pages: ['terms'] },
   ],
 
@@ -1320,6 +1333,29 @@ window.GUIDE = {
     },
 
     /* ───────────── 운영 매뉴얼 ───────────── */
+    'm24-trouble': {
+      title: '무인기 문제 해결',
+      lead: '무인기에서 자주 생기는 상황별로 어느 화면에서 무엇을 하면 되는지 정리하였습니다.',
+      blocks: [
+        '<h2>이럴 땐 이렇게</h2>',
+        { type: 'table', head: ['상황', '화면', '이렇게 합니다'], rows: [
+          ['거스름돈이 안 나왔습니다 (미지급)', '교통선불카드 거래관리', '거래 상세 → <span class="btnlabel">미지급금 지급</span> → 권종 입력(합계 일치) → <span class="btnlabel">지급 확정</span>'],
+          ['외화를 가져왔는데 수거 버튼을 누르지 않았습니다', '시재관리 › 운영금고', '알아챈 즉시 <span class="btnlabel">수거</span>를 누릅니다. 그 사이 들어온 외화가 섞였을 수 있으니 시재관리 메모에 남기고 본사에 알립니다.'],
+          ['입금 관리의 외화 입금 기록이 사라졌습니다', '현장 관리자 화면 › 입금 관리', '출금 관리에서 <span class="btnlabel">입력값으로 변경</span>을 누르면 초기화되는 것이 정상입니다. 미리 찍어 둔 사진으로 확인합니다.'],
+          ['카드 시재를 추가 장수만 입력했습니다', '현장 관리자 화면 › 카드 시재', '사진·메모해 둔 <b>기존 잔량 + 추가 장수</b> 합계로 다시 입력합니다.'],
+          ['충전·수거한 원화가 운영금고에 보이지 않습니다', '시재관리 › 운영금고', '자동으로 기록되지 않습니다. <span class="btnlabel">원화 입출고 조정 추가</span>로 반출(충전) · 인입(수거)을 기록합니다.'],
+          ['금고에 큰 권종만 많습니다', '시재관리 › 운영금고', '<span class="btnlabel">권종 교환</span>으로 큰 권종을 작은 권종으로 바꿉니다 (총액은 그대로).'],
+          ['이유를 모르는 현금 증감이 있습니다', '시재관리 › 운영금고', '<span class="btnlabel">원화 입출고 조정 추가</span> — 인입 · 반출 · 손실금 회수 중 고르고 <b>감사 사유</b>를 반드시 적습니다.'],
+          ['예치금이 곧 바닥납니다', '선불지갑 예치금', '<span class="btnlabel">충전 요청</span> → 본사에서 완료 처리'],
+          ['공카드가 곧 떨어집니다', '공카드 관리', '<span class="btnlabel">카드 요청</span> → 본사 배정 → 입고 확인'],
+          ['불량 방출 카드가 나왔습니다', '공카드 관리', '회수함에서 회수 → 반납 대상으로 적재'],
+          ['장치에 오류가 떴습니다', '관제·헬스체크', '해당 장치를 <b>원격 초기화</b>합니다.'],
+        ] },
+        { type: 'callout', tone: 'tip', html: '<p>입금 관리 · 카드 시재처럼 값이 초기화될 수 있는 화면은 입력하기 전에 <b>사진을 찍어 두거나 메모</b>해 둡니다.</p>' },
+      ],
+      related: ['m24-closing', 'm24-cash', 'm24-reserve'],
+    },
+
     'daily-closing': {
       title: '데일리 시재마감',
       lead: '매일 마감할 때 외화 시재 → 원화 시재 순서로 맞추는 방법과, 안 맞을 때 확인할 것들입니다.',
