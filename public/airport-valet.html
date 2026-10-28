@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>김포 발렛 수령 프로토타입</title>
+<meta name="description" content="m-box.com 공항수령에 '김포 발렛 수령(환전 봉투 전달)'을 녹인 클릭형 프로토타입 초안">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --blue: #0073ff;
+    --blue-soft: #e6f1ff;
+    --blue-faint: #f0f6ff;
+    --navy: #022146;
+    --ink: #1a1a1a;
+    --sub: #303132;
+    --muted: #808899;
+    --line: #e3e5ed;
+    --field: #f5f8fd;
+    --bg: #eef4fd;
+    --surface: #ffffff;
+    --warn: #ff7a00;
+    --warn-soft: #fff3e6;
+    --ok: #12a150;
+    --ok-soft: #e8f7ee;
+    --red: #e5484d;
+    --memo: #fffbe6;
+    --memo-line: #f1dc8a;
+    --shadow: 0 8px 28px rgba(2, 33, 70, 0.08);
+    --font: 'Pretendard', -apple-system, system-ui, 'Noto Sans KR', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; }
+  button, input, select { font: inherit; color: inherit; }
+  a { color: var(--blue); }
+
+  /* 기획 안내 바 */
+  .proto-bar { background: var(--navy); color: #fff; font-size: 13px; }
+  .proto-bar .in { max-width: 1120px; margin: 0 auto; padding: 10px 16px; display: flex; gap: 10px 16px; flex-wrap: wrap; align-items: center; }
+  .proto-bar b { color: #7fb8ff; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+  .tabs button { background: rgba(255,255,255,.1); border: 0; color: #fff; padding: 6px 12px; border-radius: 999px; cursor: pointer; font-size: 13px; }
+  .tabs button[aria-selected="true"] { background: var(--blue); }
+
+  /* m-box 헤더 */
+  header.gnb { background: #fff; border-bottom: 1px solid var(--line); }
+  header.gnb .in { max-width: 1120px; margin: 0 auto; padding: 0 16px; height: 64px; display: flex; align-items: center; gap: 36px; }
+  .logo { font-weight: 800; font-size: 19px; letter-spacing: -.3px; display: flex; align-items: center; gap: 6px; }
+  .logo i { width: 22px; height: 22px; border-radius: 4px; background: var(--blue); display: inline-block; position: relative; }
+  .logo i::after { content: ""; position: absolute; right: -3px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: #2fd4e6; }
+  .gnb nav { display: flex; gap: 32px; font-weight: 600; font-size: 15px; }
+  .gnb nav span.on { color: var(--blue); }
+  .gnb .right { margin-left: auto; display: flex; gap: 8px; }
+  .btn-o { border: 1px solid var(--blue); color: var(--blue); background: #fff; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; }
+  .btn-p { border: 0; background: var(--blue); color: #fff; border-radius: 6px; padding: 8px 14px; font-size: 13px; font-weight: 600; }
+  @media (max-width: 760px) { .gnb nav, .gnb .right .btn-o { display: none; } }
+
+  .hero { background: linear-gradient(120deg, #3a4a5f, #6d7f93 60%, #9aa9b8); color: #fff; padding: 56px 16px 120px; }
+  .hero .in { max-width: 1120px; margin: 0 auto; }
+  .hero h1 { margin: 0; font-size: clamp(28px, 4.4vw, 42px); line-height: 1.3; letter-spacing: -.5px; }
+  .hero p { margin: 18px 0 0; font-size: 14px; opacity: .9; }
+
+  main { max-width: 1120px; margin: -80px auto 48px; padding: 0 16px; }
+  .panel { display: none; }
+  .panel.on { display: block; }
+
+  .card { background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  .card-h { background: var(--blue); color: #fff; text-align: center; font-weight: 700; font-size: 17px; padding: 16px; }
+  .card-b { padding: 24px; }
+  @media (max-width: 600px) { .card-b { padding: 18px 16px; } }
+
+  .seg { display: flex; justify-content: center; gap: 8px; margin-bottom: 22px; }
+  .seg button { border: 1px solid #c9ced9; background: #fff; border-radius: 999px; padding: 8px 16px; cursor: pointer; font-size: 14px; }
+  .seg button.on { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .seg button:disabled { opacity: .4; cursor: not-allowed; }
+
+  .row { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 760px) { .row { grid-template-columns: 1fr; } }
+  .fld { display: flex; flex-direction: column; gap: 6px; }
+  .fld label { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .fld select, .fld input { height: 50px; border: 1px solid var(--line); background: var(--field); border-radius: 8px; padding: 0 14px; font-size: 15px; width: 100%; }
+  .fld select:focus, .fld input:focus { outline: 2px solid var(--blue); outline-offset: -1px; background: #fff; }
+  .hint { font-size: 12px; color: var(--muted); }
+  hr.sep { border: 0; border-top: 1px solid var(--line); margin: 22px 0; }
+
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: var(--warn); color: #fff; vertical-align: 2px; }
+  .badge.blue { background: var(--blue); }
+  .badge.gray { background: #b5bbc8; }
+  .tag-assume { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 4px; background: var(--memo); border: 1px solid var(--memo-line); color: #8a6d00; margin-left: 4px; vertical-align: 1px; }
+
+  /* 수령 방식 카드 */
+  .methods { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+  @media (max-width: 600px) { .methods { grid-template-columns: 1fr; } }
+  .method { border: 2px solid var(--line); border-radius: 12px; padding: 16px; cursor: pointer; background: #fff; text-align: left; }
+  .method.on { border-color: var(--blue); background: var(--blue-faint); }
+  .method:disabled { cursor: not-allowed; opacity: .55; }
+  .method h4 { margin: 0 0 4px; font-size: 16px; }
+  .method p { margin: 0; font-size: 13px; color: var(--muted); }
+
+  .valet-box { margin-top: 18px; border: 1px dashed #9cc6ff; background: var(--blue-faint); border-radius: 12px; padding: 18px; }
+  .valet-box h5 { margin: 0 0 12px; font-size: 14px; }
+  .prefill { display: none; margin-bottom: 14px; background: var(--ok-soft); color: var(--ok); border-radius: 8px; padding: 10px 12px; font-size: 13px; font-weight: 600; }
+  .prefill.on { display: block; }
+
+  .cross { margin-top: 14px; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 13px; }
+  .cross b { font-size: 14px; }
+
+  .amt { display: grid; grid-template-columns: 1fr auto 1fr 128px; gap: 12px; align-items: start; }
+    .amt > * { min-width: 0; }
+  @media (max-width: 760px) { .amt { grid-template-columns: minmax(0, 1fr); } .amt .arrow { display: none; } }
+  .money { display: flex; height: 50px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .money select, .money .cur { width: 96px; flex: none; border: 0; border-right: 1px solid var(--line); background: var(--blue-faint); font-weight: 700; padding: 0 12px; display: flex; align-items: center; }
+  .money input { flex: 1; border: 0; text-align: right; padding: 0 14px; font-size: 16px; min-width: 0; }
+  .money input:focus { outline: none; }
+  .arrow { width: 32px; height: 32px; margin-top: 9px; border-radius: 50%; background: var(--field); display: grid; place-items: center; color: var(--muted); }
+  .limit { text-align: right; font-size: 12px; color: var(--blue); margin-top: 6px; }
+  .limit.err { color: var(--red); }
+  .submit { height: 50px; border: 0; border-radius: 8px; background: var(--blue); color: #fff; font-weight: 700; cursor: pointer; }
+  .submit:disabled { background: #e3e5ed; color: var(--muted); cursor: not-allowed; }
+
+  .login { margin-top: 22px; background: var(--blue-faint); border-radius: 10px; padding: 16px 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; }
+  .login b { font-size: 14px; }
+  .login .btn-o { margin-left: auto; border-color: #c9ced9; color: var(--ink); }
+
+  .notes { margin: 18px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--muted); }
+  .notes li { padding-left: 16px; position: relative; margin: 4px 0; }
+  .notes li::before { content: "i"; position: absolute; left: 0; top: 2px; width: 11px; height: 11px; border-radius: 50%; background: #b5bbc8; color: #fff; font-size: 8px; font-weight: 700; display: grid; place-items: center; }
+  .notes li.hl { color: var(--warn); font-weight: 600; }
+  .notes li.hl::before { background: var(--warn); }
+
+  .fee { margin-top: 14px; background: var(--field); border-radius: 10px; padding: 14px 16px; font-size: 14px; display: none; }
+  .fee.on { display: block; }
+  .fee div { display: flex; justify-content: space-between; margin: 3px 0; }
+  .fee .tot { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 8px; font-weight: 800; font-size: 16px; }
+  .fee .tot span:last-child { color: var(--blue); }
+
+  /* 기획 메모 박스 */
+  .memo { background: var(--memo); border: 1px solid var(--memo-line); border-radius: 12px; padding: 16px 18px; margin-top: 20px; font-size: 13px; color: #4d4100; }
+  .memo h6 { margin: 0 0 6px; font-size: 13px; }
+  .memo ul { margin: 0; padding-left: 18px; }
+  .memo li { margin: 3px 0; }
+
+  /* 강점 */
+  .feat { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 40px; }
+  @media (max-width: 860px) { .feat { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .feat { grid-template-columns: 1fr; } }
+  .feat > div { background: #fff; border-radius: 12px; padding: 20px; box-shadow: var(--shadow); }
+  .feat h4 { margin: 0 0 6px; font-size: 16px; }
+  .feat p { margin: 0; font-size: 13px; color: var(--muted); }
+  .feat .new { outline: 2px solid var(--blue); }
+  h2.sec { font-size: 22px; margin: 44px 0 14px; letter-spacing: -.3px; }
+
+  /* 완료 + 알림톡 */
+  .done-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+  @media (max-width: 860px) { .done-grid { grid-template-columns: 1fr; } }
+  .done-head { text-align: center; padding: 8px 0 18px; }
+  .done-head .ck { width: 56px; height: 56px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; margin: 0 auto 12px; font-size: 28px; }
+  .done-head h3 { margin: 0; font-size: 22px; }
+  .kv { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .kv th { text-align: left; color: var(--muted); font-weight: 500; padding: 9px 0; width: 38%; vertical-align: top; }
+  .kv td { padding: 9px 0; font-weight: 600; text-align: right; }
+  .kv tr + tr th, .kv tr + tr td { border-top: 1px solid var(--line); }
+  .talk { background: #bacee0; border-radius: 16px; padding: 18px; }
+  .talk .from { font-size: 12px; color: #4a5a6a; margin-bottom: 6px; }
+  .bubble { background: #fff; border-radius: 4px 14px 14px 14px; overflow: hidden; max-width: 340px; }
+  .bubble .bh { background: #fee500; padding: 10px 14px; font-weight: 700; font-size: 13px; }
+  .bubble .bb { padding: 14px; font-size: 13px; line-height: 1.65; }
+  .bubble .qr { display: flex; justify-content: center; padding: 6px 0 12px; }
+  .bubble .bb b { color: var(--ink); }
+  .bubble .bt { display: block; text-align: center; border-top: 1px solid var(--line); padding: 11px; font-size: 13px; font-weight: 600; color: var(--ink); text-decoration: none; }
+
+  /* 상태 */
+  .steps { list-style: none; margin: 0; padding: 0; }
+  .steps li { position: relative; padding: 0 0 22px 40px; }
+  .steps li::before { content: ""; position: absolute; left: 13px; top: 28px; bottom: 0; width: 2px; background: var(--line); }
+  .steps li:last-child::before { display: none; }
+  .steps .dot { position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 2px solid var(--line); display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--muted); }
+  .steps li.done .dot { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .steps li.done::before { background: var(--blue); }
+  .steps li.cur .dot { border-color: var(--blue); color: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
+  .steps li.fail .dot { background: var(--red); border-color: var(--red); color: #fff; }
+  .steps h5 { margin: 3px 0 2px; font-size: 15px; }
+  .steps p { margin: 0; font-size: 13px; color: var(--muted); }
+  .steps li.todo h5 { color: var(--muted); }
+  .proof { margin-top: 8px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .proof div { background: var(--field); border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; color: var(--sub); }
+  .proof div strong { display: block; font-size: 13px; }
+  .sim { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .sim button { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 13px; }
+  .sim button.pri { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+  /* 표 */
+  .tbl-wrap { overflow-x: auto; }
+  table.grid { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; min-width: 640px; }
+  table.grid th, table.grid td { border-bottom: 1px solid var(--line); padding: 11px 12px; text-align: left; vertical-align: top; }
+  table.grid thead th { background: var(--blue-faint); font-size: 13px; color: var(--sub); }
+  table.grid td.new { background: #f6fbff; font-weight: 600; }
+
+  details.faq { background: #fff; border-radius: 10px; margin-bottom: 8px; box-shadow: var(--shadow); }
+  details.faq summary { padding: 15px 18px; cursor: pointer; font-weight: 700; list-style: none; }
+  details.faq summary::before { content: "Q. "; color: var(--blue); }
+  details.faq div { padding: 0 18px 16px; font-size: 14px; color: var(--sub); }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .two { grid-template-columns: 1fr; } }
+  .box { background: #fff; border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); }
+  .box h4 { margin: 0 0 8px; font-size: 16px; }
+  .box ul, .box ol { margin: 0; padding-left: 18px; font-size: 14px; }
+  .box li { margin: 5px 0; }
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13px; margin: 6px 0; }
+  .flow span { background: var(--blue-faint); border-radius: 6px; padding: 5px 9px; }
+  .flow em { font-style: normal; color: var(--muted); }
+
+  footer { text-align: center; font-size: 12px; color: var(--muted); padding: 0 16px 40px; }
+</style>
+</head>
+<body>
+
+<div class="proto-bar">
+  <div class="in">
+    <span><b>기획 프로토타입 · 초안</b> m-box.com 공항수령 + 김포 발렛 수령(환전 봉투 전달)</span>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="apply" aria-selected="true">① 신청</button>
+      <button role="tab" data-tab="done" aria-selected="false">② 완료·알림톡</button>
+      <button role="tab" data-tab="status" aria-selected="false">③ 신청내역</button>
+      <button role="tab" data-tab="policy" aria-selected="false">④ 정책·FAQ</button>
+      <button role="tab" data-tab="memo" aria-selected="false">⑤ 기획 메모</button>
+    </div>
+  </div>
+</div>
+
+<header class="gnb">
+  <div class="in">
+    <div class="logo"><i></i>MONEY BOX</div>
+    <nav><span>지점 환전</span><span class="on">공항 수령</span><span>부가 서비스</span><span>회사 소개·문의</span></nav>
+    <div class="right"><button class="btn-o">비회원 내역조회</button><button class="btn-p">로그인</button></div>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="in">
+    <h1 id="heroTitle">지금 신청해도<br>30분 안에 공항에서 바로 수령</h1>
+    <p id="heroSub">출국 전 원하는 시간과 장소에서 빠르게 수령하세요.</p>
+  </div>
+</section>
+
+<main>
+
+  <!-- ① 신청 -->
+  <section class="panel on" id="p-apply">
+    <div class="card">
+      <div class="card-h">언제, 어디서 수령할까요?</div>
+      <div class="card-b">
+        <div class="seg">
+          <button id="segToday" class="on">당일 수령</button>
+          <button id="segBook">예약 수령</button>
+        </div>
+
+        <div class="row">
+          <div class="fld">
+            <label for="airport">수령 공항</label>
+            <select id="airport">
+              <option value="">수령할 공항을 선택해주세요.</option>
+              <option value="ICN1">인천공항 1터미널</option>
+              <option value="CJU">제주공항</option>
+              <option value="GMP">김포공항 국제선 · 발렛 수령 NEW</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label for="date">수령일</label>
+            <input type="date" id="date">
+          </div>
+          <div class="fld">
+            <label for="time" id="timeLabel">수령 시각</label>
+            <select id="time"></select>
+          </div>
+        </div>
+
+        <!-- 김포 선택 시 노출 -->
+        <div id="gmpArea" hidden>
+          <div class="methods">
+            <button class="method on" id="mValet" type="button">
+              <h4>🚗 발렛 접수 시 수령 <span class="badge">NEW</span></h4>
+              <p>공식 발렛에 차 키를 맡기는 자리에서 신분증 확인 후 환전 봉투를 받아요.</p>
+            </button>
+            <button class="method" type="button" disabled>
+              <h4>체크인 카운터 수령 <span class="badge gray">준비 중</span></h4>
+              <p>김포는 발렛 수령으로 먼저 시작해요.</p>
+            </button>
+          </div>
+
+          <div class="valet-box">
+            <div class="prefill" id="prefillMsg">✓ 발렛 예약에서 넘어왔어요. 공항·날짜·시각·예약번호가 자동으로 채워졌어요.</div>
+            <h5>발렛 예약 정보</h5>
+            <div class="row">
+              <div class="fld">
+                <label for="valetNo">발렛 예약번호</label>
+                <input id="valetNo" placeholder="예: GV-20261105-0123">
+              </div>
+              <div class="fld">
+                <label for="carNo">차량번호</label>
+                <input id="carNo" placeholder="예: 12가 3456">
+              </div>
+              <div class="fld">
+                <label for="flight">출국 항공편</label>
+                <input id="flight" placeholder="예: KE2117">
+              </div>
+            </div>
+            <p class="hint" style="margin:10px 0 0">수령 시각 = 발렛 접수처 도착 예정 시각이에요. 봉투는 차 키를 맡길 때 함께 받아요.</p>
+            <div class="cross" id="crossSell">
+              <div><b>아직 발렛 예약 전이세요?</b><br>김포 공식 발렛을 예약하면 환전 봉투까지 한 번에 받을 수 있어요.</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn-o" type="button" id="goValet">발렛 예약하러 가기</button>
+                <button class="btn-o" type="button" id="simPrefill" style="border-color:#c9ced9;color:var(--sub)">발렛 예약 후 돌아온 상태 보기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="sep">
+
+        <div class="amt">
+          <div>
+            <div class="money">
+              <select id="cur" aria-label="통화"></select>
+              <input id="fx" inputmode="numeric" placeholder="0" aria-label="외화 금액">
+            </div>
+            <div class="limit" id="limit">신청 가능 금액: -</div>
+          </div>
+          <div class="arrow">→</div>
+          <div>
+            <div class="money"><span class="cur">KRW</span><input id="krw" readonly value="0" aria-label="원화 금액"></div>
+          </div>
+          <button class="submit" id="submit" disabled>신청하기</button>
+        </div>
+
+        <div class="fee" id="fee">
+          <div><span>환전 금액</span><span id="feeFx">-</span></div>
+          <div><span>원화 환산</span><span id="feeKrw">-</span></div>
+          <div><span id="feeLabel">배송료</span><span id="feeAmt">-</span></div>
+          <div class="tot"><span>결제 금액</span><span id="feeTot">-</span></div>
+        </div>
+
+        <div class="login">
+          <b>이미 계정이 있다면 로그인하세요</b>
+          <span style="color:var(--muted)">로그인하면 본인인증 없이 바로 신청할 수 있어요.</span>
+          <button class="btn-o" type="button">로그인하기</button>
+        </div>
+
+        <ul class="notes" id="notes"></ul>
+      </div>
+    </div>
+
+    <div class="memo">
+      <h6>📝 이 화면에서 바뀐 점 (기존 m-box 공항수령 대비)</h6>
+      <ul>
+        <li>공항 목록에 <b>김포공항 국제선 · 발렛 수령 NEW</b> 추가. 고르면 수령 방식·발렛 정보 입력칸이 나타나요.</li>
+        <li>김포는 <b>예약 수령만</b> 가능(당일 수령 비활성). 봉투 포장과 발렛사 인계 시간 때문에 <b>전날 18시 마감</b>.</li>
+        <li>김포는 통화 <b>JPY·CNY</b>만, 한도 <b>USD 2,000 상당</b>(인천·제주는 기존 USD 4,000 그대로).</li>
+        <li>요금은 기존 "배송료" 대신 <b>"발렛 전달 수수료 5,000원"</b>으로 표시해 기존 2,500원과 왜 다른지 이름으로 구분.</li>
+        <li>발렛 예약 페이지에서 링크로 넘어오면 값이 자동으로 채워짐 → 위 "발렛 예약 후 돌아온 상태 보기" 버튼 또는 주소에 <code>?airport=GMP&amp;ref=GV-…</code></li>
+      </ul>
+    </div>
+
+    <h2 class="sec">시간 아끼고 환율 챙기는 공항수령</h2>
+    <div class="feat">
+      <div><h4>미리 예약하고 바로 수령</h4><p>예약한 외화를 공항에서 바로 수령할 수 있어요.</p></div>
+      <div><h4>유리한 환율과 낮은 수수료</h4><p>공항보다 유리한 환율과 낮은 수수료로 환전하세요.</p></div>
+      <div><h4>공항 내 원하는 곳까지 배달</h4><p>공항 내 어디서든 바로 수령! 이동과 대기 없이.</p></div>
+      <div class="new"><h4>차 키 맡기며 바로 수령 <span class="badge blue">김포</span></h4><p>공식 발렛 접수 때 환전 봉투까지. 환전소 줄서기 0번.</p></div>
+    </div>
+  </section>
+
+  <!-- ② 완료 + 알림톡 -->
+  <section class="panel" id="p-done">
+    <div class="done-grid">
+      <div class="card"><div class="card-b">
+        <div class="done-head"><div class="ck">✓</div><h3>환전 신청이 완료됐어요</h3>
+          <p class="hint" style="margin:6px 0 0">입금이 확인되면 봉투를 준비해 발렛 접수처로 보내드려요.</p></div>
+        <table class="kv" id="doneKv"></table>
+        <div class="sim" style="justify-content:center;margin-top:18px">
+          <button class="pri" data-go="status">신청 내역 보기</button>
+        </div>
+      </div></div>
+      <div>
+        <div class="talk">
+          <div class="from">머니박스 · 알림톡 (수령 전날 18시 발송)</div>
+          <div class="bubble">
+            <div class="bh">내일 김포공항 발렛 수령 안내</div>
+            <div class="bb" id="talkBody"></div>
+            <div class="qr" id="qr"></div>
+            <a class="bt" href="#" data-go="status">신청 내역 보기</a>
+          </div>
+        </div>
+        <div class="memo">
+          <h6>📝 알림톡 기준</h6>
+          <ul>
+            <li>기존 공항수령은 "체크인 카운터에서 전화" 안내 → 발렛 건은 <b>"발렛 접수 때 QR + 신분증"</b>으로 따로 템플릿.</li>
+            <li>QR은 신청번호·봉투 일련번호를 담고, 발렛 기사(또는 머니박스 직원)가 스캔해 본인·봉투를 대조해요.</li>
+            <li>대리 수령 불가 문구 필수(신청자 = 수령자).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ 신청내역 -->
+  <section class="panel" id="p-status">
+    <div class="card"><div class="card-b">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:18px">
+        <div><div class="hint">신청번호 <span id="stNo">-</span></div><h3 style="margin:2px 0 0;font-size:20px">김포공항 발렛 수령 <span id="stAmt"></span></h3></div>
+        <button class="btn-o" id="cancelBtn" style="border-color:#c9ced9;color:var(--sub)">환전 취소</button>
+      </div>
+      <ol class="steps" id="steps"></ol>
+      <div class="sim">
+        <span class="hint" style="align-self:center">시연:</span>
+        <button class="pri" id="nextStep">다음 단계로</button>
+        <button id="failStep">미수령 상황 보기</button>
+        <button id="resetStep">처음으로</button>
+      </div>
+    </div></div>
+    <div class="memo">
+      <h6>📝 상태 단계</h6>
+      <ul>
+        <li>신청 → 입금 확인 → 봉투 준비(밀봉·일련번호) → 발렛 접수처 인계 → <b>교부 완료</b>. 미수령이면 회사로 반송.</li>
+        <li>교부 완료 때 남는 기록(수령 서명·교부 사진·봉투 일련번호)을 <b>고객도 볼 수 있게</b> 해서 "발렛 기사에게 받는 현금" 불안을 줄여요. 같은 기록이 환전장부에 자동으로 남아요.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ④ 정책·FAQ -->
+  <section class="panel" id="p-policy">
+    <h2 class="sec" style="margin-top:0">기존 공항수령과 김포 발렛 수령 정책 비교</h2>
+    <div class="tbl-wrap">
+      <table class="grid">
+        <thead><tr><th style="width:18%">항목</th><th>기존 (인천 T1 · 제주)</th><th>김포 발렛 수령 (제안)</th></tr></thead>
+        <tbody>
+          <tr><th>수령 방식</th><td>체크인 카운터에서 전화 → 직원이 전달</td><td class="new">발렛 접수 때 QR + 신분증 확인 후 봉투 교부</td></tr>
+          <tr><th>신청 유형</th><td>당일 수령(30분) · 예약 수령</td><td class="new">예약 수령만 · 수령 전날 18시 마감</td></tr>
+          <tr><th>통화</th><td>USD 등 주요 통화</td><td class="new">JPY · CNY</td></tr>
+          <tr><th>1인 한도</th><td>하루 USD 4,000 상당</td><td class="new">건당 USD 2,000 상당 <span class="tag-assume">세관 확인</span></td></tr>
+          <tr><th>요금</th><td>인천 T1 배송료 2,500원</td><td class="new">발렛 전달 수수료 5,000원 <span class="tag-assume">가정</span><br><span class="hint">기획서 가정 7,500원보다 낮춤. 기존 2,500원과의 차이는 "발렛 연계·밀봉 봉투·보험"으로 설명</span></td></tr>
+          <tr><th>운영 시간</th><td>인천 05:30~20:00 · 제주 10:00~21:00</td><td class="new">06:00~20:00 <span class="tag-assume">발렛사 확인</span></td></tr>
+          <tr><th>수령일 변경</th><td>불가 (담당 직원과 조율)</td><td class="new">수령 전날 18시까지 변경 가능 · <b>발렛 예약 변경과 같이</b> 움직임</td></tr>
+          <tr><th>취소</th><td>수령일 48시간 전까지 무료</td><td>동일 (48시간 전까지 무료)</td></tr>
+          <tr><th>미수령</th><td>자동 취소 · 수수료 2% 차감</td><td class="new">자동 취소 · 2% 차감 환불 <b>또는</b> 가까운 머니박스 지점에서 7일 안에 무료 재수령 중 선택</td></tr>
+          <tr><th>대리 수령</th><td>본인 신분증 필요</td><td>불가 (신청자 = 수령자)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sec">자주 묻는 질문 (추가할 항목)</h2>
+    <details class="faq" open><summary>발렛 기사에게 현금을 받아도 안전한가요?</summary><div>머니박스(등록 환전영업자)가 환전하고, 김포공항 <b>공식 발렛 운영사</b>가 위탁을 받아 전달만 합니다. 봉투는 밀봉돼 일련번호가 붙어 있고, 교부 때 신분증·QR을 확인하며 서명·사진이 기록됩니다. 기록은 신청 내역에서 확인할 수 있어요.</div></details>
+    <details class="faq"><summary>발렛을 예약하지 않아도 신청할 수 있나요?</summary><div>김포 발렛 수령은 공식 발렛 예약이 있는 고객만 신청할 수 있어요. 발렛 없이 공항에서 받으려면 인천공항 1터미널·제주공항 수령을 이용해 주세요.</div></details>
+    <details class="faq"><summary>비행기 시간이 바뀌면 어떻게 하나요?</summary><div>수령 전날 18시까지는 신청 내역에서 수령일·시각을 바꿀 수 있어요. 발렛 예약 시간도 함께 바꿔 주세요. 이후에는 고객센터로 연락해 주세요.</div></details>
+    <details class="faq"><summary>가족이 대신 받을 수 있나요?</summary><div>외국환 규정상 신청자 본인만 받을 수 있어요. 차를 맡기는 분과 신청자가 다르면 신청자가 함께 발렛 접수처에 와 주세요.</div></details>
+    <details class="faq"><summary>발렛 접수 때 봉투를 받지 못했어요.</summary><div>자동 취소되어 수수료 2%를 뺀 금액이 환불되거나, 원하시면 7일 안에 가까운 머니박스 지점에서 추가 비용 없이 받으실 수 있어요.</div></details>
+  </section>
+
+  <!-- ⑤ 기획 메모 -->
+  <section class="panel" id="p-memo">
+    <h2 class="sec" style="margin-top:0">기획 메모</h2>
+    <div class="two">
+      <div class="box">
+        <h4>이 초안에서 정한 기본값</h4>
+        <ul>
+          <li>위치: <b>공항 수령 메뉴 안</b>, 공항 선택에 "김포 국제선 · 발렛 수령" 추가 (별도 메뉴 X)</li>
+          <li>김포는 예약 수령만, 전날 18시 마감</li>
+          <li>통화 JPY·CNY, 건당 USD 2,000 상당</li>
+          <li>요금 이름 "발렛 전달 수수료", 5,000원</li>
+          <li>수령일 변경 허용(전날 18시까지), 발렛 예약 변경과 연동</li>
+          <li>미수령: 2% 차감 환불 또는 지점 무료 재수령 선택</li>
+          <li>진입 경로 두 개: 발렛 예약 → m-box(값 자동 채움), m-box → 발렛 예약(배너)</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>확인이 필요한 것</h4>
+        <ul>
+          <li>김포 공식 발렛 운영사·계약 기간·운영 시간</li>
+          <li>발렛 기사 교부가 환전사무 위탁으로 인정되는지 (세관)</li>
+          <li>비대면 신청·대면 교부 한도 (USD 2,000 적정성)</li>
+          <li>전달 수수료 최종 금액 (2,500원 배송료와의 관계)</li>
+          <li>발렛사와 예약 연동 방식 (링크 파라미터 / API)</li>
+          <li>미수령 환율 차손 부담 주체 (약관)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="sec">운영 방식: A안이 막히면 B안</h2>
+    <div class="two">
+      <div class="box">
+        <h4>A안 · 발렛 기사가 교부 (기획서 원안)</h4>
+        <div class="flow"><span>머니박스 봉투 포장</span><em>→</em><span>발렛사 인계</span><em>→</em><span>기사가 차량 인수 때 교부</span></div>
+        <ul>
+          <li>발렛사와 <b>환전사무 위탁 계약</b> 필요, 보고 의무 이행 주체 명시</li>
+          <li>인계 물류·기사 교육·보유 한도 관리 필요</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>B안 · 머니박스 직원이 발렛 접수처에서 직접 교부</h4>
+        <div class="flow"><span>머니박스 봉투 포장</span><em>→</em><span>김포 수령 직원이 발렛 접수처 대기</span><em>→</em><span>직원이 교부</span></div>
+        <ul>
+          <li>지금 <b>인천·제주 공항 수령팀 방식 그대로</b> → 위탁 규제 문제 없음</li>
+          <li>발렛사는 고객 연결·매출 배분만 담당, 인계 물류비 없음</li>
+          <li>추천 순서: <b>B안으로 수요 확인 → 위탁 인정되면 A안 전환</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="sec">고객 화면 흐름 요약</h2>
+    <div class="box">
+      <div class="flow"><span>발렛 예약 (발렛사)</span><em>→ "환전 봉투 추가" →</em><span>m-box 공항수령 (김포 자동 선택)</span><em>→</em><span>로그인 / 본인인증</span><em>→</em><span>금액 입력·결제</span><em>→</em><span>완료</span></div>
+      <div class="flow"><span>D-1 18시 알림톡 (QR)</span><em>→</em><span>발렛 접수처: 차 키 + 신분증 + QR</span><em>→</em><span>봉투 교부 · 서명·사진 기록</span><em>→</em><span>신청 내역 "교부 완료"</span></div>
+    </div>
+  </section>
+</main>
+
+<footer>머니박스 내부 기획용 프로토타입 · 환율·수수료·운영 시간은 예시 값입니다.</footer>
+
+<script>
+(function () {
+  // 예시 환율 (원/1단위)
+  var RATE = { USD: 1400, JPY: 9.3, CNY: 195, EUR: 1520 };
+  var UNIT = { USD: 1, JPY: 1000, CNY: 100, EUR: 5 };
+  var CUR_BY_AIRPORT = { '': ['USD'], ICN1: ['USD', 'JPY', 'EUR', 'CNY'], CJU: ['USD', 'JPY', 'CNY'], GMP: ['JPY', 'CNY'] };
+  var LIMIT_USD = { ICN1: 4000, CJU: 4000, GMP: 2000 };
+  var FEE = { ICN1: 2500, CJU: 0, GMP: 5000 };
+  var HOURS = { ICN1: [5.5, 20], CJU: [10, 21], GMP: [6, 20], '': [5.5, 20] };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { mode: 'today', airport: '', step: 0, failed: false };
+  var won = function (n) { return Math.round(n).toLocaleString('ko-KR') + '원'; };
+  var fxStr = function (n, c) { return Number(n).toLocaleString('ko-KR') + ' ' + c; };
+
+  // 탭
+  function show(tab) {
+    document.querySelectorAll('.tabs button').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === tab)); });
+    document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('on', p.id === 'p-' + tab); });
+    $('hero').style.display = tab === 'apply' ? '' : 'none';
+    document.querySelector('main').style.marginTop = tab === 'apply' ? '' : '28px';
+    if (tab === 'done') renderDone();
+    if (tab === 'status') renderSteps();
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll('.tabs button').forEach(function (b) { b.onclick = function () { show(b.dataset.tab); }; });
+  document.querySelectorAll('[data-go]').forEach(function (b) { b.onclick = function (e) { e.preventDefault(); show(b.dataset.go); }; });
+
+  function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function addDays(n) { var d = new Date(); d.setDate(d.getDate() + n); return d; }
+
+  function fillTimes() {
+    var h = HOURS[state.airport] || HOURS[''], sel = $('time'), prev = sel.value;
+    sel.innerHTML = '';
+    for (var t = h[0]; t <= h[1]; t += 0.5) {
+      var hh = Math.floor(t), mm = t % 1 ? '30' : '00';
+      var v = String(hh).padStart(2, '0') + ':' + mm;
+      var o = document.createElement('option');
+      o.value = v; o.textContent = (hh < 12 ? '오전 ' : '오후 ') + (hh > 12 ? hh - 12 : hh) + ':' + mm;
+      sel.appendChild(o);
+    }
+    if ([].some.call(sel.options, function (o) { return o.value === prev; })) sel.value = prev;
+    else if (state.airport === 'GMP') sel.value = '07:30';
+  }
+
+  function fillCur() {
+    var list = CUR_BY_AIRPORT[state.airport], sel = $('cur'), prev = sel.value;
+    sel.innerHTML = list.map(function (c) { return '<option>' + c + '</option>'; }).join('');
+    if (list.indexOf(prev) >= 0) sel.value = prev;
+  }
+
+  function maxFx() {
+    var c = $('cur').value, lim = LIMIT_USD[state.airport];
+    if (!lim) return 0;
+    var v = lim * RATE.USD / RATE[c];
+    return Math.floor(v / UNIT[c]) * UNIT[c];
+  }
+
+  function calc() {
+    var c = $('cur').value, a = state.airport;
+    var n = Number(String($('fx').value).replace(/[^0-9]/g, '')) || 0;
+    var mx = maxFx();
+    var krw = n * RATE[c];
+    $('krw').value = Math.round(krw).toLocaleString('ko-KR');
+    var lim = $('limit');
+    if (!a) { lim.textContent = '신청 가능 금액: -'; lim.classList.remove('err'); }
+    else if (n > mx) { lim.textContent = '최대 ' + fxStr(mx, c) + '까지 신청할 수 있어요' + (a === 'GMP' ? ' (USD 2,000 상당)' : ''); lim.classList.add('err'); }
+    else if (n && n % UNIT[c]) { lim.textContent = UNIT[c].toLocaleString() + ' ' + c + ' 단위로 입력해 주세요'; lim.classList.add('err'); }
+    else { lim.textContent = '신청 가능 금액: 최대 ' + fxStr(mx, c) + ' · 입력 단위 ' + UNIT[c].toLocaleString() + ' ' + c; lim.classList.remove('err'); }
+
+    var valetOk = a !== 'GMP' || ($('valetNo').value.trim() && $('carNo').value.trim());
+    var ok = a && n > 0 && n <= mx && n % UNIT[c] === 0 && valetOk;
+    $('submit').disabled = !ok;
+
+    var fee = FEE[a] || 0;
+    $('fee').classList.toggle('on', !!(a && n > 0));
+    $('feeFx').textContent = fxStr(n, c);
+    $('feeKrw').textContent = won(krw);
+    $('feeLabel').textContent = a === 'GMP' ? '발렛 전달 수수료' : '배송료';
+    $('feeAmt').textContent = fee ? won(fee) : '무료';
+    $('feeTot').textContent = won(krw + fee);
+  }
+
+  function renderNotes() {
+    var a = state.airport, html = [];
+    if (a === 'GMP') {
+      html.push('<li class="hl">김포공항 발렛 수령은 예약 수령만 가능하며, 수령 전날 18시에 마감돼요.</li>');
+      html.push('<li class="hl">김포공항 발렛 수령은 발렛 전달 수수료 5,000원이 부과돼요.</li>');
+      html.push('<li>신청자 본인만 수령할 수 있어요. 발렛 접수 때 신분증과 알림톡 QR을 보여주세요.</li>');
+      html.push('<li>운영 시간 06:00~20:00 (발렛 운영 시간 기준)</li>');
+    } else {
+      html.push('<li>인천공항 1터미널은 배송료 2,500원이 부과됩니다.</li>');
+    }
+    html.push('<li>환전 신청중 환율이 변경될 수 있습니다.</li>');
+    html.push('<li>공항별 환율은 상이할 수 있습니다.</li>');
+    $('notes').innerHTML = html.join('');
+  }
+
+  function setMode(m) {
+    state.mode = m;
+    $('segToday').classList.toggle('on', m === 'today');
+    $('segBook').classList.toggle('on', m === 'book');
+    var d = $('date');
+    if (m === 'today') { d.value = ymd(new Date()); d.disabled = true; }
+    else {
+      d.disabled = false;
+      var min = ymd(addDays(1));
+      d.min = min;
+      if (!d.value || d.value < min) d.value = ymd(addDays(8));
+    }
+  }
+
+  function onAirport() {
+    state.airport = $('airport').value;
+    var g = state.airport === 'GMP';
+    $('gmpArea').hidden = !g;
+    $('segToday').disabled = g;
+    $('timeLabel').textContent = g ? '발렛 도착 예정 시각' : '수령 시각';
+    if (g) {
+      setMode('book');
+      $('heroTitle').innerHTML = '차 키를 건네는 순간<br>외화 봉투까지 받고 출국';
+      $('heroSub').textContent = '김포공항 국제선 공식 발렛 접수 때 환전 봉투를 함께 받으세요.';
+    } else {
+      $('heroTitle').innerHTML = '지금 신청해도<br>30분 안에 공항에서 바로 수령';
+      $('heroSub').textContent = '출국 전 원하는 시간과 장소에서 빠르게 수령하세요.';
+    }
+    fillTimes(); fillCur(); renderNotes(); calc();
+  }
+
+  function prefill(ref, date, time) {
+    $('airport').value = 'GMP'; onAirport();
+    $('valetNo').value = ref || 'GV-' + ymd(addDays(8)).replace(/-/g, '') + '-0123';
+    if (date) $('date').value = date;
+    if (time) $('time').value = time;
+    if (!$('carNo').value) $('carNo').value = '12가 3456';
+    $('prefillMsg').classList.add('on');
+    $('crossSell').style.display = 'none';
+    calc();
+  }
+
+  $('segToday').onclick = function () { setMode('today'); };
+  $('segBook').onclick = function () { setMode('book'); };
+  $('airport').onchange = onAirport;
+  $('cur').onchange = calc;
+  ['fx', 'valetNo', 'carNo'].forEach(function (id) { $(id).oninput = calc; });
+  $('fx').addEventListener('blur', function () {
+    var n = Number(String(this.value).replace(/[^0-9]/g, '')); this.value = n ? n.toLocaleString('ko-KR') : '';
+  });
+  $('fx').addEventListener('focus', function () { this.value = String(this.value).replace(/[^0-9]/g, ''); });
+  $('goValet').onclick = function () { alert('제휴 발렛사 예약 페이지로 이동 (프로토타입에서는 이동하지 않아요)'); };
+  $('simPrefill').onclick = function () { prefill(); };
+  $('submit').onclick = function () { state.step = 1; state.failed = false; show('done'); };
+
+  // 완료 화면
+  function summary() {
+    var c = $('cur').value, n = Number(String($('fx').value).replace(/[^0-9]/g, '')) || 0;
+    var d = new Date($('date').value + 'T00:00:00');
+    var days = ['일', '월', '화', '수', '목', '금', '토'];
+    return {
+      no: 'MB' + ($('date').value || '').replace(/-/g, '') + '-0418',
+      fx: fxStr(n, c),
+      krw: won(n * RATE[c] + (FEE[state.airport] || 0)),
+      date: (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + days[d.getDay()] + ') ' + $('time').value,
+      valet: $('valetNo').value || '-', car: $('carNo').value || '-', flight: $('flight').value || '-'
+    };
+  }
+  function renderDone() {
+    if (state.airport !== 'GMP') { prefill(); if (!$('fx').value) { $('cur').value = 'JPY'; $('fx').value = '100,000'; } calc(); }
+    if (!$('fx').value) { $('fx').value = '100,000'; calc(); }
+    var s = summary();
+    $('doneKv').innerHTML =
+      '<tr><th>신청번호</th><td>' + s.no + '</td></tr>' +
+      '<tr><th>수령 방식</th><td>김포공항 국제선 · 발렛 접수 시 수령</td></tr>' +
+      '<tr><th>수령 일시</th><td>' + s.date + '</td></tr>' +
+      '<tr><th>환전 금액</th><td>' + s.fx + '</td></tr>' +
+      '<tr><th>결제 금액</th><td>' + s.krw + '<br><span class="hint">발렛 전달 수수료 5,000원 포함</span></td></tr>' +
+      '<tr><th>발렛 예약번호</th><td>' + s.valet + '</td></tr>' +
+      '<tr><th>차량번호</th><td>' + s.car + '</td></tr>';
+    $('talkBody').innerHTML =
+      '<b>' + s.date + '</b> 김포공항 국제선 발렛 접수처에서 환전 봉투를 받으실 수 있어요.<br><br>' +
+      '· 환전 금액: <b>' + s.fx + '</b><br>' +
+      '· 발렛 예약번호: ' + s.valet + '<br>' +
+      '· 차량번호: ' + s.car + '<br><br>' +
+      '차 키를 맡길 때 <b>신분증</b>과 아래 <b>QR</b>을 보여주세요. 신청자 본인만 받을 수 있어요.';
+    $('qr').innerHTML = qrSvg(s.no);
+  }
+
+  // 모양만 흉내 낸 QR (실제 QR 아님)
+  function qrSvg(seed) {
+    var n = 21, cell = 5, h = 0, out = '';
+    for (var i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+    function rnd() { h ^= h << 13; h >>>= 0; h ^= h >> 17; h ^= h << 5; h >>>= 0; return h / 4294967296; }
+    function finder(x, y) {
+      return '<rect x="' + x * cell + '" y="' + y * cell + '" width="' + 7 * cell + '" height="' + 7 * cell + '" fill="#111"/>' +
+        '<rect x="' + (x + 1) * cell + '" y="' + (y + 1) * cell + '" width="' + 5 * cell + '" height="' + 5 * cell + '" fill="#fff"/>' +
+        '<rect x="' + (x + 2) * cell + '" y="' + (y + 2) * cell + '" width="' + 3 * cell + '" height="' + 3 * cell + '" fill="#111"/>';
+    }
+    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
+      var inF = (x < 8 && y < 8) || (x > n - 9 && y < 8) || (x < 8 && y > n - 9);
+      if (!inF && rnd() > 0.52) out += '<rect x="' + x * cell + '" y="' + y * cell + '" width="' + cell + '" height="' + cell + '" fill="#111"/>';
+    }
+    var s = n * cell;
+    return '<svg width="120" height="120" viewBox="-5 -5 ' + (s + 10) + ' ' + (s + 10) + '" role="img" aria-label="수령 QR 예시"><rect x="-5" y="-5" width="' + (s + 10) + '" height="' + (s + 10) + '" fill="#fff"/>' + out + finder(0, 0) + finder(n - 7, 0) + finder(0, n - 7) + '</svg>';
+  }
+
+  // 신청내역 상태
+  var STEPS = [
+    ['신청 완료', '환전 신청이 접수됐어요.'],
+    ['입금 확인', '결제가 확인됐어요. 이 시점의 환율로 확정돼요.'],
+    ['봉투 준비', '소액권을 섞어 밀봉하고 일련번호를 붙였어요. (봉투 No. GV-ENV-08812)'],
+    ['발렛 접수처 인계', '김포공항 국제선 발렛 접수처로 봉투를 보냈어요.'],
+    ['교부 완료', '발렛 접수 때 봉투를 받으셨어요.']
+  ];
+  function renderSteps() {
+    if (!state.step) state.step = 1;
+    var s = summary();
+    $('stNo').textContent = s.no;
+    $('stAmt').textContent = '· ' + s.fx;
+    var html = '';
+    STEPS.forEach(function (st, i) {
+      var idx = i + 1, cls = idx < state.step || (idx === state.step && idx === STEPS.length) ? 'done' : idx === state.step ? 'cur' : 'todo';
+      if (state.failed && idx === STEPS.length) {
+        html += '<li class="fail"><span class="dot">!</span><h5>미수령 · 회사로 반송</h5><p>운영 시간 안에 수령하지 않아 봉투가 반송됐어요. 아래에서 선택해 주세요.</p>' +
+          '<div class="sim"><button class="pri">2% 차감 후 환불</button><button>지점에서 7일 안에 무료 수령</button></div></li>';
+        return;
+      }
+      html += '<li class="' + cls + '"><span class="dot">' + (cls === 'done' ? '✓' : idx) + '</span><h5>' + st[0] + '</h5><p>' + st[1] + '</p>';
+      if (idx === STEPS.length && cls === 'done') {
+        html += '<div class="proof"><div><strong>수령 서명</strong>✍️ 서명 이미지</div><div><strong>교부 사진</strong>📷 08:02 촬영</div><div><strong>봉투 일련번호</strong>GV-ENV-08812</div></div>';
+      }
+      html += '</li>';
+    });
+    $('steps').innerHTML = html;
+    $('cancelBtn').disabled = state.step >= 3 || state.failed;
+    $('cancelBtn').style.opacity = $('cancelBtn').disabled ? .4 : 1;
+    $('nextStep').disabled = state.step >= STEPS.length || state.failed;
+  }
+  $('nextStep').onclick = function () { if (state.step < STEPS.length) state.step++; renderSteps(); };
+  $('failStep').onclick = function () { state.step = STEPS.length; state.failed = true; renderSteps(); };
+  $('resetStep').onclick = function () { state.step = 1; state.failed = false; renderSteps(); };
+  $('cancelBtn').onclick = function () { alert('수령일 48시간 전까지는 수수료 없이 취소돼요. (프로토타입)'); };
+
+  // 초기화 + 발렛사에서 넘어온 링크 처리
+  setMode('today'); fillTimes(); fillCur(); renderNotes(); calc();
+  var q = new URLSearchParams(location.search);
+  if (q.get('airport') === 'GMP') prefill(q.get('ref'), q.get('date'), q.get('time'));
+})();
+</script>
+</body>
+</html>
