@@ -357,7 +357,7 @@
         <li>공항 목록에 <b>김포공항 국제선 · 발렛 수령 NEW</b> 추가. 고르면 수령 방식·발렛 정보 입력칸이 나타나요.</li>
         <li>김포는 <b>예약 수령만</b> 가능(당일 수령 비활성). 봉투 포장과 발렛사 인계 시간 때문에 <b>전날 18시 마감</b>.</li>
         <li>김포는 통화 <b>JPY·CNY</b>만, 한도 <b>USD 2,000 상당</b>(인천·제주는 기존 USD 4,000 그대로).</li>
-        <li>요금은 기존 "배송료" 대신 <b>"발렛 전달 수수료 5,000원"</b>으로 표시해 기존 2,500원과 왜 다른지 이름으로 구분.</li>
+        <li>요금은 기존과 똑같이 <b>"배송료 2,500원"</b> (이름·금액 모두 인천 T1과 동일).</li>
         <li>발렛 예약 페이지에서 링크로 넘어오면 값이 자동으로 채워짐 → 위 "발렛 예약 후 돌아온 상태 보기" 버튼 또는 주소에 <code>?airport=GMP&amp;ref=GV-…</code></li>
       </ul>
     </div>
@@ -439,7 +439,7 @@
           <tr><th>신청 유형</th><td>당일 수령(30분) · 예약 수령</td><td class="new">예약 수령만 · 수령 전날 18시 마감</td></tr>
           <tr><th>통화</th><td>USD 등 주요 통화</td><td class="new">JPY · CNY</td></tr>
           <tr><th>1인 한도</th><td>하루 USD 4,000 상당</td><td class="new">건당 USD 2,000 상당 <span class="tag-assume">세관 확인</span></td></tr>
-          <tr><th>요금</th><td>인천 T1 배송료 2,500원</td><td class="new">발렛 전달 수수료 5,000원 <span class="tag-assume">가정</span><br><span class="hint">기획서 가정 7,500원보다 낮춤. 기존 2,500원과의 차이는 "발렛 연계·밀봉 봉투·보험"으로 설명</span></td></tr>
+          <tr><th>요금</th><td>인천 T1 배송료 2,500원</td><td>동일 (배송료 2,500원)</td></tr>
           <tr><th>운영 시간</th><td>인천 05:30~20:00 · 제주 10:00~21:00</td><td class="new">06:00~20:00 <span class="tag-assume">발렛사 확인</span></td></tr>
           <tr><th>수령일 변경</th><td>불가 (담당 직원과 조율)</td><td class="new">수령 전날 18시까지 변경 가능 · <b>발렛 예약 변경과 같이</b> 움직임</td></tr>
           <tr><th>취소</th><td>수령일 48시간 전까지 무료</td><td>동일 (48시간 전까지 무료)</td></tr>
@@ -467,7 +467,7 @@
           <li>위치: <b>공항 수령 메뉴 안</b>, 공항 선택에 "김포 국제선 · 발렛 수령" 추가 (별도 메뉴 X)</li>
           <li>김포는 예약 수령만, 전날 18시 마감</li>
           <li>통화 JPY·CNY, 건당 USD 2,000 상당</li>
-          <li>요금 이름 "발렛 전달 수수료", 5,000원</li>
+          <li>요금은 기존과 동일: 배송료 2,500원</li>
           <li>수령일 변경 허용(전날 18시까지), 발렛 예약 변경과 연동</li>
           <li>미수령: 2% 차감 환불 또는 지점 무료 재수령 선택</li>
           <li>진입 경로 두 개: 발렛 예약 → m-box(값 자동 채움), m-box → 발렛 예약(배너)</li>
@@ -479,7 +479,6 @@
           <li>김포 공식 발렛 운영사·계약 기간·운영 시간</li>
           <li>발렛 기사 교부가 환전사무 위탁으로 인정되는지 (세관)</li>
           <li>비대면 신청·대면 교부 한도 (USD 2,000 적정성)</li>
-          <li>전달 수수료 최종 금액 (2,500원 배송료와의 관계)</li>
           <li>발렛사와 예약 연동 방식 (링크 파라미터 / API)</li>
           <li>미수령 환율 차손 부담 주체 (약관)</li>
         </ul>
@@ -524,7 +523,7 @@
   var UNIT = { USD: 1, JPY: 1000, CNY: 100, EUR: 5 };
   var CUR_BY_AIRPORT = { '': ['USD'], ICN1: ['USD', 'JPY', 'EUR', 'CNY'], CJU: ['USD', 'JPY', 'CNY'], GMP: ['JPY', 'CNY'] };
   var LIMIT_USD = { ICN1: 4000, CJU: 4000, GMP: 2000 };
-  var FEE = { ICN1: 2500, CJU: 0, GMP: 5000 };
+  var FEE = { ICN1: 2500, CJU: 0, GMP: 2500 };
   var HOURS = { ICN1: [5.5, 20], CJU: [10, 21], GMP: [6, 20], '': [5.5, 20] };
 
   var $ = function (id) { return document.getElementById(id); };
@@ -595,7 +594,7 @@
     $('fee').classList.toggle('on', !!(a && n > 0));
     $('feeFx').textContent = fxStr(n, c);
     $('feeKrw').textContent = won(krw);
-    $('feeLabel').textContent = a === 'GMP' ? '발렛 전달 수수료' : '배송료';
+    $('feeLabel').textContent = '배송료';
     $('feeAmt').textContent = fee ? won(fee) : '무료';
     $('feeTot').textContent = won(krw + fee);
   }
@@ -604,7 +603,7 @@
     var a = state.airport, html = [];
     if (a === 'GMP') {
       html.push('<li class="hl">김포공항 발렛 수령은 예약 수령만 가능하며, 수령 전날 18시에 마감돼요.</li>');
-      html.push('<li class="hl">김포공항 발렛 수령은 발렛 전달 수수료 5,000원이 부과돼요.</li>');
+      html.push('<li class="hl">김포공항 발렛 수령은 배송료 2,500원이 부과돼요.</li>');
       html.push('<li>신청자 본인만 수령할 수 있어요. 발렛 접수 때 신분증과 알림톡 QR을 보여주세요.</li>');
       html.push('<li>운영 시간 06:00~20:00 (발렛 운영 시간 기준)</li>');
     } else {
@@ -692,7 +691,7 @@
       '<tr><th>수령 방식</th><td>김포공항 국제선 · 발렛 접수 시 수령</td></tr>' +
       '<tr><th>수령 일시</th><td>' + s.date + '</td></tr>' +
       '<tr><th>환전 금액</th><td>' + s.fx + '</td></tr>' +
-      '<tr><th>결제 금액</th><td>' + s.krw + '<br><span class="hint">발렛 전달 수수료 5,000원 포함</span></td></tr>' +
+      '<tr><th>결제 금액</th><td>' + s.krw + '<br><span class="hint">배송료 2,500원 포함</span></td></tr>' +
       '<tr><th>발렛 예약번호</th><td>' + s.valet + '</td></tr>' +
       '<tr><th>차량번호</th><td>' + s.car + '</td></tr>';
     $('talkBody').innerHTML =
