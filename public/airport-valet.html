@@ -355,8 +355,7 @@
       <h6>📝 이 화면에서 바뀐 점 (기존 m-box 공항수령 대비)</h6>
       <ul>
         <li>공항 목록에 <b>김포공항 국제선 · 발렛 수령 NEW</b> 추가. 고르면 수령 방식·발렛 정보 입력칸이 나타나요.</li>
-        <li>김포는 <b>예약 수령만</b> 가능(당일 수령 비활성). 봉투 포장과 발렛사 인계 시간 때문에 <b>전날 18시 마감</b>.</li>
-        <li>김포는 통화 <b>JPY·CNY</b>만, 한도 <b>USD 2,000 상당</b>(인천·제주는 기존 USD 4,000 그대로).</li>
+        <li>당일·예약 수령, 통화, 한도(하루 USD 4,000), 운영 시간, 변경·취소·미수령 정책은 <b>모두 기존 공항수령과 동일</b>. 바뀌는 건 수령 장소(발렛 접수처)뿐.</li>
         <li>요금은 기존과 똑같이 <b>"배송료 2,500원"</b> (이름·금액 모두 인천 T1과 동일).</li>
         <li>발렛 예약 페이지에서 링크로 넘어오면 값이 자동으로 채워짐 → 위 "발렛 예약 후 돌아온 상태 보기" 버튼 또는 주소에 <code>?airport=GMP&amp;ref=GV-…</code></li>
       </ul>
@@ -384,7 +383,7 @@
       </div></div>
       <div>
         <div class="talk">
-          <div class="from">머니박스 · 알림톡 (수령 전날 18시 발송)</div>
+          <div class="from">머니박스 · 알림톡 (기존 공항수령 알림톡과 같은 시점에 발송)</div>
           <div class="bubble">
             <div class="bh">내일 김포공항 발렛 수령 안내</div>
             <div class="bb" id="talkBody"></div>
@@ -436,14 +435,14 @@
         <thead><tr><th style="width:18%">항목</th><th>기존 (인천 T1 · 제주)</th><th>김포 발렛 수령 (제안)</th></tr></thead>
         <tbody>
           <tr><th>수령 방식</th><td>체크인 카운터에서 전화 → 직원이 전달</td><td class="new">발렛 접수 때 QR + 신분증 확인 후 봉투 교부</td></tr>
-          <tr><th>신청 유형</th><td>당일 수령(30분) · 예약 수령</td><td class="new">예약 수령만 · 수령 전날 18시 마감</td></tr>
-          <tr><th>통화</th><td>USD 등 주요 통화</td><td class="new">JPY · CNY</td></tr>
-          <tr><th>1인 한도</th><td>하루 USD 4,000 상당</td><td class="new">건당 USD 2,000 상당 <span class="tag-assume">세관 확인</span></td></tr>
+          <tr><th>신청 유형</th><td>당일 수령(30분) · 예약 수령</td><td>동일 (당일 수령 · 예약 수령)</td></tr>
+          <tr><th>통화</th><td>USD 등 주요 통화</td><td>동일</td></tr>
+          <tr><th>1인 한도</th><td>하루 USD 4,000 상당</td><td>동일 (하루 USD 4,000 상당)</td></tr>
           <tr><th>요금</th><td>인천 T1 배송료 2,500원</td><td>동일 (배송료 2,500원)</td></tr>
-          <tr><th>운영 시간</th><td>인천 05:30~20:00 · 제주 10:00~21:00</td><td class="new">06:00~20:00 <span class="tag-assume">발렛사 확인</span></td></tr>
-          <tr><th>수령일 변경</th><td>불가 (담당 직원과 조율)</td><td class="new">수령 전날 18시까지 변경 가능 · <b>발렛 예약 변경과 같이</b> 움직임</td></tr>
+          <tr><th>운영 시간</th><td>인천 05:30~20:00 · 제주 10:00~21:00</td><td>인천과 동일 05:30~20:00</td></tr>
+          <tr><th>수령일 변경</th><td>불가 (담당 직원과 조율)</td><td>동일 (불가 · 담당 직원과 조율)</td></tr>
           <tr><th>취소</th><td>수령일 48시간 전까지 무료</td><td>동일 (48시간 전까지 무료)</td></tr>
-          <tr><th>미수령</th><td>자동 취소 · 수수료 2% 차감</td><td class="new">자동 취소 · 2% 차감 환불 <b>또는</b> 가까운 머니박스 지점에서 7일 안에 무료 재수령 중 선택</td></tr>
+          <tr><th>미수령</th><td>자동 취소 · 수수료 2% 차감</td><td>동일 (자동 취소 · 수수료 2% 차감)</td></tr>
           <tr><th>대리 수령</th><td>본인 신분증 필요</td><td>불가 (신청자 = 수령자)</td></tr>
         </tbody>
       </table>
@@ -452,9 +451,9 @@
     <h2 class="sec">자주 묻는 질문 (추가할 항목)</h2>
     <details class="faq" open><summary>발렛 기사에게 현금을 받아도 안전한가요?</summary><div>머니박스(등록 환전영업자)가 환전하고, 김포공항 <b>공식 발렛 운영사</b>가 위탁을 받아 전달만 합니다. 봉투는 밀봉돼 일련번호가 붙어 있고, 교부 때 신분증·QR을 확인하며 서명·사진이 기록됩니다. 기록은 신청 내역에서 확인할 수 있어요.</div></details>
     <details class="faq"><summary>발렛을 예약하지 않아도 신청할 수 있나요?</summary><div>김포 발렛 수령은 공식 발렛 예약이 있는 고객만 신청할 수 있어요. 발렛 없이 공항에서 받으려면 인천공항 1터미널·제주공항 수령을 이용해 주세요.</div></details>
-    <details class="faq"><summary>비행기 시간이 바뀌면 어떻게 하나요?</summary><div>수령 전날 18시까지는 신청 내역에서 수령일·시각을 바꿀 수 있어요. 발렛 예약 시간도 함께 바꿔 주세요. 이후에는 고객센터로 연락해 주세요.</div></details>
+    <details class="faq"><summary>비행기 시간이 바뀌면 어떻게 하나요?</summary><div>현재 정책상 신청 후 수령일을 변경하기 어려워요. 담당 직원과 수령 일정을 조율해 주시고, 발렛 예약 시간도 함께 바꿔 주세요.</div></details>
     <details class="faq"><summary>가족이 대신 받을 수 있나요?</summary><div>외국환 규정상 신청자 본인만 받을 수 있어요. 차를 맡기는 분과 신청자가 다르면 신청자가 함께 발렛 접수처에 와 주세요.</div></details>
-    <details class="faq"><summary>발렛 접수 때 봉투를 받지 못했어요.</summary><div>자동 취소되어 수수료 2%를 뺀 금액이 환불되거나, 원하시면 7일 안에 가까운 머니박스 지점에서 추가 비용 없이 받으실 수 있어요.</div></details>
+    <details class="faq"><summary>발렛 접수 때 봉투를 받지 못했어요.</summary><div>기존 공항수령과 같이 자동으로 취소·환불 처리되며, 취소 수수료 2%가 차감돼요.</div></details>
   </section>
 
   <!-- ⑤ 기획 메모 -->
@@ -465,11 +464,8 @@
         <h4>이 초안에서 정한 기본값</h4>
         <ul>
           <li>위치: <b>공항 수령 메뉴 안</b>, 공항 선택에 "김포 국제선 · 발렛 수령" 추가 (별도 메뉴 X)</li>
-          <li>김포는 예약 수령만, 전날 18시 마감</li>
-          <li>통화 JPY·CNY, 건당 USD 2,000 상당</li>
+          <li>신청 유형·통화·한도·운영 시간·변경·취소·미수령 정책은 기존 공항수령과 동일</li>
           <li>요금은 기존과 동일: 배송료 2,500원</li>
-          <li>수령일 변경 허용(전날 18시까지), 발렛 예약 변경과 연동</li>
-          <li>미수령: 2% 차감 환불 또는 지점 무료 재수령 선택</li>
           <li>진입 경로 두 개: 발렛 예약 → m-box(값 자동 채움), m-box → 발렛 예약(배너)</li>
         </ul>
       </div>
@@ -478,9 +474,9 @@
         <ul>
           <li>김포 공식 발렛 운영사·계약 기간·운영 시간</li>
           <li>발렛 기사 교부가 환전사무 위탁으로 인정되는지 (세관)</li>
-          <li>비대면 신청·대면 교부 한도 (USD 2,000 적정성)</li>
+          <li>발렛 기사 교부 시에도 기존 한도(USD 4,000)가 그대로 적용되는지 (세관)</li>
           <li>발렛사와 예약 연동 방식 (링크 파라미터 / API)</li>
-          <li>미수령 환율 차손 부담 주체 (약관)</li>
+          <li>김포 발렛 운영 시간이 기존 운영 시간(05:30~20:00)과 맞는지</li>
         </ul>
       </div>
     </div>
@@ -509,7 +505,7 @@
     <h2 class="sec">고객 화면 흐름 요약</h2>
     <div class="box">
       <div class="flow"><span>발렛 예약 (발렛사)</span><em>→ "환전 봉투 추가" →</em><span>m-box 공항수령 (김포 자동 선택)</span><em>→</em><span>로그인 / 본인인증</span><em>→</em><span>금액 입력·결제</span><em>→</em><span>완료</span></div>
-      <div class="flow"><span>D-1 18시 알림톡 (QR)</span><em>→</em><span>발렛 접수처: 차 키 + 신분증 + QR</span><em>→</em><span>봉투 교부 · 서명·사진 기록</span><em>→</em><span>신청 내역 "교부 완료"</span></div>
+      <div class="flow"><span>알림톡 (QR)</span><em>→</em><span>발렛 접수처: 차 키 + 신분증 + QR</span><em>→</em><span>봉투 교부 · 서명·사진 기록</span><em>→</em><span>신청 내역 "교부 완료"</span></div>
     </div>
   </section>
 </main>
@@ -521,10 +517,10 @@
   // 예시 환율 (원/1단위)
   var RATE = { USD: 1400, JPY: 9.3, CNY: 195, EUR: 1520 };
   var UNIT = { USD: 1, JPY: 1000, CNY: 100, EUR: 5 };
-  var CUR_BY_AIRPORT = { '': ['USD'], ICN1: ['USD', 'JPY', 'EUR', 'CNY'], CJU: ['USD', 'JPY', 'CNY'], GMP: ['JPY', 'CNY'] };
-  var LIMIT_USD = { ICN1: 4000, CJU: 4000, GMP: 2000 };
+  var CUR_BY_AIRPORT = { '': ['USD'], ICN1: ['USD', 'JPY', 'EUR', 'CNY'], CJU: ['USD', 'JPY', 'CNY'], GMP: ['USD', 'JPY', 'EUR', 'CNY'] };
+  var LIMIT_USD = { ICN1: 4000, CJU: 4000, GMP: 4000 };
   var FEE = { ICN1: 2500, CJU: 0, GMP: 2500 };
-  var HOURS = { ICN1: [5.5, 20], CJU: [10, 21], GMP: [6, 20], '': [5.5, 20] };
+  var HOURS = { ICN1: [5.5, 20], CJU: [10, 21], GMP: [5.5, 20], '': [5.5, 20] };
 
   var $ = function (id) { return document.getElementById(id); };
   var state = { mode: 'today', airport: '', step: 0, failed: false };
@@ -582,7 +578,7 @@
     $('krw').value = Math.round(krw).toLocaleString('ko-KR');
     var lim = $('limit');
     if (!a) { lim.textContent = '신청 가능 금액: -'; lim.classList.remove('err'); }
-    else if (n > mx) { lim.textContent = '최대 ' + fxStr(mx, c) + '까지 신청할 수 있어요' + (a === 'GMP' ? ' (USD 2,000 상당)' : ''); lim.classList.add('err'); }
+    else if (n > mx) { lim.textContent = '최대 ' + fxStr(mx, c) + '까지 신청할 수 있어요' ; lim.classList.add('err'); }
     else if (n && n % UNIT[c]) { lim.textContent = UNIT[c].toLocaleString() + ' ' + c + ' 단위로 입력해 주세요'; lim.classList.add('err'); }
     else { lim.textContent = '신청 가능 금액: 최대 ' + fxStr(mx, c) + ' · 입력 단위 ' + UNIT[c].toLocaleString() + ' ' + c; lim.classList.remove('err'); }
 
@@ -602,10 +598,9 @@
   function renderNotes() {
     var a = state.airport, html = [];
     if (a === 'GMP') {
-      html.push('<li class="hl">김포공항 발렛 수령은 예약 수령만 가능하며, 수령 전날 18시에 마감돼요.</li>');
       html.push('<li class="hl">김포공항 발렛 수령은 배송료 2,500원이 부과돼요.</li>');
       html.push('<li>신청자 본인만 수령할 수 있어요. 발렛 접수 때 신분증과 알림톡 QR을 보여주세요.</li>');
-      html.push('<li>운영 시간 06:00~20:00 (발렛 운영 시간 기준)</li>');
+      html.push('<li>운영 시간 05:30~20:00</li>');
     } else {
       html.push('<li>인천공항 1터미널은 배송료 2,500원이 부과됩니다.</li>');
     }
@@ -632,10 +627,8 @@
     state.airport = $('airport').value;
     var g = state.airport === 'GMP';
     $('gmpArea').hidden = !g;
-    $('segToday').disabled = g;
     $('timeLabel').textContent = g ? '발렛 도착 예정 시각' : '수령 시각';
     if (g) {
-      setMode('book');
       $('heroTitle').innerHTML = '차 키를 건네는 순간<br>외화 봉투까지 받고 출국';
       $('heroSub').textContent = '김포공항 국제선 공식 발렛 접수 때 환전 봉투를 함께 받으세요.';
     } else {
@@ -646,7 +639,7 @@
   }
 
   function prefill(ref, date, time) {
-    $('airport').value = 'GMP'; onAirport();
+    $('airport').value = 'GMP'; onAirport(); setMode('book');
     $('valetNo').value = ref || 'GV-' + ymd(addDays(8)).replace(/-/g, '') + '-0123';
     if (date) $('date').value = date;
     if (time) $('time').value = time;
@@ -738,8 +731,8 @@
     STEPS.forEach(function (st, i) {
       var idx = i + 1, cls = idx < state.step || (idx === state.step && idx === STEPS.length) ? 'done' : idx === state.step ? 'cur' : 'todo';
       if (state.failed && idx === STEPS.length) {
-        html += '<li class="fail"><span class="dot">!</span><h5>미수령 · 회사로 반송</h5><p>운영 시간 안에 수령하지 않아 봉투가 반송됐어요. 아래에서 선택해 주세요.</p>' +
-          '<div class="sim"><button class="pri">2% 차감 후 환불</button><button>지점에서 7일 안에 무료 수령</button></div></li>';
+        html += '<li class="fail"><span class="dot">!</span><h5>미수령 · 회사로 반송</h5><p>운영 시간 안에 수령하지 않아 봉투가 반송됐어요. 자동으로 취소·환불돼요.</p>' +
+          '<div class="sim"><button class="pri">자동 취소 · 2% 차감 후 환불</button></div></li>';
         return;
       }
       html += '<li class="' + cls + '"><span class="dot">' + (cls === 'done' ? '✓' : idx) + '</span><h5>' + st[0] + '</h5><p>' + st[1] + '</p>';
