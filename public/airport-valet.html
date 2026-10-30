@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>김포 발렛 수령 플로우</title>
+<title>발렛 수령 플로우</title>
 <meta name="description" content="m-box.com 공항수령에 김포 발렛 기사 수령을 붙이는 화면 흐름 확인용 와이어프레임">
 <style>
   :root { --ink: #222; --muted: #777; --line: #bbb; --box: #fff; --fill: #eee; --bg: #f6f6f6; --hl: #fff6cc; }
@@ -53,137 +53,149 @@
 <body>
 <div class="wrap">
 
-  <h1>김포 발렛 수령 · 화면 흐름 (와이어프레임)</h1>
-  <p class="lead">m-box.com "공항 수령"에 발렛을 <b>선택 옵션</b>으로 붙였을 때의 화면 순서만 확인하는 용도예요. 디자인·문구는 확정이 아니에요.</p>
+  <h1>발렛 수령 · 화면 흐름 (와이어프레임)</h1>
+  <p class="lead">m-box.com "공항 수령"에 이지백 에어파크 발렛 수령(김포·인천)을 붙였을 때의 화면 순서만 확인하는 용도예요. 디자인·문구는 확정이 아니에요.</p>
   <div class="summary">
     <ol>
-      <li><b>기존 환전 흐름은 한 화면도 바꾸지 않아요.</b> 공항 목록에 김포만 추가</li>
-      <li>김포로 신청을 마치면 완료 화면에 <b>"발렛도 같이 예약할래요?"</b> 옵션이 하나 붙어요</li>
-      <li>안 하면 → 기존처럼 공항에서 직원에게 수령 (끝)</li>
-      <li>하면 → 발렛 정보 입력 → 동의 → 수령 방법이 <b>발렛 기사 수령</b>으로 바뀌고 수령권(QR) 발급</li>
-      <li>추가 결제 없음: 전달 수수료 2,500원 = 기존 배송료 2,500원</li>
+      <li><b>기존 공항수령 흐름은 그대로</b>예요. 공항 목록도 지금처럼 인천 T1 · 제주</li>
+      <li>공항수령 페이지에 <b>"발렛 맡기며 받기"</b> 입구를 따로 하나 둬요 (김포 · 인천)</li>
+      <li><b>김포</b>는 직원 수령이 없어서 이 입구로만 신청해요</li>
+      <li><b>인천</b>은 기존대로 직원에게 받거나, 이 입구로 발렛 수령을 고를 수 있어요. 기존으로 신청한 고객도 완료 화면에서 발렛으로 바꿀 수 있어요</li>
+      <li>본인인증·결제 화면은 기존 것을 그대로 써요. 수수료도 2,500원으로 같아요</li>
     </ol>
   </div>
   <div class="legend"><span>기존 화면 (변경 없음)</span><span class="l-new">새로 추가되는 화면</span><span class="l-ext">이지백(에어파크) 화면</span></div>
 
-  <!-- 1 -->
-  <h2>1. 기존 공항수령 흐름 (그대로)</h2>
+  <!-- 0 -->
+  <h2>0. 공항수령 페이지 입구</h2>
   <div class="flow">
     <div class="scr">
       <div class="hd">공항 수령 신청 <small>기존</small></div>
       <div class="bd">
-        <div class="in">당일 수령 / 예약 수령</div>
-        <div class="in">공항: 인천 T1 · 제주 · <b>김포 (추가)</b></div>
-        <div class="in">날짜 · 시각</div>
-        <div class="in">통화 · 금액</div>
+        <div class="in">당일 / 예약 수령</div>
+        <div class="in">공항: 인천 T1 · 제주 (그대로)</div>
+        <div class="in">날짜 · 시각 · 통화 · 금액</div>
         <div class="btn">신청하기</div>
+        <div class="ex">→ 1번 흐름</div>
       </div>
     </div>
+    <div class="scr new">
+      <div class="hd">발렛 맡기며 받기 <small>추가</small></div>
+      <div class="bd">
+        <div class="txt">🚗 차로 출국하세요?<br>공항 발렛에 차를 맡길 때 외화 봉투를 받아요</div>
+        <div class="txt"><small>김포 · 인천 | 발렛 운영: 이지백</small></div>
+        <div class="btn">발렛 수령 신청</div>
+        <div class="ex">→ 2번 흐름</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1 -->
+  <h2>1. 기존 공항수령 (그대로) · 인천만 완료 화면에 옵션 추가</h2>
+  <div class="flow">
+    <div class="scr"><div class="hd">공항 수령 신청 <small>기존</small></div><div class="bd"><div class="txt">인천 T1 · 제주</div><div class="btn">신청하기</div></div></div>
     <div class="arr">→</div>
-    <div class="scr"><div class="hd">본인인증 <small>기존</small></div><div class="bd"><div class="in">휴대폰 인증</div><div class="btn">다음</div></div></div>
+    <div class="scr"><div class="hd">본인인증 <small>기존</small></div><div class="bd"><div class="in">휴대폰 인증</div></div></div>
     <div class="arr">→</div>
-    <div class="scr"><div class="hd">결제 <small>기존</small></div><div class="bd"><div class="in">결제 (배송료 2,500원 포함)</div><div class="btn">결제하기</div></div></div>
+    <div class="scr"><div class="hd">결제 <small>기존</small></div><div class="bd"><div class="in">결제 (배송료 2,500원 포함)</div></div></div>
     <div class="arr">→</div>
     <div class="scr">
       <div class="hd">신청 완료 <small>기존</small></div>
       <div class="bd">
-        <div class="txt">신청번호 · 금액 · 수령 일시</div>
         <div class="txt">수령 방법: 공항에서 직원에게</div>
-        <div class="opt on">🚗 김포 출국이세요? <b>발렛도 같이 예약할래요?</b><br><small>차 맡길 때 봉투를 받아요 · 추가 비용 없음</small></div>
-        <div class="ex">노란 박스만 추가 · 김포 신청일 때만 보임</div>
+        <div class="opt on">🚗 차로 가세요? <b>발렛에 맡기며 받기로 바꾸기</b><br><small>추가 비용 없음</small></div>
+        <div class="ex">노란 박스만 추가 · 인천 신청일 때만 보임 · 신청 내역에도 같은 버튼</div>
       </div>
     </div>
   </div>
-
   <div class="branch">
     <div class="lane">
-      <b>발렛 안 함 → 기존과 똑같이 끝</b>
-      <div class="flow">
-        <div class="scr"><div class="hd">알림톡 <small>기존</small></div><div class="bd"><div class="txt">체크인 카운터에서 전화 → 직원이 전달</div></div></div>
-      </div>
+      <b>그대로 두면</b> → 기존처럼 체크인 카운터에서 직원에게 수령 (끝)
     </div>
-
     <div class="lane">
-      <b>"발렛도 같이 예약할래요?" 선택 → 추가 화면 3개</b>
-      <div class="flow">
-        <div class="scr new">
-          <div class="hd">A. 발렛 정보 <small>추가</small></div>
-          <div class="bd">
-            <div class="in">출국일 · 출국 시각 (신청에서 가져옴)</div>
-            <div class="in">목적지</div>
-            <div class="in">차량번호</div>
-            <div class="txt">차량 인수 장소: (미정)</div>
-            <div class="btn">다음</div>
-            <div class="ex">만차 → "직원 수령 그대로 진행돼요"</div>
-            <div class="foot">발렛 운영: 이지백</div>
-          </div>
-        </div>
-        <div class="arr">→</div>
-        <div class="scr new">
-          <div class="hd">B. 동의 <small>추가</small></div>
-          <div class="bd">
-            <div class="in">☐ 이지백 위탁 교부 동의</div>
-            <div class="in">☐ 개인정보 제3자 제공 (이지백)</div>
-            <div class="txt">수령할 때 신청자 본인 신분증 필요</div>
-            <div class="btn">발렛 예약하기</div>
-          </div>
-        </div>
-        <div class="arr">→</div>
-        <div class="scr new">
-          <div class="hd">C. 수령권 <small>추가</small></div>
-          <div class="bd">
-            <div class="qr"></div>
-            <div class="txt">수령 방법: <b>발렛 기사에게</b><br>금액 · 통화 · 수령 일시 · 장소<br>준비물: 신분증</div>
-            <div class="foot">알림톡에도 같은 QR</div>
-          </div>
-        </div>
-        <div class="arr">→</div>
-        <div class="scr">
-          <div class="hd">신청 내역 <small>기존 + 상태 추가</small></div>
-          <div class="bd">
-            <div class="txt">기존 상태 + 발렛 건은 "봉투 준비 → 기사 인계 → 수령 완료" 표시</div>
-            <div class="in">[발렛 취소] → 직원 수령으로 되돌림</div>
-            <div class="ex">기사 인계 후 → 앱에서 변경·취소 불가, 고객센터</div>
-          </div>
-        </div>
-      </div>
-      <p class="lead" style="margin:10px 0 0">완료 화면을 놓쳐도 <b>신청 내역</b>에서 같은 "발렛 추가" 버튼으로 들어올 수 있어요.</p>
+      <b>"발렛으로 바꾸기" 선택</b> → 2번의 <b>A 발렛 정보</b>와 <b>D 수령권</b>만 거치면 끝 (금액·결제는 이미 끝남)
     </div>
   </div>
 
   <!-- 2 -->
-  <h2>2. 이지백 에어파크에서 시작</h2>
-  <p class="lead">발렛을 먼저 예약하던 고객. 체크하면 우리 <b>기존 공항수령 신청</b>으로 넘어오고, 김포·날짜가 채워진 채 기존 흐름 그대로 진행. 완료되면 바로 수령권(QR).</p>
+  <h2>2. 발렛 맡기며 받기 (김포 · 인천)</h2>
+  <div class="flow">
+    <div class="scr new">
+      <div class="hd">A. 발렛 정보 <small>추가</small></div>
+      <div class="bd">
+        <div class="in">공항: 김포 국제선 / 인천</div>
+        <div class="in">출국일 · 출국 시각</div>
+        <div class="in">목적지</div>
+        <div class="in">차량번호</div>
+        <div class="txt">차량 인수 장소: (미정)</div>
+        <div class="btn">다음</div>
+        <div class="ex">만차 → 인천은 직원 수령 안내, 김포는 지점 환전 예약 안내</div>
+        <div class="foot">발렛 운영: 이지백</div>
+      </div>
+    </div>
+    <div class="arr">→</div>
+    <div class="scr new">
+      <div class="hd">B. 금액 <small>추가</small></div>
+      <div class="bd">
+        <div class="in">통화 · 금액 (목적지 기준 추천)</div>
+        <div class="txt">적용 환율<br>원화 환산액<br>전달 수수료 2,500원 (별도 줄)<br><b>총 결제액</b></div>
+        <div class="in">☐ 이지백 위탁 교부 · 개인정보 제3자 제공 동의</div>
+        <div class="btn">다음</div>
+      </div>
+    </div>
+    <div class="arr">→</div>
+    <div class="scr"><div class="hd">C. 본인인증 → 결제 <small>기존 재사용</small></div><div class="bd"><div class="txt">기존 공항수령과 같은 화면</div></div></div>
+    <div class="arr">→</div>
+    <div class="scr new">
+      <div class="hd">D. 수령권 <small>추가</small></div>
+      <div class="bd">
+        <div class="qr"></div>
+        <div class="txt">수령 방법: <b>발렛 기사에게</b><br>금액 · 수령 일시 · 장소<br>준비물: 신분증</div>
+        <div class="foot">알림톡에도 같은 QR</div>
+      </div>
+    </div>
+    <div class="arr">→</div>
+    <div class="scr">
+      <div class="hd">신청 내역 <small>기존 + 상태 추가</small></div>
+      <div class="bd">
+        <div class="txt">봉투 준비 → 기사 인계 → 수령 완료</div>
+        <div class="in">[취소]</div>
+        <div class="ex">기사 인계 후 → 앱 취소 불가, 고객센터</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <h2>3. 이지백 에어파크에서 시작</h2>
+  <p class="lead">발렛을 먼저 예약하던 고객. 체크하면 2번의 <b>B 금액</b>부터 진행 (A 발렛 정보는 자동으로 채워짐).</p>
   <div class="flow">
     <div class="scr ext">
       <div class="hd">에어파크 발렛 예약 <small>이지백</small></div>
       <div class="bd">
-        <div class="in">출국일 · 시각 · 목적지 · 차량번호</div>
+        <div class="in">공항(김포/인천) · 출국일 · 목적지 · 차량번호</div>
         <div class="opt on">☑ 환전 봉투 추가 (머니박스)<br><small>예상 환율 표시</small></div>
         <div class="btn">발렛 예약하기</div>
         <div class="ex">체크 안 하면 발렛만 예약</div>
       </div>
     </div>
     <div class="arr">→</div>
-    <div class="scr"><div class="hd">공항 수령 신청 <small>기존</small></div><div class="bd"><div class="txt">김포 · 출국일 자동으로 채워짐<br>통화 · 금액만 입력</div></div></div>
+    <div class="scr new"><div class="hd">B. 금액 <small>우리</small></div><div class="bd"><div class="txt">예약 정보 자동으로 채워짐</div></div></div>
     <div class="arr">→</div>
-    <div class="scr"><div class="hd">본인인증 → 결제 <small>기존</small></div><div class="bd"><div class="txt">기존 그대로 (+ B. 동의 항목)</div></div></div>
-    <div class="arr">→</div>
-    <div class="scr new"><div class="hd">C. 수령권 <small>추가</small></div><div class="bd"><div class="txt">수령 방법: 발렛 기사에게</div></div></div>
+    <div class="scr"><div class="hd">C → D</div><div class="bd"><div class="txt">2번과 동일</div></div></div>
   </div>
 
-  <!-- 3 -->
-  <h2>3. 출국 당일까지 뒤에서 일어나는 일 (발렛 선택 시)</h2>
+  <!-- 4 -->
+  <h2>4. 출국 당일까지 뒤에서 일어나는 일 (발렛 수령)</h2>
   <table>
     <tr><th style="width:18%">언제</th><th style="width:27%">고객</th><th style="width:27%">우리 회사</th><th>이지백 기사</th></tr>
-    <tr><td>신청·결제</td><td>기존대로 신청·결제, 발렛 추가</td><td>수령권(QR) 발송, 이지백에 교부 목록 전달</td><td>—</td></tr>
-    <tr><td>출국 전날</td><td>알림톡(신분증 지참)</td><td>봉투 밀봉·일련번호, 기사에게 인계</td><td>봉투 받고 인계 서명 (D-02)</td></tr>
+    <tr><td>신청·결제</td><td>신청·결제</td><td>수령권(QR) 발송, 이지백에 교부 목록 전달</td><td>—</td></tr>
+    <tr><td>출국 전날</td><td>알림톡(신분증 지참)</td><td>봉투 밀봉·일련번호, 기사에게 인계 (김포·인천 각각)</td><td>봉투 받고 인계 서명 (D-02)</td></tr>
     <tr><td>출국 당일</td><td>차 맡기며 QR + 신분증 제시, 봉투 받음</td><td>환전장부 자동 기록</td><td>QR 스캔 → 신분증 확인 → 봉투 번호 스캔 → 서명·사진 (D-03)</td></tr>
     <tr><td>못 건넨 경우</td><td>환불 안내 받음</td><td>봉투 돌려받고 기존 미수령 처리 (자동 취소 · 2%)</td><td>실패 신고 (D-04), 봉투 반환</td></tr>
   </table>
 
-  <!-- 4 -->
-  <h2>4. 이지백 기사 화면 (틀)</h2>
+  <!-- 5 -->
+  <h2>5. 이지백 기사 화면 (틀)</h2>
   <div class="flow">
     <div class="scr ext"><div class="hd">D-01 오늘 교부 목록</div><div class="bd"><div class="in">시간 · 고객(가림) · 차량 · 봉투번호 · 상태</div><div class="in">…</div><div class="btn">봉투 인계 확인</div></div></div>
     <div class="arr">→</div>
@@ -194,24 +206,28 @@
     <div class="scr ext"><div class="hd">D-04 실패 · 사고 신고</div><div class="bd"><div class="in">사유: 신분증 불일치 / 노쇼 / 훼손 / 분실</div><div class="in">사진</div><div class="ex">분실 → 머니박스에 바로 전화</div></div></div>
   </div>
 
-  <!-- 5 -->
-  <h2>5. 조건 (기존 공항수령과 같음)</h2>
+  <!-- 6 -->
+  <h2>6. 공항별로 받을 수 있는 방법</h2>
   <table>
-    <tr><th style="width:22%">항목</th><th>직원 수령 (기존)</th><th>발렛 기사 수령 (옵션)</th></tr>
-    <tr><td>신청 · 결제 화면</td><td colspan="2">기존 그대로 (발렛은 완료 후 추가)</td></tr>
+    <tr><th style="width:22%">공항</th><th>직원 수령 (기존)</th><th>발렛 기사 수령 (추가)</th></tr>
+    <tr><td>인천 T1</td><td>○</td><td>○ (선택)</td></tr>
+    <tr><td>김포 국제선</td><td>✕</td><td>○ (김포는 이것만)</td></tr>
+    <tr><td>제주</td><td>○</td><td>✕</td></tr>
+  </table>
+  <table>
+    <tr><th style="width:22%">조건</th><th colspan="2">직원 수령과 발렛 수령 모두 동일</th></tr>
     <tr><td>당일 / 예약</td><td colspan="2">둘 다 가능</td></tr>
     <tr><td>통화 · 한도</td><td colspan="2">주요 통화 · 하루 USD 4,000 상당</td></tr>
-    <tr><td>수수료</td><td>배송료 2,500원</td><td>전달 수수료 2,500원 (추가 결제 없음)</td></tr>
+    <tr><td>수수료</td><td colspan="2">2,500원 (직원: 배송료 / 발렛: 전달 수수료)</td></tr>
     <tr><td>미수령</td><td colspan="2">자동 취소 · 수수료 2% 차감</td></tr>
-    <tr><td>건네는 사람</td><td>머니박스 직원</td><td>이지백 에어파크 기사</td></tr>
   </table>
 
   <div class="q">
     <b>확인할 것</b>
     <ul>
-      <li><b>김포에서도 직원 수령을 운영하나요?</b> 발렛을 안 하는 김포 고객은 직원에게 받아야 해서 필요해요. 운영하지 않으면 김포는 발렛 추가가 필수가 돼요.</li>
-      <li>발렛 추가는 언제까지 가능? (예: 수령 전날까지, 봉투 인계 전)</li>
-      <li>발렛 차량 인수 장소 (터미널 앞 / 공항 밖) → 수령권 "장소" 문구</li>
+      <li>인천 발렛 차량 인수 장소와 김포 인수 장소 (터미널 앞 / 공항 밖) → 수령권 "장소" 문구</li>
+      <li>인천은 우리 직원과 발렛 기사 둘 다 있으니, 발렛 고객 봉투를 <b>우리 인천 수령팀이 발렛 접수처에서 직접 건네는 것</b>도 가능한지</li>
+      <li>발렛 입구를 어디에 둘지: 공항수령 페이지 안 카드 / 홈 배너 / 둘 다</li>
       <li>기사 화면을 이지백 앱 안에 넣을지 / 별도 웹으로 만들지</li>
       <li>이지백과 예약 정보를 주고받는 방식 (링크 / API)</li>
     </ul>
