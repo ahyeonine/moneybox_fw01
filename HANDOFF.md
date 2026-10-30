@@ -16,7 +16,7 @@ last update: 2026.10.14
   - 화면정의서: https://ahyeonine.github.io/moneybox_fw01/screen-specs.html
   - 화면설계서: https://ahyeonine.github.io/moneybox_fw01/web-screens.html  ← 두레이 링크는 구버전 `app-screens.html`(리다이렉트)이니 이걸로 교체 권장
   - 로드맵: https://ahyeonine.github.io/moneybox_fw01/roadmap.html
-  - 김포 발렛 수령 프로토타입(공항수령 마지막 단계에서 직원 수령 / 이지백 에어파크 발렛 기사 수령 선택 · 고객 C·기사 D·알림톡): https://ahyeonine.github.io/moneybox_fw01/airport-valet.html
+  - 김포 발렛 수령 화면 흐름(와이어프레임: 공항수령 마지막 단계에서 직원 수령 / 이지백 에어파크 발렛 기사 수령 선택): https://ahyeonine.github.io/moneybox_fw01/airport-valet.html
 - **기획 문서(md)**: `docs-plan/외국인웹/` — 정책·공통규칙·CEMS대응·의사결정로그·미결사항·기획문서·화면정의서·화면설계서·와이어프레임 (전부 최신)
 - **Figma 화면설계서**: 송재욱(mbmnoah@gmail.com) 계정 초안에 빈 파일로 있음(미사용·삭제 예정). 본 담당자 계정이 아니면 새 Figma 계정에서 다시 생성 필요.
 

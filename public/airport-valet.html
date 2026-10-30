@@ -2,1249 +2,237 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>김포 발렛 수령 프로토타입</title>
-<meta name="description" content="m-box.com 공항수령 마지막 단계에서 '공항 직원 수령 / 발렛 기사 수령(이지백 에어파크)'을 고르는 클릭형 프로토타입">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>김포 발렛 수령 플로우</title>
+<meta name="description" content="m-box.com 공항수령에 김포 발렛 기사 수령을 붙이는 화면 흐름 확인용 와이어프레임">
 <style>
-  :root {
-    --blue: #0073ff;
-    --blue-soft: #e6f1ff;
-    --blue-faint: #f0f6ff;
-    --navy: #022146;
-    --ink: #1a1a1a;
-    --sub: #303132;
-    --muted: #808899;
-    --line: #e3e5ed;
-    --field: #f5f8fd;
-    --bg: #eef4fd;
-    --surface: #ffffff;
-    --warn: #ff7a00;
-    --warn-soft: #fff3e6;
-    --ok: #12a150;
-    --ok-soft: #e8f7ee;
-    --red: #e5484d;
-    --red-soft: #fdecec;
-    --memo: #fffbe6;
-    --memo-line: #f1dc8a;
-    --park: #00a37a;
-    --park-soft: #e6f7f2;
-    --shadow: 0 8px 28px rgba(2, 33, 70, 0.08);
-    --font: 'Pretendard', -apple-system, system-ui, 'Noto Sans KR', sans-serif;
-  }
+  :root { --ink: #222; --muted: #777; --line: #bbb; --box: #fff; --fill: #eee; --bg: #f6f6f6; --hl: #fff6cc; }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; }
-  button, input, select { font: inherit; color: inherit; }
-  button { cursor: pointer; }
-  button:disabled { cursor: not-allowed; }
-  a { color: var(--blue); }
-  code { background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 4px; font-size: .92em; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 system-ui, -apple-system, 'Noto Sans KR', sans-serif; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 17px; margin: 40px 0 6px; padding-top: 16px; border-top: 2px solid var(--ink); }
+  .lead { color: var(--muted); margin: 0 0 12px; }
+  .summary { background: var(--box); border: 1px solid var(--line); padding: 12px 16px; }
+  .summary ol { margin: 0; padding-left: 20px; }
 
-  /* 기획 안내 바 */
-  .proto-bar { background: var(--navy); color: #fff; font-size: 13px; position: sticky; top: 0; z-index: 10; }
-  .proto-bar .in { max-width: 1120px; margin: 0 auto; padding: 10px 16px; display: flex; gap: 10px 16px; flex-wrap: wrap; align-items: center; }
-  .proto-bar b { color: #7fb8ff; }
-  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
-  .tabs button { background: rgba(255,255,255,.1); border: 0; color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 13px; }
-  .tabs button[aria-selected="true"] { background: var(--blue); }
+  .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; margin-top: 12px; }
+  .arr { align-self: center; font-size: 22px; color: var(--muted); }
+  .scr { width: 230px; background: var(--box); border: 1.5px solid var(--ink); display: flex; flex-direction: column; }
+  .scr .hd { border-bottom: 1.5px solid var(--ink); padding: 6px 10px; font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; gap: 6px; }
+  .scr .hd small { font-weight: 400; color: var(--muted); }
+  .scr .bd { padding: 10px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .scr.ext { border-style: dashed; }
+  .scr.new .hd { background: var(--hl); }
+  .in { border: 1px solid var(--line); padding: 5px 8px; font-size: 12px; color: var(--muted); }
+  .btn { border: 1.5px solid var(--ink); padding: 6px; text-align: center; font-size: 12px; font-weight: 700; margin-top: auto; }
+  .txt { font-size: 12px; }
+  .opt { border: 1px solid var(--line); padding: 6px 8px; font-size: 12px; }
+  .opt.on { border: 2px solid var(--ink); background: var(--hl); }
+  .ex { font-size: 11px; color: #a33; border-top: 1px dotted var(--line); padding-top: 6px; }
+  .foot { font-size: 11px; color: var(--muted); text-align: center; border-top: 1px dotted var(--line); padding-top: 4px; }
+  .qr { width: 70px; height: 70px; margin: 4px auto; background: repeating-linear-gradient(45deg, #ccc 0 4px, #fff 4px 8px); border: 1px solid var(--line); }
 
-  /* m-box 헤더 */
-  header.gnb { background: #fff; border-bottom: 1px solid var(--line); }
-  header.gnb .in { max-width: 1120px; margin: 0 auto; padding: 0 16px; height: 64px; display: flex; align-items: center; gap: 36px; }
-  .logo { font-weight: 800; font-size: 19px; letter-spacing: -.3px; display: flex; align-items: center; gap: 6px; }
-  .logo i { width: 22px; height: 22px; border-radius: 4px; background: var(--blue); display: inline-block; position: relative; }
-  .logo i::after { content: ""; position: absolute; right: -3px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: #2fd4e6; }
-  .gnb nav { display: flex; gap: 32px; font-weight: 600; font-size: 15px; }
-  .gnb nav span.on { color: var(--blue); }
-  .gnb .right { margin-left: auto; display: flex; gap: 8px; }
-  .btn-o { border: 1px solid var(--blue); color: var(--blue); background: #fff; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; }
-  .btn-o.gray { border-color: #c9ced9; color: var(--sub); }
-  .btn-p { border: 0; background: var(--blue); color: #fff; border-radius: 6px; padding: 8px 14px; font-size: 13px; font-weight: 600; }
-  @media (max-width: 760px) { .gnb nav, .gnb .right .btn-o { display: none; } }
+  .branch { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
+  .lane { border: 1px solid var(--line); background: #fafafa; padding: 10px; }
+  .lane > b { font-size: 13px; }
 
-  .hero { background: linear-gradient(120deg, #3a4a5f, #6d7f93 60%, #9aa9b8); color: #fff; padding: 56px 16px 120px; }
-  .hero .in { max-width: 1120px; margin: 0 auto; }
-  .hero h1 { margin: 0; font-size: clamp(28px, 4.4vw, 42px); line-height: 1.3; letter-spacing: -.5px; }
-  .hero p { margin: 18px 0 0; font-size: 14px; opacity: .9; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .legend span::before { content: ""; display: inline-block; width: 14px; height: 10px; margin-right: 5px; border: 1.5px solid var(--ink); vertical-align: -1px; }
+  .legend .l-new::before { background: var(--hl); }
+  .legend .l-ext::before { border-style: dashed; }
 
-  main { max-width: 1120px; margin: 28px auto 48px; padding: 0 16px; }
-  main.under-hero { margin-top: -80px; }
-  .panel, .scr { display: none; }
-  .panel.on, .scr.on { display: block; }
-
-  .card { background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
-  .card-h { background: var(--blue); color: #fff; text-align: center; font-weight: 700; font-size: 17px; padding: 16px; }
-  .card-b { padding: 24px; }
-  @media (max-width: 600px) { .card-b { padding: 18px 16px; } }
-  .narrow { max-width: 720px; margin: 0 auto; }
-
-  .seg { display: flex; justify-content: center; gap: 8px; margin-bottom: 22px; }
-  .seg button { border: 1px solid #c9ced9; background: #fff; border-radius: 999px; padding: 8px 16px; font-size: 14px; }
-  .seg button.on { background: var(--navy); border-color: var(--navy); color: #fff; }
-  .seg button:disabled { opacity: .4; }
-
-  .row { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  @media (max-width: 760px) { .row, .row.two { grid-template-columns: minmax(0, 1fr); } }
-  .fld { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-  .fld label { font-size: 12px; color: var(--muted); font-weight: 600; }
-  .fld select, .fld input { height: 50px; border: 1px solid var(--line); background: var(--field); border-radius: 8px; padding: 0 14px; font-size: 15px; width: 100%; }
-  .fld select:focus, .fld input:focus { outline: 2px solid var(--blue); outline-offset: -1px; background: #fff; }
-  .hint { font-size: 12px; color: var(--muted); }
-  hr.sep { border: 0; border-top: 1px solid var(--line); margin: 22px 0; }
-
-  .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: var(--warn); color: #fff; vertical-align: 2px; }
-  .badge.blue { background: var(--blue); }
-  .badge.gray { background: #b5bbc8; }
-  .badge.green { background: var(--park); }
-  .tag-assume { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 4px; background: var(--memo); border: 1px solid var(--memo-line); color: #8a6d00; margin-left: 4px; vertical-align: 1px; }
-
-  .amt { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) 128px; gap: 12px; align-items: start; }
-  .amt > * { min-width: 0; }
-  @media (max-width: 760px) { .amt { grid-template-columns: minmax(0, 1fr); } .amt .arrow { display: none; } }
-  .money { display: flex; height: 50px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-  .money select, .money .cur { width: 96px; flex: none; border: 0; border-right: 1px solid var(--line); background: var(--blue-faint); font-weight: 700; padding: 0 12px; display: flex; align-items: center; }
-  .money input { flex: 1; border: 0; text-align: right; padding: 0 14px; font-size: 16px; min-width: 0; }
-  .money input:focus { outline: none; }
-  .arrow { width: 32px; height: 32px; margin-top: 9px; border-radius: 50%; background: var(--field); display: grid; place-items: center; color: var(--muted); }
-  .limit { text-align: right; font-size: 12px; color: var(--blue); margin-top: 6px; }
-  .limit.err { color: var(--red); }
-  .submit { height: 50px; border: 0; border-radius: 8px; background: var(--blue); color: #fff; font-weight: 700; width: 100%; font-size: 15px; }
-  .submit:disabled { background: #e3e5ed; color: var(--muted); }
-  .submit.ghost { background: #fff; border: 1px solid #c9ced9; color: var(--sub); }
-
-  .login { margin-top: 22px; background: var(--blue-faint); border-radius: 10px; padding: 16px 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; }
-  .login b { font-size: 14px; }
-  .login .btn-o { margin-left: auto; border-color: #c9ced9; color: var(--ink); }
-
-  .notes { margin: 18px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--muted); }
-  .notes li { padding-left: 16px; position: relative; margin: 4px 0; }
-  .notes li::before { content: "i"; position: absolute; left: 0; top: 2px; width: 11px; height: 11px; border-radius: 50%; background: #b5bbc8; color: #fff; font-size: 8px; font-weight: 700; display: grid; place-items: center; }
-  .notes li.hl { color: var(--warn); font-weight: 600; }
-  .notes li.hl::before { background: var(--warn); }
-
-  /* 진행 단계 표시 */
-  .stepper { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; margin-bottom: 18px; font-size: 12px; }
-  .stepper span { padding: 4px 10px; border-radius: 999px; background: #fff; color: var(--muted); border: 1px solid var(--line); }
-  .stepper span.on { background: var(--blue); color: #fff; border-color: var(--blue); }
-  .stepper span.done { color: var(--blue); border-color: #9cc6ff; }
-  .scr-title { margin: 0 0 4px; font-size: 22px; letter-spacing: -.3px; }
-  .scr-id { font-size: 12px; font-weight: 700; color: var(--blue); }
-  .scr-sub { margin: 0 0 20px; color: var(--muted); font-size: 14px; }
-
-  /* 수령 방법 카드 */
-  .methods { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  @media (max-width: 680px) { .methods { grid-template-columns: 1fr; } }
-  .method { border: 2px solid var(--line); border-radius: 14px; padding: 20px; background: #fff; text-align: left; display: flex; flex-direction: column; gap: 8px; }
-  .method.on { border-color: var(--blue); background: var(--blue-faint); }
-  .method:disabled { opacity: .55; }
-  .method .ico { font-size: 28px; }
-  .method h4 { margin: 0; font-size: 17px; }
-  .method p { margin: 0; font-size: 13px; color: var(--muted); }
-  .method ul { margin: 4px 0 0; padding-left: 16px; font-size: 12px; color: var(--sub); }
-  .method .why { font-size: 12px; color: var(--red); font-weight: 600; }
-
-  .kv { width: 100%; border-collapse: collapse; font-size: 14px; }
-  .kv th { text-align: left; color: var(--muted); font-weight: 500; padding: 9px 0; width: 40%; vertical-align: top; }
-  .kv td { padding: 9px 0; font-weight: 600; text-align: right; }
-  .kv tr + tr th, .kv tr + tr td { border-top: 1px solid var(--line); }
-  .kv tr.tot th, .kv tr.tot td { font-size: 16px; font-weight: 800; color: var(--ink); }
-  .kv tr.tot td { color: var(--blue); }
-  .box-soft { background: var(--field); border-radius: 12px; padding: 16px 18px; }
-  .box-soft + .box-soft { margin-top: 12px; }
-  .box-soft h5 { margin: 0 0 8px; font-size: 14px; }
-  .recommend { display: flex; gap: 8px; align-items: center; background: var(--ok-soft); color: var(--ok); border-radius: 8px; padding: 9px 12px; font-size: 13px; font-weight: 600; margin-bottom: 10px; }
-  .operator { margin-top: 18px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 12px; color: var(--muted); text-align: center; }
-  .operator b { color: var(--sub); }
-  .actions { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 22px; }
-  .err-msg { background: var(--red-soft); color: var(--red); border-radius: 8px; padding: 10px 12px; font-size: 13px; font-weight: 600; margin-top: 12px; }
-  .ok-msg { background: var(--ok-soft); color: var(--ok); border-radius: 8px; padding: 10px 12px; font-size: 13px; font-weight: 600; margin-top: 12px; }
-
-  .agree { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-  .agree label { display: flex; gap: 10px; align-items: center; padding: 12px 14px; font-size: 14px; }
-  .agree label + label { border-top: 1px solid var(--line); }
-  .agree label.all { background: var(--field); font-weight: 700; }
-  .agree input { width: 18px; height: 18px; accent-color: var(--blue); }
-  .agree .req { color: var(--blue); font-size: 12px; font-weight: 700; }
-
-  .vacct { text-align: center; padding: 8px 0; }
-  .vacct .num { font-size: 22px; font-weight: 800; letter-spacing: .5px; margin: 6px 0; }
-  .vacct .timer { display: inline-block; margin-top: 8px; background: var(--warn-soft); color: var(--warn); border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: 14px; }
-
-  .ticket { max-width: 380px; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); background: #fff; }
-  .ticket .th { background: var(--blue); color: #fff; padding: 18px 20px; }
-  .ticket .th small { opacity: .85; }
-  .ticket .th h3 { margin: 4px 0 0; font-size: 26px; }
-  .ticket .qr { display: flex; justify-content: center; padding: 22px 0 10px; }
-  .ticket .tb { padding: 6px 20px 20px; }
-  .ticket .cut { border-top: 2px dashed var(--line); margin: 0 14px; }
-
-  /* 상태 */
-  .steps { list-style: none; margin: 0; padding: 0; }
-  .steps li { position: relative; padding: 0 0 20px 40px; }
-  .steps li::before { content: ""; position: absolute; left: 13px; top: 28px; bottom: 0; width: 2px; background: var(--line); }
-  .steps li:last-child::before { display: none; }
-  .steps .dot { position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 2px solid var(--line); display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--muted); }
-  .steps li.done .dot { background: var(--blue); border-color: var(--blue); color: #fff; }
-  .steps li.done::before { background: var(--blue); }
-  .steps li.cur .dot { border-color: var(--blue); color: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
-  .steps li.fail .dot { background: var(--red); border-color: var(--red); color: #fff; }
-  .steps h5 { margin: 3px 0 2px; font-size: 15px; }
-  .steps p { margin: 0; font-size: 13px; color: var(--muted); }
-  .steps li.todo h5 { color: var(--muted); }
-  .proof { margin-top: 8px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .proof div { background: var(--field); border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; color: var(--sub); }
-  .proof div strong { display: block; font-size: 13px; }
-  .sim { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
-  .sim .lbl { font-size: 12px; color: var(--muted); }
-  .sim button { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 7px 11px; font-size: 13px; }
-  .sim button.pri { background: var(--navy); color: #fff; border-color: var(--navy); }
-  .sim button:disabled { opacity: .4; }
-
-  /* 기획 메모 */
-  .memo { background: var(--memo); border: 1px solid var(--memo-line); border-radius: 12px; padding: 14px 18px; margin-top: 18px; font-size: 13px; color: #4d4100; }
-  .memo h6 { margin: 0 0 6px; font-size: 13px; }
-  .memo ul { margin: 0; padding-left: 18px; }
-  .memo li { margin: 3px 0; }
-
-  /* 표 */
-  h2.sec { font-size: 22px; margin: 40px 0 14px; letter-spacing: -.3px; }
-  h2.sec:first-child { margin-top: 0; }
-  .tbl-wrap { overflow-x: auto; border-radius: 12px; box-shadow: var(--shadow); }
-  table.grid { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; min-width: 640px; }
-  table.grid th, table.grid td { border-bottom: 1px solid var(--line); padding: 11px 12px; text-align: left; vertical-align: top; }
-  table.grid thead th { background: var(--blue-faint); font-size: 13px; color: var(--sub); }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
-  .box { background: #fff; border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); }
-  .box h4 { margin: 0 0 8px; font-size: 16px; }
-  .box ul { margin: 0; padding-left: 18px; font-size: 14px; }
-  .box li { margin: 5px 0; }
-  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13px; margin: 6px 0; }
-  .flow span { background: var(--blue-faint); border-radius: 6px; padding: 5px 9px; }
-  .flow span.red { background: var(--red-soft); color: var(--red); }
-  .flow em { font-style: normal; color: var(--muted); }
-
-  /* 에어파크(이지백) 화면 */
-  .park-wrap { max-width: 520px; margin: 0 auto; }
-  .park { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
-  .park .ph { background: var(--park); color: #fff; padding: 16px 20px; font-weight: 800; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
-  .park .ph small { font-weight: 500; font-size: 12px; opacity: .9; }
-  .park .pb { padding: 20px; }
-  .park .fld input, .park .fld select { background: #f6faf8; }
-  .addon { margin-top: 16px; border: 2px solid var(--park); border-radius: 12px; padding: 14px; display: flex; gap: 12px; align-items: flex-start; background: var(--park-soft); }
-  .addon input { width: 20px; height: 20px; accent-color: var(--park); margin-top: 2px; }
-  .addon b { font-size: 15px; }
-  .addon p { margin: 2px 0 0; font-size: 13px; color: var(--sub); }
-  .park .go { margin-top: 18px; width: 100%; height: 52px; border: 0; border-radius: 10px; background: var(--park); color: #fff; font-weight: 800; font-size: 16px; }
-
-  /* 기사 화면 (폰 프레임) */
-  .driver-grid { display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start; }
-  @media (max-width: 860px) { .driver-grid { grid-template-columns: 1fr; } }
-  .phone { width: 100%; max-width: 380px; margin: 0 auto; background: #111; border-radius: 36px; padding: 12px; }
-  .phone .scrn { background: #f4f6f8; border-radius: 26px; min-height: 640px; overflow: hidden; display: flex; flex-direction: column; }
-  .dh { background: var(--park); color: #fff; padding: 16px 18px 14px; }
-  .dh small { opacity: .85; font-size: 12px; }
-  .dh h3 { margin: 2px 0 0; font-size: 20px; }
-  .db { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
-  .dv { display: none; flex: 1; flex-direction: column; }
-  .dv.on { display: flex; }
-  .ditem { background: #fff; border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; gap: 10px; align-items: center; border: 0; text-align: left; width: 100%; }
-  .ditem .t { font-size: 20px; font-weight: 800; }
-  .ditem .m { font-size: 13px; color: var(--muted); }
-  .st { font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 999px; background: var(--blue-soft); color: var(--blue); white-space: nowrap; }
-  .st.ok { background: var(--ok-soft); color: var(--ok); }
-  .st.no { background: var(--red-soft); color: var(--red); }
-  .st.wait { background: #eceef2; color: var(--muted); }
-  .big { width: 100%; min-height: 60px; border: 0; border-radius: 14px; font-size: 18px; font-weight: 800; background: var(--park); color: #fff; }
-  .big.sec { background: #fff; color: var(--ink); border: 2px solid #d5d9e0; }
-  .big.red { background: #fff; color: var(--red); border: 2px solid #f3b7b9; }
-  .big:disabled { opacity: .35; }
-  .dstep { background: #fff; border-radius: 14px; padding: 14px; }
-  .dstep h4 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: center; }
-  .dstep h4 .n { width: 24px; height: 24px; border-radius: 50%; background: #d5d9e0; color: #fff; display: grid; place-items: center; font-size: 13px; }
-  .dstep.done h4 .n { background: var(--park); }
-  .dstep.cur { outline: 3px solid var(--park); }
-  .dstep p { margin: 0 0 8px; font-size: 13px; color: var(--muted); }
-  .reason { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .reason button { min-height: 56px; border-radius: 12px; border: 2px solid #d5d9e0; background: #fff; font-weight: 700; font-size: 15px; }
-  .reason button.on { border-color: var(--red); color: var(--red); background: var(--red-soft); }
-  .scanlist { background: #fff; border-radius: 14px; padding: 6px 14px; }
-  .scanlist div { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; }
-  .scanlist div + div { border-top: 1px solid var(--line); }
-  .back { background: none; border: 0; color: #fff; font-size: 14px; padding: 0; margin-bottom: 4px; opacity: .9; }
-
-  /* 알림톡 */
-  .talks { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .talk { background: #bacee0; border-radius: 16px; padding: 16px; }
-  .talk .from { font-size: 12px; color: #4a5a6a; margin-bottom: 6px; font-weight: 600; }
-  .bubble { background: #fff; border-radius: 4px 14px 14px 14px; overflow: hidden; }
-  .bubble .bh { background: #fee500; padding: 10px 14px; font-weight: 700; font-size: 13px; }
-  .bubble .bb { padding: 14px; font-size: 13px; line-height: 1.65; }
-  .bubble .bt { display: block; text-align: center; border-top: 1px solid var(--line); padding: 11px; font-size: 13px; font-weight: 600; color: var(--ink); }
-
-  footer { text-align: center; font-size: 12px; color: var(--muted); padding: 0 16px 40px; }
+  table { width: 100%; border-collapse: collapse; background: var(--box); margin-top: 10px; font-size: 13px; }
+  th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--fill); }
+  .q { background: var(--hl); border: 1px solid #e0cf7a; padding: 10px 14px; margin-top: 12px; }
+  .q ul { margin: 4px 0 0; padding-left: 18px; }
+  @media (max-width: 560px) { .scr { width: 100%; } .arr { width: 100%; text-align: center; transform: rotate(90deg); } }
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="proto-bar">
-  <div class="in">
-    <span><b>기획 프로토타입</b> 공항수령 · 직원 수령 / 발렛 기사 수령(이지백 에어파크)</span>
-    <div class="tabs" role="tablist">
-      <button role="tab" data-tab="flow" aria-selected="true">① 고객 화면 (C)</button>
-      <button role="tab" data-tab="park" aria-selected="false">② 에어파크 진입 (C-01A)</button>
-      <button role="tab" data-tab="driver" aria-selected="false">③ 기사 화면 (D)</button>
-      <button role="tab" data-tab="talk" aria-selected="false">④ 알림톡</button>
-      <button role="tab" data-tab="rule" aria-selected="false">⑤ 운영 규칙·상태</button>
-      <button role="tab" data-tab="memo" aria-selected="false">⑥ 기획 메모</button>
+  <h1>김포 발렛 수령 · 화면 흐름 (와이어프레임)</h1>
+  <p class="lead">m-box.com "공항 수령"에 김포 발렛 기사 수령을 붙였을 때의 화면 순서만 확인하는 용도예요. 디자인·문구는 확정이 아니에요.</p>
+  <div class="summary">
+    <ol>
+      <li>기존 공항수령은 그대로 두고, 공항 목록에 <b>김포공항</b>만 추가</li>
+      <li>신청 마지막에 <b>수령 방법</b>을 고름: 공항에서 직원에게 / 발렛 기사에게</li>
+      <li>발렛을 고르면 발렛 정보 → 금액 확인 → 본인인증 → 입금 → 수령권(QR)</li>
+      <li>출국 당일 차를 맡기면서 QR + 신분증 보여주고 봉투 받음</li>
+    </ol>
+  </div>
+  <div class="legend"><span>기존 화면</span><span class="l-new">새로 추가되는 화면</span><span class="l-ext">이지백(에어파크) 화면</span></div>
+
+  <!-- 1 -->
+  <h2>1. 우리 웹에서 시작 (m-box.com 공항 수령)</h2>
+  <div class="flow">
+    <div class="scr">
+      <div class="hd">① 공항 수령 신청 <small>기존</small></div>
+      <div class="bd">
+        <div class="in">당일 수령 / 예약 수령</div>
+        <div class="in">공항: 인천 T1 · 제주 · <b>김포 (추가)</b></div>
+        <div class="in">날짜 · 시각</div>
+        <div class="in">통화 · 금액</div>
+        <div class="btn">신청하기</div>
+      </div>
+    </div>
+    <div class="arr">→</div>
+    <div class="scr new">
+      <div class="hd">② 수령 방법 선택 <small>추가</small></div>
+      <div class="bd">
+        <div class="txt">어떻게 받으시겠어요?</div>
+        <div class="opt">공항에서 직원에게 수령<br><small>인천 T1 · 제주</small></div>
+        <div class="opt on">발렛 기사에게 수령<br><small>김포</small></div>
+        <div class="btn">다음</div>
+        <div class="ex">김포 선택 시 → 발렛만 가능<br>인천·제주 선택 시 → 직원만 가능</div>
+      </div>
     </div>
   </div>
-</div>
 
-<header class="gnb" id="gnb">
-  <div class="in">
-    <div class="logo"><i></i>MONEY BOX</div>
-    <nav><span>지점 환전</span><span class="on">공항 수령</span><span>부가 서비스</span><span>회사 소개·문의</span></nav>
-    <div class="right"><button class="btn-o">비회원 내역조회</button><button class="btn-p">로그인</button></div>
-  </div>
-</header>
+  <div class="branch">
+    <div class="lane">
+      <b>② 에서 "공항에서 직원에게" 선택 → 지금과 똑같음</b>
+      <div class="flow">
+        <div class="scr"><div class="hd">본인인증 <small>기존</small></div><div class="bd"><div class="in">휴대폰 인증</div></div></div>
+        <div class="arr">→</div>
+        <div class="scr"><div class="hd">결제 <small>기존</small></div><div class="bd"><div class="in">결제</div></div></div>
+        <div class="arr">→</div>
+        <div class="scr"><div class="hd">완료 · 알림톡 <small>기존</small></div><div class="bd"><div class="txt">체크인 카운터에서 전화 → 직원이 전달</div></div></div>
+      </div>
+    </div>
 
-<section class="hero" id="hero">
-  <div class="in">
-    <h1>지금 신청해도<br>30분 안에 공항에서 바로 수령</h1>
-    <p>출국 전 원하는 시간과 장소에서 빠르게 수령하세요.</p>
-  </div>
-</section>
-
-<main id="main" class="under-hero">
-
-<!-- ============ ① 고객 화면 ============ -->
-<section class="panel on" id="p-flow">
-
-  <div class="stepper" id="stepper"></div>
-
-  <!-- 기존 공항수령 폼 -->
-  <div class="scr on" id="s-form">
-    <div class="card">
-      <div class="card-h">언제, 어디서 수령할까요?</div>
-      <div class="card-b">
-        <div class="seg">
-          <button id="segToday" class="on">당일 수령</button>
-          <button id="segBook">예약 수령</button>
-        </div>
-        <div class="row">
-          <div class="fld">
-            <label for="airport">수령 공항</label>
-            <select id="airport">
-              <option value="">수령할 공항을 선택해주세요.</option>
-              <option value="ICN1">인천공항 1터미널</option>
-              <option value="CJU">제주공항</option>
-              <option value="GMP">김포공항 국제선</option>
-            </select>
+    <div class="lane">
+      <b>② 에서 "발렛 기사에게" 선택 → 새 흐름</b>
+      <div class="flow">
+        <div class="scr new">
+          <div class="hd">③ 발렛 정보 <small>C-01B</small></div>
+          <div class="bd">
+            <div class="in">출국일 · 출국 시각 (①에서 가져옴)</div>
+            <div class="in">목적지</div>
+            <div class="in">차량번호</div>
+            <div class="txt">차량 인수 장소: (미정)</div>
+            <div class="btn">발렛 예약하고 다음</div>
+            <div class="ex">만차 → 다른 수령 방법 안내</div>
+            <div class="foot">발렛 운영: 이지백</div>
           </div>
-          <div class="fld">
-            <label for="date" id="dateLabel">수령일</label>
-            <input type="date" id="date">
+        </div>
+        <div class="arr">→</div>
+        <div class="scr new">
+          <div class="hd">④ 금액 확인 <small>C-02</small></div>
+          <div class="bd">
+            <div class="in">예약 정보 (이름 · 출국 · 목적지 · 차량)</div>
+            <div class="in">통화 · 금액 (목적지 기준 추천)</div>
+            <div class="txt">적용 환율 · 확정 시각<br>원화 환산액<br>전달 수수료 2,500원 (별도 줄)<br><b>총 결제액</b></div>
+            <div class="btn">다음</div>
+            <div class="ex">한도 초과 → 안내</div>
           </div>
-          <div class="fld">
-            <label for="time" id="timeLabel">수령 시각</label>
-            <select id="time"></select>
+        </div>
+        <div class="arr">→</div>
+        <div class="scr new">
+          <div class="hd">⑤ 본인 확인 · 약관 <small>C-03</small></div>
+          <div class="bd">
+            <div class="in">휴대폰 본인인증</div>
+            <div class="txt">지참할 신분증 안내</div>
+            <div class="in">약관: 환전 / 이지백 위탁 교부 / 개인정보 제3자 제공 / 취소·환불</div>
+            <div class="btn">신청</div>
+            <div class="ex">예약자 ≠ 인증자 → 진행 불가</div>
           </div>
         </div>
-        <hr class="sep">
-        <div class="amt">
-          <div>
-            <div class="money">
-              <select id="cur" aria-label="통화"></select>
-              <input id="fx" inputmode="numeric" placeholder="0" aria-label="외화 금액">
-            </div>
-            <div class="limit" id="limit">신청 가능 금액: -</div>
+        <div class="arr">→</div>
+        <div class="scr new">
+          <div class="hd">⑥ 입금 <small>C-04</small></div>
+          <div class="bd">
+            <div class="in">가상계좌 번호 [복사]</div>
+            <div class="txt">입금 금액<br>입금 마감 시각 (남은 시간)</div>
+            <div class="ex">마감 초과 → 환전만 취소, 발렛 예약은 유지</div>
           </div>
-          <div class="arrow">→</div>
-          <div><div class="money"><span class="cur">KRW</span><input id="krw" readonly value="0" aria-label="원화 금액"></div></div>
-          <button class="submit" id="toMethod" disabled>신청하기</button>
         </div>
-        <div class="login">
-          <b>이미 계정이 있다면 로그인하세요</b>
-          <span style="color:var(--muted)">로그인하면 본인인증 없이 바로 신청할 수 있어요.</span>
-          <button class="btn-o" type="button">로그인하기</button>
-        </div>
-        <ul class="notes" id="notes"></ul>
-      </div>
-    </div>
-    <div class="memo">
-      <h6>📝 기존 화면에서 바뀐 점</h6>
-      <ul>
-        <li>공항 목록에 <b>김포공항 국제선</b>만 추가. 나머지 입력은 기존 그대로예요.</li>
-        <li>김포를 고르면 날짜·시각 이름만 <b>출국일·출국 시각</b>으로 바뀌어요. 당일·예약 수령, 통화, 한도(하루 USD 4,000), 운영 시간은 기존과 같아요.</li>
-        <li>"신청하기"를 누르면 <b>마지막 단계로 수령 방법</b>(공항 직원 / 발렛 기사)을 골라요.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- 수령 방법 선택 (마지막 단계) -->
-  <div class="scr" id="s-method">
-    <div class="card narrow"><div class="card-b">
-      <h3 class="scr-title">어떻게 받으시겠어요?</h3>
-      <p class="scr-sub" id="methodSub">수령 방법을 골라주세요.</p>
-      <div class="methods">
-        <button class="method" id="mStaff" type="button">
-          <span class="ico">🧑‍💼</span>
-          <h4>공항에서 직원에게 수령</h4>
-          <p>출국장 체크인 카운터에서 알림톡 번호로 전화하면 머니박스 직원이 전달해요.</p>
-          <ul><li>인천공항 1터미널 · 제주공항</li><li>당일 30분 수령 가능</li><li>배송료 2,500원 (인천 T1)</li></ul>
-          <span class="why" id="whyStaff"></span>
-        </button>
-        <button class="method" id="mValet" type="button">
-          <span class="ico">🚗</span>
-          <h4>발렛 기사에게 수령 <span class="badge">NEW</span></h4>
-          <p>김포공항 발렛에 차를 맡길 때, 기사님이 신분증 확인 후 외화 봉투를 건네요.</p>
-          <ul><li>김포공항 국제선</li><li>당일·예약 수령 · 통화·한도는 기존과 동일</li><li>전달 수수료 2,500원</li></ul>
-          <span class="why" id="whyValet"></span>
-        </button>
-      </div>
-      <div class="actions">
-        <button class="submit ghost" data-back="s-form">이전</button>
-        <button class="submit" id="methodNext" disabled>다음</button>
-      </div>
-      <p class="operator">발렛 운영: <b>이지백(에어파크)</b> · 환전: 머니박스</p>
-    </div></div>
-  </div>
-
-  <!-- 직원 수령: 기존 절차 -->
-  <div class="scr" id="s-staff">
-    <div class="card narrow"><div class="card-b" style="text-align:center">
-      <h3 class="scr-title">기존 공항수령 절차로 이어져요</h3>
-      <p class="scr-sub">본인인증 → 결제 → 알림톡 안내. 지금 m-box.com 흐름 그대로라 이 프로토타입에서는 생략했어요.</p>
-      <button class="submit ghost" data-back="s-method" style="max-width:200px">이전</button>
-    </div></div>
-  </div>
-
-  <!-- C-01B 발렛 같이 예약 -->
-  <div class="scr" id="s-valet">
-    <div class="card narrow"><div class="card-b">
-      <div class="scr-id">C-01B</div>
-      <h3 class="scr-title">김포공항 발렛 같이 예약</h3>
-      <p class="scr-sub">차를 맡기는 자리에서 외화 봉투를 받아요. 출국 정보를 확인해 주세요.</p>
-      <div class="row two">
-        <div class="fld"><label>출국일</label><input id="vDate" type="date"></div>
-        <div class="fld"><label>출국 시각</label><select id="vTime"></select></div>
-        <div class="fld"><label for="vDest">목적지</label>
-          <select id="vDest">
-            <option value="">목적지를 선택해주세요.</option>
-            <option value="HND">도쿄 하네다</option>
-            <option value="KIX">오사카 간사이</option>
-            <option value="SHA">상하이 훙차오</option>
-            <option value="PEK">베이징 서우두</option>
-          </select>
-        </div>
-        <div class="fld"><label for="vCar">차량번호</label><input id="vCar" placeholder="예: 12가 3456"></div>
-      </div>
-      <div class="box-soft" style="margin-top:16px">
-        <table class="kv">
-          <tr><th>차량 인수 예정</th><td id="vPick">-</td></tr>
-          <tr><th>인수 장소</th><td>에어파크 차량 인수 장소 <span class="tag-assume">미정</span></td></tr>
-        </table>
-      </div>
-      <div class="sim">
-        <span class="lbl">시연:</span>
-        <button id="simFull">만차로 예약 불가</button>
-      </div>
-      <div class="err-msg" id="fullMsg" hidden>선택한 날짜는 발렛 예약이 마감됐어요. 가까운 머니박스 매장에서 받으시겠어요? <a href="#" onclick="return false">매장 수령으로 바꾸기</a></div>
-      <div class="actions">
-        <button class="submit ghost" data-back="s-method">이전</button>
-        <button class="submit" id="valetNext" disabled>발렛 예약하고 다음</button>
-      </div>
-      <p class="operator">발렛 운영: <b>이지백(에어파크)</b> · 발렛 서비스 책임은 이지백에 있어요. <a href="#" onclick="return false">약관 보기</a></p>
-    </div></div>
-  </div>
-
-  <!-- C-02 환전 신청 -->
-  <div class="scr" id="s-apply">
-    <div class="card narrow"><div class="card-b">
-      <div class="scr-id">C-02</div>
-      <h3 class="scr-title">환전 신청</h3>
-      <p class="scr-sub" id="applySub">예약 정보를 확인하고 금액을 확정해 주세요.</p>
-      <div class="box-soft">
-        <h5>발렛 예약 정보</h5>
-        <table class="kv" id="applyInfo"></table>
-      </div>
-      <div class="box-soft">
-        <div class="recommend" id="recommend"></div>
-        <div class="money" style="background:#fff">
-          <select id="aCur" aria-label="통화"></select>
-          <input id="aFx" inputmode="numeric" aria-label="외화 금액">
-        </div>
-        <div class="limit" id="aLimit"></div>
-      </div>
-      <div class="box-soft">
-        <table class="kv">
-          <tr><th>적용 환율</th><td id="aRate">-</td></tr>
-          <tr><th>원화 환산액</th><td id="aKrw">-</td></tr>
-          <tr><th>전달 수수료</th><td>2,500원</td></tr>
-          <tr class="tot"><th>총 결제액</th><td id="aTot">-</td></tr>
-        </table>
-        <p class="hint" style="margin:6px 0 0">전달 수수료는 환율과 별도예요. 금액은 기존 공항수령 배송료와 같아요.</p>
-      </div>
-      <div class="actions">
-        <button class="submit ghost" id="applyBack">이전</button>
-        <button class="submit" id="applyNext">다음</button>
-      </div>
-      <p class="operator">발렛 운영: <b>이지백(에어파크)</b> · 환전: 머니박스</p>
-    </div></div>
-  </div>
-
-  <!-- C-03 본인 확인·약관 -->
-  <div class="scr" id="s-auth">
-    <div class="card narrow"><div class="card-b">
-      <div class="scr-id">C-03</div>
-      <h3 class="scr-title">본인 확인과 약관 동의</h3>
-      <p class="scr-sub">봉투는 신청한 분 본인에게만 건넬 수 있어요.</p>
-      <button class="submit" id="doAuth" style="background:var(--navy)">휴대폰 본인인증</button>
-      <div class="sim"><span class="lbl">시연:</span><button id="authMismatch">예약자와 이름이 다른 경우</button></div>
-      <div id="authResult"></div>
-      <div class="box-soft" style="margin-top:14px">
-        <h5>수령할 때 가져올 신분증</h5>
-        <div class="hint" style="font-size:13px;color:var(--sub)">주민등록증 · 운전면허증 · 여권 · 모바일 신분증 중 하나 (실물 또는 공식 앱)</div>
-      </div>
-      <div class="agree" style="margin-top:14px">
-        <label class="all"><input type="checkbox" id="agAll"> 전체 동의</label>
-        <label><input type="checkbox" class="ag"> <span class="req">필수</span> 외화 환전 이용약관</label>
-        <label><input type="checkbox" class="ag"> <span class="req">필수</span> 이지백 위탁 교부 동의</label>
-        <label><input type="checkbox" class="ag"> <span class="req">필수</span> 개인정보 제3자 제공 (이지백)</label>
-        <label><input type="checkbox" class="ag"> <span class="req">필수</span> 취소·환불 규정</label>
-      </div>
-      <div class="actions">
-        <button class="submit ghost" data-back="s-apply">이전</button>
-        <button class="submit" id="authNext" disabled>신청하고 입금하기</button>
-      </div>
-    </div></div>
-  </div>
-
-  <!-- C-04 결제 -->
-  <div class="scr" id="s-pay">
-    <div class="card narrow"><div class="card-b">
-      <div class="scr-id">C-04</div>
-      <h3 class="scr-title">가상계좌로 입금해 주세요</h3>
-      <p class="scr-sub">입금이 확인되면 수령권(QR)을 알림톡으로 보내드려요.</p>
-      <div class="box-soft vacct">
-        <div class="hint">신한은행 · 예금주 (주)머니박스</div>
-        <div class="num">562-910-284417</div>
-        <button class="btn-o" id="copyAcct">계좌번호 복사</button>
-        <table class="kv" style="margin-top:14px">
-          <tr><th>입금 금액</th><td id="payAmt">-</td></tr>
-          <tr><th>입금 마감</th><td id="payDue">-</td></tr>
-        </table>
-        <div class="timer" id="payTimer">남은 시간 1:59:59</div>
-      </div>
-      <div class="sim"><span class="lbl">시연:</span>
-        <button class="pri" id="paid">입금 완료</button>
-        <button id="payLate">입금 마감 초과</button>
-      </div>
-      <div class="err-msg" id="lateMsg" hidden>입금 마감이 지나 <b>환전만 취소</b>됐어요. 발렛 예약은 그대로 유지돼요. 출국 전까지 다시 신청할 수 있어요.</div>
-    </div></div>
-  </div>
-
-  <!-- C-05 수령권 -->
-  <div class="scr" id="s-ticket">
-    <div class="scr-id" style="text-align:center">C-05</div>
-    <h3 class="scr-title" style="text-align:center;margin-bottom:14px">수령권</h3>
-    <div class="ticket">
-      <div class="th"><small>김포공항 발렛 수령</small><h3 id="tAmt">-</h3></div>
-      <div class="qr" id="tQr"></div>
-      <p class="hint" style="text-align:center;margin:0">차를 맡길 때 기사님께 이 화면과 신분증을 보여주세요</p>
-      <div class="cut" style="margin-top:16px"></div>
-      <div class="tb"><table class="kv" id="tInfo"></table></div>
-    </div>
-    <div class="narrow" style="max-width:380px;margin-top:16px">
-      <button class="submit" id="toHistory">신청 내역 보기</button>
-      <p class="operator">발렛 운영: <b>이지백(에어파크)</b> · 알림톡에도 같은 QR 링크가 가요</p>
-    </div>
-  </div>
-
-  <!-- C-06 신청 내역 -->
-  <div class="scr" id="s-history">
-    <div class="card narrow"><div class="card-b">
-      <div class="scr-id">C-06</div>
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap">
-        <div><div class="hint">신청번호 <span id="hNo">-</span></div><h3 class="scr-title" style="margin-top:2px">김포공항 발렛 수령 · <span id="hAmt"></span></h3></div>
-        <button class="btn-o gray" id="cancelBtn">환전 취소</button>
-      </div>
-      <div class="err-msg" id="cancelLock" hidden>기사에게 봉투가 넘어간 뒤에는 앱에서 취소할 수 없어요. <a href="#" onclick="return false">고객센터 연결 (02-757-0000)</a></div>
-      <ol class="steps" id="steps" style="margin-top:16px"></ol>
-      <div id="refundBox" hidden class="box-soft">
-        <h5>환불 받을 계좌</h5>
-        <div class="row two">
-          <div class="fld"><select><option>은행 선택</option><option>신한은행</option><option>국민은행</option><option>우리은행</option></select></div>
-          <div class="fld"><input placeholder="계좌번호"></div>
-        </div>
-        <p class="hint" style="margin:8px 0 0">기존 공항수령과 같이 자동 취소되며, 취소 수수료 2%를 뺀 금액이 반환 확인 후 3영업일 이내에 환불돼요.</p>
-      </div>
-      <div class="sim">
-        <span class="lbl">시연:</span>
-        <button class="pri" id="hNext">다음 상태로</button>
-        <button id="hReturn">반환 (노쇼·본인 확인 실패)</button>
-        <button id="hAccident">사고 (분실·훼손)</button>
-        <button id="hReset">처음으로</button>
-      </div>
-      <p class="operator">발렛 운영: <b>이지백(에어파크)</b></p>
-    </div></div>
-  </div>
-</section>
-
-<!-- ============ ② 에어파크 진입 ============ -->
-<section class="panel" id="p-park">
-  <div class="park-wrap">
-    <p class="scr-id" style="text-align:center">C-01A · 이지백 화면 (에어파크 앱/웹)</p>
-    <div class="park">
-      <div class="ph"><span>AirPark 김포 발렛</span><small>by 이지백</small></div>
-      <div class="pb">
-        <div class="row two">
-          <div class="fld"><label>출국일</label><input type="date" id="pkDate"></div>
-          <div class="fld"><label>출국 시각</label><select id="pkTime"><option>07:30</option><option selected>09:00</option><option>11:30</option><option>14:00</option></select></div>
-          <div class="fld"><label>목적지</label><select id="pkDest"><option value="KIX">오사카 간사이</option><option value="HND">도쿄 하네다</option><option value="SHA">상하이 훙차오</option><option value="PEK">베이징 서우두</option></select></div>
-          <div class="fld"><label>차량번호</label><input id="pkCar" value="34나 5678"></div>
-        </div>
-        <label class="addon">
-          <input type="checkbox" id="pkAdd" checked>
-          <span><b>환전 봉투 추가</b> <span class="badge green">머니박스</span>
-            <p>차를 맡길 때 외화 봉투도 같이 받아요. 공항 창구보다 좋은 환율.</p>
-            <p class="hint" id="pkRate">예상 환율 100엔 = 930원</p></span>
-        </label>
-        <button class="go" id="pkGo">발렛 예약하기</button>
-        <div class="ok-msg" id="pkOnly" hidden>발렛만 예약됐어요. (환전 봉투 미선택)</div>
-      </div>
-    </div>
-    <div class="memo">
-      <h6>📝 C-01A</h6>
-      <ul>
-        <li>이지백이 만드는 화면. 우리는 체크박스 문구·예상 환율만 제공해요.</li>
-        <li>체크하고 예약하면 예약 정보(예약번호·이름·연락처·차량번호·출국 일시·목적지)를 받아 <b>머니박스 C-02로 바로</b> 이어져요. 예: <code>m-box.com/airport/valet?ref=AP-…</code> (연동 방식 미정)</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ③ 기사 화면 ============ -->
-<section class="panel" id="p-driver">
-  <div class="driver-grid">
-    <div class="phone"><div class="scrn">
-
-      <!-- D-01 -->
-      <div class="dv on" id="d1">
-        <div class="dh"><small>에어파크 기사 · 김포 국제선</small><h3>오늘 교부 목록</h3></div>
-        <div class="db">
-          <button class="big sec" id="toD2">📦 봉투 인계 확인</button>
-          <div id="dList" style="display:flex;flex-direction:column;gap:10px"></div>
-          <p class="hint" style="text-align:center;margin:4px 0 0">목록에 없는 고객에게는 교부할 수 없어요</p>
-        </div>
-      </div>
-
-      <!-- D-02 -->
-      <div class="dv" id="d2">
-        <div class="dh"><button class="back" data-d="d1">‹ 목록</button><h3>봉투 인계 확인</h3></div>
-        <div class="db">
-          <div class="scanlist" id="d2List"></div>
-          <button class="big" id="d2Scan">봉투 일괄 스캔</button>
-          <button class="big red" id="d2Miss">수량 불일치 (시연)</button>
-          <div id="d2Msg"></div>
-          <button class="big sec" id="d2Sign" disabled>✍️ 인계 서명하고 완료</button>
-        </div>
-      </div>
-
-      <!-- D-03 -->
-      <div class="dv" id="d3">
-        <div class="dh"><button class="back" data-d="d1">‹ 목록</button><h3 id="d3Title">교부 진행</h3></div>
-        <div class="db">
-          <div class="dstep cur" id="ds1"><h4><span class="n">1</span>수령권 QR 스캔</h4><button class="big" id="b1">QR 스캔</button></div>
-          <div class="dstep" id="ds2"><h4><span class="n">2</span>신분증 대조</h4><p id="d3Who">-</p><button class="big" id="b2" disabled>✓ 신분증 일치</button></div>
-          <div class="dstep" id="ds3"><h4><span class="n">3</span>봉투 번호 스캔</h4><p id="d3Env">-</p><button class="big" id="b3" disabled>봉투 스캔</button><div class="sim"><button id="b3Bad" disabled>번호 불일치 (시연)</button></div></div>
-          <div class="dstep" id="ds4"><h4><span class="n">4</span>서명 · 사진</h4><button class="big" id="b4" disabled>✍️ 서명 + 📷 사진</button></div>
-          <div id="d3Msg"></div>
-          <button class="big red" id="toD4">교부 실패 · 사고 신고</button>
-        </div>
-      </div>
-
-      <!-- D-04 -->
-      <div class="dv" id="d4">
-        <div class="dh"><button class="back" data-d="d3">‹ 교부</button><h3>교부 실패 · 사고 신고</h3></div>
-        <div class="db">
-          <div class="reason" id="reasons">
-            <button data-r="신분증 불일치">신분증 불일치</button>
-            <button data-r="노쇼">노쇼</button>
-            <button data-r="봉투 훼손">봉투 훼손</button>
-            <button data-r="봉투 분실">봉투 분실</button>
+        <div class="arr">→</div>
+        <div class="scr new">
+          <div class="hd">⑦ 수령권 <small>C-05</small></div>
+          <div class="bd">
+            <div class="qr"></div>
+            <div class="txt">금액 · 통화<br>수령 일시 · 장소<br>준비물: 신분증</div>
+            <div class="foot">알림톡에도 같은 QR</div>
           </div>
-          <button class="big sec">📷 사진 첨부</button>
-          <div class="dstep"><p style="margin:0">반환 예정: <b id="d4Due">-</b><br><span class="hint">미교부 봉투는 교부일 다음 영업일까지 머니박스로 반환</span></p></div>
-          <div id="d4Msg"></div>
-          <button class="big" id="d4Send" disabled>신고하기</button>
+        </div>
+        <div class="arr">→</div>
+        <div class="scr new">
+          <div class="hd">⑧ 신청 내역 <small>C-06</small></div>
+          <div class="bd">
+            <div class="txt">상태: 입금 대기 → 입금 완료 → 봉투 준비 → 기사 인계 → 수령 완료</div>
+            <div class="in">[취소] · 환불 계좌</div>
+            <div class="ex">기사 인계 후 → 앱 취소 불가, 고객센터</div>
+          </div>
         </div>
       </div>
-    </div></div>
+    </div>
+  </div>
 
-    <div>
-      <div class="box">
-        <h4>기사 화면 원칙</h4>
-        <ul>
-          <li>차를 받으면서 <b>한 손으로</b> 쓴다 → 버튼은 크게, 글 입력 없이 스캔·선택만.</li>
-          <li>D-01 오늘 교부 목록 → D-02 봉투 인계 확인(전날 오후) → D-03 교부 진행(QR → 신분증 → 봉투 번호 → 서명·사진) → 실패 시 D-04.</li>
-          <li>교부 완료 기록은 환전장부(일자·실명·식별번호·금액·적용 환율)에 자동 반영.</li>
-          <li>분실 신고는 머니박스에 즉시 전화 연결.</li>
-        </ul>
-      </div>
-      <div class="memo">
-        <h6>📝 미정</h6>
-        <ul>
-          <li>이 화면을 <b>이지백 기존 기사 앱 안</b>에 넣을지, <b>별도 웹</b>으로 만들지.</li>
-          <li>기사 1인당 봉투 보유 한도 값.</li>
-        </ul>
+  <!-- 2 -->
+  <h2>2. 이지백 에어파크에서 시작</h2>
+  <p class="lead">발렛을 먼저 예약하던 고객. 체크하면 우리 ④ 금액 확인부터 위와 같은 흐름.</p>
+  <div class="flow">
+    <div class="scr ext">
+      <div class="hd">에어파크 발렛 예약 <small>C-01A · 이지백</small></div>
+      <div class="bd">
+        <div class="in">출국일 · 시각 · 목적지 · 차량번호</div>
+        <div class="opt on">☑ 환전 봉투 추가 (머니박스)<br><small>예상 환율 표시</small></div>
+        <div class="btn">발렛 예약하기</div>
+        <div class="ex">체크 안 하면 발렛만 예약</div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ============ ④ 알림톡 ============ -->
-<section class="panel" id="p-talk">
-  <h2 class="sec">고객 알림 (카카오 알림톡)</h2>
-  <div class="talks" id="talks"></div>
-</section>
-
-<!-- ============ ⑤ 운영 규칙·상태 ============ -->
-<section class="panel" id="p-rule">
-  <h2 class="sec">수령 방법 비교</h2>
-  <div class="tbl-wrap"><table class="grid">
-    <thead><tr><th style="width:18%">항목</th><th>공항에서 직원에게 수령 (기존)</th><th>발렛 기사에게 수령 (신규)</th></tr></thead>
-    <tbody>
-      <tr><th>공항</th><td>인천공항 1터미널 · 제주공항</td><td>김포공항 국제선</td></tr>
-      <tr><th>건네는 사람</th><td>머니박스 공항 수령팀</td><td>이지백 에어파크 기사 (환전사무 수탁)</td></tr>
-      <tr><th>신청 유형</th><td>당일 수령 · 예약 수령</td><td>동일 (당일 수령 · 예약 수령)</td></tr>
-      <tr><th>통화·한도</th><td>주요 통화 · 하루 USD 4,000 상당</td><td>동일 (주요 통화 · 하루 USD 4,000 상당)</td></tr>
-      <tr><th>요금</th><td>배송료 2,500원 (인천 T1)</td><td>전달 수수료 2,500원 (별도 줄 표시, 금액 동일)</td></tr>
-      <tr><th>결제</th><td>기존 결제</td><td>가상계좌 · 신청 후 2시간 안에 입금</td></tr>
-      <tr><th>미수령</th><td>자동 취소 · 수수료 2% 차감</td><td>동일 (자동 취소 · 수수료 2% 차감, 반환 확인 후 3영업일 내 환불)</td></tr>
-    </tbody>
-  </table></div>
-
-  <h2 class="sec">운영 규칙 <span class="tag-assume">제안값 · 이지백 협의 후 확정</span></h2>
-  <div class="tbl-wrap"><table class="grid">
-    <thead><tr><th style="width:26%">항목</th><th>제안</th></tr></thead>
-    <tbody>
-      <tr><th>입금 마감</th><td>신청 후 2시간 이내</td></tr>
-      <tr><th>봉투 인계</th><td>출국 전날 오후, 인계 대장 서명</td></tr>
-      <tr><th>교부 가능 시간</th><td>에어파크 차량 인수 운영 시간과 동일</td></tr>
-      <tr><th>미교부 봉투 반환</th><td>교부일 다음 영업일까지 머니박스로</td></tr>
-      <tr><th>환불</th><td>반환 확인 후 3영업일 이내 (미수령은 기존과 같이 수수료 2% 차감)</td></tr>
-    </tbody>
-  </table></div>
-
-  <h2 class="sec">상태값</h2>
-  <div class="box">
-    <div class="flow"><span>입금 대기</span><em>→</em><span>입금 완료</span><em>→</em><span>봉투 준비</span><em>→</em><span>기사 인계</span><em>→</em><span>수령 완료</span></div>
-    <div class="flow"><em>분기:</em><span class="red">환전 취소</span><em>입금 마감 초과·고객 취소</em><span class="red">반환</span><em>노쇼·본인 확인 실패·발렛 취소</em><span class="red">사고</span><em>분실·훼손</em></div>
-    <p class="hint" style="margin:8px 0 0">기사 인계 이후에는 고객 앱에서 취소할 수 없고 고객센터로 연결.</p>
+    <div class="arr">→</div>
+    <div class="scr new"><div class="hd">④ 금액 확인 <small>우리</small></div><div class="bd"><div class="txt">예약 정보 자동으로 채워짐</div></div></div>
+    <div class="arr">→</div>
+    <div class="scr new"><div class="hd">⑤ → ⑥ → ⑦ → ⑧</div><div class="bd"><div class="txt">1번 흐름과 동일</div></div></div>
   </div>
 
-  <h2 class="sec">예외 상황</h2>
-  <div class="tbl-wrap"><table class="grid">
-    <thead><tr><th style="width:26%">상황</th><th>처리</th></tr></thead>
-    <tbody>
-      <tr><th>입금 마감 초과</th><td>환전만 취소, 발렛 예약은 유지</td></tr>
-      <tr><th>출국일 변경</th><td>이지백 예약 변경 → 머니박스에 통보 → 봉투 인계일 변경</td></tr>
-      <tr><th>노쇼 · 발렛 취소</th><td>봉투 반환 → 자동 취소 · 수수료 2% 차감 환불</td></tr>
-      <tr><th>신분증 불일치</th><td>교부 중단, 봉투 반환</td></tr>
-      <tr><th>봉투 분실 · 훼손</th><td>기사 화면에서 즉시 신고</td></tr>
-    </tbody>
-  </table></div>
-</section>
+  <!-- 3 -->
+  <h2>3. 출국 당일까지 뒤에서 일어나는 일</h2>
+  <table>
+    <tr><th style="width:18%">언제</th><th style="width:27%">고객</th><th style="width:27%">우리 회사</th><th>이지백 기사</th></tr>
+    <tr><td>신청·입금</td><td>신청, 가상계좌 입금</td><td>입금 확인, 수령권(QR) 발송, 이지백에 교부 목록 전달</td><td>—</td></tr>
+    <tr><td>출국 전날</td><td>알림톡(신분증 지참)</td><td>봉투 밀봉·일련번호, 기사에게 인계</td><td>봉투 받고 인계 서명 (D-02)</td></tr>
+    <tr><td>출국 당일</td><td>차 맡기며 QR + 신분증 제시, 봉투 받음</td><td>환전장부 자동 기록</td><td>QR 스캔 → 신분증 확인 → 봉투 번호 스캔 → 서명·사진 (D-03)</td></tr>
+    <tr><td>못 건넨 경우</td><td>환불 안내 받음</td><td>봉투 돌려받고 환불</td><td>실패 신고 (D-04), 봉투 반환</td></tr>
+  </table>
 
-<!-- ============ ⑥ 기획 메모 ============ -->
-<section class="panel" id="p-memo">
-  <h2 class="sec">기획 메모</h2>
-  <div class="two-col">
-    <div class="box">
-      <h4>이 프로토타입에 반영한 확정 사항</h4>
-      <ul>
-        <li>공항수령 <b>마지막 단계에서 수령 방법</b>을 고름: 공항 직원 수령(기존) / 발렛 기사 수령(신규)</li>
-        <li>진입 두 곳: 에어파크 예약의 "환전 봉투 추가"(C-01A), 우리 공항수령의 "발렛 같이 예약"(C-01B). C-02부터 같은 흐름</li>
-        <li>발렛도 우리 서비스처럼 디자인, 화면 하단·약관에 "발렛 운영: 이지백" 고지</li>
-        <li>전달 수수료는 환율과 분리해 별도 줄. 금액은 기존 배송료와 같은 2,500원</li>
-        <li>관리자 화면 없음 (MVP는 엑셀)</li>
-      </ul>
-    </div>
-    <div class="box">
-      <h4>미정 (구현 전 확인)</h4>
-      <ul>
-        <li>기사 화면: 이지백 기사 앱 안 / 별도 웹</li>
-        <li>에어파크 차량 인수 장소 (터미널 앞 / 공항 밖 거점) → 수령권 "수령 장소" 문구</li>
-        <li>예약 정보 연동 방식 (링크 파라미터 / 서버 간 API)</li>
-        <li>운영 규칙 값 (모두 제안값)</li>
-      </ul>
-    </div>
+  <!-- 4 -->
+  <h2>4. 이지백 기사 화면 (틀)</h2>
+  <div class="flow">
+    <div class="scr ext"><div class="hd">D-01 오늘 교부 목록</div><div class="bd"><div class="in">시간 · 고객(가림) · 차량 · 봉투번호 · 상태</div><div class="in">…</div><div class="btn">봉투 인계 확인</div></div></div>
+    <div class="arr">→</div>
+    <div class="scr ext"><div class="hd">D-02 봉투 인계 확인</div><div class="bd"><div class="in">봉투 일괄 스캔 → 목록 대조</div><div class="btn">인계 서명</div><div class="ex">수량 안 맞음 → 인계 거부</div></div></div>
+    <div class="arr">→</div>
+    <div class="scr ext"><div class="hd">D-03 교부 진행</div><div class="bd"><div class="in">1. QR 스캔</div><div class="in">2. 신분증 대조</div><div class="in">3. 봉투 번호 스캔</div><div class="in">4. 서명 · 사진</div><div class="ex">번호 불일치 → 중단</div></div></div>
+    <div class="arr">→</div>
+    <div class="scr ext"><div class="hd">D-04 실패 · 사고 신고</div><div class="bd"><div class="in">사유: 신분증 불일치 / 노쇼 / 훼손 / 분실</div><div class="in">사진</div><div class="ex">분실 → 머니박스에 바로 전화</div></div></div>
   </div>
-  <div class="memo">
-    <h6>📝 지난 버전과 달라진 점</h6>
+
+  <!-- 5 -->
+  <h2>5. 조건 (기존 공항수령과 같음)</h2>
+  <table>
+    <tr><th style="width:22%">항목</th><th>직원 수령 (인천 · 제주)</th><th>발렛 기사 수령 (김포)</th></tr>
+    <tr><td>당일 / 예약</td><td colspan="2">둘 다 가능</td></tr>
+    <tr><td>통화 · 한도</td><td colspan="2">주요 통화 · 하루 USD 4,000 상당</td></tr>
+    <tr><td>수수료</td><td>배송료 2,500원</td><td>전달 수수료 2,500원</td></tr>
+    <tr><td>미수령</td><td colspan="2">자동 취소 · 수수료 2% 차감</td></tr>
+    <tr><td>건네는 사람</td><td>머니박스 직원</td><td>이지백 에어파크 기사</td></tr>
+  </table>
+
+  <div class="q">
+    <b>확인할 것</b>
     <ul>
-      <li>김포 조건은 <b>기존 공항수령과 동일</b>: 당일·예약 수령, 주요 통화, 하루 USD 4,000, 운영 시간 05:30~20:00, 미수령 시 수수료 2% 차감. 요금도 2,500원으로 같아요. (명세의 JPY·CNY · USD 2,000 · 출국 2일 전 마감은 적용하지 않음)</li><li>발렛 요금은 화면에서 뺐어요.</li>
-      <li>제휴사를 이지백(에어파크)으로 바꾸고, 가상계좌 입금·본인인증·수령권·기사 화면을 새로 넣었어요.</li>
+      <li>② 수령 방법을 <b>신청 마지막</b>에 고르는 게 맞나요? (아니면 공항 고를 때 같이?)</li>
+      <li>발렛 차량 인수 장소 (터미널 앞 / 공항 밖) → ⑦ 수령권 "장소" 문구</li>
+      <li>기사 화면을 이지백 앱 안에 넣을지 / 별도 웹으로 만들지</li>
+      <li>이지백과 예약 정보를 주고받는 방식 (링크 / API)</li>
     </ul>
   </div>
-</section>
 
-</main>
-
-<footer>머니박스 내부 기획용 프로토타입 · 환율·요금·시간은 예시 값입니다.</footer>
-
-<script>
-(function () {
-  var RATE = { USD: 1400, JPY: 9.3, CNY: 195, EUR: 1520 };
-  var UNIT = { USD: 1, JPY: 1000, CNY: 100, EUR: 5 };
-  var CUR_BY_AIRPORT = { '': ['USD'], ICN1: ['USD', 'JPY', 'EUR', 'CNY'], CJU: ['USD', 'JPY', 'CNY'], GMP: ['USD', 'JPY', 'EUR', 'CNY'] };
-  var LIMIT_USD = { ICN1: 4000, CJU: 4000, GMP: 4000 };
-  var HOURS = { ICN1: [5.5, 20], CJU: [10, 21], GMP: [5.5, 20], '': [5.5, 20] };
-  var DEST = { HND: ['도쿄 하네다', 'JPY'], KIX: ['오사카 간사이', 'JPY'], SHA: ['상하이 훙차오', 'CNY'], PEK: ['베이징 서우두', 'CNY'] };
-  var FEE = 2500;
-  var DAYS = ['일', '월', '화', '수', '목', '금', '토'];
-
-  var $ = function (id) { return document.getElementById(id); };
-  var num = function (v) { return Number(String(v).replace(/[^0-9]/g, '')) || 0; };
-  var won = function (n) { return Math.round(n).toLocaleString('ko-KR') + '원'; };
-  var fxStr = function (n, c) { return Number(n).toLocaleString('ko-KR') + ' ' + c; };
-  function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
-  function addDays(n) { var d = new Date(); d.setDate(d.getDate() + n); return d; }
-  function pretty(dateStr, time) {
-    if (!dateStr) return '-';
-    var d = new Date(dateStr + 'T00:00:00');
-    return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + DAYS[d.getDay()] + ')' + (time ? ' ' + time : '');
-  }
-  function minusMin(time, m) {
-    var p = time.split(':'), t = +p[0] * 60 + +p[1] - m;
-    return String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0');
-  }
-  function maxFx(airport, c) {
-    var lim = LIMIT_USD[airport];
-    if (!lim) return 0;
-    return Math.floor(lim * RATE.USD / RATE[c] / UNIT[c]) * UNIT[c];
-  }
-  function rateStr(c) { return c === 'JPY' ? '100엔 = ' + (RATE.JPY * 100).toFixed(0) + '원' : '1' + c + ' = ' + RATE[c].toLocaleString() + '원'; }
-
-  var S = {
-    mode: 'today', airport: '', method: '', entry: 'web',
-    name: '김머니', birth: '1985.03.14', phone: '010-****-1234',
-    ref: '', depDate: '', depTime: '09:00', dest: '', car: '',
-    cur: 'JPY', amt: 0, no: '', authed: false, status: 1, branch: '', lockedAt: ''
-  };
-
-  /* ---------- 탭 ---------- */
-  function showTab(tab) {
-    document.querySelectorAll('.tabs button').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === tab)); });
-    document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('on', p.id === 'p-' + tab); });
-    var isFlow = tab === 'flow';
-    $('gnb').style.display = isFlow ? '' : 'none';
-    $('hero').style.display = isFlow && cur === 's-form' ? '' : 'none';
-    $('main').classList.toggle('under-hero', isFlow && cur === 's-form');
-    if (tab === 'talk') renderTalks();
-    if (tab === 'driver') renderD1();
-    window.scrollTo(0, 0);
-  }
-  document.querySelectorAll('.tabs button').forEach(function (b) { b.onclick = function () { showTab(b.dataset.tab); }; });
-
-  /* ---------- 고객 흐름 화면 전환 ---------- */
-  var cur = 's-form';
-  var FLOW_VALET = [['s-form', '신청'], ['s-method', '수령 방법'], ['s-valet', '발렛 예약'], ['s-apply', '환전 신청'], ['s-auth', '본인 확인'], ['s-pay', '입금'], ['s-ticket', '수령권'], ['s-history', '신청 내역']];
-  function go(id) {
-    cur = id;
-    document.querySelectorAll('.scr').forEach(function (s) { s.classList.toggle('on', s.id === id); });
-    var onForm = id === 's-form';
-    $('hero').style.display = onForm ? '' : 'none';
-    $('main').classList.toggle('under-hero', onForm);
-    // 진행 단계
-    var flow = S.entry === 'airpark' ? FLOW_VALET.filter(function (f) { return ['s-form', 's-method', 's-valet'].indexOf(f[0]) < 0; }) : FLOW_VALET;
-    if (S.method === 'staff') flow = FLOW_VALET.slice(0, 2);
-    var idx = flow.map(function (f) { return f[0]; }).indexOf(id);
-    $('stepper').innerHTML = onForm ? '' : flow.map(function (f, i) {
-      return '<span class="' + (i < idx ? 'done' : i === idx ? 'on' : '') + '">' + (i + 1) + '. ' + f[1] + '</span>';
-    }).join('');
-    if (id === 's-method') renderMethod();
-    if (id === 's-valet') renderValet();
-    if (id === 's-apply') renderApply();
-    if (id === 's-pay') renderPay();
-    if (id === 's-ticket') renderTicket();
-    if (id === 's-history') renderHistory();
-    window.scrollTo(0, 0);
-  }
-  document.querySelectorAll('[data-back]').forEach(function (b) { b.onclick = function () { go(b.dataset.back); }; });
-
-  /* ---------- 신청 폼 (기존 공항수령) ---------- */
-  function fillTimes(sel, h, def) {
-    var prev = sel.value; sel.innerHTML = '';
-    for (var t = h[0]; t <= h[1]; t += 0.5) {
-      var hh = Math.floor(t), mm = t % 1 ? '30' : '00', v = String(hh).padStart(2, '0') + ':' + mm;
-      var o = document.createElement('option'); o.value = v;
-      o.textContent = (hh < 12 ? '오전 ' : '오후 ') + (hh > 12 ? hh - 12 : hh) + ':' + mm;
-      sel.appendChild(o);
-    }
-    if ([].some.call(sel.options, function (o) { return o.value === prev; })) sel.value = prev; else if (def) sel.value = def;
-  }
-  function setMode(m) {
-    S.mode = m;
-    $('segToday').classList.toggle('on', m === 'today');
-    $('segBook').classList.toggle('on', m === 'book');
-    var d = $('date');
-    if (m === 'today') { d.value = ymd(new Date()); d.disabled = true; }
-    else {
-      d.disabled = false;
-      var min = ymd(addDays(1));
-      d.min = min;
-      if (!d.value || d.value < min) d.value = ymd(addDays(8));
-    }
-  }
-  function onAirport() {
-    S.airport = $('airport').value;
-    var g = S.airport === 'GMP';
-    $('dateLabel').textContent = g ? '출국일' : '수령일';
-    $('timeLabel').textContent = g ? '출국 시각' : '수령 시각';
-    fillTimes($('time'), HOURS[S.airport] || HOURS[''], g ? '09:00' : null);
-    var list = CUR_BY_AIRPORT[S.airport], sel = $('cur'), prev = sel.value;
-    sel.innerHTML = list.map(function (c) { return '<option>' + c + '</option>'; }).join('');
-    if (list.indexOf(prev) >= 0) sel.value = prev;
-    renderNotes(); calc();
-  }
-  function renderNotes() {
-    var h = [];
-    if (S.airport === 'GMP') {
-      h.push('<li class="hl">김포공항 국제선은 발렛 기사 수령으로 받아요. 전달 수수료 2,500원이 부과돼요.</li>');
-    } else {
-      h.push('<li>인천공항 1터미널은 배송료 2,500원이 부과됩니다.</li>');
-    }
-    h.push('<li>환전 신청중 환율이 변경될 수 있습니다.</li>');
-    h.push('<li>공항별 환율은 상이할 수 있습니다.</li>');
-    $('notes').innerHTML = h.join('');
-  }
-  function calc() {
-    var c = $('cur').value, a = S.airport, n = num($('fx').value), mx = maxFx(a, c), lim = $('limit');
-    $('krw').value = Math.round(n * RATE[c]).toLocaleString('ko-KR');
-    var err = false;
-    if (!a) lim.textContent = '신청 가능 금액: -';
-    else if (n > mx) { lim.textContent = '최대 ' + fxStr(mx, c) + '까지 신청할 수 있어요'; err = true; }
-    else if (n && n % UNIT[c]) { lim.textContent = UNIT[c].toLocaleString() + ' ' + c + ' 단위로 입력해 주세요'; err = true; }
-    else lim.textContent = '신청 가능 금액: 최대 ' + fxStr(mx, c);
-    lim.classList.toggle('err', err);
-    $('toMethod').disabled = !(a && n > 0 && !err);
-  }
-  $('segToday').onclick = function () { setMode('today'); };
-  $('segBook').onclick = function () { setMode('book'); };
-  $('airport').onchange = onAirport;
-  $('cur').onchange = calc;
-  $('fx').oninput = calc;
-  $('fx').onblur = function () { var n = num(this.value); this.value = n ? n.toLocaleString('ko-KR') : ''; };
-  $('fx').onfocus = function () { this.value = String(this.value).replace(/[^0-9]/g, ''); };
-  $('toMethod').onclick = function () {
-    S.entry = 'web'; S.cur = $('cur').value; S.amt = num($('fx').value);
-    S.depDate = $('date').value; S.depTime = $('time').value;
-    go('s-method');
-  };
-
-  /* ---------- 수령 방법 (마지막 단계) ---------- */
-  function renderMethod() {
-    var g = S.airport === 'GMP';
-    $('methodSub').textContent = (g ? '김포공항 국제선' : $('airport').selectedOptions[0].textContent) + ' · ' + fxStr(S.amt, S.cur) + ' · ' + pretty(S.depDate, S.depTime);
-    $('mStaff').disabled = g;
-    $('whyStaff').textContent = g ? '김포공항은 직원 수령을 아직 운영하지 않아요' : '';
-    $('mValet').disabled = !g;
-    $('whyValet').textContent = g ? '' : '김포공항 국제선 출국만 가능해요. 공항을 김포로 바꾸면 고를 수 있어요.';
-    if (S.method === 'staff' && g) S.method = '';
-    if (S.method === 'valet' && !g) S.method = '';
-    if (!S.method) S.method = g ? 'valet' : 'staff';
-    $('mStaff').classList.toggle('on', S.method === 'staff');
-    $('mValet').classList.toggle('on', S.method === 'valet');
-    $('methodNext').disabled = !S.method;
-  }
-  $('mStaff').onclick = function () { S.method = 'staff'; renderMethod(); };
-  $('mValet').onclick = function () { S.method = 'valet'; renderMethod(); };
-  $('methodNext').onclick = function () { go(S.method === 'valet' ? 's-valet' : 's-staff'); };
-
-  /* ---------- C-01B 발렛 같이 예약 ---------- */
-  fillTimes($('vTime'), HOURS.GMP, '09:00');
-  function renderValet() {
-    $('vDate').min = ymd(new Date());
-    $('vDate').value = S.depDate; $('vTime').value = S.depTime;
-    if (!S.dest) S.dest = S.cur === 'CNY' ? 'SHA' : 'KIX';
-    $('vDest').value = S.dest; $('vCar').value = S.car;
-    $('fullMsg').hidden = true;
-    valetCheck();
-  }
-  function valetCheck() {
-    S.depDate = $('vDate').value; S.depTime = $('vTime').value; S.dest = $('vDest').value; S.car = $('vCar').value.trim();
-    $('vPick').textContent = S.depDate ? pretty(S.depDate, minusMin(S.depTime, 120)) + ' 전후' : '-';
-    $('valetNext').disabled = !(S.depDate && S.dest && S.car) || !$('fullMsg').hidden;
-  }
-  ['vDate', 'vTime', 'vDest'].forEach(function (id) { $(id).onchange = valetCheck; });
-  $('vCar').oninput = valetCheck;
-  $('simFull').onclick = function () { $('fullMsg').hidden = !$('fullMsg').hidden; valetCheck(); };
-  $('valetNext').onclick = function () { S.ref = 'AP-' + S.depDate.replace(/-/g, '') + '-0417'; go('s-apply'); };
-
-  /* ---------- C-02 환전 신청 ---------- */
-  $('aCur').innerHTML = CUR_BY_AIRPORT.GMP.map(function (c) { return '<option>' + c + '</option>'; }).join('');
-  function renderApply() {
-    $('applySub').textContent = S.entry === 'airpark' ? '에어파크에서 넘어온 예약 정보예요. 금액을 정하고 환율을 확정해 주세요.' : '예약 정보를 확인하고 금액을 확정해 주세요.';
-    $('applyInfo').innerHTML =
-      '<tr><th>예약자</th><td>' + S.name + '</td></tr>' +
-      '<tr><th>출국</th><td>' + pretty(S.depDate, S.depTime) + '</td></tr>' +
-      '<tr><th>목적지</th><td>' + (DEST[S.dest] ? DEST[S.dest][0] : '-') + '</td></tr>' +
-      '<tr><th>에어파크 예약번호</th><td>' + S.ref + '</td></tr>' +
-      '<tr><th>차량번호</th><td>' + S.car + '</td></tr>';
-    var rec = DEST[S.dest] ? DEST[S.dest][1] : 'JPY';
-    // 에어파크 진입은 금액 전이라 추천 통화를 바로 넣고, 우리 웹 진입은 고객이 고른 통화를 유지
-    if (S.entry === 'airpark' && !S.curTouched) S.cur = rec;
-    $('recommend').innerHTML = '✓ ' + DEST[S.dest][0] + '행이라 <b>&nbsp;' + rec + '&nbsp;</b>를 추천해요' + (S.cur === rec ? '' : ' (지금 선택: ' + S.cur + ')');
-    $('aCur').value = S.cur;
-    $('aFx').value = S.amt ? S.amt.toLocaleString('ko-KR') : '';
-    applyCalc();
-  }
-  function applyCalc() {
-    S.cur = $('aCur').value; S.amt = num($('aFx').value);
-    var mx = maxFx('GMP', S.cur), lim = $('aLimit'), err = '';
-    if (S.amt > mx) err = '하루 USD 4,000 상당(' + fxStr(mx, S.cur) + ')을 넘을 수 없어요';
-    else if (S.amt % UNIT[S.cur]) err = UNIT[S.cur].toLocaleString() + ' ' + S.cur + ' 단위로 입력해 주세요';
-    lim.textContent = err || '신청 가능 금액: 최대 ' + fxStr(mx, S.cur) + (S.cur === 'USD' ? '' : ' (USD 4,000 상당)');
-    lim.classList.toggle('err', !!err);
-    var now = new Date(), krw = S.amt * RATE[S.cur];
-    $('aRate').innerHTML = rateStr(S.cur) + '<br><span class="hint">' + (now.getMonth() + 1) + '/' + now.getDate() + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ' 기준 확정</span>';
-    $('aKrw').textContent = won(krw);
-    $('aTot').textContent = won(krw + (S.amt ? FEE : 0));
-    $('applyNext').disabled = !S.amt || !!err;
-  }
-  $('aCur').onchange = function () { S.curTouched = true; applyCalc(); };
-  $('aFx').oninput = applyCalc;
-  $('aFx').onblur = function () { var n = num(this.value); this.value = n ? n.toLocaleString('ko-KR') : ''; };
-  $('aFx').onfocus = function () { this.value = String(this.value).replace(/[^0-9]/g, ''); };
-  $('applyBack').onclick = function () { if (S.entry === 'airpark') showTab('park'); else go('s-valet'); };
-  $('applyNext').onclick = function () { go('s-auth'); };
-
-  /* ---------- C-03 본인 확인·약관 ---------- */
-  function authCheck() {
-    var all = [].every.call(document.querySelectorAll('.ag'), function (c) { return c.checked; });
-    $('agAll').checked = all;
-    $('authNext').disabled = !(S.authed && all);
-  }
-  $('doAuth').onclick = function () {
-    S.authed = true;
-    $('authResult').innerHTML = '<div class="ok-msg">✓ ' + S.name + ' 님 본인인증 완료 · 예약자 이름과 일치해요</div>';
-    authCheck();
-  };
-  $('authMismatch').onclick = function () {
-    S.authed = false;
-    $('authResult').innerHTML = '<div class="err-msg">인증한 이름(김박스)이 발렛 예약자(' + S.name + ')와 달라 진행할 수 없어요. 예약자 본인이 인증해 주세요.</div>';
-    authCheck();
-  };
-  $('agAll').onchange = function () { var v = this.checked; document.querySelectorAll('.ag').forEach(function (c) { c.checked = v; }); authCheck(); };
-  document.querySelectorAll('.ag').forEach(function (c) { c.onchange = authCheck; });
-  $('authNext').onclick = function () {
-    S.no = 'MB' + S.depDate.replace(/-/g, '') + '-' + (S.cur === 'JPY' ? '0418' : '0419');
-    S.status = 1; S.branch = ''; go('s-pay');
-  };
-
-  /* ---------- C-04 결제 ---------- */
-  var timer;
-  function renderPay() {
-    var due = new Date(Date.now() + 2 * 3600 * 1000);
-    $('payAmt').textContent = won(S.amt * RATE[S.cur] + FEE);
-    $('payDue').textContent = (due.getMonth() + 1) + '/' + due.getDate() + ' ' + String(due.getHours()).padStart(2, '0') + ':' + String(due.getMinutes()).padStart(2, '0') + '까지';
-    $('lateMsg').hidden = true; $('paid').disabled = false;
-    clearInterval(timer);
-    timer = setInterval(function () {
-      var s = Math.max(0, Math.floor((due - Date.now()) / 1000));
-      $('payTimer').textContent = '남은 시간 ' + Math.floor(s / 3600) + ':' + String(Math.floor(s % 3600 / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
-    }, 1000);
-  }
-  $('copyAcct').onclick = function () { this.textContent = '복사됐어요 ✓'; var b = this; setTimeout(function () { b.textContent = '계좌번호 복사'; }, 1500); };
-  $('paid').onclick = function () { clearInterval(timer); S.status = 2; go('s-ticket'); };
-  $('payLate').onclick = function () { clearInterval(timer); S.status = 1; S.branch = 'cancel'; $('lateMsg').hidden = false; $('paid').disabled = true; $('payTimer').textContent = '입금 마감'; };
-
-  /* ---------- C-05 수령권 ---------- */
-  function renderTicket() {
-    $('tAmt').textContent = fxStr(S.amt, S.cur);
-    $('tQr').innerHTML = qrSvg(S.no);
-    $('tInfo').innerHTML =
-      '<tr><th>신청번호</th><td>' + S.no + '</td></tr>' +
-      '<tr><th>수령 일시</th><td>' + pretty(S.depDate, minusMin(S.depTime, 120)) + ' 전후<br><span class="hint">차를 맡길 때</span></td></tr>' +
-      '<tr><th>수령 장소</th><td>김포공항 에어파크 차량 인수 장소 <span class="tag-assume">미정</span></td></tr>' +
-      '<tr><th>준비물</th><td>본인 신분증</td></tr>' +
-      '<tr><th>차량번호</th><td>' + S.car + '</td></tr>';
-  }
-  $('toHistory').onclick = function () { go('s-history'); };
-
-  /* ---------- C-06 신청 내역 ---------- */
-  var STEPS = [
-    ['입금 대기', '가상계좌 입금을 기다리고 있어요.'],
-    ['입금 완료', '환전이 확정됐어요. 수령권(QR)을 보냈어요.'],
-    ['봉투 준비', '소액권을 섞어 밀봉하고 일련번호를 붙였어요. (봉투 GV-ENV-08812)'],
-    ['기사 인계', '출국 전날 에어파크 기사에게 봉투를 넘겼어요.'],
-    ['수령 완료', '차를 맡기며 봉투를 받으셨어요.']
-  ];
-  var BRANCH = {
-    cancel: ['환전 취소', '입금 마감이 지나 환전만 취소됐어요. 발렛 예약은 유지돼요.'],
-    ret: ['반환', '봉투를 건네지 못해 머니박스로 반환해요. 자동 취소되며 수수료 2%를 뺀 금액이 환불돼요. 환불 계좌를 입력해 주세요.'],
-    acc: ['사고', '봉투 분실·훼손이 신고됐어요. 담당자가 곧 연락드려요. 전액 환불 또는 재발송으로 처리해요.']
-  };
-  function renderHistory() {
-    $('hNo').textContent = S.no || '-';
-    $('hAmt').textContent = fxStr(S.amt, S.cur);
-    var h = '';
-    STEPS.forEach(function (st, i) {
-      var n = i + 1;
-      if (S.branch && n > S.status) {
-        if (n === S.status + 1) h += '<li class="fail"><span class="dot">!</span><h5>' + BRANCH[S.branch][0] + '</h5><p>' + BRANCH[S.branch][1] + '</p></li>';
-        return;
-      }
-      var cls = n < S.status || (n === S.status && n === STEPS.length) ? 'done' : n === S.status ? 'cur' : 'todo';
-      h += '<li class="' + cls + '"><span class="dot">' + (cls === 'done' ? '✓' : n) + '</span><h5>' + st[0] + '</h5><p>' + st[1] + '</p>';
-      if (n === STEPS.length && cls === 'done') h += '<div class="proof"><div><strong>수령 서명</strong>✍️ 서명</div><div><strong>교부 사진</strong>📷 07:12</div><div><strong>봉투 번호</strong>GV-ENV-08812</div></div>';
-      h += '</li>';
-    });
-    $('steps').innerHTML = h;
-    var locked = S.status >= 4 && !S.branch;
-    $('cancelBtn').disabled = !!S.branch || S.status >= 5;
-    $('cancelBtn').style.opacity = $('cancelBtn').disabled ? .4 : 1;
-    $('cancelLock').hidden = true;
-    $('cancelBtn').onclick = function () {
-      if (locked) { $('cancelLock').hidden = false; return; }
-      S.branch = 'cancel'; renderHistory();
-    };
-    $('refundBox').hidden = !(S.branch && (S.branch !== 'cancel' || S.status >= 2));
-    $('hNext').disabled = !!S.branch || S.status >= 5;
-    $('hReturn').disabled = !!S.branch || S.status < 4 || S.status >= 5;
-    $('hAccident').disabled = !!S.branch || S.status < 3 || S.status >= 5;
-  }
-  $('hNext').onclick = function () { S.status++; renderHistory(); };
-  $('hReturn').onclick = function () { S.branch = 'ret'; renderHistory(); };
-  $('hAccident').onclick = function () { S.branch = 'acc'; renderHistory(); };
-  $('hReset').onclick = function () { S.status = 2; S.branch = ''; renderHistory(); };
-
-  /* ---------- C-01A 에어파크 ---------- */
-  $('pkDate').min = ymd(new Date()); $('pkDate').value = ymd(addDays(8));
-  function pkRate() { var c = DEST[$('pkDest').value][1]; $('pkRate').textContent = '예상 환율 ' + rateStr(c); }
-  $('pkDest').onchange = pkRate; pkRate();
-  $('pkGo').onclick = function () {
-    if (!$('pkAdd').checked) { $('pkOnly').hidden = false; return; }
-    $('pkOnly').hidden = true;
-    S.entry = 'airpark'; S.method = 'valet'; S.airport = 'GMP';
-    S.depDate = $('pkDate').value; S.depTime = $('pkTime').value; S.dest = $('pkDest').value; S.car = $('pkCar').value;
-    S.ref = 'AP-' + S.depDate.replace(/-/g, '') + '-0522'; S.amt = 0; S.curTouched = false;
-    showTab('flow'); go('s-apply');
-  };
-
-  /* ---------- 기사 화면 ---------- */
-  var JOBS = [
-    { t: '06:40', name: '박*연', car: '12가 3456', env: 'GV-ENV-08810', amt: '50,000 JPY', st: 'ok' },
-    { t: '07:10', name: '김*니', car: '34나 5678', env: 'GV-ENV-08812', amt: '100,000 JPY', st: 'wait' },
-    { t: '08:30', name: '이*호', car: '56다 7890', env: 'GV-ENV-08815', amt: '3,000 CNY', st: 'wait' }
-  ];
-  var ST_TXT = { ok: '수령 완료', wait: '교부 대기', no: '교부 실패' };
-  var handed = false, cj = 1, dstep = 1, reason = '';
-  function dGo(id) { document.querySelectorAll('.dv').forEach(function (v) { v.classList.toggle('on', v.id === id); }); }
-  document.querySelectorAll('[data-d]').forEach(function (b) { b.onclick = function () { if (b.dataset.d === 'd1') renderD1(); dGo(b.dataset.d); }; });
-  function renderD1() {
-    $('dList').innerHTML = JOBS.map(function (j, i) {
-      return '<button class="ditem" data-j="' + i + '"><span><span class="t">' + j.t + '</span><br><span class="m">' + j.name + ' · ' + j.car + '<br>' + j.env + ' · ' + j.amt + '</span></span><span class="st ' + j.st + '">' + (handed || j.st !== 'wait' ? ST_TXT[j.st] : '인계 전') + '</span></button>';
-    }).join('');
-    document.querySelectorAll('.ditem').forEach(function (b) { b.onclick = function () { openD3(+b.dataset.j); }; });
-  }
-  $('toD2').onclick = function () {
-    $('d2List').innerHTML = JOBS.map(function (j) { return '<div><span>' + j.env + '</span><span class="st wait">미확인</span></div>'; }).join('');
-    $('d2Msg').innerHTML = ''; $('d2Sign').disabled = true; dGo('d2');
-  };
-  $('d2Scan').onclick = function () {
-    $('d2List').innerHTML = JOBS.map(function (j) { return '<div><span>' + j.env + '</span><span class="st ok">✓ 일치</span></div>'; }).join('');
-    $('d2Msg').innerHTML = '<div class="ok-msg">3개 모두 목록과 일치해요</div>'; $('d2Sign').disabled = false;
-  };
-  $('d2Miss').onclick = function () {
-    $('d2List').innerHTML = JOBS.map(function (j, i) { return '<div><span>' + j.env + '</span><span class="st ' + (i === 2 ? 'no">✕ 없음' : 'ok">✓ 일치') + '</span></div>'; }).join('');
-    $('d2Msg').innerHTML = '<div class="err-msg">1개가 비어요. 인계를 거부하고 머니박스에 알렸어요.</div>'; $('d2Sign').disabled = true;
-  };
-  $('d2Sign').onclick = function () { handed = true; renderD1(); dGo('d1'); };
-  function openD3(i) {
-    cj = i; dstep = 1; var j = JOBS[i];
-    $('d3Title').textContent = j.t + ' · ' + j.car;
-    $('d3Who').innerHTML = '-';
-    $('d3Env').textContent = '건넬 봉투: ' + j.env + ' (' + j.amt + ')';
-    $('d3Msg').innerHTML = j.st === 'ok' ? '<div class="ok-msg">이미 수령 완료된 건이에요</div>' : !handed ? '<div class="err-msg">봉투 인계 확인을 먼저 해주세요</div>' : '';
-    if (j.st === 'ok' || !handed) dstep = 0;
-    renderD3(); dGo('d3');
-  }
-  function renderD3() {
-    for (var k = 1; k <= 4; k++) {
-      $('ds' + k).classList.toggle('done', k < dstep || dstep === 5);
-      $('ds' + k).classList.toggle('cur', k === dstep);
-      $('b' + k).disabled = k !== dstep;
-    }
-    $('b3Bad').disabled = dstep !== 3;
-  }
-  $('b1').onclick = function () { var j = JOBS[cj]; $('d3Who').innerHTML = '<b style="font-size:18px;color:var(--ink)">' + j.name.replace('*', j.name === '김*니' ? '머' : '수') + '</b> · 1985.03.14<br>신분증 사진·이름·생년월일을 대조하세요'; dstep = 2; renderD3(); };
-  $('b2').onclick = function () { dstep = 3; renderD3(); };
-  $('b3').onclick = function () { $('d3Env').innerHTML = '✓ ' + JOBS[cj].env + ' 일치'; dstep = 4; renderD3(); };
-  $('b3Bad').onclick = function () { $('d3Msg').innerHTML = '<div class="err-msg">봉투 번호가 달라요. 교부를 중단하세요.</div>'; dstep = 0; renderD3(); };
-  $('b4').onclick = function () { dstep = 5; renderD3(); JOBS[cj].st = 'ok'; $('d3Msg').innerHTML = '<div class="ok-msg">교부 완료 · 환전장부에 기록됐어요</div>'; };
-  $('toD4').onclick = function () {
-    reason = ''; document.querySelectorAll('#reasons button').forEach(function (b) { b.classList.remove('on'); });
-    var d = addDays(1); $('d4Due').textContent = (d.getMonth() + 1) + '/' + d.getDate() + ' 18:00까지';
-    $('d4Msg').innerHTML = ''; $('d4Send').disabled = true; dGo('d4');
-  };
-  document.querySelectorAll('#reasons button').forEach(function (b) {
-    b.onclick = function () {
-      reason = b.dataset.r;
-      document.querySelectorAll('#reasons button').forEach(function (x) { x.classList.toggle('on', x === b); });
-      $('d4Msg').innerHTML = reason === '봉투 분실' ? '<div class="err-msg">분실은 머니박스에 바로 전화 연결돼요 📞</div>' : '';
-      $('d4Send').disabled = false;
-    };
-  });
-  $('d4Send').onclick = function () { JOBS[cj].st = 'no'; renderD1(); dGo('d1'); };
-
-  /* ---------- 알림톡 ---------- */
-  function renderTalks() {
-    var amt = S.amt ? fxStr(S.amt, S.cur) : '100,000 JPY';
-    var dep = S.depDate ? pretty(S.depDate, S.depTime) : '11월 7일 (토) 09:00';
-    var T = [
-      ['신청 직후', '입금 안내', '환전 신청이 접수됐어요.<br>· 가상계좌: 신한 562-910-284417<br>· 입금 마감: 신청 후 2시간<br>마감이 지나면 환전만 취소되고 발렛 예약은 유지돼요.', '입금 안내 보기'],
-      ['입금 확인', '환전 확정', '<b>' + amt + '</b> 환전이 확정됐어요.<br>· 수령: ' + dep + ' 출국, 차를 맡길 때<br>· 장소: 김포공항 에어파크 차량 인수 장소', '수령권(QR) 보기'],
-      ['출국 전날', '내일 출국 안내', '내일 차를 맡길 때 외화 봉투를 받으실 수 있어요.<br><b>본인 신분증</b>을 꼭 챙겨 주세요. 신청자 본인만 받을 수 있어요.', '수령권(QR) 보기'],
-      ['수령 완료', '수령 완료', '<b>' + amt + '</b>을 받으셨어요.<br>· 수령 시각: 07:12<br>즐거운 여행 되세요!', '내역 보기'],
-      ['취소·반환', '환불 안내', '봉투를 건네지 못해 반환 처리됐어요.<br>· 사유: 노쇼<br>취소 수수료 2%를 뺀 금액이 반환 확인 후 3영업일 안에 환불돼요. 환불 계좌를 입력해 주세요.', '환불 계좌 입력']
-    ];
-    $('talks').innerHTML = T.map(function (t) {
-      return '<div class="talk"><div class="from">' + t[0] + '</div><div class="bubble"><div class="bh">[머니박스] ' + t[1] + '</div><div class="bb">' + t[2] + '</div><a class="bt" href="#" onclick="return false">' + t[3] + '</a></div></div>';
-    }).join('');
-  }
-
-  /* ---------- QR 모양 (실제 QR 아님) ---------- */
-  function qrSvg(seed) {
-    var n = 21, cell = 6, h = 0, out = '';
-    for (var i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
-    h = h || 7;
-    function rnd() { h ^= h << 13; h >>>= 0; h ^= h >> 17; h ^= h << 5; h >>>= 0; return h / 4294967296; }
-    function finder(x, y) {
-      return '<rect x="' + x * cell + '" y="' + y * cell + '" width="' + 7 * cell + '" height="' + 7 * cell + '" fill="#111"/>' +
-        '<rect x="' + (x + 1) * cell + '" y="' + (y + 1) * cell + '" width="' + 5 * cell + '" height="' + 5 * cell + '" fill="#fff"/>' +
-        '<rect x="' + (x + 2) * cell + '" y="' + (y + 2) * cell + '" width="' + 3 * cell + '" height="' + 3 * cell + '" fill="#111"/>';
-    }
-    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
-      var inF = (x < 8 && y < 8) || (x > n - 9 && y < 8) || (x < 8 && y > n - 9);
-      if (!inF && rnd() > 0.52) out += '<rect x="' + x * cell + '" y="' + y * cell + '" width="' + cell + '" height="' + cell + '" fill="#111"/>';
-    }
-    var s = n * cell;
-    return '<svg width="170" height="170" viewBox="-6 -6 ' + (s + 12) + ' ' + (s + 12) + '" role="img" aria-label="수령 QR 예시">' + out + finder(0, 0) + finder(n - 7, 0) + finder(0, n - 7) + '</svg>';
-  }
-
-  /* ---------- 시작 ---------- */
-  setMode('today'); onAirport();
-  var q = new URLSearchParams(location.search);
-  if (q.get('ref')) {
-    $('pkDate').value = q.get('date') || $('pkDate').value;
-    $('pkGo').onclick();
-  }
-})();
-</script>
+</div>
 </body>
 </html>
