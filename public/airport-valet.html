@@ -2,237 +2,405 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="m-box.com 공항수령에 이지백 에어파크 발렛 수령(김포 전용·인천 선택)을 붙인 화면별 와이어프레임">
 <title>발렛 수령 플로우</title>
-<meta name="description" content="m-box.com 공항수령에 김포 발렛 기사 수령을 붙이는 화면 흐름 확인용 와이어프레임">
+<meta name="claude:viewport-fit-sides" content="cover">
 <style>
-  :root { --ink: #222; --muted: #777; --line: #bbb; --box: #fff; --fill: #eee; --bg: #f6f6f6; --hl: #fff6cc; }
+  /* 회색 로우파이 와이어프레임: 화면(폰 프레임) + 번호 주석, 흐름 순서대로 가로 배치 */
+  :root { --ink: #24272c; --muted: #737880; --line: #b7bbc2; --frame: #ffffff; --fill: #e9ebee; --bg: #f4f5f6; --hl: #fff2b8; --hl-line: #dcc76a; --red: #b0353a; --dot: #24272c; --dot-fg: #ffffff; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink: #e5e7ea; --muted: #9ba0a8; --line: #4b5058; --frame: #1c1f23; --fill: #2b2f35; --bg: #131517; --hl: #4a4120; --hl-line: #7b6a2b; --red: #f08a8e; --dot: #e5e7ea; --dot-fg: #131517; color-scheme: dark; } }
+  :root[data-theme="dark"] { --ink: #e5e7ea; --muted: #9ba0a8; --line: #4b5058; --frame: #1c1f23; --fill: #2b2f35; --bg: #131517; --hl: #4a4120; --hl-line: #7b6a2b; --red: #f08a8e; --dot: #e5e7ea; --dot-fg: #131517; color-scheme: dark; }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 system-ui, -apple-system, 'Noto Sans KR', sans-serif; }
-  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
-  h1 { font-size: 22px; margin: 0 0 4px; }
-  h2 { font-size: 17px; margin: 40px 0 6px; padding-top: 16px; border-top: 2px solid var(--ink); }
-  .lead { color: var(--muted); margin: 0 0 12px; }
-  .summary { background: var(--box); border: 1px solid var(--line); padding: 12px 16px; }
-  .summary ol { margin: 0; padding-left: 20px; }
-
-  .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; margin-top: 12px; }
-  .arr { align-self: center; font-size: 22px; color: var(--muted); }
-  .scr { width: 230px; background: var(--box); border: 1.5px solid var(--ink); display: flex; flex-direction: column; }
-  .scr .hd { border-bottom: 1.5px solid var(--ink); padding: 6px 10px; font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; gap: 6px; }
-  .scr .hd small { font-weight: 400; color: var(--muted); }
-  .scr .bd { padding: 10px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-  .scr.ext { border-style: dashed; }
-  .scr.new .hd { background: var(--hl); }
-  .in { border: 1px solid var(--line); padding: 5px 8px; font-size: 12px; color: var(--muted); }
-  .btn { border: 1.5px solid var(--ink); padding: 6px; text-align: center; font-size: 12px; font-weight: 700; margin-top: auto; }
-  .txt { font-size: 12px; }
-  .opt { border: 1px solid var(--line); padding: 6px 8px; font-size: 12px; }
-  .opt.on { border: 2px solid var(--ink); background: var(--hl); }
-  .ex { font-size: 11px; color: #a33; border-top: 1px dotted var(--line); padding-top: 6px; }
-  .foot { font-size: 11px; color: var(--muted); text-align: center; border-top: 1px dotted var(--line); padding-top: 4px; }
-  .qr { width: 70px; height: 70px; margin: 4px auto; background: repeating-linear-gradient(45deg, #ccc 0 4px, #fff 4px 8px); border: 1px solid var(--line); }
-
-  .branch { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
-  .lane { border: 1px solid var(--line); background: #fafafa; padding: 10px; }
-  .lane > b { font-size: 13px; }
-
-  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 8px; }
-  .legend span::before { content: ""; display: inline-block; width: 14px; height: 10px; margin-right: 5px; border: 1.5px solid var(--ink); vertical-align: -1px; }
+  body { background: var(--bg); color: var(--ink); font: 14px/1.5 system-ui, -apple-system, 'Noto Sans KR', sans-serif; }
+  .wrap { max-width: 1300px; margin: 0 auto; padding-block: 24px 60px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  h1 { font-size: 22px; margin: 0 0 4px; text-wrap: balance; }
+  h2 { font-size: 17px; margin: 44px 0 4px; padding-top: 14px; border-top: 2px solid var(--ink); text-wrap: balance; }
+  .lead { color: var(--muted); margin: 0 0 12px; max-width: 75ch; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+  .legend span::before { content: ""; display: inline-block; width: 14px; height: 10px; margin-right: 5px; border: 1.5px solid var(--ink); vertical-align: -1px; background: var(--frame); }
   .legend .l-new::before { background: var(--hl); }
   .legend .l-ext::before { border-style: dashed; }
 
-  table { width: 100%; border-collapse: collapse; background: var(--box); margin-top: 10px; font-size: 13px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; margin-top: 14px; }
+  .arr { align-self: center; font-size: 22px; color: var(--muted); padding-top: 60px; }
+  .screen { width: 216px; display: flex; flex-direction: column; gap: 8px; }
+  .cap { font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; gap: 6px; }
+  .cap small { font-weight: 400; color: var(--muted); }
+  .frame { background: var(--frame); border: 1.5px solid var(--ink); border-radius: 18px; overflow: hidden; min-height: 470px; display: flex; flex-direction: column; }
+  .frame.ext { border-style: dashed; }
+  .frame.reuse { opacity: .7; }
+  .top { border-bottom: 1px solid var(--line); padding: 8px 12px; font-size: 11px; font-weight: 700; display: flex; justify-content: space-between; }
+  .top.new { background: var(--hl); }
+  .body { padding: 12px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .t { font-size: 15px; font-weight: 700; }
+  .s { font-size: 11px; color: var(--muted); }
+  .f { border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; font-size: 11px; color: var(--muted); position: relative; }
+  .f b { color: var(--ink); font-weight: 600; }
+  .blk { background: var(--fill); border-radius: 6px; padding: 8px 9px; font-size: 11px; position: relative; }
+  .blk.hl { background: var(--hl); border: 1.5px solid var(--hl-line); }
+  .kv { display: flex; justify-content: space-between; font-size: 11px; }
+  .kv.tot { font-weight: 800; font-size: 12px; border-top: 1px solid var(--line); padding-top: 4px; }
+  .seg { display: flex; gap: 4px; position: relative; }
+  .seg span:not(.n) { flex: 1; text-align: center; border: 1px solid var(--line); border-radius: 999px; font-size: 10px; padding: 3px; }
+  .seg span.on { background: var(--ink); color: var(--frame); border-color: var(--ink); }
+  .btn { border: 1.5px solid var(--ink); border-radius: 8px; text-align: center; font-size: 12px; font-weight: 700; padding: 8px; background: var(--ink); color: var(--frame); position: relative; }
+  .btn.sec { background: var(--frame); color: var(--ink); }
+  .push { margin-top: auto; display: flex; flex-direction: column; gap: 6px; }
+  .foot { font-size: 10px; color: var(--muted); text-align: center; border-top: 1px dashed var(--line); padding-top: 5px; position: relative; }
+  .qr { width: 96px; height: 96px; margin: 2px auto; background: repeating-linear-gradient(45deg, var(--line) 0 5px, var(--frame) 5px 10px); border: 1px solid var(--line); position: relative; }
+  .ck { font-size: 11px; display: flex; gap: 6px; align-items: center; }
+  .ck::before { content: ""; width: 11px; height: 11px; border: 1px solid var(--ink); border-radius: 2px; flex: none; }
+  .tl { display: flex; flex-direction: column; gap: 4px; font-size: 11px; position: relative; }
+  .tl span::before { content: "○ "; }
+  .tl span.d::before { content: "● "; }
+  .err { font-size: 10px; color: var(--red); }
+
+  /* 주석 번호 */
+  .n { position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%; background: var(--dot); color: var(--dot-fg); font-size: 10px; font-weight: 800; display: grid; place-items: center; }
+  .cap .n, .notes .n { position: static; display: inline-grid; flex: none; }
+  .notes { list-style: none; margin: 0; padding: 0; font-size: 12px; display: flex; flex-direction: column; gap: 4px; }
+  .notes li { display: flex; gap: 6px; align-items: flex-start; }
+  .notes li .n { margin-top: 1px; }
+
+  .grid-tbl { overflow-x: auto; margin-top: 12px; }
+  table { min-width: 560px; width: 100%; border-collapse: collapse; background: var(--frame); font-size: 13px; }
   th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
   th { background: var(--fill); }
-  .q { background: var(--hl); border: 1px solid #e0cf7a; padding: 10px 14px; margin-top: 12px; }
+  .q { background: var(--hl); border: 1px solid var(--hl-line); padding: 10px 14px; margin-top: 16px; }
   .q ul { margin: 4px 0 0; padding-left: 18px; }
-  @media (max-width: 560px) { .scr { width: 100%; } .arr { width: 100%; text-align: center; transform: rotate(90deg); } }
+  @media (max-width: 600px) { .screen { width: 100%; } .arr { width: 100%; text-align: center; padding-top: 0; transform: rotate(90deg); } }
 </style>
 </head>
 <body>
+
+
 <div class="wrap">
+  <h1>발렛 수령 와이어프레임</h1>
+  <p class="lead">기존 공항수령은 그대로 두고, 이지백 에어파크 발렛 수령(김포 전용 · 인천 선택)을 별도 입구로 붙인 화면들이에요. 흐름 확인용이라 디자인·문구는 확정이 아니에요. 검은 동그라미 숫자는 각 화면 아래 설명과 짝이에요.</p>
+  <div class="legend"><span>기존 화면</span><span class="l-new">새 화면 / 새로 추가되는 부분</span><span class="l-ext">이지백(에어파크) 화면</span></div>
 
-  <h1>발렛 수령 · 화면 흐름 (와이어프레임)</h1>
-  <p class="lead">m-box.com "공항 수령"에 이지백 에어파크 발렛 수령(김포·인천)을 붙였을 때의 화면 순서만 확인하는 용도예요. 디자인·문구는 확정이 아니에요.</p>
-  <div class="summary">
-    <ol>
-      <li><b>기존 공항수령 흐름은 그대로</b>예요. 공항 목록도 지금처럼 인천 T1 · 제주</li>
-      <li>공항수령 페이지에 <b>"발렛 맡기며 받기"</b> 입구를 따로 하나 둬요 (김포 · 인천)</li>
-      <li><b>김포</b>는 직원 수령이 없어서 이 입구로만 신청해요</li>
-      <li><b>인천</b>은 기존대로 직원에게 받거나, 이 입구로 발렛 수령을 고를 수 있어요. 기존으로 신청한 고객도 완료 화면에서 발렛으로 바꿀 수 있어요</li>
-      <li>본인인증·결제 화면은 기존 것을 그대로 써요. 수수료도 2,500원으로 같아요</li>
-    </ol>
-  </div>
-  <div class="legend"><span>기존 화면 (변경 없음)</span><span class="l-new">새로 추가되는 화면</span><span class="l-ext">이지백(에어파크) 화면</span></div>
-
-  <!-- 0 -->
-  <h2>0. 공항수령 페이지 입구</h2>
-  <div class="flow">
-    <div class="scr">
-      <div class="hd">공항 수령 신청 <small>기존</small></div>
-      <div class="bd">
-        <div class="in">당일 / 예약 수령</div>
-        <div class="in">공항: 인천 T1 · 제주 (그대로)</div>
-        <div class="in">날짜 · 시각 · 통화 · 금액</div>
-        <div class="btn">신청하기</div>
-        <div class="ex">→ 1번 흐름</div>
+  <!-- ================= 1 ================= -->
+  <h2>1. 공항수령 페이지 · 입구</h2>
+  <p class="lead">기존 신청 폼은 그대로. 아래에 발렛 입구 카드 하나만 추가.</p>
+  <div class="row">
+    <div class="screen">
+      <div class="cap">P-01 공항 수령 <small>기존 + 카드 추가</small></div>
+      <div class="frame">
+        <div class="top"><span>MONEY BOX</span><span>공항 수령</span></div>
+        <div class="body">
+          <div class="t">지금 신청해도 30분 안에<br>공항에서 바로 수령</div>
+          <div class="seg"><span class="on">당일 수령</span><span>예약 수령</span></div>
+          <div class="f">공항 <b>인천 T1 · 제주</b><span class="n">1</span></div>
+          <div class="f">날짜 · 시각</div>
+          <div class="f">통화 · 금액</div>
+          <div class="btn">신청하기</div>
+          <div class="blk hl">
+            <b>🚗 차로 출국하세요?</b><br>공항 발렛에 차 맡길 때 외화 봉투 받기<br><span class="s">김포 · 인천 | 발렛 운영: 이지백</span>
+            <span class="n">2</span>
+          </div>
+          <div class="btn sec">발렛 수령 신청</div>
+        </div>
       </div>
-    </div>
-    <div class="scr new">
-      <div class="hd">발렛 맡기며 받기 <small>추가</small></div>
-      <div class="bd">
-        <div class="txt">🚗 차로 출국하세요?<br>공항 발렛에 차를 맡길 때 외화 봉투를 받아요</div>
-        <div class="txt"><small>김포 · 인천 | 발렛 운영: 이지백</small></div>
-        <div class="btn">발렛 수령 신청</div>
-        <div class="ex">→ 2번 흐름</div>
-      </div>
+      <ol class="notes">
+        <li><span class="n">1</span>공항 목록은 지금 그대로. 김포는 넣지 않음</li>
+        <li><span class="n">2</span>추가 카드. 누르면 V-01 발렛 정보로 이동</li>
+      </ol>
     </div>
   </div>
 
-  <!-- 1 -->
-  <h2>1. 기존 공항수령 (그대로) · 인천만 완료 화면에 옵션 추가</h2>
-  <div class="flow">
-    <div class="scr"><div class="hd">공항 수령 신청 <small>기존</small></div><div class="bd"><div class="txt">인천 T1 · 제주</div><div class="btn">신청하기</div></div></div>
-    <div class="arr">→</div>
-    <div class="scr"><div class="hd">본인인증 <small>기존</small></div><div class="bd"><div class="in">휴대폰 인증</div></div></div>
-    <div class="arr">→</div>
-    <div class="scr"><div class="hd">결제 <small>기존</small></div><div class="bd"><div class="in">결제 (배송료 2,500원 포함)</div></div></div>
-    <div class="arr">→</div>
-    <div class="scr">
-      <div class="hd">신청 완료 <small>기존</small></div>
-      <div class="bd">
-        <div class="txt">수령 방법: 공항에서 직원에게</div>
-        <div class="opt on">🚗 차로 가세요? <b>발렛에 맡기며 받기로 바꾸기</b><br><small>추가 비용 없음</small></div>
-        <div class="ex">노란 박스만 추가 · 인천 신청일 때만 보임 · 신청 내역에도 같은 버튼</div>
+  <!-- ================= 2 ================= -->
+  <h2>2. 발렛 수령 신청 (김포 · 인천)</h2>
+  <div class="row">
+    <div class="screen">
+      <div class="cap">V-01 발렛 정보 <small>새 화면</small></div>
+      <div class="frame">
+        <div class="top new"><span>‹ 발렛 수령 신청</span><span>1/4</span></div>
+        <div class="body">
+          <div class="t">어느 공항에서 차를 맡기세요?</div>
+          <div class="seg"><span class="on">김포 국제선</span><span>인천</span><span class="n">1</span></div>
+          <div class="f">출국일</div>
+          <div class="f">출국 시각</div>
+          <div class="f">목적지</div>
+          <div class="f">차량번호</div>
+          <div class="blk">차량 인수: 출국 2시간 전 전후<br>장소: (미정)<span class="n">2</span></div>
+          <div class="push">
+            <div class="err">만차 시 → 인천: 직원 수령 안내 / 김포: 지점 환전 예약 안내<span class="n" style="position:relative;top:0;right:0;display:inline-grid;margin-left:4px">3</span></div>
+            <div class="btn">다음</div>
+            <div class="foot">발렛 운영: 이지백(에어파크)</div>
+          </div>
+        </div>
       </div>
+      <ol class="notes">
+        <li><span class="n">1</span>김포 · 인천 중 선택</li>
+        <li><span class="n">2</span>인수 장소는 이지백과 확인 후 문구 확정</li>
+        <li><span class="n">3</span>발렛 예약 불가 시 대안 안내</li>
+      </ol>
     </div>
-  </div>
-  <div class="branch">
-    <div class="lane">
-      <b>그대로 두면</b> → 기존처럼 체크인 카운터에서 직원에게 수령 (끝)
+
+    <div class="arr">→</div>
+
+    <div class="screen">
+      <div class="cap">V-02 금액 · 동의 <small>새 화면</small></div>
+      <div class="frame">
+        <div class="top new"><span>‹ 발렛 수령 신청</span><span>2/4</span></div>
+        <div class="body">
+          <div class="blk">오사카 간사이행 · 11/7 09:00<br>12가 3456</div>
+          <div class="s">✓ 오사카행이라 JPY를 추천해요<span class="n" style="position:relative;top:0;right:0;display:inline-grid;margin-left:4px">1</span></div>
+          <div class="f"><b>JPY</b> · 금액 입력</div>
+          <div class="s" style="text-align:right">최대 하루 USD 4,000 상당</div>
+          <div class="kv"><span>적용 환율</span><span>100엔 = ○○○원</span></div>
+          <div class="kv"><span>원화 환산</span><span>○○○,○○○원</span></div>
+          <div class="kv"><span>전달 수수료</span><span>2,500원</span></div>
+          <div class="kv tot"><span>총 결제액</span><span>○○○,○○○원</span></div>
+          <div class="ck">이지백 위탁 교부 동의</div>
+          <div class="ck">개인정보 제3자 제공 (이지백)<span class="n" style="position:relative;top:0;right:0;display:inline-grid;margin-left:4px">2</span></div>
+          <div class="push"><div class="btn">다음</div></div>
+        </div>
+      </div>
+      <ol class="notes">
+        <li><span class="n">1</span>목적지로 통화 추천, 바꿀 수 있음</li>
+        <li><span class="n">2</span>발렛 수령에만 있는 동의 2개. 나머지 약관은 기존 결제 단계 그대로</li>
+      </ol>
     </div>
-    <div class="lane">
-      <b>"발렛으로 바꾸기" 선택</b> → 2번의 <b>A 발렛 정보</b>와 <b>D 수령권</b>만 거치면 끝 (금액·결제는 이미 끝남)
+
+    <div class="arr">→</div>
+
+    <div class="screen">
+      <div class="cap">본인인증 · 결제 <small>기존 화면 재사용</small></div>
+      <div class="frame reuse">
+        <div class="top"><span>‹ 본인인증 · 결제</span><span>3/4</span></div>
+        <div class="body">
+          <div class="f">휴대폰 본인인증</div>
+          <div class="f">결제 수단</div>
+          <div class="blk">기존 공항수령과 같은 화면</div>
+          <div class="push"><div class="btn">결제하기</div></div>
+        </div>
+      </div>
+      <ol class="notes"><li>새로 만들지 않음</li></ol>
+    </div>
+
+    <div class="arr">→</div>
+
+    <div class="screen">
+      <div class="cap">V-03 수령권 <small>새 화면</small></div>
+      <div class="frame">
+        <div class="top new"><span>수령권</span><span>4/4</span></div>
+        <div class="body">
+          <div class="t" style="text-align:center">100,000 JPY</div>
+          <div class="qr"><span class="n">1</span></div>
+          <div class="s" style="text-align:center">차 맡길 때 이 화면 + 신분증</div>
+          <div class="kv"><span>수령 방법</span><span><b>발렛 기사에게</b></span></div>
+          <div class="kv"><span>일시</span><span>11/7 (토) 07:00 전후</span></div>
+          <div class="kv"><span>장소</span><span>김포 에어파크 (미정)</span></div>
+          <div class="kv"><span>준비물</span><span>본인 신분증</span></div>
+          <div class="push"><div class="btn sec">신청 내역 보기</div><div class="foot">알림톡에도 같은 QR<span class="n">2</span></div></div>
+        </div>
+      </div>
+      <ol class="notes">
+        <li><span class="n">1</span>기사가 스캔하는 QR</li>
+        <li><span class="n">2</span>알림톡 링크로도 열림</li>
+      </ol>
+    </div>
+
+    <div class="arr">→</div>
+
+    <div class="screen">
+      <div class="cap">V-04 신청 내역 <small>기존 + 상태 추가</small></div>
+      <div class="frame">
+        <div class="top"><span>‹ 신청 내역</span><span></span></div>
+        <div class="body">
+          <div class="t">김포 발렛 수령 · 100,000 JPY</div>
+          <div class="tl">
+            <span class="d">결제 완료</span>
+            <span class="d">봉투 준비</span>
+            <span>기사 인계</span>
+            <span>수령 완료</span>
+            <span class="n">1</span>
+          </div>
+          <div class="btn sec">수령권 보기</div>
+          <div class="push">
+            <div class="btn sec">취소</div>
+            <div class="err">기사 인계 후에는 앱 취소 불가 → 고객센터<span class="n" style="position:relative;top:0;right:0;display:inline-grid;margin-left:4px">2</span></div>
+          </div>
+        </div>
+      </div>
+      <ol class="notes">
+        <li><span class="n">1</span>발렛 건만 상태 단계 추가</li>
+        <li><span class="n">2</span>취소 기준은 기존 공항수령과 같음 (48시간 전 무료)</li>
+      </ol>
     </div>
   </div>
 
-  <!-- 2 -->
-  <h2>2. 발렛 맡기며 받기 (김포 · 인천)</h2>
-  <div class="flow">
-    <div class="scr new">
-      <div class="hd">A. 발렛 정보 <small>추가</small></div>
-      <div class="bd">
-        <div class="in">공항: 김포 국제선 / 인천</div>
-        <div class="in">출국일 · 출국 시각</div>
-        <div class="in">목적지</div>
-        <div class="in">차량번호</div>
-        <div class="txt">차량 인수 장소: (미정)</div>
-        <div class="btn">다음</div>
-        <div class="ex">만차 → 인천은 직원 수령 안내, 김포는 지점 환전 예약 안내</div>
-        <div class="foot">발렛 운영: 이지백</div>
+  <!-- ================= 3 ================= -->
+  <h2>3. 인천 기존 신청 → 발렛으로 바꾸기</h2>
+  <p class="lead">기존 흐름으로 인천 신청을 끝낸 고객에게만 보이는 옵션. 결제는 이미 끝나서 추가 비용 없음.</p>
+  <div class="row">
+    <div class="screen">
+      <div class="cap">신청 완료 <small>기존 + 박스 추가</small></div>
+      <div class="frame">
+        <div class="top"><span>신청 완료</span><span></span></div>
+        <div class="body">
+          <div class="t" style="text-align:center">✓ 신청이 완료됐어요</div>
+          <div class="kv"><span>신청번호</span><span>MB○○○○</span></div>
+          <div class="kv"><span>공항</span><span>인천 T1</span></div>
+          <div class="kv"><span>수령 방법</span><span>직원에게</span></div>
+          <div class="blk hl">🚗 차로 가세요?<br><b>발렛에 맡기며 받기로 바꾸기</b><br><span class="s">추가 비용 없음</span><span class="n">1</span></div>
+          <div class="push"><div class="btn sec">신청 내역 보기</div></div>
+        </div>
       </div>
+      <ol class="notes"><li><span class="n">1</span>인천 신청일 때만 보임. 신청 내역에도 같은 버튼</li></ol>
     </div>
     <div class="arr">→</div>
-    <div class="scr new">
-      <div class="hd">B. 금액 <small>추가</small></div>
-      <div class="bd">
-        <div class="in">통화 · 금액 (목적지 기준 추천)</div>
-        <div class="txt">적용 환율<br>원화 환산액<br>전달 수수료 2,500원 (별도 줄)<br><b>총 결제액</b></div>
-        <div class="in">☐ 이지백 위탁 교부 · 개인정보 제3자 제공 동의</div>
-        <div class="btn">다음</div>
+    <div class="screen">
+      <div class="cap">V-01 발렛 정보 <small>공항 · 날짜 채워짐</small></div>
+      <div class="frame">
+        <div class="top new"><span>‹ 발렛으로 바꾸기</span><span></span></div>
+        <div class="body">
+          <div class="blk">인천 · 11/7 (토) <span class="s">신청에서 가져옴</span></div>
+          <div class="f">출국 시각</div>
+          <div class="f">목적지</div>
+          <div class="f">차량번호</div>
+          <div class="ck">이지백 위탁 교부 동의</div>
+          <div class="ck">개인정보 제3자 제공 (이지백)</div>
+          <div class="push"><div class="btn">발렛으로 바꾸기</div><div class="foot">발렛 운영: 이지백(에어파크)</div></div>
+        </div>
       </div>
+      <ol class="notes"><li>금액·결제 단계 없이 바로 V-03 수령권</li></ol>
     </div>
     <div class="arr">→</div>
-    <div class="scr"><div class="hd">C. 본인인증 → 결제 <small>기존 재사용</small></div><div class="bd"><div class="txt">기존 공항수령과 같은 화면</div></div></div>
-    <div class="arr">→</div>
-    <div class="scr new">
-      <div class="hd">D. 수령권 <small>추가</small></div>
-      <div class="bd">
-        <div class="qr"></div>
-        <div class="txt">수령 방법: <b>발렛 기사에게</b><br>금액 · 수령 일시 · 장소<br>준비물: 신분증</div>
-        <div class="foot">알림톡에도 같은 QR</div>
-      </div>
-    </div>
-    <div class="arr">→</div>
-    <div class="scr">
-      <div class="hd">신청 내역 <small>기존 + 상태 추가</small></div>
-      <div class="bd">
-        <div class="txt">봉투 준비 → 기사 인계 → 수령 완료</div>
-        <div class="in">[취소]</div>
-        <div class="ex">기사 인계 후 → 앱 취소 불가, 고객센터</div>
+    <div class="screen">
+      <div class="cap">V-03 수령권 <small>2번과 같음</small></div>
+      <div class="frame">
+        <div class="top new"><span>수령권</span><span></span></div>
+        <div class="body"><div class="qr"></div><div class="kv"><span>수령 방법</span><span><b>발렛 기사에게</b></span></div><div class="blk">발렛 취소하면 다시 직원 수령으로</div></div>
       </div>
     </div>
   </div>
 
-  <!-- 3 -->
-  <h2>3. 이지백 에어파크에서 시작</h2>
-  <p class="lead">발렛을 먼저 예약하던 고객. 체크하면 2번의 <b>B 금액</b>부터 진행 (A 발렛 정보는 자동으로 채워짐).</p>
-  <div class="flow">
-    <div class="scr ext">
-      <div class="hd">에어파크 발렛 예약 <small>이지백</small></div>
-      <div class="bd">
-        <div class="in">공항(김포/인천) · 출국일 · 목적지 · 차량번호</div>
-        <div class="opt on">☑ 환전 봉투 추가 (머니박스)<br><small>예상 환율 표시</small></div>
-        <div class="btn">발렛 예약하기</div>
-        <div class="ex">체크 안 하면 발렛만 예약</div>
+  <!-- ================= 4 ================= -->
+  <h2>4. 에어파크에서 시작 (이지백 화면)</h2>
+  <div class="row">
+    <div class="screen">
+      <div class="cap">E-01 에어파크 발렛 예약 <small>이지백</small></div>
+      <div class="frame ext">
+        <div class="top"><span>AirPark</span><span>by 이지백</span></div>
+        <div class="body">
+          <div class="t">발렛 예약</div>
+          <div class="seg"><span class="on">김포</span><span>인천</span></div>
+          <div class="f">출국일 · 시각</div>
+          <div class="f">목적지</div>
+          <div class="f">차량번호</div>
+          <div class="blk hl"><span class="ck"><b>환전 봉투 추가</b></span><span class="s">머니박스 · 예상 환율 100엔 = ○○○원</span><span class="n">1</span></div>
+          <div class="push"><div class="btn">발렛 예약하기</div></div>
+        </div>
+      </div>
+      <ol class="notes"><li><span class="n">1</span>체크하면 머니박스 V-02로 이동, 안 하면 발렛만 예약</li></ol>
+    </div>
+    <div class="arr">→</div>
+    <div class="screen">
+      <div class="cap">V-02 금액 · 동의 <small>머니박스</small></div>
+      <div class="frame">
+        <div class="top new"><span>발렛 수령 신청</span><span>2/4</span></div>
+        <div class="body"><div class="blk">에어파크 예약 정보 자동 표시<br>(공항 · 출국 · 목적지 · 차량)</div><div class="f">통화 · 금액</div><div class="push"><div class="btn">다음</div></div></div>
+      </div>
+      <ol class="notes"><li>이후 본인인증·결제 → V-03 수령권 (2번과 같음)</li></ol>
+    </div>
+  </div>
+
+  <!-- ================= 5 ================= -->
+  <h2>5. 이지백 기사 화면</h2>
+  <p class="lead">차를 받으며 한 손으로 쓰는 화면. 입력 없이 스캔 · 선택만.</p>
+  <div class="row">
+    <div class="screen">
+      <div class="cap">D-01 오늘 교부 목록</div>
+      <div class="frame ext">
+        <div class="top"><span>에어파크 기사</span><span>김포</span></div>
+        <div class="body">
+          <div class="btn sec">📦 봉투 인계 확인</div>
+          <div class="blk">06:40 · 박*연 · 12가 3456<br><span class="s">봉투 GV-08810 · 수령 완료</span></div>
+          <div class="blk">07:10 · 김*니 · 34나 5678<br><span class="s">봉투 GV-08812 · 교부 대기</span></div>
+          <div class="blk">08:30 · 이*호 · 56다 7890<br><span class="s">봉투 GV-08815 · 교부 대기</span></div>
+          <div class="err">목록에 없는 고객은 교부 불가</div>
+        </div>
       </div>
     </div>
     <div class="arr">→</div>
-    <div class="scr new"><div class="hd">B. 금액 <small>우리</small></div><div class="bd"><div class="txt">예약 정보 자동으로 채워짐</div></div></div>
+    <div class="screen">
+      <div class="cap">D-02 봉투 인계 확인 <small>출국 전날</small></div>
+      <div class="frame ext">
+        <div class="top"><span>‹ 봉투 인계</span><span></span></div>
+        <div class="body">
+          <div class="kv"><span>GV-08810</span><span>✓</span></div>
+          <div class="kv"><span>GV-08812</span><span>✓</span></div>
+          <div class="kv"><span>GV-08815</span><span>✓</span></div>
+          <div class="btn">봉투 일괄 스캔</div>
+          <div class="err">수량 안 맞으면 인계 거부 → 머니박스 알림</div>
+          <div class="push"><div class="btn sec">✍️ 인계 서명</div></div>
+        </div>
+      </div>
+    </div>
     <div class="arr">→</div>
-    <div class="scr"><div class="hd">C → D</div><div class="bd"><div class="txt">2번과 동일</div></div></div>
+    <div class="screen">
+      <div class="cap">D-03 교부 진행</div>
+      <div class="frame ext">
+        <div class="top"><span>‹ 07:10 · 34나 5678</span><span></span></div>
+        <div class="body">
+          <div class="btn">① 수령권 QR 스캔</div>
+          <div class="blk">② 김머니 · 1985.03.14<br><span class="s">신분증과 대조</span></div>
+          <div class="btn sec">✓ 신분증 일치</div>
+          <div class="btn sec">③ 봉투 번호 스캔</div>
+          <div class="btn sec">④ 서명 + 사진</div>
+          <div class="err">봉투 번호 다르면 중단</div>
+          <div class="push"><div class="btn sec" style="color:var(--red);border-color:var(--red)">교부 실패 · 사고 신고</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="arr">→</div>
+    <div class="screen">
+      <div class="cap">D-04 실패 · 사고 신고</div>
+      <div class="frame ext">
+        <div class="top"><span>‹ 신고</span><span></span></div>
+        <div class="body">
+          <div class="seg"><span>신분증 불일치</span><span>노쇼</span></div>
+          <div class="seg"><span>봉투 훼손</span><span>봉투 분실</span></div>
+          <div class="btn sec">📷 사진</div>
+          <div class="blk">반환 예정: 다음 영업일까지 머니박스로</div>
+          <div class="err">분실 → 머니박스에 바로 전화 연결</div>
+          <div class="push"><div class="btn">신고하기</div></div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- 4 -->
-  <h2>4. 출국 당일까지 뒤에서 일어나는 일 (발렛 수령)</h2>
-  <table>
-    <tr><th style="width:18%">언제</th><th style="width:27%">고객</th><th style="width:27%">우리 회사</th><th>이지백 기사</th></tr>
-    <tr><td>신청·결제</td><td>신청·결제</td><td>수령권(QR) 발송, 이지백에 교부 목록 전달</td><td>—</td></tr>
-    <tr><td>출국 전날</td><td>알림톡(신분증 지참)</td><td>봉투 밀봉·일련번호, 기사에게 인계 (김포·인천 각각)</td><td>봉투 받고 인계 서명 (D-02)</td></tr>
-    <tr><td>출국 당일</td><td>차 맡기며 QR + 신분증 제시, 봉투 받음</td><td>환전장부 자동 기록</td><td>QR 스캔 → 신분증 확인 → 봉투 번호 스캔 → 서명·사진 (D-03)</td></tr>
-    <tr><td>못 건넨 경우</td><td>환불 안내 받음</td><td>봉투 돌려받고 기존 미수령 처리 (자동 취소 · 2%)</td><td>실패 신고 (D-04), 봉투 반환</td></tr>
-  </table>
-
-  <!-- 5 -->
-  <h2>5. 이지백 기사 화면 (틀)</h2>
-  <div class="flow">
-    <div class="scr ext"><div class="hd">D-01 오늘 교부 목록</div><div class="bd"><div class="in">시간 · 고객(가림) · 차량 · 봉투번호 · 상태</div><div class="in">…</div><div class="btn">봉투 인계 확인</div></div></div>
-    <div class="arr">→</div>
-    <div class="scr ext"><div class="hd">D-02 봉투 인계 확인</div><div class="bd"><div class="in">봉투 일괄 스캔 → 목록 대조</div><div class="btn">인계 서명</div><div class="ex">수량 안 맞음 → 인계 거부</div></div></div>
-    <div class="arr">→</div>
-    <div class="scr ext"><div class="hd">D-03 교부 진행</div><div class="bd"><div class="in">1. QR 스캔</div><div class="in">2. 신분증 대조</div><div class="in">3. 봉투 번호 스캔</div><div class="in">4. 서명 · 사진</div><div class="ex">번호 불일치 → 중단</div></div></div>
-    <div class="arr">→</div>
-    <div class="scr ext"><div class="hd">D-04 실패 · 사고 신고</div><div class="bd"><div class="in">사유: 신분증 불일치 / 노쇼 / 훼손 / 분실</div><div class="in">사진</div><div class="ex">분실 → 머니박스에 바로 전화</div></div></div>
-  </div>
-
-  <!-- 6 -->
-  <h2>6. 공항별로 받을 수 있는 방법</h2>
-  <table>
+  <!-- ================= 6 ================= -->
+  <h2>6. 공항별 수령 방법 · 조건</h2>
+  <div class="grid-tbl"><table>
     <tr><th style="width:22%">공항</th><th>직원 수령 (기존)</th><th>발렛 기사 수령 (추가)</th></tr>
-    <tr><td>인천 T1</td><td>○</td><td>○ (선택)</td></tr>
-    <tr><td>김포 국제선</td><td>✕</td><td>○ (김포는 이것만)</td></tr>
+    <tr><td>인천 T1</td><td>○</td><td>○ 고객이 선택 (P-01 카드 또는 신청 완료 후 바꾸기)</td></tr>
+    <tr><td>김포 국제선</td><td>✕</td><td>○ 김포는 이것만 (P-01 카드 또는 에어파크)</td></tr>
     <tr><td>제주</td><td>○</td><td>✕</td></tr>
-  </table>
-  <table>
-    <tr><th style="width:22%">조건</th><th colspan="2">직원 수령과 발렛 수령 모두 동일</th></tr>
-    <tr><td>당일 / 예약</td><td colspan="2">둘 다 가능</td></tr>
-    <tr><td>통화 · 한도</td><td colspan="2">주요 통화 · 하루 USD 4,000 상당</td></tr>
-    <tr><td>수수료</td><td colspan="2">2,500원 (직원: 배송료 / 발렛: 전달 수수료)</td></tr>
-    <tr><td>미수령</td><td colspan="2">자동 취소 · 수수료 2% 차감</td></tr>
-  </table>
+  </table></div>
+  <div class="grid-tbl"><table>
+    <tr><th style="width:22%">조건</th><th>직원 수령 · 발렛 수령 모두 동일</th></tr>
+    <tr><td>당일 / 예약</td><td>둘 다 가능</td></tr>
+    <tr><td>통화 · 한도</td><td>주요 통화 · 하루 USD 4,000 상당</td></tr>
+    <tr><td>수수료</td><td>2,500원 (직원: 배송료 / 발렛: 전달 수수료)</td></tr>
+    <tr><td>취소</td><td>수령일 48시간 전까지 무료</td></tr>
+    <tr><td>미수령</td><td>자동 취소 · 수수료 2% 차감</td></tr>
+  </table></div>
 
   <div class="q">
     <b>확인할 것</b>
     <ul>
-      <li>인천 발렛 차량 인수 장소와 김포 인수 장소 (터미널 앞 / 공항 밖) → 수령권 "장소" 문구</li>
-      <li>인천은 우리 직원과 발렛 기사 둘 다 있으니, 발렛 고객 봉투를 <b>우리 인천 수령팀이 발렛 접수처에서 직접 건네는 것</b>도 가능한지</li>
-      <li>발렛 입구를 어디에 둘지: 공항수령 페이지 안 카드 / 홈 배너 / 둘 다</li>
+      <li>김포 · 인천 발렛 차량 인수 장소 → V-01, V-03 "장소" 문구</li>
+      <li>인천 발렛 고객 봉투를 우리 인천 수령팀이 발렛 접수처에서 직접 건넬 수 있는지</li>
+      <li>발렛으로 바꾸기는 언제까지 가능한지 (예: 봉투 인계 전까지)</li>
       <li>기사 화면을 이지백 앱 안에 넣을지 / 별도 웹으로 만들지</li>
       <li>이지백과 예약 정보를 주고받는 방식 (링크 / API)</li>
     </ul>
   </div>
-
 </div>
+
 </body>
 </html>
