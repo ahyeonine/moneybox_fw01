@@ -377,7 +377,7 @@
       <h6>📝 기존 화면에서 바뀐 점</h6>
       <ul>
         <li>공항 목록에 <b>김포공항 국제선</b>만 추가. 나머지 입력은 기존 그대로예요.</li>
-        <li>김포를 고르면 날짜·시각 이름이 <b>출국일·출국 시각</b>으로 바뀌고, 통화는 JPY·CNY, 한도는 USD 2,000 상당, 출국 2일 전 자정까지 신청 가능해요(당일 수령 비활성).</li>
+        <li>김포를 고르면 날짜·시각 이름만 <b>출국일·출국 시각</b>으로 바뀌어요. 당일·예약 수령, 통화, 한도(하루 USD 4,000), 운영 시간은 기존과 같아요.</li>
         <li>"신청하기"를 누르면 <b>마지막 단계로 수령 방법</b>(공항 직원 / 발렛 기사)을 골라요.</li>
       </ul>
     </div>
@@ -400,7 +400,7 @@
           <span class="ico">🚗</span>
           <h4>발렛 기사에게 수령 <span class="badge">NEW</span></h4>
           <p>김포공항 발렛에 차를 맡길 때, 기사님이 신분증 확인 후 외화 봉투를 건네요.</p>
-          <ul><li>김포공항 국제선</li><li>JPY·CNY · USD 2,000 상당 이내</li><li>출국 2일 전 자정까지 신청</li></ul>
+          <ul><li>김포공항 국제선</li><li>당일·예약 수령 · 통화·한도는 기존과 동일</li><li>전달 수수료 2,500원</li></ul>
           <span class="why" id="whyValet"></span>
         </button>
       </div>
@@ -445,7 +445,6 @@
         <table class="kv">
           <tr><th>차량 인수 예정</th><td id="vPick">-</td></tr>
           <tr><th>인수 장소</th><td>에어파크 차량 인수 장소 <span class="tag-assume">미정</span></td></tr>
-          <tr><th>발렛 요금</th><td>20,000원 <span class="tag-assume">예시</span><br><span class="hint">발렛 요금은 에어파크에서 따로 결제해요</span></td></tr>
         </table>
       </div>
       <div class="sim">
@@ -474,7 +473,7 @@
       <div class="box-soft">
         <div class="recommend" id="recommend"></div>
         <div class="money" style="background:#fff">
-          <select id="aCur" aria-label="통화"><option>JPY</option><option>CNY</option></select>
+          <select id="aCur" aria-label="통화"></select>
           <input id="aFx" inputmode="numeric" aria-label="외화 금액">
         </div>
         <div class="limit" id="aLimit"></div>
@@ -543,7 +542,7 @@
         <button class="pri" id="paid">입금 완료</button>
         <button id="payLate">입금 마감 초과</button>
       </div>
-      <div class="err-msg" id="lateMsg" hidden>입금 마감이 지나 <b>환전만 취소</b>됐어요. 발렛 예약은 그대로 유지돼요. 다시 신청하려면 출국 2일 전 자정까지 가능해요.</div>
+      <div class="err-msg" id="lateMsg" hidden>입금 마감이 지나 <b>환전만 취소</b>됐어요. 발렛 예약은 그대로 유지돼요. 출국 전까지 다시 신청할 수 있어요.</div>
     </div></div>
   </div>
 
@@ -580,7 +579,7 @@
           <div class="fld"><select><option>은행 선택</option><option>신한은행</option><option>국민은행</option><option>우리은행</option></select></div>
           <div class="fld"><input placeholder="계좌번호"></div>
         </div>
-        <p class="hint" style="margin:8px 0 0">반환 확인 후 3영업일 이내에 환불돼요. 원하시면 머니박스 매장에서 받을 수도 있어요.</p>
+        <p class="hint" style="margin:8px 0 0">기존 공항수령과 같이 자동 취소되며, 취소 수수료 2%를 뺀 금액이 반환 확인 후 3영업일 이내에 환불돼요.</p>
       </div>
       <div class="sim">
         <span class="lbl">시연:</span>
@@ -613,7 +612,7 @@
             <p>차를 맡길 때 외화 봉투도 같이 받아요. 공항 창구보다 좋은 환율.</p>
             <p class="hint" id="pkRate">예상 환율 100엔 = 930원</p></span>
         </label>
-        <button class="go" id="pkGo">발렛 예약하기 · 20,000원</button>
+        <button class="go" id="pkGo">발렛 예약하기</button>
         <div class="ok-msg" id="pkOnly" hidden>발렛만 예약됐어요. (환전 봉투 미선택)</div>
       </div>
     </div>
@@ -720,11 +719,11 @@
     <tbody>
       <tr><th>공항</th><td>인천공항 1터미널 · 제주공항</td><td>김포공항 국제선</td></tr>
       <tr><th>건네는 사람</th><td>머니박스 공항 수령팀</td><td>이지백 에어파크 기사 (환전사무 수탁)</td></tr>
-      <tr><th>신청 유형</th><td>당일 수령 · 예약 수령</td><td>예약만 · 출국 2일 전 자정 마감</td></tr>
-      <tr><th>통화·한도</th><td>주요 통화 · 하루 USD 4,000 상당</td><td>JPY · CNY · 1인 USD 2,000 상당</td></tr>
-      <tr><th>요금</th><td>배송료 2,500원 (인천 T1)</td><td>전달 수수료 2,500원 (별도 줄 표시) + 발렛 요금은 에어파크 결제</td></tr>
+      <tr><th>신청 유형</th><td>당일 수령 · 예약 수령</td><td>동일 (당일 수령 · 예약 수령)</td></tr>
+      <tr><th>통화·한도</th><td>주요 통화 · 하루 USD 4,000 상당</td><td>동일 (주요 통화 · 하루 USD 4,000 상당)</td></tr>
+      <tr><th>요금</th><td>배송료 2,500원 (인천 T1)</td><td>전달 수수료 2,500원 (별도 줄 표시, 금액 동일)</td></tr>
       <tr><th>결제</th><td>기존 결제</td><td>가상계좌 · 신청 후 2시간 안에 입금</td></tr>
-      <tr><th>미수령</th><td>자동 취소 · 수수료 2% 차감</td><td>봉투 반환 → 환불(3영업일) 또는 매장 수령</td></tr>
+      <tr><th>미수령</th><td>자동 취소 · 수수료 2% 차감</td><td>동일 (자동 취소 · 수수료 2% 차감, 반환 확인 후 3영업일 내 환불)</td></tr>
     </tbody>
   </table></div>
 
@@ -732,12 +731,11 @@
   <div class="tbl-wrap"><table class="grid">
     <thead><tr><th style="width:26%">항목</th><th>제안</th></tr></thead>
     <tbody>
-      <tr><th>신청 마감</th><td>출국 2일 전 자정까지</td></tr>
       <tr><th>입금 마감</th><td>신청 후 2시간 이내</td></tr>
       <tr><th>봉투 인계</th><td>출국 전날 오후, 인계 대장 서명</td></tr>
       <tr><th>교부 가능 시간</th><td>에어파크 차량 인수 운영 시간과 동일</td></tr>
       <tr><th>미교부 봉투 반환</th><td>교부일 다음 영업일까지 머니박스로</td></tr>
-      <tr><th>환불</th><td>반환 확인 후 3영업일 이내</td></tr>
+      <tr><th>환불</th><td>반환 확인 후 3영업일 이내 (미수령은 기존과 같이 수수료 2% 차감)</td></tr>
     </tbody>
   </table></div>
 
@@ -754,7 +752,7 @@
     <tbody>
       <tr><th>입금 마감 초과</th><td>환전만 취소, 발렛 예약은 유지</td></tr>
       <tr><th>출국일 변경</th><td>이지백 예약 변경 → 머니박스에 통보 → 봉투 인계일 변경</td></tr>
-      <tr><th>노쇼 · 발렛 취소</th><td>봉투 반환 → 환불 또는 매장 수령</td></tr>
+      <tr><th>노쇼 · 발렛 취소</th><td>봉투 반환 → 자동 취소 · 수수료 2% 차감 환불</td></tr>
       <tr><th>신분증 불일치</th><td>교부 중단, 봉투 반환</td></tr>
       <tr><th>봉투 분실 · 훼손</th><td>기사 화면에서 즉시 신고</td></tr>
     </tbody>
@@ -782,14 +780,13 @@
         <li>에어파크 차량 인수 장소 (터미널 앞 / 공항 밖 거점) → 수령권 "수령 장소" 문구</li>
         <li>예약 정보 연동 방식 (링크 파라미터 / 서버 간 API)</li>
         <li>운영 규칙 값 (모두 제안값)</li>
-        <li>발렛 요금 금액 (화면의 20,000원은 예시)</li>
       </ul>
     </div>
   </div>
   <div class="memo">
     <h6>📝 지난 버전과 달라진 점</h6>
     <ul>
-      <li>지난번에는 김포도 기존 정책(USD 4,000·당일 수령·주요 통화)에 맞췄는데, 새 명세에 따라 <b>JPY·CNY, USD 2,000, 출국 2일 전 마감</b>으로 되돌렸어요. 요금(2,500원)만 기존과 같게 유지했어요.</li>
+      <li>김포 조건은 <b>기존 공항수령과 동일</b>: 당일·예약 수령, 주요 통화, 하루 USD 4,000, 운영 시간 05:30~20:00, 미수령 시 수수료 2% 차감. 요금도 2,500원으로 같아요. (명세의 JPY·CNY · USD 2,000 · 출국 2일 전 마감은 적용하지 않음)</li><li>발렛 요금은 화면에서 뺐어요.</li>
       <li>제휴사를 이지백(에어파크)으로 바꾸고, 가상계좌 입금·본인인증·수령권·기사 화면을 새로 넣었어요.</li>
     </ul>
   </div>
@@ -803,9 +800,9 @@
 (function () {
   var RATE = { USD: 1400, JPY: 9.3, CNY: 195, EUR: 1520 };
   var UNIT = { USD: 1, JPY: 1000, CNY: 100, EUR: 5 };
-  var CUR_BY_AIRPORT = { '': ['USD'], ICN1: ['USD', 'JPY', 'EUR', 'CNY'], CJU: ['USD', 'JPY', 'CNY'], GMP: ['JPY', 'CNY'] };
-  var LIMIT_USD = { ICN1: 4000, CJU: 4000, GMP: 2000 };
-  var HOURS = { ICN1: [5.5, 20], CJU: [10, 21], GMP: [6, 21], '': [5.5, 20] };
+  var CUR_BY_AIRPORT = { '': ['USD'], ICN1: ['USD', 'JPY', 'EUR', 'CNY'], CJU: ['USD', 'JPY', 'CNY'], GMP: ['USD', 'JPY', 'EUR', 'CNY'] };
+  var LIMIT_USD = { ICN1: 4000, CJU: 4000, GMP: 4000 };
+  var HOURS = { ICN1: [5.5, 20], CJU: [10, 21], GMP: [5.5, 20], '': [5.5, 20] };
   var DEST = { HND: ['도쿄 하네다', 'JPY'], KIX: ['오사카 간사이', 'JPY'], SHA: ['상하이 훙차오', 'CNY'], PEK: ['베이징 서우두', 'CNY'] };
   var FEE = 2500;
   var DAYS = ['일', '월', '화', '수', '목', '금', '토'];
@@ -898,7 +895,7 @@
     if (m === 'today') { d.value = ymd(new Date()); d.disabled = true; }
     else {
       d.disabled = false;
-      var min = ymd(addDays(S.airport === 'GMP' ? 2 : 1));
+      var min = ymd(addDays(1));
       d.min = min;
       if (!d.value || d.value < min) d.value = ymd(addDays(8));
     }
@@ -906,8 +903,6 @@
   function onAirport() {
     S.airport = $('airport').value;
     var g = S.airport === 'GMP';
-    $('segToday').disabled = g;
-    if (g) setMode('book');
     $('dateLabel').textContent = g ? '출국일' : '수령일';
     $('timeLabel').textContent = g ? '출국 시각' : '수령 시각';
     fillTimes($('time'), HOURS[S.airport] || HOURS[''], g ? '09:00' : null);
@@ -919,8 +914,7 @@
   function renderNotes() {
     var h = [];
     if (S.airport === 'GMP') {
-      h.push('<li class="hl">김포공항 국제선은 발렛 기사 수령으로 받아요. 출국 2일 전 자정까지 신청할 수 있어요.</li>');
-      h.push('<li>김포공항 국제선은 JPY·CNY만, 1인 USD 2,000 상당까지 신청할 수 있어요.</li>');
+      h.push('<li class="hl">김포공항 국제선은 발렛 기사 수령으로 받아요. 전달 수수료 2,500원이 부과돼요.</li>');
     } else {
       h.push('<li>인천공항 1터미널은 배송료 2,500원이 부과됩니다.</li>');
     }
@@ -974,7 +968,7 @@
   /* ---------- C-01B 발렛 같이 예약 ---------- */
   fillTimes($('vTime'), HOURS.GMP, '09:00');
   function renderValet() {
-    $('vDate').min = ymd(addDays(2));
+    $('vDate').min = ymd(new Date());
     $('vDate').value = S.depDate; $('vTime').value = S.depTime;
     if (!S.dest) S.dest = S.cur === 'CNY' ? 'SHA' : 'KIX';
     $('vDest').value = S.dest; $('vCar').value = S.car;
@@ -992,6 +986,7 @@
   $('valetNext').onclick = function () { S.ref = 'AP-' + S.depDate.replace(/-/g, '') + '-0417'; go('s-apply'); };
 
   /* ---------- C-02 환전 신청 ---------- */
+  $('aCur').innerHTML = CUR_BY_AIRPORT.GMP.map(function (c) { return '<option>' + c + '</option>'; }).join('');
   function renderApply() {
     $('applySub').textContent = S.entry === 'airpark' ? '에어파크에서 넘어온 예약 정보예요. 금액을 정하고 환율을 확정해 주세요.' : '예약 정보를 확인하고 금액을 확정해 주세요.';
     $('applyInfo').innerHTML =
@@ -1011,9 +1006,9 @@
   function applyCalc() {
     S.cur = $('aCur').value; S.amt = num($('aFx').value);
     var mx = maxFx('GMP', S.cur), lim = $('aLimit'), err = '';
-    if (S.amt > mx) err = '1인 USD 2,000 상당(' + fxStr(mx, S.cur) + ')을 넘을 수 없어요';
+    if (S.amt > mx) err = '하루 USD 4,000 상당(' + fxStr(mx, S.cur) + ')을 넘을 수 없어요';
     else if (S.amt % UNIT[S.cur]) err = UNIT[S.cur].toLocaleString() + ' ' + S.cur + ' 단위로 입력해 주세요';
-    lim.textContent = err || '신청 가능 금액: 최대 ' + fxStr(mx, S.cur) + ' (USD 2,000 상당)';
+    lim.textContent = err || '신청 가능 금액: 최대 ' + fxStr(mx, S.cur) + (S.cur === 'USD' ? '' : ' (USD 4,000 상당)');
     lim.classList.toggle('err', !!err);
     var now = new Date(), krw = S.amt * RATE[S.cur];
     $('aRate').innerHTML = rateStr(S.cur) + '<br><span class="hint">' + (now.getMonth() + 1) + '/' + now.getDate() + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ' 기준 확정</span>';
@@ -1091,7 +1086,7 @@
   ];
   var BRANCH = {
     cancel: ['환전 취소', '입금 마감이 지나 환전만 취소됐어요. 발렛 예약은 유지돼요.'],
-    ret: ['반환', '봉투를 건네지 못해 머니박스로 반환해요. 환불 계좌를 입력하거나 매장에서 받으세요.'],
+    ret: ['반환', '봉투를 건네지 못해 머니박스로 반환해요. 자동 취소되며 수수료 2%를 뺀 금액이 환불돼요. 환불 계좌를 입력해 주세요.'],
     acc: ['사고', '봉투 분실·훼손이 신고됐어요. 담당자가 곧 연락드려요. 전액 환불 또는 재발송으로 처리해요.']
   };
   function renderHistory() {
@@ -1129,7 +1124,7 @@
   $('hReset').onclick = function () { S.status = 2; S.branch = ''; renderHistory(); };
 
   /* ---------- C-01A 에어파크 ---------- */
-  $('pkDate').min = ymd(addDays(2)); $('pkDate').value = ymd(addDays(8));
+  $('pkDate').min = ymd(new Date()); $('pkDate').value = ymd(addDays(8));
   function pkRate() { var c = DEST[$('pkDest').value][1]; $('pkRate').textContent = '예상 환율 ' + rateStr(c); }
   $('pkDest').onchange = pkRate; pkRate();
   $('pkGo').onclick = function () {
@@ -1216,7 +1211,7 @@
       ['입금 확인', '환전 확정', '<b>' + amt + '</b> 환전이 확정됐어요.<br>· 수령: ' + dep + ' 출국, 차를 맡길 때<br>· 장소: 김포공항 에어파크 차량 인수 장소', '수령권(QR) 보기'],
       ['출국 전날', '내일 출국 안내', '내일 차를 맡길 때 외화 봉투를 받으실 수 있어요.<br><b>본인 신분증</b>을 꼭 챙겨 주세요. 신청자 본인만 받을 수 있어요.', '수령권(QR) 보기'],
       ['수령 완료', '수령 완료', '<b>' + amt + '</b>을 받으셨어요.<br>· 수령 시각: 07:12<br>즐거운 여행 되세요!', '내역 보기'],
-      ['취소·반환', '환불 안내', '봉투를 건네지 못해 반환 처리됐어요.<br>· 사유: 노쇼<br>환불 계좌를 입력하시면 반환 확인 후 3영업일 안에 환불돼요. 매장 수령도 가능해요.', '환불 계좌 입력']
+      ['취소·반환', '환불 안내', '봉투를 건네지 못해 반환 처리됐어요.<br>· 사유: 노쇼<br>취소 수수료 2%를 뺀 금액이 반환 확인 후 3영업일 안에 환불돼요. 환불 계좌를 입력해 주세요.', '환불 계좌 입력']
     ];
     $('talks').innerHTML = T.map(function (t) {
       return '<div class="talk"><div class="from">' + t[0] + '</div><div class="bubble"><div class="bh">[머니박스] ' + t[1] + '</div><div class="bb">' + t[2] + '</div><a class="bt" href="#" onclick="return false">' + t[3] + '</a></div></div>';
