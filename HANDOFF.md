@@ -18,6 +18,7 @@ last update: 2026.10.14
   - 로드맵: https://ahyeonine.github.io/moneybox_fw01/roadmap.html
   - 발렛 수령 와이어프레임(기존 공항수령은 그대로, 이지백 에어파크 발렛 수령 김포 전용·인천 선택): https://ahyeonine.github.io/moneybox_fw01/airport-valet.html
   - 발렛 수령 화면설계서(발렛 먼저 방식 · P-01·V-01~04·D-01~04·알림톡·미정립 정책): https://ahyeonine.github.io/moneybox_fw01/valet-screens.html
+  - 발렛 수령 1안·2안 와이어프레임(Figma용 SVG 복사): https://ahyeonine.github.io/moneybox_fw01/valet-options.html
 - **기획 문서(md)**: `docs-plan/외국인웹/` — 정책·공통규칙·CEMS대응·의사결정로그·미결사항·기획문서·화면정의서·화면설계서·와이어프레임 (전부 최신)
 - **Figma 화면설계서**: 송재욱(mbmnoah@gmail.com) 계정 초안에 빈 파일로 있음(미사용·삭제 예정). 본 담당자 계정이 아니면 새 Figma 계정에서 다시 생성 필요.
 
