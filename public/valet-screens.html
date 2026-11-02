@@ -93,12 +93,12 @@
 
 <div class="wrap">
   <h1>발렛 수령 화면설계서</h1>
-  <p class="lead">m-box.com 공항수령에 이지백 에어파크 발렛 수령을 붙이는 화면 설계예요. 왼쪽은 화면 배치, 오른쪽은 번호별 설명이에요. 실제 디자인이 아닌 기획 검토용이고, 기존 공항수령 흐름과 정책은 바꾸지 않아요.</p>
+  <p class="lead">m-box.com 공항수령에 이지백 에어파크 발렛 수령을 붙이는 화면 설계예요. 왼쪽은 화면 배치, 오른쪽은 번호별 설명이에요. 실제 디자인이 아닌 기획 검토용이에요. 발렛 정보는 <b>모든 공항에서 처음에</b> 받고, 기존 공항수령 신청 흐름은 바꾸지 않아요.</p>
   <div class="meta"><span>작성 2026-11-02</span><span>범위: 고객 웹(머니박스) · 에어파크(이지백) · 기사 화면(이지백)</span><span>상태: 초안</span></div>
   <div class="toc">
-    <a href="#list">화면 목록</a><a href="#flow">전체 흐름</a><a href="#policy">공통 정책</a>
+    <a href="#list">화면 목록</a><a href="#flow">전체 흐름</a><a href="#guard">발렛 먼저 방식 보완</a><a href="#policy">공통 정책</a>
     <a href="#P-01">P-01</a><a href="#V-01">V-01</a><a href="#V-02">V-02</a><a href="#V-03">V-03</a><a href="#V-04">V-04</a>
-    <a href="#C-01">C-01</a><a href="#V-05">V-05</a><a href="#E-01">E-01</a>
+    <a href="#E-01">E-01</a>
     <a href="#D-01">D-01</a><a href="#D-02">D-02</a><a href="#D-03">D-03</a><a href="#D-04">D-04</a><a href="#N-01">알림톡</a><a href="#open">미정립 정책</a>
   </div>
 
@@ -107,13 +107,11 @@
   <div class="tw"><table>
     <tr><th>ID</th><th>화면</th><th>구분</th><th>만드는 곳</th><th>설명</th></tr>
     <tr><td>P-01</td><td>공항 수령</td><td><span class="tag">기존</span> + 카드</td><td>머니박스</td><td>기존 신청 폼 그대로, 아래에 발렛 수령 카드 추가</td></tr>
-    <tr><td>V-01</td><td>발렛 정보</td><td><span class="tag new">신규</span></td><td>머니박스</td><td>공항(김포·인천) · 출국 일시 · 목적지 · 차량번호</td></tr>
-    <tr><td>V-02</td><td>금액 · 동의</td><td><span class="tag new">신규</span></td><td>머니박스</td><td>통화 · 금액 · 전달 수수료 · 이지백 동의</td></tr>
-    <tr><td>—</td><td>본인인증 · 결제</td><td><span class="tag">기존 재사용</span></td><td>머니박스</td><td>공항수령과 같은 화면</td></tr>
-    <tr><td>V-03</td><td>수령권</td><td><span class="tag new">신규</span></td><td>머니박스</td><td>QR · 수령 일시 · 장소 · 준비물</td></tr>
-    <tr><td>V-04</td><td>신청 내역 (발렛)</td><td><span class="tag">기존</span> + 상태</td><td>머니박스</td><td>발렛 건 진행 상태 · 취소</td></tr>
-    <tr><td>C-01</td><td>신청 완료</td><td><span class="tag">기존</span> + 박스</td><td>머니박스</td><td>기존 공항수령 신청 고객에게 "발렛으로 바꾸기" 노출</td></tr>
-    <tr><td>V-05</td><td>발렛으로 바꾸기</td><td><span class="tag new">신규</span></td><td>머니박스</td><td>V-01 변형. 금액·결제 없이 수령 방법만 변경</td></tr>
+    <tr><td>V-01</td><td>발렛 정보</td><td><span class="tag new">신규</span></td><td>머니박스</td><td>이름 · 휴대폰 · 공항 · 국제선/국내선 · 출국/입국 항공편 · 차종 · 차량번호 · 조회 비밀번호 · 발렛 요금 안내</td></tr>
+    <tr><td>V-02</td><td>금액 · 동의</td><td><span class="tag new">신규</span></td><td>머니박스</td><td>통화 · 금액 · 전달 수수료 · 발렛 요금 · 이지백 동의</td></tr>
+    <tr><td>—</td><td>본인인증 · 결제</td><td><span class="tag">기존 재사용</span></td><td>머니박스</td><td>공항수령과 같은 화면. 결제 완료 시 발렛 예약 확정</td></tr>
+    <tr><td>V-03</td><td>수령권</td><td><span class="tag new">신규</span></td><td>머니박스</td><td>QR · 수령 일시 · 장소 · 준비물 · 발렛 예약번호</td></tr>
+    <tr><td>V-04</td><td>신청 내역 (발렛)</td><td><span class="tag">기존</span> + 상태</td><td>머니박스</td><td>환전 · 발렛 진행 상태 · 함께 취소</td></tr>
     <tr><td>E-01</td><td>에어파크 발렛 예약</td><td><span class="tag ext">이지백</span></td><td>이지백</td><td>"환전하셨나요? 환전도 같이 하기" 카드</td></tr>
     <tr><td>D-01~04</td><td>기사 화면</td><td><span class="tag ext">이지백</span></td><td>이지백 (미정)</td><td>교부 목록 · 인계 확인 · 교부 진행 · 실패 신고</td></tr>
     <tr><td>N-01</td><td>알림톡</td><td><span class="tag new">신규 템플릿</span></td><td>머니박스</td><td>발렛 수령 건 안내 5종</td></tr>
@@ -121,11 +119,23 @@
 
   <!-- 전체 흐름 -->
   <h2 class="part" id="flow">전체 흐름</h2>
-  <p class="lead">진입은 세 곳이고, 결제 이후는 모두 V-03 수령권으로 모여요.</p>
-  <div class="flowline"><b>A. 우리 웹</b><span>P-01 카드</span><em>→</em><span class="new">V-01</span><em>→</em><span class="new">V-02</span><em>→</em><span>본인인증·결제</span><em>→</em><span class="new">V-03</span><em>→</em><span>V-04</span></div>
-  <div class="flowline"><b>B. 인천 기존 신청</b><span>기존 신청·결제</span><em>→</em><span>C-01</span><em>→</em><span class="new">V-05</span><em>→</em><span class="new">V-03</span></div>
-  <div class="flowline"><b>C. 에어파크</b><span class="ext">E-01</span><em>→</em><span class="new">V-02 (V-01 자동 채움)</span><em>→</em><span>본인인증·결제</span><em>→</em><span class="new">V-03</span></div>
+  <p class="lead">모든 공항에서 발렛 정보를 먼저 받고, 환전 금액 → 결제 순서로 가요. 진입은 두 곳이고 결제 이후는 V-03 수령권으로 모여요.</p>
+  <div class="flowline"><b>A. 우리 웹</b><span>P-01 카드</span><em>→</em><span class="new">V-01 발렛 정보</span><em>→</em><span class="new">V-02 금액</span><em>→</em><span>본인인증·결제</span><em>→</em><span class="new">V-03 수령권</span><em>→</em><span>V-04</span></div>
+  <div class="flowline"><b>B. 에어파크</b><span class="ext">E-01</span><em>→</em><span class="new">V-02 (V-01 자동 채움)</span><em>→</em><span>본인인증·결제</span><em>→</em><span class="new">V-03</span></div>
   <div class="flowline"><b>현장</b><span class="ext">D-02 전날 인계</span><em>→</em><span class="ext">D-01 목록</span><em>→</em><span class="ext">D-03 교부</span><em>/</em><span class="ext">D-04 실패</span></div>
+
+  <!-- 보완 -->
+  <h2 class="part" id="guard">발렛 먼저 방식 보완</h2>
+  <p class="lead">발렛 정보를 처음에 받으면 생기는 문제와 막는 방법이에요.</p>
+  <div class="tw"><table>
+    <tr><th>문제</th><th>막는 방법</th><th>화면</th></tr>
+    <tr><td>발렛 정보만 넣고 금액 단계에서 나가면 발렛 예약만 남음</td><td><b>V-01에서는 예약 가능 여부만 조회</b>하고, 이지백에 예약을 보내지 않아요. 발렛 예약은 <b>결제 완료 순간 환전과 함께 확정</b>. 중간에 나가면 아무것도 남지 않아요.</td><td>V-01 · 결제</td></tr>
+    <tr><td>다시 들어오면 처음부터 다시 입력</td><td>입력값을 같은 기기에 임시 저장해 "작성 중인 신청 이어하기" 표시 (보관 기간 미정)</td><td>P-01 · V-01</td></tr>
+    <tr><td>환전하러 왔는데 차 정보부터 물어봐서 어색함</td><td>입구를 "발렛 맡기며 외화 받기" 상품으로 안내하고, 상단에 <b>① 발렛 · ② 환전 · ③ 결제</b> 단계를 보여줘요. 환전만 원하는 고객은 기존 신청으로.</td><td>P-01 · V-01</td></tr>
+    <tr><td>입력 항목이 많아 중간에 포기</td><td>로그인 회원은 이름 · 휴대폰 자동 입력, 지난 차량 불러오기. 항공편을 넣으면 출국 날짜 · 시각 자동 표시.</td><td>V-01</td></tr>
+    <tr><td>조회 이후 결제하는 사이 발렛이 마감됨</td><td>결제 직전에 한 번 더 확인. 결제 후 확정이 실패하면 결제 자동 취소 (전액 환불).</td><td>결제</td></tr>
+    <tr><td>환전을 취소하면 발렛은?</td><td>V-04에서 환전 · 발렛 <b>함께 취소</b>가 기본. 발렛만 남길지는 미정립 정책.</td><td>V-04</td></tr>
+  </table></div>
 
   <!-- 공통 정책 -->
   <h2 class="part" id="policy">공통 정책</h2>
@@ -155,6 +165,7 @@
           <div class="f">통화 · 금액</div>
           <div class="btn">신청하기<span class="n">2</span></div>
           <div class="blk hl"><b>🚗 차로 출국하세요?</b><br>공항 발렛에 차 맡길 때 외화 봉투 받기<br><span class="s">발렛 운영: 이지백</span><span class="n">3</span></div>
+          <div class="s">✎ 작성 중인 발렛 신청 이어하기</div>
           <div class="btn sec">발렛 수령 신청<span class="n">4</span></div>
         </div>
       </div></div>
@@ -162,9 +173,9 @@
         <table>
           <tr><th>#</th><th>항목</th><th>설명</th></tr>
           <tr><td><span class="nn">1</span></td><td>공항 선택</td><td>기존 목록 그대로</td></tr>
-          <tr><td><span class="nn">2</span></td><td>신청하기</td><td>기존 흐름 (본인인증 → 결제 → C-01)</td></tr>
+          <tr><td><span class="nn">2</span></td><td>신청하기</td><td>기존 흐름 그대로 (본인인증 → 결제 → 완료)</td></tr>
           <tr><td><span class="nn">3</span></td><td>발렛 카드 <span class="tag new">신규</span></td><td>기존 신청 폼 아래 고정 노출. 운영사 표기</td></tr>
-          <tr><td><span class="nn">4</span></td><td>발렛 수령 신청</td><td>V-01로 이동</td></tr>
+          <tr><td><span class="nn">4</span></td><td>발렛 수령 신청</td><td>V-01로 이동. 임시 저장된 신청이 있으면 "이어하기" 링크 표시</td></tr>
         </table>
         <div class="kvline"><span>변경 범위 <b>카드 1개 추가</b></span><span>기존 폼 <b>변경 없음</b></span></div>
       </div>
@@ -176,33 +187,38 @@
     <div class="sh"><span class="no">V-01</span><h3>발렛 정보</h3><span class="path">P-01 → <b>V-01</b> → V-02</span></div>
     <div class="cols">
       <div class="wf"><div class="frame">
-        <div class="top new"><span>‹ 발렛 수령 신청</span><span>1/4</span></div>
+        <div class="top new"><span>‹ 발렛 수령 신청</span><span>① 발렛 · ② 환전 · ③ 결제</span></div>
         <div class="body">
-          <div class="t">어느 공항에서 차를 맡기세요?</div>
-          <div class="seg"><span class="on">김포 국제선</span><span>인천</span><span class="n">1</span></div>
-          <div class="f">출국일<span class="n">2</span></div>
-          <div class="f">출국 시각</div>
-          <div class="f">목적지<span class="n">3</span></div>
-          <div class="f">차량번호<span class="n">4</span></div>
-          <div class="blk">차량 인수: 출국 2시간 전 전후<br>장소: (미정)<span class="n">5</span></div>
+          <div class="t">차를 맡길 정보를 알려주세요</div>
+          <div class="seg"><span class="on">김포</span><span>인천</span><span class="n">1</span></div>
+          <div class="seg"><span class="on">국제선</span><span>국내선</span><span class="n">2</span></div>
+          <div class="f">출국 항공편 (예: KE2117)<span class="n">3</span></div>
+          <div class="f">입국 항공편</div>
+          <div class="f">이름<span class="n">4</span></div>
+          <div class="f">휴대폰</div>
+          <div class="f">차종<span class="n">5</span></div>
+          <div class="f">차량번호</div>
+          <div class="f">조회 비밀번호<span class="n">6</span></div>
+          <div class="blk">발렛 요금 <b>○○,○○○원</b><br><span class="s">출국 11/7 ~ 입국 11/10 · 3박 기준</span><span class="n">7</span></div>
           <div class="push">
-            <div class="btn">다음<span class="n">6</span></div>
-            <div class="foot">발렛 운영: 이지백(에어파크)<span class="n">7</span></div>
+            <div class="btn">예약 가능 확인하고 다음<span class="n">8</span></div>
+            <div class="foot">발렛 운영: 이지백(에어파크)</div>
           </div>
         </div>
       </div></div>
       <div class="info">
         <table>
           <tr><th>#</th><th>항목</th><th>설명</th></tr>
-          <tr><td><span class="nn">1</span></td><td>공항</td><td>김포 국제선 / 인천 중 선택. 필수</td></tr>
-          <tr><td><span class="nn">2</span></td><td>출국일 · 시각</td><td>당일 · 예약 모두 가능 (기존 공항수령 기준). 시각은 운영 시간 안에서 선택</td></tr>
-          <tr><td><span class="nn">3</span></td><td>목적지</td><td>V-02 통화 추천에 사용. 필수</td></tr>
-          <tr><td><span class="nn">4</span></td><td>차량번호</td><td>기사 목록(D-01)과 대조. 필수</td></tr>
-          <tr><td><span class="nn">5</span></td><td>인수 안내</td><td>출국 시각 기준으로 자동 계산. 장소 문구는 이지백 확인 후 확정</td></tr>
-          <tr><td><span class="nn">6</span></td><td>다음</td><td>필수값 입력 시 활성. 이지백 발렛 예약 가능 여부 확인 후 V-02</td></tr>
-          <tr><td><span class="nn">7</span></td><td>운영사 고지</td><td>발렛 화면 공통 하단 문구</td></tr>
+          <tr><td><span class="nn">1</span></td><td>공항</td><td>김포 / 인천. 필수</td></tr>
+          <tr><td><span class="nn">2</span></td><td>국제선 / 국내선</td><td>필수. 국내선일 때 처리는 미정립 정책</td></tr>
+          <tr><td><span class="nn">3</span></td><td>출국 · 입국 항공편</td><td>출국편은 필수. 입력하면 출국 날짜 · 시각을 자동 표시하고, 목적지로 V-02 통화를 추천. 입국편은 차를 돌려받는 시점</td></tr>
+          <tr><td><span class="nn">4</span></td><td>이름 · 휴대폰</td><td>필수. 로그인 회원은 자동 입력. 환전 본인인증 이름과 같아야 함</td></tr>
+          <tr><td><span class="nn">5</span></td><td>차종 · 차량번호</td><td>필수. 기사 목록(D-01)과 대조. 회원은 지난 차량 불러오기</td></tr>
+          <tr><td><span class="nn">6</span></td><td>조회 비밀번호</td><td>필수. 발렛 예약 조회용 (비회원 내역조회와 통합할지는 미정립 정책)</td></tr>
+          <tr><td><span class="nn">7</span></td><td>발렛 요금 안내</td><td>공항 · 출입국 일정으로 계산해 보여줌. 결제 방식은 미정립 정책</td></tr>
+          <tr><td><span class="nn">8</span></td><td>예약 가능 확인</td><td>이지백에 <b>가능 여부만 조회</b> (예약은 아직 안 함). 가능하면 V-02, 입력값은 임시 저장</td></tr>
         </table>
-        <div class="exc"><b>예외</b> 발렛 만차 · 예약 불가 → 다른 수령 방법 안내 (안내 내용은 미정립 정책)</div>
+        <div class="exc"><b>예외</b> 만차 · 예약 불가 → 이 화면에서 안내하고 진행 불가 (대안 안내는 미정립 정책)</div>
       </div>
     </div>
   </section>
@@ -214,13 +230,14 @@
       <div class="wf"><div class="frame">
         <div class="top new"><span>‹ 발렛 수령 신청</span><span>2/4</span></div>
         <div class="body">
-          <div class="blk">오사카 간사이행 · 11/7 09:00<br>12가 3456<span class="n">1</span></div>
+          <div class="blk">김포 · KE2117 오사카 11/7 09:00<br>소나타 · 12가 3456<span class="n">1</span></div>
           <div class="s">✓ 오사카행이라 JPY를 추천해요</div>
           <div class="f"><b>JPY</b> · 금액 입력<span class="n">2</span></div>
           <div class="s" style="text-align:right">최대 하루 USD 4,000 상당</div>
           <div class="kv"><span>적용 환율</span><span>100엔 = ○○○원</span><span class="n">3</span></div>
           <div class="kv"><span>원화 환산</span><span>○○○,○○○원</span></div>
           <div class="kv"><span>전달 수수료</span><span>2,500원</span><span class="n">4</span></div>
+          <div class="kv"><span>발렛 요금</span><span>○○,○○○원</span><span class="n">6</span></div>
           <div class="kv tot"><span>총 결제액</span><span>○○○,○○○원</span></div>
           <div class="ck">이지백 위탁 교부 동의<span class="n">5</span></div>
           <div class="ck">개인정보 제3자 제공 (이지백)</div>
@@ -235,6 +252,7 @@
           <tr><td><span class="nn">3</span></td><td>환율 · 환산액</td><td>기존 공항수령과 같은 기준으로 표시</td></tr>
           <tr><td><span class="nn">4</span></td><td>전달 수수료</td><td>2,500원. 환율과 별도 줄로 표시</td></tr>
           <tr><td><span class="nn">5</span></td><td>추가 동의</td><td>발렛 수령에만 있는 필수 동의 2개. 나머지 약관은 기존 결제 단계 그대로</td></tr>
+          <tr><td><span class="nn">6</span></td><td>발렛 요금</td><td>V-01과 같은 금액. 총 결제액에 넣을지(우리가 함께 결제) · 안내만 할지(에어파크 결제)는 미정립 정책</td></tr>
         </table>
         <div class="exc"><b>예외</b> 한도 초과 → 입력란 아래 안내, 다음 비활성</div>
       </div>
@@ -243,7 +261,7 @@
 
   <!-- V-03 -->
   <section class="screen" id="V-03">
-    <div class="sh"><span class="no">V-03</span><h3>수령권</h3><span class="path">결제 완료 / V-05 → <b>V-03</b> → V-04</span></div>
+    <div class="sh"><span class="no">V-03</span><h3>수령권</h3><span class="path">결제 완료 → <b>V-03</b> → V-04</span></div>
     <div class="cols">
       <div class="wf"><div class="frame">
         <div class="top new"><span>수령권</span><span>4/4</span></div>
@@ -255,6 +273,7 @@
           <div class="kv"><span>일시</span><span>11/7 (토) 07:00 전후</span></div>
           <div class="kv"><span>장소</span><span>김포 에어파크 (미정)</span><span class="n">3</span></div>
           <div class="kv"><span>준비물</span><span>본인 신분증</span></div>
+          <div class="kv"><span>발렛 예약번호</span><span>AP-○○○○</span><span class="n">5</span></div>
           <div class="push"><div class="btn sec">신청 내역 보기</div><div class="foot">알림톡에도 같은 QR<span class="n">4</span></div></div>
         </div>
       </div></div>
@@ -265,6 +284,7 @@
           <tr><td><span class="nn">2</span></td><td>수령 방법</td><td>"발렛 기사에게" 고정 표시</td></tr>
           <tr><td><span class="nn">3</span></td><td>장소</td><td>공항별 에어파크 인수 장소. 문구 미정</td></tr>
           <tr><td><span class="nn">4</span></td><td>알림톡 연동</td><td>같은 수령권을 알림톡 버튼으로도 열 수 있음 (N-01)</td></tr>
+          <tr><td><span class="nn">5</span></td><td>발렛 예약번호</td><td>결제 완료 시 이지백 예약이 확정되며 받은 번호</td></tr>
         </table>
         <div class="kvline"><span>로그인 없이 <b>알림톡 링크로 열람</b> 가능해야 함</span></div>
       </div>
@@ -292,62 +312,9 @@
           <tr><th>#</th><th>항목</th><th>설명</th></tr>
           <tr><td><span class="nn">1</span></td><td>진행 상태</td><td>결제 완료 → 봉투 준비 → 기사 인계 → 수령 완료. 분기: 취소 · 반환(미수령) · 사고</td></tr>
           <tr><td><span class="nn">2</span></td><td>수령권 보기</td><td>V-03 이동</td></tr>
-          <tr><td><span class="nn">3</span></td><td>취소</td><td>수령일 48시간 전까지 무료(기존 기준). 기사 인계 이후 버튼 대신 고객센터 안내</td></tr>
+          <tr><td><span class="nn">3</span></td><td>취소</td><td>환전 · 발렛 <b>함께 취소</b>가 기본. 환전은 수령일 48시간 전까지 무료(기존 기준), 발렛 취소 수수료는 이지백 기준. 기사 인계 이후 버튼 대신 고객센터 안내</td></tr>
         </table>
         <div class="exc"><b>예외</b> 미수령 반환 → 기존과 같이 자동 취소 · 수수료 2% 차감 환불</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- C-01 -->
-  <section class="screen" id="C-01">
-    <div class="sh"><span class="no">C-01</span><h3>신청 완료</h3><span class="path">기존 결제 → <b>C-01</b> → V-05</span></div>
-    <div class="cols">
-      <div class="wf"><div class="frame">
-        <div class="top"><span>신청 완료</span><span></span></div>
-        <div class="body">
-          <div class="t" style="text-align:center">✓ 신청이 완료됐어요</div>
-          <div class="kv"><span>신청번호</span><span>MB○○○○</span></div>
-          <div class="kv"><span>공항</span><span>인천 T1</span></div>
-          <div class="kv"><span>수령 방법</span><span>직원에게</span></div>
-          <div class="blk hl">🚗 차로 가세요?<br><b>발렛에 맡기며 받기로 바꾸기</b><span class="n">1</span></div>
-          <div class="push"><div class="btn sec">신청 내역 보기</div></div>
-        </div>
-      </div></div>
-      <div class="info">
-        <table>
-          <tr><th>#</th><th>항목</th><th>설명</th></tr>
-          <tr><td><span class="nn">1</span></td><td>발렛 전환 박스 <span class="tag new">신규</span></td><td>누르면 V-05. 신청 내역에도 같은 버튼 (노출 대상은 미정립 정책)</td></tr>
-        </table>
-        <div class="kvline"><span>기존 완료 화면 <b>박스 1개만 추가</b></span><span>전환 가능 기한 <b>미정</b> (예: 봉투 인계 전)</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- V-05 -->
-  <section class="screen" id="V-05">
-    <div class="sh"><span class="no">V-05</span><h3>발렛으로 바꾸기</h3><span class="path">C-01 / 신청 내역 → <b>V-05</b> → V-03</span></div>
-    <div class="cols">
-      <div class="wf"><div class="frame">
-        <div class="top new"><span>‹ 발렛으로 바꾸기</span><span></span></div>
-        <div class="body">
-          <div class="blk">인천 · 11/7 (토) <span class="s">신청에서 가져옴</span><span class="n">1</span></div>
-          <div class="f">출국 시각</div>
-          <div class="f">목적지</div>
-          <div class="f">차량번호</div>
-          <div class="ck">이지백 위탁 교부 동의<span class="n">2</span></div>
-          <div class="ck">개인정보 제3자 제공 (이지백)</div>
-          <div class="push"><div class="btn">발렛으로 바꾸기<span class="n">3</span></div><div class="foot">발렛 운영: 이지백(에어파크)</div></div>
-        </div>
-      </div></div>
-      <div class="info">
-        <table>
-          <tr><th>#</th><th>항목</th><th>설명</th></tr>
-          <tr><td><span class="nn">1</span></td><td>기존 신청 정보</td><td>공항 · 날짜는 기존 신청 값 고정 (수정 불가)</td></tr>
-          <tr><td><span class="nn">2</span></td><td>추가 동의</td><td>V-02와 같은 필수 동의 2개</td></tr>
-          <tr><td><span class="nn">3</span></td><td>발렛으로 바꾸기</td><td>금액 · 결제 단계 없음. 수령 방법만 "발렛 기사에게"로 바꾸고 V-03</td></tr>
-        </table>
-        <div class="exc"><b>예외</b> 발렛 만차 · 발렛 취소 → 기존 수령 방법으로 진행</div>
       </div>
     </div>
   </section>
@@ -495,7 +462,7 @@
   <h2 class="part" id="N-01">N-01 알림톡 (발렛 수령 건)</h2>
   <div class="tw"><table>
     <tr><th>시점</th><th>내용</th><th>버튼</th></tr>
-    <tr><td>결제 완료</td><td>환전 확정 · 수령 방법(발렛 기사에게) · 수령 일시 · 장소</td><td>수령권(QR) 보기</td></tr>
+    <tr><td>결제 완료</td><td>환전 · 발렛 예약 확정 · 수령 방법(발렛 기사에게) · 수령 일시 · 장소 · 발렛 예약번호</td><td>수령권(QR) 보기</td></tr>
     <tr><td>출국 전날</td><td>차 맡길 때 신분증 · QR 지참 안내, 신청자 본인만 수령</td><td>수령권(QR) 보기</td></tr>
     <tr><td>수령 완료</td><td>받은 금액 · 시각</td><td>내역 보기</td></tr>
     <tr><td>발렛 만차 · 취소</td><td>만차 · 취소 사유와 이후 처리 안내 (처리 방식은 미정립 정책)</td><td>내역 보기</td></tr>
@@ -507,11 +474,14 @@
     <b>미정립 정책</b>
     <ul>
       <li>공항별 수령 방법: 김포 국제선 직원 수령 운영 여부, 인천 T1 직원 수령 · 발렛 수령 선택 허용 여부</li>
-      <li>C-01 "발렛으로 바꾸기" 노출 대상 공항</li>
-      <li>발렛 만차 · 예약 불가 · 발렛 취소 시 대안 (다른 수령 방법 / 지점 환전 예약 / 취소 · 환불)</li>
-      <li>김포 · 인천 에어파크 차량 인수 장소 → V-01, V-03 문구</li>
+      <li>발렛 요금 결제: 우리가 환전과 함께 결제 / 안내만 하고 에어파크에서 결제</li>
+      <li>국내선 선택 시 처리 (환전 대상이 아닐 수 있음)</li>
+      <li>만차 · 예약 불가 시 대안 (다른 공항 · 지점 환전 예약 등)</li>
+      <li>환전 취소 시 발렛만 남길 수 있게 할지</li>
+      <li>조회 비밀번호를 기존 비회원 내역조회와 통합할지</li>
+      <li>입력값 임시 저장 기간</li>
+      <li>김포 · 인천 에어파크 차량 인수 장소 → V-03 문구</li>
       <li>인천 발렛 고객 봉투를 우리 인천 수령팀이 발렛 접수처에서 직접 건넬 수 있는지</li>
-      <li>C-01 발렛 전환 가능 기한 (예: 봉투 인계 전)</li>
       <li>기사 화면(D)을 이지백 기사 앱 안에 넣을지 / 별도 웹</li>
       <li>이지백과 예약 정보 연동 방식 (링크 파라미터 / API)</li>
     </ul>
