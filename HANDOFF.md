@@ -21,7 +21,7 @@ last update: 2026.10.14
   - 발렛 와이어프레임 · 앱 (Figma용 SVG 복사): https://ahyeonine.github.io/moneybox_fw01/valet-wf-app.html
   - 발렛 화면설계서 · 웹 (Figma용 SVG 복사): https://ahyeonine.github.io/moneybox_fw01/valet-sp-web.html
   - 발렛 화면설계서 · 앱 (Figma용 SVG 복사): https://ahyeonine.github.io/moneybox_fw01/valet-sp-app.html
-  - 발표용 · 환전 신청 이후 흐름 (앱): https://ahyeonine.github.io/moneybox_fw01/valet-present.html
+  - 공항 수령 · 환전 신청 이후 흐름 (앱): https://ahyeonine.github.io/moneybox_fw01/valet-present.html
   - (웹 · 앱 합본) 와이어프레임: https://ahyeonine.github.io/moneybox_fw01/valet-options.html · 화면설계서: https://ahyeonine.github.io/moneybox_fw01/valet-screens.html
   - 발렛 관리자 페이지(부가 서비스 > 발렛 · A-01 신청 목록 · A-02 상세 · A-03 봉투 포장·인계 · A-04 교부 결과·환불 · A-05 정산 · A-06 공항 인계(인천)): https://ahyeonine.github.io/moneybox_fw01/valet-admin.html
 - **기획 문서(md)**: `docs-plan/외국인웹/` — 정책·공통규칙·CEMS대응·의사결정로그·미결사항·기획문서·화면정의서·화면설계서·와이어프레임 (전부 최신)
